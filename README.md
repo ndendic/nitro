@@ -22,7 +22,7 @@ Nitro generates HTML and SVG content programmatically with:
 
 ```bash
 # Install from PyPI (when available)
-pip install nitro
+pip install nitro-boost
 
 # For development - build from source
 git clone <repository>
