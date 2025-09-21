@@ -68,5 +68,21 @@ docs/_build/
 # VSCode
 .vscode/
 
+# Tests
+tests/
+
 # Pyenv
 .python-version
+.env
+*.env
+
+# Claude
+.claude/
+.cursor/
+# CLAUDE.md
+
+
+# datastar
+datastar-inspector*
+rusty_monster*
+resources/
