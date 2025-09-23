@@ -1,22 +1,38 @@
 [build-system]
-requires = ["maturin>=1.9,<2.0"]
-build-backend = "maturin"
+requires = ["setuptools-rust>=1.8.0", "setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "nitro-boost"
+version = "0.1.1"
 requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Rust",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-dynamic = ["version"]
 dependencies = [
     "blinker>=1.9.0",
     "datastar-py>=0.6.5",
     "pydantic>=2.11.9",
 ]
-[tool.maturin]
-features = ["pyo3/extension-module"]
-module-name = "nitro"  # Match your crate name
-python-packages = ["nitro"]  # Your Python package name
+
+[project.scripts]
+nitro-boost = "nitro:main"
+
+[tool.setuptools]
+packages = ["nitro"]
+zip-safe = false
+
+[tool.setuptools-rust]
+rust-project = "."
+# Ensure it builds the Rust extension
+extension-name = "nitro"
+
+[tool.uv.workspace]
+members = ["."]
