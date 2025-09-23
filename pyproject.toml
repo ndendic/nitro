@@ -18,3 +18,5 @@ dependencies = [
 ]
 [tool.maturin]
 features = ["pyo3/extension-module"]
+module-name = "nitro"  # Match your crate name
+python-packages = ["nitro"]  # Your Python package name

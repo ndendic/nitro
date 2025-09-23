@@ -32,3 +32,4 @@ strip = "symbols"     # Remove debug symbols for smaller binary
 overflow-checks = false  # Disable overflow checks for maximum speed
 debug-assertions = false # Disable debug assertions
 
+
