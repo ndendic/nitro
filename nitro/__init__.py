@@ -1,4 +1,6 @@
 # Re-export everything from rusty-tags core
+__version__ = "0.1.0"
+
 from rusty_tags import *
 
 # Import framework-specific components
@@ -6,7 +8,7 @@ from .templates import Page, create_template, page_template
 from .utils import show, AttrDict, uniq
 from .client import Client
 from .events import *
-from .datastar import *
+from rusty_tags.datastar import *
 
 __author__ = "Nikola Dendic"
 __description__ = "Booster add-on for your favourite web-framework. Built on rusty-tags core."

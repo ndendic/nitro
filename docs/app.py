@@ -3,7 +3,6 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from rusty_tags import *
-from rusty_tags.starlette import *
 from rusty_tags.utils import create_template
 
 
