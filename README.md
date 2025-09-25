@@ -2,33 +2,39 @@
 
 ⚠️ **Early Beta** - This library is in active development and APIs may change.
 
-A high-performance HTML generation library that combines Rust-powered performance with modern Python web development. Nitro provides a complete HTML/SVG tag system with intelligent templating, reactive component support, and 3-10x speed improvements over pure Python implementations.
+A booster add-on for your favourite web-framework. Built on rusty-tags core. Nitro provides a web development toolkit with intelligent templating, reactive component support, event system, and framework integrations.
 
 ## What Nitro Does
 
-Nitro generates HTML and SVG content programmatically with:
+Nitro provides a comprehensive web development framework with:
 
-- **🏷️ Complete HTML5/SVG Tags**: All standard HTML5 and SVG elements with optimized Rust implementations
-- **⚡ High Performance**: 3-10x faster than pure Python with memory optimization and intelligent caching
+- **🏷️ Complete HTML5/SVG Tags**: All standard HTML5 and SVG elements powered by rusty-tags core
+- **⚡ High Performance**: 3-10x faster than pure Python through Rust-optimized HTML generation
 - **🎨 Modern Templating**: Page templates, decorators, and component system for full-stack development
 - **🔄 Reactive Components**: Built-in Datastar integration for modern web applications
 - **🏗️ FastHTML-Style API**: Familiar syntax with callable chaining support
 - **🧠 Intelligent Processing**: Automatic attribute handling and smart type conversion
 - **📦 Framework Ready**: Works with FastAPI, Flask, Django, and other Python web frameworks
 
+## Architecture
+
+Nitro is built on top of the `rusty-tags` core package:
+
+- **`rusty-tags`** (core): High-performance HTML generation library with Rust backend
+- **`nitro`** (framework): Full-stack web development toolkit with advanced features
+
 ## Quick Start
 
 ### Installation
 
 ```bash
-# Install from PyPI (when available)
+# Install Nitro framework (includes rusty-tags as dependency)
 pip install nitro-boost
 
-# For development - build from source
+# For development - clone and install
 git clone <repository>
-cd Nitro
-maturin develop
-pip install datastar-py blinker pydantic
+cd nitro
+pip install -e .
 ```
 
 ### Basic HTML Generation

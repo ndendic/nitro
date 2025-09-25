@@ -2,8 +2,8 @@ from collections.abc import Callable
 from typing import Any, Dict, Optional
 import uuid
 
-from nitro import HtmlString, I, Script
-from nitro.datastar import Signals
+from rusty_tags import HtmlString, I, Script
+from ..datastar import Signals
 
 
 def Icon(icon: str, **attrs) -> HtmlString:

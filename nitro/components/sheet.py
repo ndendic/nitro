@@ -1,9 +1,6 @@
 from typing import Literal
-
-from nitro import H2 as HTMLH2
-from nitro import Div, HtmlString, P, Span, Button
-from nitro.datastar import Signals
-from nitro.datastar import attribute_generator as data
+from rusty_tags import H2 as HTMLH2, Div, HtmlString, P, Span, Button
+from ..datastar import Signals, attribute_generator as data
 
 # Using direct class strings instead of cn utility for Open Props compatibility
 

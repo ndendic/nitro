@@ -1,38 +1,30 @@
 [build-system]
-requires = ["setuptools-rust>=1.8.0", "setuptools>=61.0"]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "nitro-boost"
-version = "0.1.1"
-requires-python = ">=3.12"
+name = "nitro"
+version = "0.1.0"
+requires-python = ">=3.8"
 classifiers = [
-    "Programming Language :: Rust",
-    "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
 ]
 dependencies = [
-    "blinker>=1.9.0",
+    "rusty-tags>=0.6.0",
     "datastar-py>=0.6.5",
+    "blinker>=1.9.0",
     "pydantic>=2.11.9",
 ]
 
-[project.scripts]
-nitro-boost = "nitro:main"
-
-[tool.setuptools]
-packages = ["nitro"]
-zip-safe = false
-
-[tool.setuptools-rust]
-rust-project = "."
-# Ensure it builds the Rust extension
-extension-name = "nitro"
-
-[tool.uv.workspace]
-members = ["."]

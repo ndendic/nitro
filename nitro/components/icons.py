@@ -1,4 +1,4 @@
-import nitro as rt
+import rusty_tags as rt
 
 
 def LucideIcon(icon: str, 

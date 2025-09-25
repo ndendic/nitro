@@ -1,3 +1,10 @@
+"""
+Nitro Templates - Advanced templating system for web applications.
+
+This module provides enhanced templating functionality moved from the core utils
+to provide better separation of concerns in the Nitro framework.
+"""
+
 from typing import Optional, Callable, ParamSpec, TypeVar
 from functools import partial, wraps
 from rusty_tags import Html, Head, Title, Body, HtmlString, Script, CustomTag, Link
@@ -8,10 +15,7 @@ R = TypeVar("R")
 
 fragment = CustomTag("Fragment")
 
-def uniq(length: int = 6):
-    return str(uuid.uuid4().hex[:length])
-
-HEADER_URLS = {        
+HEADER_URLS = {
         'highlight_js': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js",
         'highlight_python': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/python.min.js",
         'highlight_light_css': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-light.css",
@@ -21,11 +25,11 @@ HEADER_URLS = {
         'tailwind4': "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
     }
 
-def Page(*content, 
-         title: str = "Nitro", 
+def Page(*content,
+         title: str = "Nitro",
          hdrs:tuple=None,
-         ftrs:tuple=None, 
-         htmlkw:dict=None, 
+         ftrs:tuple=None,
+         htmlkw:dict=None,
          bodykw:dict=None,
          datastar:bool=True,
          tailwind4:bool=False,
@@ -67,7 +71,7 @@ def Page(*content,
                     hljs.highlightAll();
                 ''', type='module'),
             )
-            ftrs += (Script("hljs.highlightAll();"),) 
+            ftrs += (Script("hljs.highlightAll();"),)
     if lucide:
         hdrs += (Script(src="https://unpkg.com/lucide@latest"),)
         ftrs += (Script("lucide.createIcons();"),)
@@ -81,17 +85,17 @@ def Page(*content,
             Script(src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js", type="module") if datastar else fragment,
         ),
         Body(
-            *content,             
+            *content,
             *ftrs if ftrs else (),
             **bodykw if bodykw else {},
         ),
         **htmlkw if htmlkw else {},
     )
- 
-def create_template(page_title: str = "MyPage", 
+
+def create_template(page_title: str = "MyPage",
                     hdrs:Optional[tuple]=None,
-                    ftrs:Optional[tuple]=None, 
-                    htmlkw:Optional[dict]=None, 
+                    ftrs:Optional[tuple]=None,
+                    htmlkw:Optional[dict]=None,
                     bodykw:Optional[dict]=None,
                     datastar:bool=True,
                     lucide:bool=True,
@@ -99,23 +103,23 @@ def create_template(page_title: str = "MyPage",
                     tailwind4:bool=False
                     ):
     """Create a decorator that wraps content in a Page layout.
-    
+
     Returns a decorator function that can be used to wrap view functions.
     The decorator will take the function's output and wrap it in the Page layout.
     """
-    page_func = partial(Page, 
-                        hdrs=hdrs, 
-                        ftrs=ftrs, 
-                        htmlkw=htmlkw, 
-                        bodykw=bodykw, 
-                        datastar=datastar, 
-                        lucide=lucide, 
-                        highlightjs=highlightjs, 
+    page_func = partial(Page,
+                        hdrs=hdrs,
+                        ftrs=ftrs,
+                        htmlkw=htmlkw,
+                        bodykw=bodykw,
+                        datastar=datastar,
+                        lucide=lucide,
+                        highlightjs=highlightjs,
                         tailwind4=tailwind4
                        )
     def page(title: str|None = None, wrap_in: Callable|None = None):
         def decorator(func: Callable[P, R]) -> Callable[P, R]:
-            @wraps(func) 
+            @wraps(func)
             def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 if wrap_in:
                     return wrap_in(page_func(func(*args, **kwargs), title=title if title else page_title))
@@ -126,44 +130,30 @@ def create_template(page_title: str = "MyPage",
     return page
 
 def page_template(
-        page_title: str = "MyPage", 
+        page_title: str = "MyPage",
         hdrs:Optional[tuple]=None,
-        ftrs:Optional[tuple]=None, 
-        htmlkw:Optional[dict]=None, 
-        bodykw:Optional[dict]=None, 
-        datastar:bool=True, 
+        ftrs:Optional[tuple]=None,
+        htmlkw:Optional[dict]=None,
+        bodykw:Optional[dict]=None,
+        datastar:bool=True,
         tailwind4:bool=False,
         lucide:bool=False,
         highlightjs:bool=False,
     ):
     """Create a decorator that wraps content in a Page layout.
-    
+
     Returns a decorator function that can be used to wrap view functions.
     The decorator will take the function's output and wrap it in the Page layout.
     """
-    template = partial(Page, 
-                       hdrs=hdrs, 
-                       ftrs=ftrs, 
-                       htmlkw=htmlkw, 
-                       bodykw=bodykw, 
-                       title=page_title, 
-                       datastar=datastar, 
-                       lucide=lucide, 
-                       tailwind4=tailwind4, 
+    template = partial(Page,
+                       hdrs=hdrs,
+                       ftrs=ftrs,
+                       htmlkw=htmlkw,
+                       bodykw=bodykw,
+                       title=page_title,
+                       datastar=datastar,
+                       lucide=lucide,
+                       tailwind4=tailwind4,
                        highlightjs=highlightjs
                       )
     return template
-
-def show(html: HtmlString):
-    try:
-        from IPython.display import HTML
-        return HTML(html.render())
-    except ImportError:
-        raise ImportError("IPython is not installed. Please install IPython to use this function.")
-
-class AttrDict(dict):
-    "`dict` subclass that also provides access to keys as attrs"
-    def __getattr__(self,k): return self[k] if k in self else None
-    def __setattr__(self, k, v): (self.__setitem__,super().__setattr__)[k[0]=='_'](k,v)
-    def __dir__(self): return super().__dir__() + list(self.keys()) # type: ignore
-    def copy(self): return AttrDict(**self)

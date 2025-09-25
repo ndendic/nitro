@@ -1,6 +1,6 @@
 from itertools import count
 from typing import Any, Optional, Union
-import nitro as rt
+import rusty_tags as rt
 from .utils import cn
 from nitro.datastar import Signals
 

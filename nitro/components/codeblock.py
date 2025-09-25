@@ -1,7 +1,7 @@
 from typing import Any
 from enum import Enum
 
-import nitro as rt
+import rusty_tags as rt
 from .utils import cn
 
 

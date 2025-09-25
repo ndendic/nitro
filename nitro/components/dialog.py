@@ -1,7 +1,6 @@
 from typing import Any, Callable, Dict, Optional
-
-import nitro as rt
-from nitro.datastar import Signals
+from rusty_tags import *
+from ..datastar import Signals
 
 from .utils import generate_component_id
 
