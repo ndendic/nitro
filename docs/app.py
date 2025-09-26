@@ -4,10 +4,19 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from rusty_tags import *
 from rusty_tags.utils import create_template
+from pages.codeblock import router as codeblock_router
+from pages.tabs import router as tabs_router
+from pages.accordion import router as accordion_router
+from pages.dialog import router as dialog_router
 
 
 app = FastAPI()
 page = create_template()
+
+app.include_router(codeblock_router)
+app.include_router(tabs_router)
+app.include_router(accordion_router)
+app.include_router(dialog_router)
 
 @app.get("/")
 @page(title="RustyTags Documentation", wrap_in=HTMLResponse)

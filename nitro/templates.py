@@ -22,6 +22,7 @@ HEADER_URLS = {
         'highlight_dark_css': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css",
         'highlight_copy': "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.js",
         'highlight_copy_css': "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.css",
+        'lucide': "https://unpkg.com/lucide@latest",
         'tailwind4': "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
     }
 
@@ -73,7 +74,7 @@ def Page(*content,
             )
             ftrs += (Script("hljs.highlightAll();"),)
     if lucide:
-        hdrs += (Script(src="https://unpkg.com/lucide@latest"),)
+        hdrs += (Script(src=HEADER_URLS['lucide']),)
         ftrs += (Script("lucide.createIcons();"),)
     if tailwind4:
         hdrs += (Script(src=HEADER_URLS['tailwind4']),)

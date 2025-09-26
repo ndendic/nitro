@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 import uuid
 
 from rusty_tags import HtmlString, I, Script
-from ..datastar import Signals
+from rusty_tags.datastar import Signals
 
 
 def Icon(icon: str, **attrs) -> HtmlString:

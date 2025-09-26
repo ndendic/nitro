@@ -2,7 +2,7 @@ from itertools import count
 from typing import Any, Optional, Union
 import rusty_tags as rt
 from .utils import cn
-from nitro.datastar import Signals
+from rusty_tags.datastar import Signals
 
 _tab_ids = count(1)
 

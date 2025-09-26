@@ -1,6 +1,6 @@
 from typing import Any, Callable, Dict, Optional
 from rusty_tags import *
-from ..datastar import Signals
+from rusty_tags.datastar import Signals
 
 from .utils import generate_component_id
 
@@ -36,7 +36,7 @@ def Dialog(
     element_id: Optional[str] = None,
     cls: str = "",
     **attrs: Any,
-) -> rt.HtmlString:
+) -> HtmlString:
     """Headless dialog wrapper built on the native ``<dialog>`` element.
 
     ``id`` becomes the basis for internal state (``$<id>_open``) and can also
@@ -66,7 +66,7 @@ def Dialog(
         container_attrs["cls"] = container_cls
     container_attrs.setdefault("data-attr-data-open", f"${signal_name} ? 'true' : 'false'")
 
-    return rt.Div(
+    return Div(
         *processed_children,
         signals=Signals(**{signal_name: default_open}),
         **container_attrs,
@@ -77,10 +77,10 @@ def DialogTrigger(
     *children: Any,
     cls: str = "",
     **attrs: Any,
-) -> Callable[[DialogContext], rt.HtmlString]:
+) -> Callable[[DialogContext], HtmlString]:
     """Interactive control that opens the dialog."""
 
-    def create_trigger(context: DialogContext) -> rt.HtmlString:
+    def create_trigger(context: DialogContext) -> HtmlString:
         signal = context["signal"]
         dialog_id = context["dialog_id"]
 
@@ -100,7 +100,7 @@ def DialogTrigger(
         if merged_cls:
             button_attrs["cls"] = merged_cls
 
-        return rt.Button(
+        return Button(
             *children,
             **button_attrs,
         )
@@ -114,10 +114,10 @@ def DialogContent(
     content_attrs: Optional[Dict[str, Any]] = None,
     dialog_cls: str = "",
     **attrs: Any,
-) -> Callable[[DialogContext], rt.HtmlString]:
+) -> Callable[[DialogContext], HtmlString]:
     """Native ``<dialog>`` surface controlled by the shared signal."""
 
-    def create_content(context: DialogContext) -> rt.HtmlString:
+    def create_content(context: DialogContext) -> HtmlString:
         signal = context["signal"]
         modal = context["modal"]
         close_on_escape = context["close_on_escape"]
@@ -173,12 +173,12 @@ def DialogContent(
         inner_attrs.setdefault("role", "document")
 
         processed_children = [_call_with_context(child, context) for child in children]
-        inner_content = rt.Div(
+        inner_content = Div(
             *processed_children,
             **inner_attrs,
         )
 
-        return rt.Dialog(
+        return Dialog(
             inner_content,
             **dialog_attributes,
         )
@@ -190,17 +190,17 @@ def DialogHeader(
     *children: Any,
     cls: str = "",
     **attrs: Any,
-) -> Callable[[DialogContext], rt.HtmlString]:
+) -> Callable[[DialogContext], HtmlString]:
     """Header container for titles and dismiss actions."""
 
-    def create_header(context: DialogContext) -> rt.HtmlString:
+    def create_header(context: DialogContext) -> HtmlString:
         header_attrs = dict(attrs)
         header_cls = _merge_classes(cls, header_attrs.pop("cls", ""))
         if header_cls:
             header_attrs["cls"] = header_cls
 
         processed_children = [_call_with_context(child, context) for child in children]
-        return rt.Header(
+        return Header(
             *processed_children,
             **header_attrs,
         )
@@ -212,7 +212,7 @@ def DialogTitle(
     *children: Any,
     cls: str = "",
     **attrs: Any,
-) -> rt.HtmlString:
+) -> HtmlString:
     """Semantic title element for dialogs."""
 
     title_attrs = dict(attrs)
@@ -220,7 +220,7 @@ def DialogTitle(
     if title_cls:
         title_attrs["cls"] = title_cls
 
-    return rt.H2(
+    return H2(
         *children,
         **title_attrs,
     )
@@ -230,7 +230,7 @@ def DialogBody(
     *children: Any,
     cls: str = "",
     **attrs: Any,
-) -> rt.HtmlString:
+) -> HtmlString:
     """Scrollable body content for dialogs."""
 
     body_attrs = dict(attrs)
@@ -238,7 +238,7 @@ def DialogBody(
     if body_cls:
         body_attrs["cls"] = body_cls
 
-    return rt.Div(
+    return Div(
         *children,
         **body_attrs,
     )
@@ -248,17 +248,17 @@ def DialogFooter(
     *children: Any,
     cls: str = "",
     **attrs: Any,
-) -> Callable[[DialogContext], rt.HtmlString]:
+) -> Callable[[DialogContext], HtmlString]:
     """Footer container suited for action buttons."""
 
-    def create_footer(context: DialogContext) -> rt.HtmlString:
+    def create_footer(context: DialogContext) -> HtmlString:
         footer_attrs = dict(attrs)
         footer_cls = _merge_classes(cls, footer_attrs.pop("cls", ""))
         if footer_cls:
             footer_attrs["cls"] = footer_cls
 
         processed_children = [_call_with_context(child, context) for child in children]
-        return rt.Footer(
+        return Footer(
             *processed_children,
             **footer_attrs,
         )
@@ -270,10 +270,10 @@ def DialogClose(
     *children: Any,
     cls: str = "",
     **attrs: Any,
-) -> Callable[[DialogContext], rt.HtmlString]:
+) -> Callable[[DialogContext], HtmlString]:
     """Button helper that closes the dialog by toggling the shared signal."""
 
-    def create_close(context: DialogContext) -> rt.HtmlString:
+    def create_close(context: DialogContext) -> HtmlString:
         signal = context["signal"]
         button_attrs = dict(attrs)
         existing_cls = button_attrs.pop("cls", "")
@@ -288,7 +288,7 @@ def DialogClose(
         if merged_cls:
             button_attrs["cls"] = merged_cls
 
-        return rt.Button(
+        return Button(
             *children,
             **button_attrs,
         )
@@ -312,7 +312,7 @@ def ConfirmDialog(
     close_icon_attrs: Optional[Dict[str, Any]] = None,
     element_id: Optional[str] = None,
     **attrs: Any,
-) -> rt.HtmlString:
+) -> HtmlString:
     """Convenience wrapper that assembles a basic confirmation dialog."""
 
     trigger_kwargs = dict(trigger_attrs or {})
@@ -320,7 +320,7 @@ def ConfirmDialog(
     cancel_base = dict(cancel_attrs or {})
     icon_base = dict(close_icon_attrs or {})
 
-    def confirm_button(context: DialogContext) -> rt.HtmlString:
+    def confirm_button(context: DialogContext) -> HtmlString:
         signal = context["signal"]
         button_attrs = dict(confirm_base)
         existing_cls = button_attrs.pop("cls", "")
@@ -341,7 +341,7 @@ def ConfirmDialog(
         if merged_cls:
             button_attrs["cls"] = merged_cls
 
-        return rt.Button(
+        return Button(
             confirm_text,
             **button_attrs,
         )
@@ -355,7 +355,7 @@ def ConfirmDialog(
                 DialogTitle(title),
                 DialogClose(close_icon, **icon_base),
             ),
-            DialogBody(rt.P(message)),
+            DialogBody(P(message)),
             DialogFooter(
                 cancel_button,
                 confirm_button,
