@@ -2,9 +2,10 @@
 
 from .base import *
 from fastapi import APIRouter
+from fastapi.responses import HTMLResponse
 
 
-router = APIRouter()
+router: APIRouter = APIRouter()
 
 def example_1():
     return CodeBlock("print('Hello, World!')")

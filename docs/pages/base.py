@@ -3,22 +3,13 @@ Shared utilities and configuration for component documentation pages.
 All component documentation pages should import from this module.
 """
 import inspect
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
 from rusty_tags import *
 from rusty_tags import Section as HTMLSection
-from rusty_tags.datastar import Signals, DS
-from nitro.events import event, emit_async, on, ANY
-from nitro.client import Client
+from rusty_tags.datastar import Signals
 from nitro.starlette import *
-from nitro.components import LucideIcon, CodeBlock, Tabs, TabsList, TabsTrigger, TabsContent, Accordion, AccordionItem, Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogBody, DialogFooter, DialogClose, ConfirmDialog
-from nitro.components.utils import cn
+from nitro.components import CodeBlock, Tabs, TabsList, TabsTrigger, TabsContent
 from nitro.utils import create_template
-from datastar_py.fastapi import ReadSignals
-from datastar_py.consts import ElementPatchMode
-from uuid import uuid4
-from typing import Any, Callable
-from enum import Enum
+from typing import Callable
 
 # Shared header URLs for external dependencies
 HEADER_URLS = {

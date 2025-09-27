@@ -8,7 +8,6 @@ to provide better separation of concerns in the Nitro framework.
 from typing import Optional, Callable, ParamSpec, TypeVar
 from functools import partial, wraps
 from rusty_tags import Html, Head, Title, Body, HtmlString, Script, CustomTag, Link
-import uuid
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -28,10 +27,10 @@ HEADER_URLS = {
 
 def Page(*content,
          title: str = "Nitro",
-         hdrs:tuple=None,
-         ftrs:tuple=None,
-         htmlkw:dict=None,
-         bodykw:dict=None,
+         hdrs:tuple|None=None,
+         ftrs:tuple|None=None,
+         htmlkw:dict|None=None,
+         bodykw:dict|None=None,
          datastar:bool=True,
          tailwind4:bool=False,
          lucide:bool=False,

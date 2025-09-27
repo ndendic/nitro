@@ -3,11 +3,14 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from rusty_tags import *
-from rusty_tags.utils import create_template
-from pages.codeblock import router as codeblock_router
-from pages.tabs import router as tabs_router
-from pages.accordion import router as accordion_router
-from pages.dialog import router as dialog_router
+from rusty_tags.datastar import Signals
+
+from nitro.templates import create_template
+
+from .pages.accordion import router as accordion_router
+from .pages.codeblock import router as codeblock_router
+from .pages.dialog import router as dialog_router
+from .pages.tabs import router as tabs_router
 
 
 app = FastAPI()
