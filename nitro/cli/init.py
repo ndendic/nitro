@@ -9,16 +9,33 @@ from ..templates.css_input import generate_css_input
 from .utils import confirm, console, error, info, success
 
 
-def validate_tailwind_project(root: Path, force: bool = False) -> None:
+def validate_tailwind_project(config: NitroConfig, force: bool = False) -> None:
+    """Validate project for Tailwind initialization using actual config values."""
     conflicts = []
 
-    # Check for existing Tailwind files
-    tailwind_files = ["input.css", "tailwind.config.js", "static/css/input.css", "static/css/nitro.css"]
+    # Check for existing files based on actual config (including env overrides)
+    files_to_check = [
+        (config.css_input_absolute, "CSS input file"),
+        (config.css_output_absolute, "CSS output file"),
+    ]
 
-    for file_path in tailwind_files:
-        path = root / file_path
-        if path.exists():
-            conflicts.append(f"{file_path}")
+    # Also check for common Tailwind config files
+    common_config_files = [
+        (config.project_root / "tailwind.config.js", "Tailwind config (JS)"),
+        (config.project_root / "tailwind.config.ts", "Tailwind config (TS)"),
+    ]
+
+    # Check configured paths
+    for file_path, description in files_to_check:
+        if file_path.exists():
+            rel_path = file_path.relative_to(config.project_root)
+            conflicts.append(f"{rel_path} ({description})")
+
+    # Check common config files (optional)
+    for file_path, description in common_config_files:
+        if file_path.exists():
+            rel_path = file_path.relative_to(config.project_root)
+            conflicts.append(f"{rel_path} ({description})")
 
     if conflicts and not force:
         error(
@@ -32,20 +49,24 @@ def validate_tailwind_project(root: Path, force: bool = False) -> None:
 def setup_css_directories(config: NitroConfig, verbose: bool = False) -> None:
     """Create necessary directories for Tailwind CSS."""
     dirs = [
-        config.css_dir_absolute,
+        config.css_input_absolute.parent,  # Input CSS directory
+        config.css_dir_absolute,           # Output CSS directory
     ]
 
     for d in dirs:
-        d.mkdir(parents=True, exist_ok=True)
-        if verbose:
-            console.print(
-                f"[green]Created:[/green] {d.relative_to(config.project_root)}"
-            )
+        if not d.exists():
+            d.mkdir(parents=True, exist_ok=True)
+            if verbose:
+                console.print(
+                    f"[green]Created:[/green] {d.relative_to(config.project_root)}"
+                )
 
 
 def create_css_input(config: NitroConfig, verbose: bool = False) -> None:
     """Create Tailwind CSS input file."""
     input_path = config.css_input_absolute
+    # Ensure parent directory exists (defensive programming)
+    input_path.parent.mkdir(parents=True, exist_ok=True)
     input_path.write_text(generate_css_input(config))
     if verbose:
         console.print(f"[green]Created:[/green] {input_path.relative_to(config.project_root)}")
@@ -108,7 +129,7 @@ def init_command(
             console.print(f"[dim]CSS input:[/dim] {config.tailwind.css_input}")
             console.print(f"[dim]CSS output:[/dim] {config.tailwind.css_output}")
 
-        validate_tailwind_project(root, force)
+        validate_tailwind_project(config, force)
 
         if not force and config.css_output_absolute.exists():
             console.print(
