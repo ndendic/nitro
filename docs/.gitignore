@@ -1,0 +1,7 @@
+
+# Nitro generated files
+static/css/nitro.css
+*.css.map
+
+# Nitro cache
+.nitro/

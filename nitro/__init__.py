@@ -4,7 +4,7 @@ __version__ = "0.1.0"
 from rusty_tags import *
 
 # Import framework-specific components
-from .templates import Page, create_template, page_template
+from .template_utils import Page, create_template, page_template
 from .utils import show, AttrDict, uniq
 from .client import Client
 from .events import *

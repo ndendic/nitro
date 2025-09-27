@@ -15,11 +15,11 @@ from nitro.components import (
 )
 
 from fastapi import APIRouter
+from fastapi.responses import HTMLResponse
 
+router: APIRouter = APIRouter()
 
-router = APIRouter()
-
-def example_basic_dialog():
+def example_basic_dialog() -> HtmlString:
     return Dialog(
         DialogTrigger(
             "Open basic dialog",
@@ -62,7 +62,7 @@ def example_basic_dialog():
     )
 
 
-def example_confirm_dialog():
+def example_confirm_dialog() -> HtmlString:
     return ConfirmDialog(
         title="Delete file",
         message="Are you sure you want to delete this file? This action cannot be undone.",
@@ -87,7 +87,7 @@ def example_confirm_dialog():
     )
 
 
-def example_custom_dialog():
+def example_custom_dialog() -> HtmlString:
     return Dialog(
         DialogTrigger(
             "Compose message",

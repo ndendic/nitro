@@ -1,97 +1,50 @@
-<!--
-Sync Impact Report:
-- Version change: 1.0.0 → 1.1.0
-- Modified principles: Event-Driven Architecture → Optional Module Architecture (clarifies modules are optional)
-- Added sections: Planned Features and Modules (roadmap and module requirements)
-- Templates requiring updates: ⚠ plan-template.md needs constitution check update
-- No deferred TODOs
--->
-
-# Nitro Constitution
+# [PROJECT_NAME] Constitution
+<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
 
 ## Core Principles
 
-### I. Framework Agnostic
-Nitro MUST be compatible with all major Python web frameworks including FastAPI, FastHTML, Django, Flask, and Sanic. No feature shall depend on a specific framework. All integrations MUST be implemented through adapter patterns that preserve the core functionality across frameworks. This ensures maximum adoption and prevents vendor lock-in for developers.
+### [PRINCIPLE_1_NAME]
+<!-- Example: I. Library-First -->
+[PRINCIPLE_1_DESCRIPTION]
+<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
 
-### II. Rust Core Performance
-All HTML generation and templating core operations MUST use the Rust-based rusty-tags backend for optimal performance. Python-layer features MUST NOT bypass the Rust core for performance-critical paths. This principle ensures the 3-10x performance advantage over pure Python solutions is maintained as the framework evolves.
+### [PRINCIPLE_2_NAME]
+<!-- Example: II. CLI Interface -->
+[PRINCIPLE_2_DESCRIPTION]
+<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
 
-### III. Developer Experience First
-Every API design decision MUST prioritize developer joy and productivity over internal implementation convenience. Features MUST include comprehensive examples, clear error messages, and intuitive APIs that feel natural to Python developers. Complex operations MUST be exposed through simple, readable interfaces.
+### [PRINCIPLE_3_NAME]
+<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
+[PRINCIPLE_3_DESCRIPTION]
+<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
 
-### IV. Modularity
-All functionality MUST be implemented as independent, composable modules that can be used selectively. Modules MUST have clear, minimal dependencies and well-defined interfaces. This enables developers to adopt only the features they need without bloat, similar to Laravel's modular architecture.
+### [PRINCIPLE_4_NAME]
+<!-- Example: IV. Integration Testing -->
+[PRINCIPLE_4_DESCRIPTION]
+<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
 
-### V. Optional Module Architecture
-Nitro MUST provide powerful optional modules that developers can choose to adopt based on their needs. No module shall be mandatory for basic functionality. Each module MUST be independently usable and well-documented. This principle enables developers to start simple and progressively enhance their applications with advanced features as needed.
+### [PRINCIPLE_5_NAME]
+<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
+[PRINCIPLE_5_DESCRIPTION]
+<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
 
-## Planned Features and Modules
+## [SECTION_2_NAME]
+<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
 
-Nitro's roadmap includes these optional modules that developers can adopt as needed:
+[SECTION_2_CONTENT]
+<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
 
-### Core Enhancement Modules
-- **Event-Driven CQRS**: Optional Blinker-based event system for Command Query Responsibility Segregation patterns, enabling audit logging, state synchronization, and loose coupling
-- **Datastar Integration**: Enhanced reactive component support with improved client-server communication
-- **Template Scaffolding**: Pre-built templates and scaffolding tools for rapid development
+## [SECTION_3_NAME]
+<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
 
-### Developer Experience Modules
-- **Tailwind Integration**: Standalone CDN/CLI support for rapid styling with utility-first CSS
-- **Active Record Pattern**: Database interaction layer with intuitive ORM-like patterns for Python web development
-- **Auto Layout System**: Automatic layout generation for database models and forms
-
-### Advanced Features (Future)
-- **Component Library**: Pre-built UI components following modern design patterns
-
-Each module MUST:
-- Function independently without requiring other optional modules
-- Include comprehensive documentation and examples
-- Maintain framework agnosticism across all supported Python web frameworks
-- Follow the same performance and developer experience standards as the core
-
-## Performance Standards
-
-Nitro MUST maintain superior performance characteristics:
-- HTML generation MUST be 3-10x faster than pure Python solutions
-- Memory usage MUST be optimized through intelligent pooling and caching
-- Component rendering MUST achieve sub-microsecond performance for simple elements
-- All performance optimizations MUST be benchmarked and regression-tested
-
-## Integration Requirements
-
-Framework integration adapters MUST:
-- Preserve all Nitro features across different frameworks
-- Use framework-native response types when available
-- Maintain consistent API surface regardless of underlying framework
-- Include comprehensive integration tests for each supported framework
-
-## Development Workflow
-
-All features MUST follow TDD (Test-Driven Development):
-- Tests written and approved before implementation begins
-- Contract tests MUST be created for all public APIs
-- Integration tests MUST cover framework compatibility
-- Performance benchmarks MUST be included for core functionality
-
-Code review MUST verify:
-- Framework agnosticism is maintained
-- Performance characteristics are preserved
-- Developer experience is optimal
-- Event-driven patterns are properly implemented
+[SECTION_3_CONTENT]
+<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
 
 ## Governance
+<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-This constitution supersedes all other development practices and guidelines. All pull requests and code reviews MUST verify compliance with these principles.
+[GOVERNANCE_RULES]
+<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
 
-Amendments require:
-- Documentation of the proposed change and rationale
-- Approval from core maintainers
-- Migration plan for existing features
-- Update of dependent documentation and templates
-
-Complexity deviations MUST be justified with:
-- Clear explanation of why simpler alternatives are insufficient
-- Performance or compatibility requirements that necessitate the complexity
-- Plan for future simplification when constraints are removed
-
-**Version**: 1.1.0 | **Ratified**: 2025-09-26 | **Last Amended**: 2025-09-26
+**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
+<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->

@@ -2,6 +2,8 @@
 
 from .base import *
 from fastapi import APIRouter
+from fastapi.responses import HTMLResponse
+from nitro.components import Accordion, AccordionItem
 
 router = APIRouter()
 
