@@ -23,15 +23,15 @@ HEADER_URLS = {
 
 def Page(*content, 
          title: str = "Nitro", 
-         hdrs:tuple=None,
-         ftrs:tuple=None, 
-         htmlkw:dict=None, 
-         bodykw:dict=None,
+         hdrs:tuple|None=None,
+         ftrs:tuple|None=None, 
+         htmlkw:dict|None=None, 
+         bodykw:dict|None=None,
          datastar:bool=True,
          tailwind4:bool=False,
          lucide:bool=False,
          highlightjs:bool=False
-    ) -> HtmlString:
+    ):
     """Base page layout with common HTML structure."""
     # initialize empty tuple if None
     hdrs = hdrs if hdrs is not None else ()
@@ -156,7 +156,7 @@ def page_template(
 
 def show(html: HtmlString):
     try:
-        from IPython.display import HTML
+        from IPython.display import HTML # type: ignore
         return HTML(html.render())
     except ImportError:
         raise ImportError("IPython is not installed. Please install IPython to use this function.")

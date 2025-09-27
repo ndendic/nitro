@@ -76,9 +76,11 @@ tests/
 .env
 *.env
 
-# Claude
+# AI
 .claude/
 .cursor/
+specs/
+
 # CLAUDE.md
 
 
@@ -86,3 +88,10 @@ tests/
 datastar-inspector*
 rusty_monster*
 resources/
+
+# Nitro generated files
+nitro.css
+*.css.map
+
+# Nitro cache
+.nitro/
