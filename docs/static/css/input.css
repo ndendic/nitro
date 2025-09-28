@@ -14,6 +14,7 @@
 }
 
 @layer base {
+  /* base defaults */
   html {
     min-height: 100vh;
     color: light-dark(var(--gray-9), var(--gray-1));

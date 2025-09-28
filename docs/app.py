@@ -46,11 +46,11 @@ def index():
                 Li("📊 Datastar Reactivity - Modern reactive web development"),
             ),
         ),
-        Section("anchor",
-            P("Anchor tag."),
-            Button("Click me", id="myButton", on_click="$anchorOpen = !$anchorOpen"),
-            Div("default", data_anchor="'#myButton'", show="$anchorOpen", cls="bg-red-500"),
-        ),
+        # Section("anchor",
+        #     P("Anchor tag."),
+        #     Button("Click me", id="myButton", on_click="$anchorOpen = !$anchorOpen"),
+        #     Div("default", data_anchor="'#myButton'", show="$anchorOpen", cls="bg-red-500"),
+        # ),
         
         signals=Signals(message=""),
     )
