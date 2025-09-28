@@ -22,3 +22,5 @@ nitro = "nitro.cli.main:app"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.ty.environment]
+root = ["./nitro","./docs","./notebooks"]

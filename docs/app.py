@@ -1,13 +1,15 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+
+from nitro import *
+
 from pages.accordion import router as accordion_router
 from pages.codeblock import router as codeblock_router
 from pages.dialog import router as dialog_router
 from pages.tabs import router as tabs_router
 
 from pages.base import page
-from nitro import *
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="docs/static"), name="static")
@@ -21,7 +23,7 @@ app.include_router(dialog_router)
 @page(title="RustyTags Documentation", wrap_in=HTMLResponse)
 def index():
     return Main(
-        H1("RustyTags Documentation"),
+        H1("RustyTags Documentation", cls="text-4xl font-bold"),
         P("A high-performance HTML generation library that combines Rust-powered performance with modern Python web development."),
         
         Section("Component Documentation",
@@ -47,7 +49,7 @@ def index():
         Section("anchor",
             P("Anchor tag."),
             Button("Click me", id="myButton", on_click="$anchorOpen = !$anchorOpen"),
-            Div("default", data_anchor="'#myButton'", show="$anchorOpen"),
+            Div("default", data_anchor="'#myButton'", show="$anchorOpen", cls="bg-red-500"),
         ),
         
         signals=Signals(message=""),

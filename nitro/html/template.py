@@ -24,7 +24,9 @@ HEADER_URLS = {
         'lucide': "https://unpkg.com/lucide@latest",
         'tailwind4': "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
     }
+
 print("CSS OUTPUT ABSOLUTE",NitroConfig().tailwind.css_output)
+
 def Page(*content,
          title: str = "Nitro",
          hdrs:tuple|None=None,
@@ -81,7 +83,7 @@ def Page(*content,
     return Html(
         Head(
             Title(title),
-            # Link(rel="stylesheet", href=f"{NitroConfig().tailwind.css_output}", type="text/css"),
+            Link(rel="stylesheet", href=f"/{NitroConfig().tailwind.css_output}", type="text/css"),
             *hdrs if hdrs else (),
             Script(src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js", type="module") if datastar else Fragment(),
 

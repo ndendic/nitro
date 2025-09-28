@@ -10,37 +10,35 @@ from nitro.html.components import CodeBlock, Tabs, TabsList, TabsTrigger, TabsCo
 from typing import Callable
 
 # Shared headers for all documentation pages
-inspector = Script(src="/static/js/datastar-inspector.js", type="module")
 hdrs = (
-    Link(rel='stylesheet', href='https://unpkg.com/open-props'),
     Link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css", type="text/css"),
+    Link(rel="stylesheet", href="https://unpkg.com/open-props@1.7.16/open-props.min.css", type="text/css"),
+    Link(rel="stylesheet", href="https://github.com/argyleink/open-props/blob/main/src/props.fonts.css", type="text/css"),
     Script("import { load, apply } from 'https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js';\r\n        import AnchorPlugin from 'https://cdn.jsdelivr.net/gh/ndendic/data-satelites@master/dist/min/anchor.min.js';\r\n        load(AnchorPlugin);\r\n        apply();", type='module'),
-    # Link(rel='stylesheet', href='https://unpkg.com/open-props/normalize.min.css'),
-    Style(
-        """
-        html {
-            min-height: 100vh;
-            color: light-dark(var(--gray-9), var(--gray-1));
-            font-family: var(--font-neo-grotesque);
-            font-size: var(--font-size-fluid-0);
-            letter-spacing: var(--font-letterspacing-1);
-        }
-        main {
-            width: min(100% - 2rem, 45rem);
-            margin-inline: auto;
-        }
-        .anchor-container {
-            position: relative;
-            height: 300px;
-            border: 2px dashed #ccc;
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: auto;
-        }
+    Script(src="/static/js/datastar-inspector.js", type="module"),
+    Style("""
+html {
+    min-height: 100vh;
+    color: light-dark(var(--gray-9), var(--gray-1));
+    font-family: var(--font-neo-grotesque);
+    font-size: var(--font-size-fluid-0);
+    letter-spacing: var(--font-letterspacing-1);
+  }
+  main {
+    width: min(100% - 2rem, 45rem);
+    margin-inline: auto;
+  }
+  .anchor-container {
+    position: relative;
+    height: 300px;
+    border: 2px dashed #ccc;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+  }
     """),
-    inspector,
 )
 
 # Shared HTML and body configuration
@@ -48,10 +46,9 @@ htmlkws = dict(lang="en")
 bodykws = dict(signals=Signals(message="", conn=""))
 ftrs = (
     CustomTag("datastar-inspector"),
-    Script("lucide.createIcons();"),
 )
 # Shared page template
-page = create_template(hdrs=hdrs, htmlkw=htmlkws, bodykw=bodykws, ftrs=ftrs, highlightjs=False, datastar=False, lucide=False)
+page = create_template(hdrs=hdrs, htmlkw=htmlkws, bodykw=bodykws, ftrs=ftrs, highlightjs=True, datastar=False, lucide=True)
 
 def Section(title, *content):
     """Utility function for creating documentation sections"""
