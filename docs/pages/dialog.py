@@ -2,7 +2,7 @@
 
 from .base import *
 
-from nitro.components import (
+from nitro.html.components import (
     Dialog,
     DialogTrigger,
     DialogContent,

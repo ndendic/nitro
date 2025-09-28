@@ -3,23 +3,11 @@ Shared utilities and configuration for component documentation pages.
 All component documentation pages should import from this module.
 """
 import inspect
-from rusty_tags import *
-from rusty_tags import Section as HTMLSection
-from rusty_tags.datastar import Signals
+from nitro import *
+from nitro import Section as HTMLSection
 from nitro.starlette import *
-from nitro.components import CodeBlock, Tabs, TabsList, TabsTrigger, TabsContent
-from nitro.utils import create_template
+from nitro.html.components import CodeBlock, Tabs, TabsList, TabsTrigger, TabsContent
 from typing import Callable
-
-# Shared header URLs for external dependencies
-HEADER_URLS = {
-    'franken_css': "https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/css/core.min.css",
-    'franken_js_core': "https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/js/core.iife.js",
-    'franken_icons': "https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/js/icon.iife.js",
-    'tailwind': "https://cdn.tailwindcss.com/3.4.16",
-    'daisyui': "https://cdn.jsdelivr.net/npm/daisyui@4.12.24/dist/full.min.css",
-    'apex_charts': "https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/js/chart.iife.js"
-}
 
 # Shared headers for all documentation pages
 inspector = Script(src="/static/js/datastar-inspector.js", type="module")
@@ -51,19 +39,19 @@ hdrs = (
             justify-content: center;
             overflow: auto;
         }
-    """)
-    # inspector
+    """),
+    inspector,
 )
 
 # Shared HTML and body configuration
 htmlkws = dict(lang="en")
 bodykws = dict(signals=Signals(message="", conn=""))
 ftrs = (
-    # CustomTag("datastar-inspector"),
+    CustomTag("datastar-inspector"),
     Script("lucide.createIcons();"),
 )
 # Shared page template
-page = create_template(hdrs=hdrs, htmlkw=htmlkws, bodykw=bodykws, ftrs=ftrs, highlightjs=True, datastar=False, lucide=True)
+page = create_template(hdrs=hdrs, htmlkw=htmlkws, bodykw=bodykws, ftrs=ftrs, highlightjs=False, datastar=False, lucide=False)
 
 def Section(title, *content):
     """Utility function for creating documentation sections"""

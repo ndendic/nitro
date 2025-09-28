@@ -3,7 +3,7 @@
 from .base import *
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
-from nitro.components import Tabs, TabsList, TabsTrigger, TabsContent
+from nitro.html.components import Tabs, TabsList, TabsTrigger, TabsContent
 
 router = APIRouter()
 

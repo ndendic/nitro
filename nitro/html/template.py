@@ -7,12 +7,12 @@ to provide better separation of concerns in the Nitro framework.
 
 from typing import Optional, Callable, ParamSpec, TypeVar
 from functools import partial, wraps
-from rusty_tags import Html, Head, Title, Body, HtmlString, Script, CustomTag, Link
+from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link
+from ..config import NitroConfig
 
 P = ParamSpec("P")
 R = TypeVar("R")
 
-fragment = CustomTag("Fragment")
 
 HEADER_URLS = {
         'highlight_js': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js",
@@ -24,7 +24,7 @@ HEADER_URLS = {
         'lucide': "https://unpkg.com/lucide@latest",
         'tailwind4': "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
     }
-
+print("CSS OUTPUT ABSOLUTE",NitroConfig().tailwind.css_output)
 def Page(*content,
          title: str = "Nitro",
          hdrs:tuple|None=None,
@@ -81,8 +81,10 @@ def Page(*content,
     return Html(
         Head(
             Title(title),
+            # Link(rel="stylesheet", href=f"{NitroConfig().tailwind.css_output}", type="text/css"),
             *hdrs if hdrs else (),
-            Script(src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js", type="module") if datastar else fragment,
+            Script(src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js", type="module") if datastar else Fragment(),
+
         ),
         Body(
             *content,

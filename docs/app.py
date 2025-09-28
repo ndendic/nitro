@@ -1,20 +1,16 @@
-"""RustyTags Documentation App - Modular Structure"""
-
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from rusty_tags import *
-from rusty_tags.datastar import Signals
-
-from nitro.template_utils import create_template
-
+from fastapi.staticfiles import StaticFiles
 from pages.accordion import router as accordion_router
 from pages.codeblock import router as codeblock_router
 from pages.dialog import router as dialog_router
 from pages.tabs import router as tabs_router
 
+from pages.base import page
+from nitro import *
 
 app: FastAPI = FastAPI()
-page = create_template()
+app.mount("/static", StaticFiles(directory="docs/static"), name="static")
 
 app.include_router(codeblock_router)
 app.include_router(tabs_router)
@@ -47,6 +43,11 @@ def index():
                 Li("🎨 Open Props Integration - Semantic design tokens"),
                 Li("📊 Datastar Reactivity - Modern reactive web development"),
             ),
+        ),
+        Section("anchor",
+            P("Anchor tag."),
+            Button("Click me", id="myButton", on_click="$anchorOpen = !$anchorOpen"),
+            Div("default", data_anchor="'#myButton'", show="$anchorOpen"),
         ),
         
         signals=Signals(message=""),

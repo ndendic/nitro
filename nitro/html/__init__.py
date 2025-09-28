@@ -1,15 +1,6 @@
-# Re-export everything from rusty-tags core
-__version__ = "0.1.0"
+from rusty_tags import *
+from .template import Page, create_template, page_template
 
-# Import framework-specific components
-from .utils import show, AttrDict, uniq
-from .client import Client
-from .events import *
-from .html import *
-from rusty_tags.datastar import *
-
-__author__ = "Nikola Dendic"
-__description__ = "Booster add-on for your favourite web-framework. Built on rusty-tags core."
 
 __all__ = [
     # Core HTML/SVG tags and utilities (re-exported from rusty-tags)
@@ -30,15 +21,6 @@ __all__ = [
     "Object", "Optgroup", "OptionEl", "Option", "Picture", "Pre", "Progress", "Q", "Rp", "Rt",
     "Ruby", "S", "Samp", "Small", "Source", "Style", "Sub", "Sup", "Template", "Time",
     "Track", "U", "Var", "Video", "Wbr",
-
-    # Framework-specific utilities
-    "Page", "create_template", "page_template", "show", "AttrDict", "uniq",
-    "Client",
-
-    # Event system
-    "Namespace", "ANY", "default_namespace", "event", "on", "emit", "emit_async", "Event",
-
-    # Datastar integration
-    "DS", "signals", "Signals", "reactive_class", "attribute_generator",
-    "SSE", "ElementPatchMode", "EventType",
+    # Template utilities
+    "Page", "create_template", "page_template",
 ]
