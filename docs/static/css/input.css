@@ -1,10 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@import "https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" layer(base);
-@import "https://unpkg.com/open-props@1.7.16/open-props.min.css";
-@import "https://github.com/argyleink/open-props/blob/main/src/props.fonts.css";
-
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
