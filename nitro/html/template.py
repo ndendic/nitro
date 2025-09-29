@@ -9,6 +9,8 @@ from typing import Optional, Callable, ParamSpec, TypeVar
 from functools import partial, wraps
 from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link
 from ..config import NitroConfig
+from pathlib import Path
+
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -57,6 +59,7 @@ def add_highlightjs(hdrs:tuple, ftrs:tuple):
                 ''', type='module'),
             )
     ftrs += (Script("hljs.highlightAll();"),)
+    return hdrs, ftrs
 
 def Page(*content,
          title: str = "Nitro",
@@ -75,18 +78,21 @@ def Page(*content,
     ftrs = ftrs if ftrs is not None else ()
     htmlkw = htmlkw if htmlkw is not None else {}
     bodykw = bodykw if bodykw is not None else {}
-
-    if highlightjs: add_highlightjs(hdrs, ftrs)
+    
+    if tailwind4: hdrs += (Script(src=HEADER_URLS['tailwind4']),)
+    if highlightjs: hdrs, ftrs = add_highlightjs(hdrs, ftrs)    
     if lucide:
         hdrs += (Script(src=HEADER_URLS['lucide']),)
         ftrs += (Script("lucide.createIcons();"),)
-    if tailwind4:
-        hdrs += (Script(src=HEADER_URLS['tailwind4']),)
+
+    config = NitroConfig()
+    tailwind_css = config.tailwind.css_output
+    tw_configured = config.tailwind.css_output.exists()
 
     return Html(
         Head(
             Title(title),
-            Link(rel="stylesheet", href=f"/{NitroConfig().tailwind.css_output}", type="text/css"),
+            Link(rel="stylesheet", href=f"/{tailwind_css}", type="text/css") if tw_configured else Fragment(),
             *hdrs if hdrs else (),
             Script(src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js", type="module") if datastar else Fragment(),
 

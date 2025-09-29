@@ -12,7 +12,7 @@ from pages.tabs import router as tabs_router
 from pages.base import page
 
 app: FastAPI = FastAPI()
-app.mount("/static", StaticFiles(directory="docs/static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(codeblock_router)
 app.include_router(tabs_router)

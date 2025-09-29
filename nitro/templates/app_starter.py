@@ -12,7 +12,7 @@ from nitro import *
 
 
 def generate_app_starter(config: NitroConfig | None = None, **_) -> str:
-    """Generate StarHTML app starter with theme system."""
+    """Generate Nitro app starter with theme system."""
     if config is None:
         tailwind = TailwindConfig(
             css_output=Path("output.css"),
