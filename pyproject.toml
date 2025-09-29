@@ -11,6 +11,7 @@ dependencies = [
     "blinker>=1.9.0",
     "pydantic>=2.11.9",
     "pydantic-settings>=2.11.0",
+    "requests>=2.32.5",
     "rusty-tags>=0.6.1",
     "typer>=0.19.2",
 ]

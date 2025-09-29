@@ -144,7 +144,7 @@ def init_command(
         steps = [
             ("Creating CSS directories", lambda: setup_css_directories(config, verbose)),
             ("Downloading Tailwind binary", lambda: download_tailwind_binary(verbose)),
-            ("Creating CSS input file", lambda: create_css_input(config, verbose)),
+            (f"Creating CSS input file at {config.tailwind.css_input}", lambda: create_css_input(config, verbose)),
             ("Updating .gitignore", lambda: create_gitignore_entries(config, verbose)),
         ]
 

@@ -90,7 +90,7 @@ rusty_monster*
 resources/
 
 # Nitro generated files
-nitro.css
+output.css
 *.css.map
 
 # Nitro cache

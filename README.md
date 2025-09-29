@@ -376,13 +376,13 @@ Nitro automatically detects the best CSS file locations based on your project st
 
 ```bash
 # If static/ folder exists:
-static/css/input.css  → static/css/nitro.css
+static/css/input.css  → static/css/output.css
 
 # If assets/ folder exists:
-assets/input.css      → assets/nitro.css
+assets/input.css      → assets/output.css
 
 # Otherwise:
-input.css             → nitro.css
+input.css             → output.css
 ```
 
 #### Environment Variables

@@ -24,17 +24,6 @@ with app.setup(hide_code=True):
                 width: min(100% - 2rem, 45rem);
                 margin-inline: auto;
             }
-            ::backdrop {
-                  background-image: linear-gradient(
-                    45deg,
-                    magenta,
-                    rebeccapurple,
-                    dodgerblue,
-                    green
-                  );
-                  opacity: 0.75;
-            }
-
         """),
     )
     htmlkws = dict(lang="en")

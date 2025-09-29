@@ -16,7 +16,7 @@ class TailwindConfig(BaseSettings):
     )
 
     css_input: Path = Field(default=Path("static/css/input.css"), description="Path to Tailwind input CSS file")
-    css_output: Path = Field(default=Path("static/css/nitro.css"), description="Path to Tailwind output CSS file")
+    css_output: Path = Field(default=Path("static/css/output.css"), description="Path to Tailwind output CSS file")
     content_paths: list[str] = Field(
         default=["**/*.py", "**/*.html", "**/*.jinja2", "!**/__pycache__/**", "!**/test_*.py"],
         description="Content paths for Tailwind to scan"
@@ -63,10 +63,10 @@ class NitroConfig(BaseSettings):
 def detect_css_paths(root: Path) -> tuple[Path, Path]:
     """Detect appropriate CSS input and output paths based on project structure."""
     if (root / "static").exists():
-        return Path("static/css/input.css"), Path("static/css/nitro.css")
+        return Path("static/css/input.css"), Path("static/css/output.css")
     if (root / "assets").exists():
-        return Path("assets/input.css"), Path("assets/nitro.css")
-    return Path("input.css"), Path("nitro.css")
+        return Path("assets/input.css"), Path("assets/output.css")
+    return Path("input.css"), Path("output.css")
 
 
 def get_nitro_config(project_root: Optional[Path] = None) -> NitroConfig:
@@ -107,7 +107,7 @@ def get_nitro_config(project_root: Optional[Path] = None) -> NitroConfig:
     tailwind_config = LocalTailwindConfig()
 
     # If no environment variables were loaded, set detected defaults
-    if tailwind_config.css_input == Path("static/css/input.css") and tailwind_config.css_output == Path("static/css/nitro.css"):
+    if tailwind_config.css_input == Path("static/css/input.css") and tailwind_config.css_output == Path("static/css/output.css"):
         # Use auto-detected paths only if env vars not set
         css_input, css_output = detect_css_paths(root)
         tailwind_config = LocalTailwindConfig(
