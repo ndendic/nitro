@@ -2,13 +2,6 @@ from collections.abc import Callable
 from typing import Any, Dict, Optional
 import uuid
 
-from rusty_tags import HtmlString, I, Script
-from rusty_tags.datastar import Signals
-
-
-def Icon(icon: str, **attrs) -> HtmlString:
-    """Iconify icon element. Usage: Icon("home", cls="h-4 w-4")"""
-    return I(Script("lucide.createIcons();"),data_lucide=icon, **attrs)
 
 def cn(*classes: Any) -> str:
     result_classes: list[str] = []
@@ -73,14 +66,8 @@ def cva(base: str = "", config: dict[str, Any] | None = None) -> Callable[..., s
     return variant_function
 
 
-def generate_component_id(component_type: str, user_id: Optional[str] = None) -> str:
-    """Generate component ID following the pattern: user_id or {component_type}-{short_hash}"""
-    if user_id:
-        return user_id
-    
-    # Generate a short hash for uniqueness
-    short_hash = uuid.uuid4().hex[:6]
-    return f"{component_type}-{short_hash}"
+def uniq(length: int = 6) -> str:
+    return str(uuid.uuid4().hex[:length])
 
 
 def create_component_signals(

@@ -14,7 +14,13 @@ hdrs = (
     Link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css", type="text/css"),
     Link(rel="stylesheet", href="https://unpkg.com/open-props@1.7.16/open-props.min.css", type="text/css"),
     Link(rel="stylesheet", href="https://github.com/argyleink/open-props/blob/main/src/props.fonts.css", type="text/css"),
-    Script("import { load, apply } from 'https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js';\r\n        import AnchorPlugin from 'https://cdn.jsdelivr.net/gh/ndendic/data-satelites@master/dist/min/anchor.min.js';\r\n        load(AnchorPlugin);\r\n        apply();", type='module'),
+    Script("""
+        import { load, apply } from 'https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js';
+        import AnchorPlugin from 'https://cdn.jsdelivr.net/gh/ndendic/data-satelites@master/dist/min/anchor.min.js';
+        load(AnchorPlugin);
+        apply();""",
+        type='module'
+    ),
     Script(src="/static/js/datastar-inspector.js", type="module"),
     Style("""
 html {

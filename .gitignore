@@ -75,6 +75,7 @@ tests/
 .python-version
 .env
 *.env
+.sesskey
 
 # AI
 .claude/

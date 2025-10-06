@@ -2,14 +2,9 @@ from typing import Any, Callable, Dict, Optional
 from rusty_tags import *
 from rusty_tags.datastar import Signals
 
-from .utils import generate_component_id
+from .utils import uniq
 
 DialogContext = Dict[str, Any]
-
-
-def _resolve_component_id(raw_id: Optional[str]) -> str:
-    """Return a stable component identifier."""
-    return raw_id or generate_component_id("dialog")
 
 
 def _call_with_context(child: Any, context: DialogContext) -> Any:
@@ -44,7 +39,7 @@ def Dialog(
     need to decide on signal names manually.
     """
 
-    component_id = _resolve_component_id(id)
+    component_id = id or f""
     signal_name = f"{component_id}_open"
     dialog_element_id = element_id or component_id
 
