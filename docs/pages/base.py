@@ -17,7 +17,8 @@ hdrs = (
     Script("""
         import { load, apply } from 'https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js';
         import AnchorPlugin from 'https://cdn.jsdelivr.net/gh/ndendic/data-satelites@master/dist/min/anchor.min.js';
-        load(AnchorPlugin);
+        import PersistPlugin from 'https://cdn.jsdelivr.net/gh/ndendic/data-satellites@master/dist/min/persist.min.js';
+        load(AnchorPlugin, PersistPlugin);
         apply();""",
         type='module'
     ),
@@ -33,16 +34,6 @@ html {
   main {
     width: min(100% - 2rem, 45rem);
     margin-inline: auto;
-  }
-  .anchor-container {
-    position: relative;
-    height: 300px;
-    border: 2px dashed #ccc;
-    margin: 20px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: auto;
   }
     """),
 )

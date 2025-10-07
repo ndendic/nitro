@@ -25,3 +25,8 @@ build-backend = "hatchling.build"
 
 [tool.ty.environment]
 root = ["./nitro","./docs","./notebooks"]
+
+[dependency-groups]
+dev = [
+    "fastapi[standard]>=0.118.0",
+]
