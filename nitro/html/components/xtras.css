@@ -186,13 +186,8 @@
 
 /* === DIALOG COMPONENTS === */
 
-/* Dialog container */
-.dialog-container {
-    position: relative;
-}
-
 /* Native dialog element styling */
-dialog.dialog {
+dialog {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -206,16 +201,7 @@ dialog.dialog {
     z-index: 50;
 }
 
-/* Dialog backdrop */
-.dialog-backdrop {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 40;
-    backdrop-filter: blur(2px);
-}
-
-/* Dialog content styling */
+/* Dialog content wrapper */
 .dialog-content {
     position: relative;
     background-color: white;
@@ -271,32 +257,6 @@ dialog.dialog {
 /* Dialog close button */
 .dialog-close {
     cursor: pointer;
-}
-
-.dialog-close-x {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 2rem;
-    height: 2rem;
-    border: none;
-    background: transparent;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.25rem;
-}
-
-.dialog-close-x:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-@media (prefers-color-scheme: dark) {
-    .dialog-close-x:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
 }
 
 /* Dialog animations */

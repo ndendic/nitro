@@ -81,6 +81,8 @@ tests/
 .claude/
 .cursor/
 specs/
+AGENTS.md
+CLAUDE.md
 
 # CLAUDE.md
 

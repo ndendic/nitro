@@ -10,6 +10,7 @@ from pages.codeblock import router as codeblock_router
 from pages.dialog import router as dialog_router
 from pages.tabs import router as tabs_router
 from pages.playground import router as playground_router
+from pages.rustytags import router as rustytags_router
 
 from pages.base import page
 
@@ -21,6 +22,7 @@ app.include_router(tabs_router)
 app.include_router(accordion_router)
 app.include_router(dialog_router)
 app.include_router(playground_router)
+app.include_router(rustytags_router)
 
 @app.get("/")
 @page(title="RustyTags Documentation", wrap_in=HTMLResponse)
@@ -30,8 +32,9 @@ def index():
         P("A high-performance HTML generation library that combines Rust-powered performance with modern Python web development."),
         
         Section("Component Documentation",
-            P(LucideIcon("book-open"), "Explore the RustyTags Xtras components:"),
+            P("Explore the RustyTags Xtras components:"),
             Ul(
+                Li(A("RustyTags Datastar SDK", href="/xtras/rustytags", cls="color-blue-6 text-decoration-underline")),
                 Li(A("CodeBlock Component", href="/xtras/codeblock", cls="color-blue-6 text-decoration-underline")),
                 Li(A("Tabs Component", href="/xtras/tabs", cls="color-blue-6 text-decoration-underline")),
                 Li(A("Accordion Component (Simplified)", href="/xtras/accordion", cls="color-blue-6 text-decoration-underline")),

@@ -19,6 +19,32 @@ style: html = """
 </style>
 """
 
+class Person:
+    def __init__(self, name: str, age: int):
+        self.name = name
+        self.age = age
+
+    def render(self):
+        return Div(
+            H1("Person render"),
+            P("Name: " + self.name),
+            P("Age: " + str(self.age)),
+        ).render()
+    def __html__(self):
+        return Div(
+            H1("Person __html__"),
+            P("Name: " + self.name),
+            P("Age: " + str(self.age)),
+        ).render()
+    def __str__(self):
+        return Div(
+            H1("Person __str__"),
+            P("Name: " + self.name),
+            P("Age: " + str(self.age)),
+        ).render()
+
+nik = Person("Nik", 30)
+
 @router.get("/playground")
 @page(title="Playground", wrap_in=HTMLResponse)
 def tabs_docs():
@@ -73,4 +99,5 @@ def tabs_docs():
             data_class=f"{{open: {state.btn_open}, closed: !{state.btn_open}}}",
             data_anchor="'#myButton2'",
         ),
+        nik,
     )

@@ -11,8 +11,8 @@ from nitro.html.components import (
     DialogBody,
     DialogFooter,
     DialogClose,
-    ConfirmDialog,
 )
+from nitro.html.components import LucideIcon
 
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
@@ -20,118 +20,157 @@ from fastapi.responses import HTMLResponse
 router: APIRouter = APIRouter()
 
 def example_basic_dialog() -> HtmlString:
-    return Dialog(
+    return Div(
         DialogTrigger(
             "Open basic dialog",
-            toggles="basicDialog",
+            dialog_id="basic_dialog",
+            cls="dialog-trigger",
             style="padding:0.5rem 1rem; border:1px solid currentColor; border-radius:0.5rem; background:transparent; cursor:pointer;",
         ),
-        DialogContent(
-            DialogHeader(
-                DialogTitle("Basic dialog"),
-                DialogClose(
-                    "Close",
-                    style="border:none; background:none; cursor:pointer; text-decoration:underline;",
+        Dialog(
+            DialogContent(
+                DialogHeader(
+                    DialogTitle("Basic dialog"),
+                    DialogClose(
+                        LucideIcon("x"),
+                        dialog_id="basic_dialog",
+                        style="border:none; background:none; cursor:pointer; text-decoration:underline;",
+                    ),
+                    cls="dialog-header",
+                    style="display:flex; align-items:center; justify-content:space-between;",
                 ),
-                style="display:flex; align-items:center; justify-content:space-between;",
-            ),
-            DialogBody(
-                P("Dialogs keep their own Datastar-backed open state."),
-                P("When you pass `id='basicDialog'`, the signal becomes `$basicDialog_open` automatically."),
-                style="display:grid; gap:0.75rem;",
-            ),
-            DialogFooter(
-                DialogClose(
-                    "Cancel",
-                    style="border:1px solid currentColor; background:transparent; padding:0.4rem 0.9rem; border-radius:0.5rem; cursor:pointer;",
+                DialogBody(
+                    P("Dialogs use standard HTML dialog elements with Datastar signals."),
+                    P("When you pass `id='basic_dialog'`, the signal becomes `$basic_dialog_open` automatically."),
+                    cls="dialog-body",
+                    style="display:grid; gap:0.75rem;",
                 ),
-                DialogClose(
-                    "Confirm",
-                    on_click="console.log('Confirmed')",
-                    style="border:1px solid currentColor; background:currentColor; color:Canvas; padding:0.4rem 0.9rem; border-radius:0.5rem; cursor:pointer;",
+                DialogFooter(
+                    DialogClose(
+                        "Cancel",
+                        dialog_id="basic_dialog",
+                        style="border:1px solid currentColor; background:transparent; padding:0.4rem 0.9rem; border-radius:0.5rem; cursor:pointer;",
+                    ),
+                    DialogClose(
+                        "Confirm",
+                        dialog_id="basic_dialog",
+                        on_click="console.log('Confirmed')",
+                        style="border:1px solid currentColor; padding:0.4rem 0.9rem; border-radius:0.5rem; cursor:pointer;",
+                    ),
+                    cls="dialog-footer",
+                    style="display:flex; justify-content:flex-end; gap:0.75rem;",
                 ),
-                style="display:flex; justify-content:flex-end; gap:0.75rem;",
+                cls="dialog-content",
             ),
-            content_attrs=dict(
-                style="display:grid; gap:1.5rem; padding:1.5rem; border:1px solid currentColor; border-radius:0.75rem; background:Canvas; color:CanvasText; min-width:18rem;",
-            ),
-            style="padding:0; border:none; background:transparent;",
+            id="basic_dialog",
+            cls="dialog",
+            style="gap:1.5rem; padding:1.5rem; border:1px solid currentColor; border-radius:0.75rem; background:Canvas; color:CanvasText; min-width:18rem;",
+            data_style="{backdropFilter: $basic_dialog_open ? 'blur(6px)' : 'none'}",
         ),
-        id="basicDialog",
-        data_style="{backdropFilter: $basicDialog_open ? 'blur(6px)' : 'none'}",
-    )
-
-
-def example_confirm_dialog() -> HtmlString:
-    return ConfirmDialog(
-        title="Delete file",
-        message="Are you sure you want to delete this file? This action cannot be undone.",
-        trigger_text="Delete file",
-        confirm_text="Delete",
-        cancel_text="Cancel",
-        on_confirm="console.log('File deleted')",
-        id="deleteFile",
-        trigger_attrs={
-            "style": "padding:0.45rem 1rem; border:1px solid currentColor; border-radius:0.5rem; background:var(--red-3, #fee); cursor:pointer;",
-        },
-        confirm_attrs={
-            "style": "padding:0.45rem 1rem; border:1px solid currentColor; border-radius:0.5rem; background:var(--red-6, #c00); color:Canvas; cursor:pointer;",
-        },
-        cancel_attrs={
-            "style": "padding:0.45rem 1rem; border:1px solid currentColor; border-radius:0.5rem; background:transparent; cursor:pointer;",
-        },
-        close_icon_attrs={
-            "style": "border:none; background:none; cursor:pointer; font-size:1rem;",
-        },
-        data_style="{maxWidth: '26rem', borderColor: $deleteFile_open ? 'currentColor' : 'transparent'}",
     )
 
 
 def example_custom_dialog() -> HtmlString:
-    return Dialog(
+    return Div(
         DialogTrigger(
             "Compose message",
+            dialog_id="composer",
+            cls="dialog-trigger",
             style="padding:0.5rem 1rem; border:1px solid currentColor; border-radius:999px; background:transparent; cursor:pointer;",
         ),
-        DialogContent(
-            DialogHeader(
-                DialogTitle("Compose message"),
-                DialogClose(
-                    "×",
-                    style="border:none; background:none; font-size:1.25rem; cursor:pointer; line-height:1;",
+        Dialog(
+            DialogContent(
+                DialogHeader(
+                    DialogTitle("Compose message"),
+                    DialogClose(
+                        "×",
+                        dialog_id="composer",
+                        style="border:none; background:none; font-size:1.25rem; cursor:pointer; line-height:1;",
+                    ),
+                    cls="dialog-header",
+                    style="display:flex; align-items:center; justify-content:space-between;",
                 ),
-                style="display:flex; align-items:center; justify-content:space-between;",
-            ),
-            DialogBody(
-                P("Use `content_attrs` to style the inner surface without predefined classes."),
-                Div(
-                    Label("Subject", _for="subject"),
-                    Input(id="subject", placeholder="Quarterly report", style="padding:0.4rem 0.6rem; border:1px solid currentColor; border-radius:0.4rem;"),
-                    Label("Message", _for="message"),
-                    Textarea(id="message", rows=4, style="padding:0.4rem 0.6rem; border:1px solid currentColor; border-radius:0.4rem;"),
-                    style="display:grid; gap:0.75rem;",
+                DialogBody(
+                    P("Use standard HTML dialog elements with Datastar for reactive behavior."),
+                    Div(
+                        Label("Subject", _for="subject"),
+                        Input(id="subject", placeholder="Quarterly report", style="padding:0.4rem 0.6rem; border:1px solid currentColor; border-radius:0.4rem;"),
+                        Label("Message", _for="message"),
+                        Textarea(id="message", rows=4, style="padding:0.4rem 0.6rem; border:1px solid currentColor; border-radius:0.4rem;"),
+                        style="display:grid; gap:0.75rem;",
+                    ),
+                    cls="dialog-body",
+                    style="display:grid; gap:1rem;",
                 ),
-                style="display:grid; gap:1rem;",
-            ),
-            DialogFooter(
-                DialogClose(
-                    "Discard",
-                    style="border:1px solid currentColor; background:transparent; padding:0.45rem 1rem; border-radius:0.5rem; cursor:pointer;",
+                DialogFooter(
+                    DialogClose(
+                        "Discard",
+                        dialog_id="composer",
+                        style="border:1px solid currentColor; background:transparent; padding:0.45rem 1rem; border-radius:0.5rem; cursor:pointer;",
+                    ),
+                    DialogClose(
+                        "Send",
+                        dialog_id="composer",
+                        on_click="console.log('Message sent')",
+                        style="border:1px solid currentColor; padding:0.45rem 1rem; border-radius:0.5rem; cursor:pointer;",
+                    ),
+                    cls="dialog-footer",
+                    style="display:flex; justify-content:flex-end; gap:0.75rem;",
                 ),
-                DialogClose(
-                    "Send",
-                    on_click="console.log('Message sent')",
-                    style="border:1px solid currentColor; background:currentColor; color:Canvas; padding:0.45rem 1rem; border-radius:0.5rem; cursor:pointer;",
-                ),
-                style="display:flex; justify-content:flex-end; gap:0.75rem;",
-            ),
-            content_attrs=dict(
-                style="display:grid; gap:1.5rem; padding:1.75rem; border:1px solid currentColor; border-radius:1rem; background:Canvas; color:CanvasText; min-width:22rem;",
+                cls="dialog-content",
                 data_style="{boxShadow: $composer_open ? '0 24px 48px -24px oklch(0 0 0 / 0.45)' : 'none'}",
             ),
+            id="composer",
+            style="gap:1.5rem; padding:1.75rem; border:1px solid currentColor; border-radius:1rem; background:Canvas; color:CanvasText; min-width:22rem;",
+            data_style="{opacity: $composer_open ? 1 : 0.92}",
         ),
-        id="composer",
-        data_style="{opacity: $composer_open ? 1 : 0.92}",
+    )
+
+
+def example_confirm_dialog() -> HtmlString:
+    """Example of how to build a confirmation dialog with the simplified API"""
+    return Div(
+        DialogTrigger(
+            "Delete file",
+            dialog_id="delete-file",
+            cls="dialog-trigger",
+            style="padding:0.45rem 1rem; border:1px solid currentColor; border-radius:0.5rem; background:var(--red-3, #fee); cursor:pointer;",
+        ),
+        Dialog(
+            DialogContent(
+                DialogHeader(
+                    DialogTitle("Delete file"),
+                    DialogClose(
+                        "×",
+                        dialog_id="delete-file",
+                        style="border:none; background:none; cursor:pointer; font-size:1rem;",
+                    ),
+                    cls="dialog-header",
+                    style="display:flex; align-items:center; justify-content:space-between;",
+                ),
+                DialogBody(
+                    P("Are you sure you want to delete this file? This action cannot be undone."),
+                    cls="dialog-body",
+                ),
+                DialogFooter(
+                    DialogClose(
+                        "Cancel",
+                        dialog_id="delete-file",
+                        style="padding:0.45rem 1rem; border:1px solid currentColor; border-radius:0.5rem; background:transparent; cursor:pointer;",
+                    ),
+                    DialogClose(
+                        "Delete",
+                        dialog_id="delete-file",
+                        on_click="console.log('File deleted')",
+                        style="padding:0.45rem 1rem; border:1px solid currentColor; border-radius:0.5rem; background:var(--red-6, #c00); color:Canvas; cursor:pointer;",
+                    ),
+                    cls="dialog-footer",
+                ),
+                cls="dialog-content",
+                data_style="{maxWidth: '26rem', borderColor: $delete_file_open ? 'currentColor' : 'transparent'}",
+            ),
+            id="delete-file",
+        ),
     )
 
 
@@ -140,95 +179,84 @@ def example_custom_dialog() -> HtmlString:
 def dialog_docs():
     return Main(
         H1("Dialog Component"),
-        P("The Dialog primitive exposes native dialog behaviour without imposing styling or global JavaScript."),
+        P("The Dialog component provides a simplified interface to the native HTML `dialog` element with Datastar integration."),
 
         Section(
             "Component Purpose",
-            P("Dialog solves native modal orchestration without extra scripts:"),
+            P("Dialog solves modal orchestration using standard web APIs:"),
             Ul(
-                Li("🏗️ Datastar-driven open state shared across triggers and content"),
+                Li("🏗️ Datastar-driven open state with automatic signal generation"),
                 Li("♿️ Accessibility handled by the browser via `<dialog>` APIs"),
                 Li("⌨️ Keyboard support including ESC, focus trap, and restoration"),
                 Li("🪟 Backdrop interaction control through inline expressions"),
-                Li("🎛️ Headless composition ready for user-defined styling"),
+                Li("🎛️ Simple composition without complex context passing"),
             ),
         ),
 
         Section(
             "Basic Dialog Demo",
-            P("A straightforward dialog using inline styling and Datastar bindings."),
+            P("A straightforward dialog using the simplified API."),
             ComponentShowcase(example_basic_dialog),
         ),
 
         Section(
-            "Confirm Dialog Demo",
-            P("A convenience wrapper for confirmation workflows."),
-            # ComponentShowcase(example_confirm_dialog),
+            "Custom Dialog Demo",
+            P("Demonstrates styling hooks and inline side effects."),
+            ComponentShowcase(example_custom_dialog),
         ),
 
         Section(
-            "Custom Dialog Demo",
-            P("Demonstrates id-derived signals, styling hooks, and inline side effects."),
-            # ComponentShowcase(example_custom_dialog),
+            "Confirmation Dialog Example",
+            P("How to build a confirmation dialog with the simplified API."),
+            ComponentShowcase(example_confirm_dialog),
         ),
 
         Section(
             "API Reference",
             CodeBlock(
                 """
-from typing import Any, Optional, Dict
+from typing import Any, Optional
 
 # Root dialog wrapper
 Dialog(
-*children: Any,
-id: Optional[str] = None,
-default_open: bool = False,
-modal: bool = True,
-close_on_escape: bool = True,
-close_on_backdrop: bool = True,
-element_id: Optional[str] = None,
-cls: str = "",
-**attrs: Any,
-) -> rt.HtmlString
+    *children: Any,
+    id: str,  # Required - HTML id of dialog element
+    default_open: bool = False,
+    modal: bool = True,
+    close_on_escape: bool = True,
+    close_on_backdrop: bool = True,
+    cls: str = "",
+    **attrs: Any,
+) -> HtmlString
 
-# Trigger button
-DialogTrigger(*children: Any, cls: str = "", **attrs: Any)
+# Trigger button (uses basic JS: document.getElementById('id').showModal())
+DialogTrigger(
+    *children: Any,
+    dialog_id: str,  # Required - ID of dialog to open
+    cls: str = "",
+    **attrs: Any,
+) -> HtmlString
 
-# Dialog surface+content
+# Dialog content wrapper
 DialogContent(
-*children: Any,
-cls: str = "",
-*,
-content_attrs: Optional[Dict[str, Any]] = None,
-dialog_cls: str = "",
-**attrs: Any,
-)
+    *children: Any,
+    cls: str = "",
+    **attrs: Any,
+) -> HtmlString
 
-# Sections and helpers
-DialogHeader(*children: Any, cls: str = "", **attrs: Any)
-DialogTitle(*children: Any, cls: str = "", **attrs: Any)
-DialogBody(*children: Any, cls: str = "", **attrs: Any)
-DialogFooter(*children: Any, cls: str = "", **attrs: Any)
-DialogClose(*children: Any, cls: str = "", **attrs: Any)
+# Dialog sections
+DialogHeader(*children: Any, cls: str = "", **attrs: Any) -> HtmlString
+DialogTitle(*children: Any, cls: str = "", **attrs: Any) -> HtmlString
+DialogBody(*children: Any, cls: str = "", **attrs: Any) -> HtmlString
+DialogFooter(*children: Any, cls: str = "", **attrs: Any) -> HtmlString
 
-# Convenience pattern
-ConfirmDialog(
-title: str,
-message: str,
-*,
-id: Optional[str] = None,
-confirm_text: str = "Confirm",
-cancel_text: str = "Cancel",
-trigger_text: str = "Open Dialog",
-on_confirm: str = "",
-trigger_attrs: Optional[Dict[str, Any]] = None,
-confirm_attrs: Optional[Dict[str, Any]] = None,
-cancel_attrs: Optional[Dict[str, Any]] = None,
-close_icon: str = "×",
-close_icon_attrs: Optional[Dict[str, Any]] = None,
-element_id: Optional[str] = None,
-**attrs: Any,
-) -> rt.HtmlString
+# Close button (uses basic JS: document.getElementById('id').close())
+DialogClose(
+    *children: Any,
+    dialog_id: str,  # Required - ID of dialog to close
+    cls: str = "",
+    **attrs: Any,
+) -> HtmlString
 """,
                 code_cls="language-python",
             ),
@@ -237,11 +265,23 @@ element_id: Optional[str] = None,
         Section(
             "Implementation Notes",
             Ul(
-                Li("🆔 Pass `id` once; the `$<id>_open` signal is generated automatically."),
-                Li("🦀 Native-first: the component calls `showModal()`/`show()` through `data-effect`"),
-                Li("📊 Signals: triggers and closers mutate the same Datastar signal"),
-                Li("🎛️ Hooks: use `content_attrs` for inner surface styling and `data_style` to react to `$<id>_open`"),
-                Li("🚫 No globals: all interactivity lives in inline expressions"),
+                Li("🆔 Pass `id` to Dialog and `dialog_id` to triggers/closers"),
+                Li("🦀 Native-first: uses standard HTML `<dialog>` element with basic JavaScript API"),
+                Li("📊 Simple: `document.getElementById('dialog-id').showModal()` and `.close()`"),
+                Li("🎛️ No complex state management - just basic DOM manipulation"),
+                Li("🚫 No Datastar complexity - pure JavaScript for dialog control"),
+            ),
+        ),
+
+        Section(
+            "Migration from Old API",
+            P("The new API is simpler but requires some changes:"),
+            Ul(
+                Li("✅ `Dialog(id='my-dialog')` - same as before"),
+                Li("✅ `DialogTrigger('Open', dialog_id='my-dialog')` - now requires explicit dialog_id"),
+                Li("✅ `DialogClose('Close', dialog_id='my-dialog')` - now requires explicit dialog_id"),
+                Li("❌ No more `ConfirmDialog` - build your own with the components above"),
+                Li("❌ No more `content_attrs` - use `DialogContent` with direct attributes"),
             ),
         ),
 
@@ -250,7 +290,7 @@ element_id: Optional[str] = None,
             Ul(
                 Li("🎯 Focus returns to the trigger once the dialog closes"),
                 Li("⌨️ ESC and backdrop clicks can be toggled via parameters"),
-                Li("🔖 `aria-*` wiring keeps triggers and dialog content associated"),
+                Li("🔖 `aria-*` attributes are automatically set for proper association"),
             ),
         ),
 

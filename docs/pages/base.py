@@ -35,6 +35,41 @@ html {
     width: min(100% - 2rem, 45rem);
     margin-inline: auto;
   }
+  .dialog {
+    top: 0;
+    bottom: 0;
+    opacity: 0;
+    transition: all;
+    transition-behavior: allow-discrete;
+
+    &:is([open],:popover-open) {
+      opacity: 100;
+
+      &::backdrop {
+        opacity: 100;
+      }
+      > article {
+        scale: 100;
+      }
+
+      @starting-style {
+        opacity: 0;
+
+        &::backdrop {
+          opacity: 0;
+        }
+        > article {
+          scale: 95;
+        }
+      }
+    }
+    &::backdrop {
+      opacity: 0;
+      transition: all;
+      transition-behavior: allow-discrete;
+    }
+  }
+}
     """),
 )
 
