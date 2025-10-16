@@ -75,10 +75,15 @@ tests/
 .python-version
 .env
 *.env
+.sesskey
 
-# Claude
+# AI
 .claude/
 .cursor/
+specs/
+AGENTS.md
+CLAUDE.md
+
 # CLAUDE.md
 
 
@@ -86,3 +91,11 @@ tests/
 datastar-inspector*
 rusty_monster*
 resources/
+
+# Nitro generated files
+output.css
+*.css.map
+
+# Nitro cache
+.nitro/
+AGENTS.md

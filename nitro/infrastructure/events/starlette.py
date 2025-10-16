@@ -1,6 +1,6 @@
 from typing import Any, Mapping
 
-from .datastar import SSE
+from rusty_tags.datastar import SSE
 from .events import ANY
 from datastar_py.consts import ElementPatchMode
 from datastar_py.sse import _HtmlProvider

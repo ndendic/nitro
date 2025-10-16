@@ -1,19 +1,10 @@
-# Re-export everything from rusty-tags core
-__version__ = "0.1.0"
+from rusty_tags import *
+from .template import Page, create_template, page_template
 
-# Import framework-specific components
-from nitro.utils import show, AttrDict, uniq
-from nitro.infrastructure.events.events import *  # noqa: F403
-from nitro.infrastructure.events.client import Client
-from nitro.infrastructure.html import *  # noqa: F403
-from nitro.infrastructure.html.datastar import *  # noqa: F403
 
-__author__ = "Nikola Dendic"
-__description__ = "Booster add-on for your favourite web-framework. Built on rusty-tags core."
-
-__all__ = [  # noqa: F405
+__all__ = [
     # Core HTML/SVG tags and utilities (re-exported from rusty-tags)
-    "HtmlString", "TagBuilder", "CustomTag",  
+    "HtmlString", "TagBuilder", "CustomTag",
     "A", "Aside", "B", "Body", "Br", "Button", "Code", "Div", "Em", "Form",
     "H1", "H2", "H3", "H4", "H5", "H6", "Head", "Header", "Html", "I", "Img",
     "Input", "Label", "Li", "Link", "Main", "Nav", "P", "Script", "Section",
@@ -30,15 +21,6 @@ __all__ = [  # noqa: F405
     "Object", "Optgroup", "OptionEl", "Option", "Picture", "Pre", "Progress", "Q", "Rp", "Rt",
     "Ruby", "S", "Samp", "Small", "Source", "Style", "Sub", "Sup", "Template", "Time",
     "Track", "U", "Var", "Video", "Wbr",
-
-    # Framework-specific utilities
-    "Page", "create_template", "page_template", "show", "AttrDict", "uniq",
-    "Client",
-
-    # Event system
-    "Namespace", "ANY", "default_namespace", "event", "on", "emit", "emit_async", "Event",
-
-    # Datastar integration
-    "DS", "signals", "Signals", "reactive_class", "attribute_generator",
-    "SSE", "ElementPatchMode", "EventType",
+    # Template utilities
+    "Page", "create_template", "page_template",
 ]

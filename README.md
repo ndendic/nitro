@@ -2,7 +2,7 @@
 
 ⚠️ **Early Beta** - This library is in active development and APIs may change.
 
-A booster add-on for your favourite web-framework. Built on rusty-tags core. Nitro provides a web development toolkit with intelligent templating, reactive component support, event system, and framework integrations.
+A booster add-on for your favourite web-framework. Built on rusty-tags core. Nitro provides a web development toolkit with intelligent templating, reactive component support, event system, framework integrations, and a powerful Tailwind CSS CLI.
 
 ## What Nitro Does
 
@@ -14,6 +14,7 @@ Nitro provides a comprehensive web development framework with:
 - **🔄 Reactive Components**: Built-in Datastar integration for modern web applications
 - **🏗️ FastHTML-Style API**: Familiar syntax with callable chaining support
 - **🧠 Intelligent Processing**: Automatic attribute handling and smart type conversion
+- **🎯 Tailwind CSS CLI**: Framework-agnostic CLI for Tailwind CSS integration and build management
 - **📦 Framework Ready**: Works with FastAPI, Flask, Django, and other Python web frameworks
 
 ## Architecture
@@ -35,6 +36,19 @@ pip install nitro-boost
 git clone <repository>
 cd nitro
 pip install -e .
+```
+
+The installation includes the `nitro` CLI for Tailwind CSS management:
+
+```bash
+# Verify CLI installation
+nitro --version
+
+# See available commands
+nitro --help
+
+# Initialize Tailwind CSS in your project
+nitro tw init
 ```
 
 ### Basic HTML Generation
@@ -269,6 +283,262 @@ class MyComponent:
 Div(MyComponent())
 ```
 
+## ⚡ Tailwind CSS CLI
+
+Nitro includes a powerful, framework-agnostic CLI for Tailwind CSS integration that works with any Python web framework.
+
+### Quick Start
+
+```bash
+# Initialize Tailwind CSS in your project
+nitro tw init
+
+# Start development with file watching
+nitro tw dev
+
+# Build production CSS
+nitro tw build
+```
+
+### Features
+
+- **🚀 Framework Agnostic**: Works with FastAPI, Django, Flask, FastHTML, Sanic, and any Python framework
+- **📦 Standalone Binary**: Downloads and manages Tailwind CSS standalone CLI automatically
+- **⚙️ Smart Configuration**: Auto-detects project structure with environment variable overrides
+- **👀 File Watching**: Development mode with automatic CSS rebuilding
+- **🎯 Content Scanning**: Scans your entire project for Tailwind classes
+- **🔧 Zero Config**: Works out of the box with sensible defaults
+
+### Commands
+
+#### `nitro tw init`
+
+Initialize Tailwind CSS in your project:
+
+```bash
+# Basic initialization
+nitro tw init
+
+# With detailed output
+nitro tw init --verbose
+
+# Force overwrite existing files
+nitro tw init --force
+```
+
+**What it does:**
+- Downloads the Tailwind CSS standalone binary for your platform
+- Creates CSS input file with Tailwind v4 directives
+- Sets up appropriate directory structure
+- Updates `.gitignore` with generated file patterns
+
+#### `nitro tw dev`
+
+Start Tailwind CSS in watch mode for development:
+
+```bash
+# Start file watcher
+nitro tw dev
+
+# With detailed output
+nitro tw dev --verbose
+```
+
+**Features:**
+- Watches all project files for Tailwind class changes
+- Automatically rebuilds CSS when changes detected
+- Shows build progress and file sizes
+- Graceful keyboard interrupt handling
+
+#### `nitro tw build`
+
+Build optimized production CSS:
+
+```bash
+# Build production CSS
+nitro tw build
+
+# Build with custom output path
+nitro tw build --output dist/styles.css
+
+# Build without minification
+nitro tw build --no-minify
+
+# Verbose build information
+nitro tw build --verbose
+```
+
+### Configuration
+
+#### Auto-Detection
+
+Nitro automatically detects the best CSS file locations based on your project structure:
+
+```bash
+# If static/ folder exists:
+static/css/input.css  → static/css/output.css
+
+# If assets/ folder exists:
+assets/input.css      → assets/output.css
+
+# Otherwise:
+input.css             → output.css
+```
+
+#### Environment Variables
+
+Override default paths using environment variables:
+
+```bash
+# Custom input CSS location
+NITRO_TAILWIND_CSS_INPUT="src/styles/main.css"
+
+# Custom output CSS location
+NITRO_TAILWIND_CSS_OUTPUT="dist/app.css"
+
+# Custom content scanning paths
+NITRO_TAILWIND_CONTENT_PATHS='["src/**/*.py", "templates/**/*.html"]'
+```
+
+#### Environment Files
+
+Create `.env` files in your project root for persistent configuration:
+
+```bash
+# .env
+NITRO_TAILWIND_CSS_INPUT="assets/styles/input.css"
+NITRO_TAILWIND_CSS_OUTPUT="public/css/styles.css"
+
+# .env.local (for local development overrides)
+NITRO_TAILWIND_CSS_OUTPUT="dev/styles.css"
+
+# .env.prod (for production settings)
+NITRO_TAILWIND_CSS_OUTPUT="dist/production.css"
+```
+
+### Framework Examples
+
+#### FastAPI
+
+```bash
+# Project structure
+myapp/
+├── static/css/
+├── templates/
+├── .env
+└── main.py
+
+# .env
+NITRO_TAILWIND_CSS_INPUT="static/css/input.css"
+NITRO_TAILWIND_CSS_OUTPUT="static/css/styles.css"
+```
+
+#### Django
+
+```bash
+# Project structure
+myproject/
+├── myapp/static/css/
+├── templates/
+├── .env
+└── settings.py
+
+# .env
+NITRO_TAILWIND_CSS_INPUT="myapp/static/src/input.css"
+NITRO_TAILWIND_CSS_OUTPUT="myapp/static/css/tailwind.css"
+NITRO_TAILWIND_CONTENT_PATHS='["myapp/**/*.py", "templates/**/*.html"]'
+```
+
+#### Flask
+
+```bash
+# Project structure
+flask-app/
+├── static/css/
+├── templates/
+├── .env
+└── app.py
+
+# .env
+NITRO_TAILWIND_CSS_INPUT="static/scss/main.css"
+NITRO_TAILWIND_CSS_OUTPUT="static/css/app.css"
+```
+
+### Binary Management
+
+The CLI automatically manages the Tailwind CSS standalone binary:
+
+- **Download Location**: `~/.nitro/cache/latest/tailwindcss-{platform}-{arch}`
+- **Version Support**: Latest Tailwind CSS v4.x
+- **Platform Support**: Windows, macOS (Intel/ARM), Linux (x64/ARM)
+- **Validation**: Ensures downloaded binary is genuine Tailwind CLI
+- **Cache**: Reuses downloaded binary across projects
+
+### Content Scanning
+
+By default, Nitro scans these file patterns for Tailwind classes:
+
+```python
+[
+    "**/*.py",      # Python files
+    "**/*.html",    # HTML templates
+    "**/*.jinja2",  # Jinja templates
+    "!**/__pycache__/**",  # Exclude Python cache
+    "!**/test_*.py"       # Exclude test files
+]
+```
+
+Customize scanning patterns with environment variables:
+
+```bash
+NITRO_TAILWIND_CONTENT_PATHS='[
+    "src/**/*.py",
+    "templates/**/*.html",
+    "components/**/*.vue",
+    "!**/node_modules/**"
+]'
+```
+
+### Integration with Development Servers
+
+The Tailwind CLI runs independently of your web framework, making it perfect for development workflows:
+
+```bash
+# Terminal 1: Start your web server
+python -m uvicorn main:app --reload
+
+# Terminal 2: Start Tailwind watcher
+nitro tw dev
+```
+
+Or use process managers like `honcho` or `foreman`:
+
+```yaml
+# Procfile
+web: python -m uvicorn main:app --reload --port 8000
+css: nitro tw dev
+```
+
+### Troubleshooting
+
+**Binary Download Issues:**
+```bash
+# Check binary location
+ls -la ~/.nitro/cache/latest/
+
+# Clear cache and re-download
+rm -rf ~/.nitro/cache/ && nitro tw init
+```
+
+**Configuration Issues:**
+```bash
+# Test configuration loading
+python -c "from nitro.config import get_nitro_config; print(get_nitro_config().tailwind.css_output)"
+
+# Verify environment variables
+env | grep NITRO_TAILWIND
+```
+
 ## Framework Integration
 
 ### FastAPI
@@ -361,6 +631,7 @@ python lab/benchmarks.py
 - Reactive component integration
 - Framework compatibility
 - Memory optimization
+- Tailwind CSS CLI with environment configuration
 
 ### 🔄 In Development
 - Comprehensive test suite
@@ -370,9 +641,10 @@ python lab/benchmarks.py
 
 ## System Requirements
 
-- **Python 3.8+** (broad compatibility)
-- **Dependencies**: `blinker ≥1.9.0`, `datastar-py ≥0.6.5`, `pydantic ≥2.11.7`
+- **Python 3.10+** (broad compatibility)
+- **Dependencies**: `blinker ≥1.9.0`, `pydantic ≥2.11.9`, `pydantic-settings ≥2.11.0`, `rusty-tags ≥0.6.1`, `typer ≥0.19.2`
 - **Build Requirements** (development): Rust 1.70+, Maturin ≥1.9
+- **CLI Requirements**: Internet connection for Tailwind CSS binary download (cached after first use)
 
 ## License
 

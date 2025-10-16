@@ -7,44 +7,31 @@ to provide better separation of concerns in the Nitro framework.
 
 from typing import Optional, Callable, ParamSpec, TypeVar
 from functools import partial, wraps
-from rusty_tags import Html, Head, Title, Body, HtmlString, Script, CustomTag, Link
-import uuid
+from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link
+from ..config import NitroConfig
+from pathlib import Path
+
 
 P = ParamSpec("P")
 R = TypeVar("R")
 
-fragment = CustomTag("Fragment")
 
-HEADER_URLS = {
+HEADER_URLS = {        
+        # Lucide icons
+        'lucide': "https://unpkg.com/lucide@latest",
+        # Tailwind 4
+        'tailwind4': "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4",
+        # Highlight.js
         'highlight_js': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js",
         'highlight_python': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/python.min.js",
         'highlight_light_css': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-light.css",
         'highlight_dark_css': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css",
         'highlight_copy': "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.js",
-        'highlight_copy_css': "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.css",
-        'tailwind4': "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"
+        'highlight_copy_css': "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.css"
     }
 
-def Page(*content,
-         title: str = "Nitro",
-         hdrs:tuple=None,
-         ftrs:tuple=None,
-         htmlkw:dict=None,
-         bodykw:dict=None,
-         datastar:bool=True,
-         tailwind4:bool=False,
-         lucide:bool=False,
-         highlightjs:bool=False
-    ) -> HtmlString:
-    """Base page layout with common HTML structure."""
-    # initialize empty tuple if None
-    hdrs = hdrs if hdrs is not None else ()
-    ftrs = ftrs if ftrs is not None else ()
-    htmlkw = htmlkw if htmlkw is not None else {}
-    bodykw = bodykw if bodykw is not None else {}
-
-    if highlightjs:
-            hdrs += (   # pyright: ignore[reportOperatorIssue]
+def add_highlightjs(hdrs:tuple, ftrs:tuple):
+    hdrs += (   # pyright: ignore[reportOperatorIssue]
                 Script(src=HEADER_URLS['highlight_js']),
                 Script(src=HEADER_URLS['highlight_python']),
                 Link(rel="stylesheet", href=HEADER_URLS['highlight_light_css'], id='hljs-light'),
@@ -71,18 +58,44 @@ def Page(*content,
                     hljs.highlightAll();
                 ''', type='module'),
             )
-            ftrs += (Script("hljs.highlightAll();"),)
+    ftrs += (Script("hljs.highlightAll();"),)
+    return hdrs, ftrs
+
+def Page(*content,
+         title: str = "Nitro",
+         hdrs:tuple|None=None,
+         ftrs:tuple|None=None,
+         htmlkw:dict|None=None,
+         bodykw:dict|None=None,
+         datastar:bool=True,
+         tailwind4:bool=False,
+         lucide:bool=False,
+         highlightjs:bool=False
+    ) -> HtmlString:
+    """Base page layout with common HTML structure."""
+    # initialize empty tuple if None
+    hdrs = hdrs if hdrs is not None else ()
+    ftrs = ftrs if ftrs is not None else ()
+    htmlkw = htmlkw if htmlkw is not None else {}
+    bodykw = bodykw if bodykw is not None else {}
+    
+    if tailwind4: hdrs += (Script(src=HEADER_URLS['tailwind4']),)
+    if highlightjs: hdrs, ftrs = add_highlightjs(hdrs, ftrs)    
     if lucide:
-        hdrs += (Script(src="https://unpkg.com/lucide@latest"),)
+        hdrs += (Script(src=HEADER_URLS['lucide']),)
         ftrs += (Script("lucide.createIcons();"),)
-    if tailwind4:
-        hdrs += (Script(src=HEADER_URLS['tailwind4']),)
+
+    config = NitroConfig()
+    tailwind_css = config.tailwind.css_output
+    tw_configured = config.tailwind.css_output.exists()
 
     return Html(
         Head(
             Title(title),
+            Link(rel="stylesheet", href=f"/{tailwind_css}", type="text/css") if tw_configured else Fragment(),
             *hdrs if hdrs else (),
-            Script(src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js", type="module") if datastar else fragment,
+            Script(src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js", type="module") if datastar else Fragment(),
+
         ),
         Body(
             *content,
