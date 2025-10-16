@@ -6,10 +6,10 @@ from pathlib import Path
 import typer
 from rich.table import Table
 
-from ..config import get_nitro_config
-from ..css.binary import TailwindBinaryManager
-from ..templates.css_input import generate_css_input
-from .utils import console, error, success
+from nitro.config import get_nitro_config
+from nitro.application.tailwind_builder.binary import TailwindBinaryManager
+from nitro.application.templates.css_input import generate_css_input
+from nitro.application.cli.utils import console, error, success
 
 
 def format_size(bytes: int) -> str:
@@ -69,7 +69,7 @@ def build_command(
 
         # Override output path if specified
         if output:
-            from ..config import NitroConfig, TailwindConfig
+            from nitro.config import NitroConfig, TailwindConfig
             output_path = Path(output)
             if not output_path.suffix:
                 output_path = output_path.with_suffix(".css")
@@ -77,7 +77,7 @@ def build_command(
             # Create new config with custom output
             custom_tailwind = TailwindConfig(
                 css_input=config.tailwind.css_input,
-                css_output=output_path,
+                css_output=output_path, 
                 content_paths=config.tailwind.content_paths
             )
             config = NitroConfig(

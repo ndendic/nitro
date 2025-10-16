@@ -3,10 +3,10 @@ from pathlib import Path
 import typer
 from rich.progress import track
 
-from ..config import NitroConfig, get_nitro_config
-from ..css.binary import TailwindBinaryManager
-from ..templates.css_input import generate_css_input
-from .utils import confirm, console, error, info, success
+from nitro.config import NitroConfig, get_nitro_config
+from nitro.application.tailwind_builder.binary import TailwindBinaryManager
+from nitro.application.templates.css_input import generate_css_input
+from nitro.application.cli.utils import confirm, console, error, info, success
 
 
 def validate_tailwind_project(config: NitroConfig, force: bool = False) -> None:

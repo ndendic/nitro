@@ -1,6 +1,6 @@
 """CSS input template generation with hybrid theming support."""
 
-from ..config import ProjectConfig
+from nitro.config import ProjectConfig
 
 TAILWIND_CSS_TEMPLATE = """\
 @import "tailwindcss";

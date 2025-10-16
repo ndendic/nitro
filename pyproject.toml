@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-nitro = "nitro.cli.main:app"
+nitro = "nitro.application.cli.main:app"
 
 [build-system]
 requires = ["hatchling"]

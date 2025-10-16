@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from ..config import NitroConfig, TailwindConfig
+from nitro.config import NitroConfig, TailwindConfig
 
 APP_TEMPLATE = """\
 from nitro import *
