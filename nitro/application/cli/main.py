@@ -3,10 +3,10 @@ from rich import print as rich_print
 
 from nitro import __version__
 
-from .build import build_command
-from .dev import dev_command
-from .init import init_command
-
+from .tailwind_commands.build import build_command
+from .tailwind_commands.dev import dev_command
+from .tailwind_commands.init import init_command
+from .database_commands.cli import app as db_app
 app = typer.Typer(
     name="nitro",
     help="Python-first web framework with Tailwind CSS integration",
@@ -41,6 +41,7 @@ tw_app.command("dev")(dev_command)
 tw_app.command("build")(build_command)
 app.add_typer(tw_app)
 
+app.add_typer(db_app)
 
 if __name__ == "__main__":
     app()

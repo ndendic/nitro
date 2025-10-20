@@ -8,13 +8,12 @@ to provide better separation of concerns in the Nitro framework.
 from typing import Optional, Callable, ParamSpec, TypeVar
 from functools import partial, wraps
 from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link
-from ..config import NitroConfig
-from pathlib import Path
-
+from nitro.config import NitroConfig
 
 P = ParamSpec("P")
 R = TypeVar("R")
 
+config = NitroConfig()
 
 HEADER_URLS = {        
         # Lucide icons
@@ -85,7 +84,6 @@ def Page(*content,
         hdrs += (Script(src=HEADER_URLS['lucide']),)
         ftrs += (Script("lucide.createIcons();"),)
 
-    config = NitroConfig()
     tailwind_css = config.tailwind.css_output
     tw_configured = config.tailwind.css_output.exists()
 

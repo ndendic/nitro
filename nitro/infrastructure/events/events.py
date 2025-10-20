@@ -4,10 +4,7 @@ import threading
 from typing import Any, TypeVar, Protocol
 import collections.abc as c
 from blinker import ANY, NamedSignal
-
-
-
-    
+   
 
 async def _aiter_sync_gen(gen):
     """Bridge a sync generator to async without blocking the event loop."""
@@ -150,8 +147,8 @@ same signal.
 
 F = TypeVar("F", bound=c.Callable[..., Any])
 
-def on(signal: str|Event, sender: Any = ANY, weak: bool = True) -> c.Callable[[F], F]:
-    sig = signal if isinstance(signal, Event) else event(signal)
+def on(evt: str|Event, sender: Any = ANY, weak: bool = True) -> c.Callable[[F], F]:
+    sig = evt if isinstance(evt, Event) else event(evt)
     def decorator(fn):
         sig.connect(fn, sender, weak)
         return fn
