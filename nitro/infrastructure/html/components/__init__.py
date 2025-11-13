@@ -8,3 +8,25 @@ from .tabs import Tabs, TabsList, TabsTrigger, TabsContent
 from .accordion import Accordion, AccordionItem
 from .dialog import Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogBody, DialogFooter, DialogClose
 from .icons import LucideIcon
+
+
+__all__ = [
+    'cva',
+    'cn',
+    'CodeBlock',
+    'Tabs',
+    'TabsList',
+    'TabsTrigger',
+    'TabsContent',
+    'Accordion',
+    'AccordionItem',
+    'Dialog',
+    'DialogTrigger',
+    'DialogContent',
+    'DialogHeader',
+    'DialogTitle',
+    'DialogBody',
+    'DialogFooter',
+    'DialogClose',
+    'LucideIcon',
+]

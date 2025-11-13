@@ -1,10 +1,13 @@
 import asyncio
 import inspect
 import threading
-from typing import Any, TypeVar, Protocol
+from typing import Any, TypeVar, Protocol, Callable
 import collections.abc as c
 from blinker import ANY, NamedSignal
-   
+from nitro.utils import filter_dict, match
+
+
+F = TypeVar("F", bound=Callable[..., Any])
 
 async def _aiter_sync_gen(gen):
     """Bridge a sync generator to async without blocking the event loop."""
@@ -55,7 +58,64 @@ async def _aiter_results(handler, *args, **kwargs):
     yield rv
 
 
+class Namespace(dict[str, 'Event']):
+    """A dict mapping names to events."""
+
+    def event(self, name: str, doc: str | None = None) -> 'Event':
+        """Return the :class:`Event` for the given ``name``, creating it
+        if required. Repeated calls with the same name return the same event.
+
+        :param name: The name of the event.
+        :param doc: The docstring of the event.
+        """
+        if name not in self:
+            self[name] = Event(name, self, doc)
+
+        return self[name]
+
+
+class _PNamespaceEvent(Protocol):
+    def __call__(self, name: str, doc: str | None = None) -> 'Event': ...
+
+
+default_namespace: Namespace = Namespace()
+"""A default :class:`Namespace` for creating named signals. :func:`signal`
+creates a :class:`Event` in this namespace.
+overides the blinker default_namespace.
+"""
+
+event: _PNamespaceEvent = default_namespace.event
+"""Return a :class:`Event` in :data:`default_namespace` with the given
+``name``, creating it if required. Repeated calls with the same name return the
+same signal.
+"""
+
+def filter_signals(filter_query: str, namespace: Namespace = default_namespace) -> dict[str, 'Event']:
+    return filter_dict(filter_query, namespace)
+
+
 class Event(NamedSignal):    
+
+    def __init__(self, name: str, namespace: Namespace = default_namespace, doc: str | None = None) -> None:
+        super().__init__(name, doc)
+        # Signal can be in mupltiple namespaces but only one namespace is set as default for filtering connected receivers
+        self.namespace: Namespace = namespace
+        self.connect_filtered(sender=ANY, weak=False) # connect to all receivers in the namespace
+
+    def connect(self, receiver: F, sender: Any = ANY, weak: bool = True) -> F:
+        super().connect(receiver, sender, weak)
+        self.connect_filtered(sender, weak)
+        return receiver
+
+    def connect_filtered(self, sender: Any = ANY, weak: bool = True):
+        for name, sig in self.namespace.items():
+            if match(name, self.name) and name != self.name:
+                for r, receiver in sig.receivers.items():
+                    self.receivers[r] = receiver
+                    self._by_receiver[r].update(sig._by_receiver[r])
+                    self._by_sender.update(sig._by_sender)
+                    self._by_receiver[sender].add(r)
+                    
 
     def emit(self, sender: Any = ANY, *args, **kwargs):
         """Enhanced emit that handles all handler types"""
@@ -79,6 +139,7 @@ class Event(NamedSignal):
             async for item in _aiter_results(receiver, sender, *args, **kwargs):
                 if item is not None: results.append(item)
             return results
+
         try:
             loop = asyncio.get_running_loop()
             loop.create_task(consume())
@@ -113,44 +174,12 @@ class Event(NamedSignal):
         return tasks_results
 
 
-class Namespace(dict[str, Event]):
-    """A dict mapping names to events."""
-
-    def event(self, name: str, doc: str | None = None) -> Event:
-        """Return the :class:`Event` for the given ``name``, creating it
-        if required. Repeated calls with the same name return the same event.
-
-        :param name: The name of the event.
-        :param doc: The docstring of the event.
-        """
-        if name not in self:
-            self[name] = Event(name, doc)
-
-        return self[name]
-
-
-class _PNamespaceEvent(Protocol):
-    def __call__(self, name: str, doc: str | None = None) -> Event: ...
-
-
-default_namespace: Namespace = Namespace()
-"""A default :class:`Namespace` for creating named signals. :func:`signal`
-creates a :class:`Event` in this namespace.
-overides the blinker default_namespace.
-"""
-
-event: _PNamespaceEvent = default_namespace.event
-"""Return a :class:`Event` in :data:`default_namespace` with the given
-``name``, creating it if required. Repeated calls with the same name return the
-same signal.
-"""
-
-F = TypeVar("F", bound=c.Callable[..., Any])
-
 def on(evt: str|Event, sender: Any = ANY, weak: bool = True) -> c.Callable[[F], F]:
-    sig = evt if isinstance(evt, Event) else event(evt)
+    sigs = filter_signals(evt, default_namespace)
+    if not sigs: sigs = {evt: event(evt)}
     def decorator(fn):
-        sig.connect(fn, sender, weak)
+        for tpc, sig in sigs.items():
+            sig.connect(fn, sender, weak)
         return fn
     return decorator
 

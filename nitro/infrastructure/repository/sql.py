@@ -17,15 +17,15 @@ class SQLModelRepository(EntityRepositoryInterface):
     _instance = None
     _initialized = False
 
-    def __new__(cls):
+    def __new__(cls, url: Optional[str] = config.db_url, echo: bool = False):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
+            cls._instance.engine = create_engine(url, echo=echo)
         return cls._instance
 
-    def __init__(self, url: str = config.db_url, echo: bool = False):
+    def __init__(self, url: Optional[str] = config.db_url, echo: bool = False):
         if not self._initialized:
             SQLModelRepository._initialized = True
-            self.engine = create_engine(url, echo=echo)
 
     def init_db(self) -> None:
         SQLModel.metadata.create_all(self.engine)

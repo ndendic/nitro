@@ -18,7 +18,7 @@ def emit_to_topic(topic: str | list[str] | Any, sender: str | Any = ANY, *args, 
 
 def sse_elements(
         elements: str | _HtmlProvider,
-        selector: str,
+        selector: str | None = None,
         mode: ElementPatchMode = ElementPatchMode.REPLACE,
         use_view_transition: bool | None = None,
         event_id: str | None = None,
@@ -27,7 +27,7 @@ def sse_elements(
         sender: str | Any = ANY):
     
     result = SSE.patch_elements(elements,
-        selector=selector,
+        selector=selector if selector else None,
         mode=mode,
         # use_view_transitions=use_view_transition, TODO there is a bug in datastar_py here
         event_id=event_id,
