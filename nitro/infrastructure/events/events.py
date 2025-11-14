@@ -144,7 +144,10 @@ class Event(NamedSignal):
             loop = asyncio.get_running_loop()
             loop.create_task(consume())
         except RuntimeError:
-            print(f"No event loop for async handler {receiver.__name__}")
+            def run_in_thread():
+                asyncio.run(consume())
+            threading.Thread(target=run_in_thread, daemon=True).start()
+            # print(f"No event loop for async handler {receiver.__name__}")
     
     def _consume_sync(self, receiver, sender, **kwargs):
         """Consume sync handler/generator immediately"""
