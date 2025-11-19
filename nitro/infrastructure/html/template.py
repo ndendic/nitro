@@ -5,6 +5,7 @@ This module provides enhanced templating functionality moved from the core utils
 to provide better separation of concerns in the Nitro framework.
 """
 
+from asyncio import iscoroutine, iscoroutinefunction
 from typing import Optional, Callable, ParamSpec, TypeVar
 from functools import partial, wraps
 from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link
@@ -131,11 +132,15 @@ def create_template(page_title: str = "MyPage",
     def page(title: str|None = None, wrap_in: Callable|None = None):
         def decorator(func: Callable[P, R]) -> Callable[P, R]:
             @wraps(func)
-            def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
-                if wrap_in:
-                    return wrap_in(page_func(func(*args, **kwargs), title=title if title else page_title))
+            async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+                if iscoroutinefunction(func):
+                    result = await func(*args, **kwargs)
                 else:
-                    return page_func(func(*args, **kwargs), title=title if title else page_title)
+                    result = func(*args, **kwargs)
+                if wrap_in:
+                    return wrap_in(page_func(result, title=title if title else page_title))
+                else:
+                    return page_func(result, title=title if title else page_title)
             return wrapper
         return decorator
     return page
