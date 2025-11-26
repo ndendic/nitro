@@ -16,29 +16,37 @@ R = TypeVar("R")
 
 config = NitroConfig()
 
-HEADER_URLS = {        
-        # Lucide icons
-        'lucide': "https://unpkg.com/lucide@latest",
-        # Tailwind 4
-        'tailwind4': "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4",
-        # Highlight.js
-        'highlight_js': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js",
-        'highlight_python': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/python.min.js",
-        'highlight_light_css': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-light.css",
-        'highlight_dark_css': "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css",
-        'highlight_copy': "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.js",
-        'highlight_copy_css': "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.css"
-    }
+HEADER_URLS = {
+    # Lucide icons
+    "lucide": "https://unpkg.com/lucide@latest",
+    # Tailwind 4
+    "tailwind4": "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4",
+    # FrankenUI
+    "franken_css": "https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/css/core.min.css",
+    "franken_js_core": "https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/js/core.iife.js",
+    "franken_icons": "https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/js/icon.iife.js",
+    # Highlight.js
+    "highlight_js": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js",
+    "highlight_python": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/python.min.js",
+    "highlight_light_css": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-light.css",
+    "highlight_dark_css": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css",
+    "highlight_copy": "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.js",
+    "highlight_copy_css": "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.css",
+}
 
-def add_highlightjs(hdrs:tuple, ftrs:tuple):
-    hdrs += (   # pyright: ignore[reportOperatorIssue]
-                Script(src=HEADER_URLS['highlight_js']),
-                Script(src=HEADER_URLS['highlight_python']),
-                Link(rel="stylesheet", href=HEADER_URLS['highlight_light_css'], id='hljs-light'),
-                Link(rel="stylesheet", href=HEADER_URLS['highlight_dark_css'], id='hljs-dark'),
-                Script(src=HEADER_URLS['highlight_copy']),
-                Link(rel="stylesheet", href=HEADER_URLS['highlight_copy_css']),
-                Script('''
+
+def add_highlightjs(hdrs: tuple, ftrs: tuple):
+    hdrs += (  # pyright: ignore[reportOperatorIssue]
+        Script(src=HEADER_URLS["highlight_js"]),
+        Script(src=HEADER_URLS["highlight_python"]),
+        Link(
+            rel="stylesheet", href=HEADER_URLS["highlight_light_css"], id="hljs-light"
+        ),
+        Link(rel="stylesheet", href=HEADER_URLS["highlight_dark_css"], id="hljs-dark"),
+        Script(src=HEADER_URLS["highlight_copy"]),
+        Link(rel="stylesheet", href=HEADER_URLS["highlight_copy_css"]),
+        Script(
+            """
                     hljs.addPlugin(new CopyButtonPlugin());
                     hljs.configure({
                         cssSelector: 'pre code',
@@ -56,34 +64,46 @@ def add_highlightjs(hdrs:tuple, ftrs:tuple):
                     ).observe(document.documentElement, { attributes: true });
                     updateTheme();
                     hljs.highlightAll();
-                ''', type='module'),
-            )
+                """,
+            type="module",
+        ),
+    )
     ftrs += (Script("hljs.highlightAll();"),)
     return hdrs, ftrs
 
-def Page(*content,
-         title: str = "Nitro",
-         hdrs:tuple|None=None,
-         ftrs:tuple|None=None,
-         htmlkw:dict|None=None,
-         bodykw:dict|None=None,
-         datastar:bool=True,
-         tailwind4:bool=False,
-         lucide:bool=False,
-         highlightjs:bool=False
-    ) -> HtmlString:
+
+def Page(
+    *content,
+    title: str = "Nitro",
+    hdrs: tuple | None = None,
+    ftrs: tuple | None = None,
+    htmlkw: dict | None = None,
+    bodykw: dict | None = None,
+    datastar: bool = True,
+    monsterui: bool = False,
+    tailwind4: bool = False,
+    lucide: bool = False,
+    highlightjs: bool = False,
+) -> HtmlString:
     """Base page layout with common HTML structure."""
     # initialize empty tuple if None
     hdrs = hdrs if hdrs is not None else ()
     ftrs = ftrs if ftrs is not None else ()
     htmlkw = htmlkw if htmlkw is not None else {}
     bodykw = bodykw if bodykw is not None else {}
-    
-    if tailwind4: hdrs += (Script(src=HEADER_URLS['tailwind4']),)
-    if highlightjs: hdrs, ftrs = add_highlightjs(hdrs, ftrs)    
+
+    if tailwind4:
+        hdrs += (Script(src=HEADER_URLS["tailwind4"]),)
+    if highlightjs:
+        hdrs, ftrs = add_highlightjs(hdrs, ftrs)
     if lucide:
-        hdrs += (Script(src=HEADER_URLS['lucide']),)
+        hdrs += (Script(src=HEADER_URLS["lucide"]),)
         ftrs += (Script("lucide.createIcons();"),)
+    # if monsterui:
+        # hdrs += (Link(rel="stylesheet", href=HEADER_URLS["franken_css"]),)
+        # hdrs += (Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/css/utilities.min.css"),)
+        # hdrs += (Script(src=HEADER_URLS["franken_js_core"], type="module"),)
+        # hdrs += (Script(src=HEADER_URLS["franken_icons"], type="module"),)
 
     tailwind_css = config.tailwind.css_output
     tw_configured = config.tailwind.css_output.exists()
@@ -91,10 +111,17 @@ def Page(*content,
     return Html(
         Head(
             Title(title),
-            Link(rel="stylesheet", href=f"/{tailwind_css}", type="text/css") if tw_configured else Fragment(),
+            
             *hdrs if hdrs else (),
-            Script(src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js", type="module") if datastar else Fragment(),
-
+            Script(
+                src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js",
+                type="module",
+            )
+            if datastar
+            else Fragment(),
+            Link(rel="stylesheet", href=f"/{tailwind_css}", type="text/css")
+            if tw_configured
+            else Fragment(),
         ),
         Body(
             *content,
@@ -104,32 +131,38 @@ def Page(*content,
         **htmlkw if htmlkw else {},
     )
 
-def create_template(page_title: str = "MyPage",
-                    hdrs:Optional[tuple]=None,
-                    ftrs:Optional[tuple]=None,
-                    htmlkw:Optional[dict]=None,
-                    bodykw:Optional[dict]=None,
-                    datastar:bool=True,
-                    lucide:bool=True,
-                    highlightjs:bool=False,
-                    tailwind4:bool=False
-                    ):
+
+def create_template(
+    page_title: str = "MyPage",
+    hdrs: Optional[tuple] = None,
+    ftrs: Optional[tuple] = None,
+    htmlkw: Optional[dict] = None,
+    bodykw: Optional[dict] = None,
+    datastar: bool = True,
+    monsterui: bool = False,
+    lucide: bool = True,
+    highlightjs: bool = False,
+    tailwind4: bool = False,
+):
     """Create a decorator that wraps content in a Page layout.
 
     Returns a decorator function that can be used to wrap view functions.
     The decorator will take the function's output and wrap it in the Page layout.
     """
-    page_func = partial(Page,
-                        hdrs=hdrs,
-                        ftrs=ftrs,
-                        htmlkw=htmlkw,
-                        bodykw=bodykw,
-                        datastar=datastar,
-                        lucide=lucide,
-                        highlightjs=highlightjs,
-                        tailwind4=tailwind4
-                       )
-    def page(title: str|None = None, wrap_in: Callable|None = None):
+    page_func = partial(
+        Page,
+        hdrs=hdrs,
+        ftrs=ftrs,
+        htmlkw=htmlkw,
+        bodykw=bodykw,
+        datastar=datastar,
+        monsterui=monsterui,
+        lucide=lucide,
+        highlightjs=highlightjs,
+        tailwind4=tailwind4,
+    )
+
+    def page(title: str | None = None, wrap_in: Callable | None = None):
         def decorator(func: Callable[P, R]) -> Callable[P, R]:
             @wraps(func)
             async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
@@ -138,38 +171,47 @@ def create_template(page_title: str = "MyPage",
                 else:
                     result = func(*args, **kwargs)
                 if wrap_in:
-                    return wrap_in(page_func(result, title=title if title else page_title))
+                    return wrap_in(
+                        page_func(result, title=title if title else page_title)
+                    )
                 else:
                     return page_func(result, title=title if title else page_title)
+
             return wrapper
+
         return decorator
+
     return page
 
+
 def page_template(
-        page_title: str = "MyPage",
-        hdrs:Optional[tuple]=None,
-        ftrs:Optional[tuple]=None,
-        htmlkw:Optional[dict]=None,
-        bodykw:Optional[dict]=None,
-        datastar:bool=True,
-        tailwind4:bool=False,
-        lucide:bool=False,
-        highlightjs:bool=False,
-    ):
+    page_title: str = "MyPage",
+    hdrs: Optional[tuple] = None,
+    ftrs: Optional[tuple] = None,
+    htmlkw: Optional[dict] = None,
+    bodykw: Optional[dict] = None,
+    datastar: bool = True,
+    monsterui: bool = False,
+    tailwind4: bool = False,
+    lucide: bool = False,
+    highlightjs: bool = False,
+):
     """Create a decorator that wraps content in a Page layout.
 
     Returns a decorator function that can be used to wrap view functions.
     The decorator will take the function's output and wrap it in the Page layout.
     """
-    template = partial(Page,
-                       hdrs=hdrs,
-                       ftrs=ftrs,
-                       htmlkw=htmlkw,
-                       bodykw=bodykw,
-                       title=page_title,
-                       datastar=datastar,
-                       lucide=lucide,
-                       tailwind4=tailwind4,
-                       highlightjs=highlightjs
-                      )
+    template = partial(
+        Page,
+        hdrs=hdrs,
+        ftrs=ftrs,
+        htmlkw=htmlkw,
+        bodykw=bodykw,
+        title=page_title,
+        datastar=datastar,
+        monsterui=monsterui,
+        lucide=lucide,
+        tailwind4=tailwind4,
+        highlightjs=highlightjs,
+    )
     return template
