@@ -1260,3 +1260,105 @@ Commits this session:
 - 2329f16: Complete advanced_entity category (74.9%)
 - 3de8655: Complete advanced_events category (76.6%)
 
+
+═══════════════════════════════════════════════════════════════════════════════
+SESSION 11 - INTEGRATION_STARLETTE CATEGORY COMPLETE
+═══════════════════════════════════════════════════════════════════════════════
+
+Date: 2025-12-10
+Starting Progress: 131/171 (76.6%)
+Ending Progress: 132/171 (77.2%)
+Branch: auto-nitro
+Commit: bc4ad01
+
+ACCOMPLISHMENT: integration_starlette category (1/1 feature, all tests passing)
+Progress: 131→132 features (+1)
+
+═══════════════════════════════════════════════════════════════════════════════
+FEATURE COMPLETED
+═══════════════════════════════════════════════════════════════════════════════
+
+Feature: Nitro works with Starlette
+Category: integration_starlette
+Status: ✓ PASSING
+
+Implementation:
+- Created examples/starlette_counter_app.py (204 lines)
+- Full counter application demonstrating all Nitro features
+- Async route handlers with Starlette
+- Entity persistence with SQLModelRepository
+- Event system with async handlers
+- RustyTags HTML generation with Tailwind4
+
+Test Steps Verified:
+1. ✓ Create Starlette app - Working
+2. ✓ Use Entity and events - Working  
+3. ✓ Verify async support works properly - Working
+
+Key Components Tested:
+✓ Counter Entity with table=True
+✓ Entity.save(), Entity.get() methods
+✓ Async methods: increment(), decrement(), reset()
+✓ Async event handlers with @on decorator
+✓ emit_async() for async event emission
+✓ Page() with RustyTags HTML generation
+✓ Tailwind4 CSS integration
+✓ JSON API endpoints
+✓ Database initialization on startup
+✓ CORS middleware
+
+Testing Results:
+✓ Homepage (200 OK, contains "Starlette" + "Nitro" + "Counter")
+✓ /status endpoint (200 OK, returns entity JSON)
+✓ /increment endpoint (200 OK, count increments, event fires)
+✓ /decrement endpoint (200 OK, count decrements, event fires)
+✓ /reset endpoint (200 OK, count resets to 0, event fires)
+
+Event System Verification:
+- Console output confirms event handlers executing:
+  ✓ Counter 'Main Counter' incremented to 1
+  ✓ Counter 'Main Counter' decremented to 0
+  ✓ Counter 'Main Counter' reset to 0
+
+═══════════════════════════════════════════════════════════════════════════════
+OVERALL PROGRESS
+═══════════════════════════════════════════════════════════════════════════════
+
+COMPLETED: 132/171 features (77.2%)
+
+COMPLETED CATEGORIES (15 of ~29):
+✓ core_entity, events, templating, persistence_sql, persistence_memory
+✓ components, config, error_handling, edge_cases, async_support
+✓ testing, cli_tailwind, cli_db, cli_general, security
+✓ advanced_entity, advanced_events
+✓ integration_starlette ⭐ NEW (100% complete)
+
+REMAINING: 39 features (22.8%)
+
+Remaining Categories:
+- integration_fasthtml (1 feature)
+- migration (1 feature)
+- integration_flask (2 features)
+- backwards_compatibility (2 features)
+- documentation (3 features)
+- advanced_persistence (3 features)
+- advanced_datastar (3 features)
+- deployment (4 features)
+- developer_experience (4 features)
+- examples (4 features)
+- integration_fastapi (5 features)
+- monitoring (3 features)
+- performance (4 features)
+
+═══════════════════════════════════════════════════════════════════════════════
+NEXT SESSION PRIORITIES
+═══════════════════════════════════════════════════════════════════════════════
+
+Continue with single-feature categories:
+1. integration_fasthtml (1 feature) - Similar to Starlette
+2. migration (1 feature) - Documentation task
+
+Or tackle Flask integration (2 features) for more impact.
+
+═══════════════════════════════════════════════════════════════════════════════
+
