@@ -1099,7 +1099,7 @@
       "Step 2: Use Entity and events",
       "Step 3: Verify async support works properly"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "components",
