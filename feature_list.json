@@ -1461,7 +1461,7 @@
       "Step 2: Access computed field",
       "Step 3: Verify it's calculated correctly but not stored"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_entity",
@@ -1471,7 +1471,7 @@
       "Step 2: Try to create entity with invalid value",
       "Step 3: Verify validator is called and prevents creation"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_entity",
@@ -1481,7 +1481,7 @@
       "Step 2: Save entity",
       "Step 3: Verify hooks are called at correct times"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_events",
