@@ -267,3 +267,71 @@ The Nitro Framework is now a complete, production-ready web framework that:
 
 - Session 19 Agent
 ═══════════════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════════════
+SESSION 27 - Phase 2.1.2: Base Dispatcher Implementation
+Date: 2025-12-10
+Status: ✅ COMPLETE - Milestone 2.1.2 Achieved
+═══════════════════════════════════════════════════════════════════════════════
+
+OBJECTIVE
+═══════════════════════════════════════════════════════════════════════════════
+Implement NitroDispatcher base class and entity/action discovery system to 
+complete the framework-agnostic foundation for auto-routing.
+
+ACCOMPLISHMENTS
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ 1. DISCOVERY SYSTEM (171 lines)
+   File: nitro/infrastructure/routing/discovery.py
+   
+   Functions:
+   - discover_entity_subclasses() - Find all Entity subclasses recursively
+   - discover_action_methods() - Find all @action decorated methods
+   - discover_all_routes() - Combined discovery pipeline
+   - validate_action_uniqueness() - Detect URL conflicts
+   
+   Tests: 18 comprehensive tests (100% passing)
+
+✅ 2. BASE DISPATCHER (360 lines)
+   File: nitro/infrastructure/routing/dispatcher.py
+   
+   Class: NitroDispatcher (abstract base)
+   
+   Methods:
+   - configure() - Entity/route discovery and registration
+   - dispatch() - Main request handler (entity loading, param extraction, method call)
+   - extract_method_parameters() - Type-safe parameter extraction
+   - format_response() - Consistent response formatting
+   - format_error() - Standard error responses (404, 422, 500)
+   - get_routes_summary() - Route introspection
+   - register_route() - ABSTRACT (framework-specific)
+   
+   Features:
+   - Framework-agnostic design
+   - Entity loading from repository
+   - Parameter extraction (path, query, body)
+   - Type conversion (int, float, bool)
+   - Default values and required parameters
+   - Error handling (400, 404, 422, 500)
+   - Response formatting (Entity, dict, list, primitives)
+   
+   Tests: 24 comprehensive tests (100% passing)
+
+✅ 3. COMPREHENSIVE TESTING
+   - 18 discovery tests (test_routing_discovery.py)
+   - 24 dispatcher tests (test_routing_dispatcher.py)
+   - Total: 42 new tests
+   - All 419 total tests passing (100%)
+   - Zero regressions
+
+FILES CREATED: 1,231 lines (531 production + 700 tests)
+
+TEST RESULTS: 419/419 passing (100%)
+
+PHASE 2.1 PROGRESS: 50% complete (2/4 milestones)
+
+Next: Implement FastAPI adapter (Milestone 2.1.3)
+
+- Session 27 Agent
+═══════════════════════════════════════════════════════════════════════════════
