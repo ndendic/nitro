@@ -260,7 +260,7 @@
       "Step 1: Get SQLModelRepository instance twice",
       "Step 2: Verify both references point to same object"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -270,7 +270,7 @@
       "Step 2: Call repository.init_db()",
       "Step 3: Verify user table exists in database"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -280,7 +280,7 @@
       "Step 2: Call repository.schema()",
       "Step 3: Verify it returns string with table and column information"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -290,7 +290,7 @@
       "Step 2: Verify it yields SQLModel Session object",
       "Step 3: Verify session is properly closed after use"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -300,7 +300,7 @@
       "Step 2: Call repository.save(user)",
       "Step 3: Verify record exists in database"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -311,7 +311,7 @@
       "Step 3: Call repository.save(user)",
       "Step 4: Verify database record has updated name"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -321,7 +321,7 @@
       "Step 2: Call repository.bulk_create(User, data)",
       "Step 3: Verify all 10 records are in database"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -332,7 +332,7 @@
       "Step 3: Call repository.bulk_upsert(User, data)",
       "Step 4: Verify all records are updated"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -342,7 +342,7 @@
       "Step 2: Call repository.count(User)",
       "Step 3: Verify it returns 7"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -353,7 +353,7 @@
       "Step 3: Call filter with UUID string",
       "Step 4: Verify entity is found"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -363,7 +363,7 @@
       "Step 2: Call filter(created_at=(start_date, end_date))",
       "Step 3: Verify only entities within range are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -373,7 +373,7 @@
       "Step 2: Call filter(status=['active', 'pending'])",
       "Step 3: Verify only users with those statuses are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
@@ -383,7 +383,7 @@
       "Step 2: Verify all complete successfully",
       "Step 3: Verify no connection leaks occur"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_memory",
