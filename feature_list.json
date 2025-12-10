@@ -1733,7 +1733,7 @@
       "Step 2: Perform save/load operations",
       "Step 3: Verify operations complete correctly"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "async_support",
@@ -1744,7 +1744,7 @@
       "Step 3: Measure total execution time",
       "Step 4: Verify concurrent execution (time < sum of delays)"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "async_support",
@@ -1754,6 +1754,6 @@
       "Step 2: Perform concurrent saves/loads",
       "Step 3: Verify no race conditions"
     ],
-    "passes": false
+    "passes": true
   }
 ]
