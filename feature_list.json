@@ -975,7 +975,7 @@
       "Step 2: Create NitroConfig()",
       "Step 3: Verify config.db_url matches env var"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "config",
@@ -985,7 +985,7 @@
       "Step 2: Create NitroConfig()",
       "Step 3: Verify config loads from .env"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "config",
@@ -995,7 +995,7 @@
       "Step 2: Verify default db_url is sqlite",
       "Step 3: Verify default Tailwind paths are set"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "config",
@@ -1005,7 +1005,7 @@
       "Step 2: Try to create NitroConfig()",
       "Step 3: Verify validation error is raised"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "integration_fastapi",
