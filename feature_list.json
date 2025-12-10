@@ -701,7 +701,7 @@
       "Step 3: Verify HTML has <!DOCTYPE>, <html>, <head>, <body>",
       "Step 4: Verify title is set"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -711,7 +711,7 @@
       "Step 2: Render to string",
       "Step 3: Verify Datastar CDN script is included in <head>"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -721,7 +721,7 @@
       "Step 2: Render to string",
       "Step 3: Verify <link> to style.css is in <head>"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -731,7 +731,7 @@
       "Step 2: Render to string",
       "Step 3: Verify Lucide CDN script is included"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -741,7 +741,7 @@
       "Step 2: Render to string",
       "Step 3: Verify highlight.js CSS and JS are included"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -752,7 +752,7 @@
       "Step 3: Verify it returns Page instance with correct title",
       "Step 4: Verify function return value is wrapped in Page"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -762,7 +762,7 @@
       "Step 2: Access signals as attributes",
       "Step 3: Verify it generates correct Datastar data-* attributes"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -772,7 +772,7 @@
       "Step 2: Use signals.count.add(1) and signals.count.sub(1)",
       "Step 3: Verify correct Datastar expressions are generated"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -782,7 +782,7 @@
       "Step 2: Use signals.name.set('Bob')",
       "Step 3: Verify correct Datastar set expression"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -792,7 +792,7 @@
       "Step 2: Use signals.visible.toggle()",
       "Step 3: Verify correct Datastar toggle expression"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -802,7 +802,7 @@
       "Step 2: Render to string",
       "Step 3: Verify output is <div class=\"container\">content</div>"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -812,7 +812,7 @@
       "Step 2: Render to string",
       "Step 3: Verify proper nesting in HTML output"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -822,7 +822,7 @@
       "Step 2: Render to string",
       "Step 3: Verify onclick attribute is set"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
@@ -832,7 +832,7 @@
       "Step 2: Use component in Page",
       "Step 3: Verify component renders correctly"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_tailwind",
