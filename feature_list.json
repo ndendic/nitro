@@ -1619,7 +1619,7 @@
       "Step 3: Verify order.placed event triggers email",
       "Step 4: Verify inventory is updated via event handler"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "migration",
