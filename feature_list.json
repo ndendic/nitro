@@ -1209,7 +1209,7 @@
       "Step 2: Try to save()",
       "Step 3: Verify clear ValidationError is raised"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "error_handling",
@@ -1219,7 +1219,7 @@
       "Step 2: Try to perform operation",
       "Step 3: Verify helpful error message"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "error_handling",
@@ -1230,7 +1230,7 @@
       "Step 3: Verify exception is caught and logged",
       "Step 4: Verify app continues running"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "error_handling",
@@ -1240,7 +1240,7 @@
       "Step 2: Verify error message is clear and actionable",
       "Step 3: Verify suggestions are provided"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "edge_cases",
