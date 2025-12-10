@@ -1310,7 +1310,7 @@
       "Step 2: Verify pip install command is present",
       "Step 3: Verify it mentions Rust requirement for development"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "documentation",
@@ -1320,7 +1320,7 @@
       "Step 2: Verify all public methods are documented",
       "Step 3: Verify examples are provided"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "documentation",
@@ -1330,7 +1330,7 @@
       "Step 2: Verify working app is created",
       "Step 3: Verify tutorial is under 5 minutes to complete"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "developer_experience",

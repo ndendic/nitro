@@ -500,6 +500,43 @@ content = Div(H1("Notebook Content"), style="color: blue;")
 show(content)  # Renders directly in Jupyter cells
 ```
 
+## Documentation
+
+Comprehensive documentation is available:
+
+- **📖 [Tutorial](docs/TUTORIAL.md)**: Build a Todo app in 5 minutes
+- **📚 [API Reference](docs/API_REFERENCE.md)**: Complete API documentation
+- **🔄 [Migration Guide](examples/migration_from_starmodel.md)**: Migrate from StarModel
+- **📝 [Changelog](CHANGELOG.md)**: Version history and breaking changes
+- **💡 [Examples](examples/)**: Complete working applications
+
+### Quick Start
+
+```bash
+# Install
+pip install nitro-boost
+
+# Follow 5-minute tutorial
+# See docs/TUTORIAL.md
+```
+
+### Development Requirements
+
+For development and building from source:
+- **Python 3.10+**: Core runtime
+- **Rust toolchain**: Required for building RustyTags (HTML generation core)
+  - Install Rust: https://rustup.rs/
+  - Verify: `rustc --version`
+- **Maturin**: Python-Rust build tool
+  - Install: `pip install maturin`
+
+```bash
+# Clone and build
+git clone <repository>
+cd nitro
+pip install -e .
+```
+
 ## License
 
 MIT License - See LICENSE file for details.
@@ -512,4 +549,4 @@ Contributions welcome! Please check the repository for contributing guidelines a
 
 - **Repository**: https://github.com/ndendic/Nitro
 - **Issues**: https://github.com/ndendic/Nitro/issues
-- **Examples**: See `lab/` directory for complete applications
+- **Examples**: See `examples/` directory for complete applications
