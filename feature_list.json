@@ -1411,7 +1411,7 @@
       "Step 2: Verify injection is prevented",
       "Step 3: Verify no SQL errors occur"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "security",
@@ -1421,7 +1421,7 @@
       "Step 2: Try to save entity with script tags in string field",
       "Step 3: Verify validation catches malicious patterns if configured"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_entity",
