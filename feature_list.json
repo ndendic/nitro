@@ -1169,7 +1169,7 @@
       "Step 2: Benchmark equivalent pure Python string building",
       "Step 3: Verify RustyTags is at least 3x faster"
     ],
-    "passes": true
+    "passes": false
   },
   {
     "category": "performance",
@@ -1337,7 +1337,7 @@
     "description": "Installation just works with pip install",
     "steps": [
       "Step 1: Create fresh virtual environment",
-      "Step 2: Run uv pip install nitro-boost",
+      "Step 2: Run pip install nitro",
       "Step 3: Verify import nitro works",
       "Step 4: Verify no manual steps required"
     ],
@@ -1681,6 +1681,26 @@
       "Step 2: Emit various events",
       "Step 3: Query metrics (events fired, handlers executed)",
       "Step 4: Verify accurate metrics"
+    ],
+    "passes": true
+  },
+  {
+    "category": "deployment",
+    "description": "Nitro app works with Gunicorn",
+    "steps": [
+      "Step 1: Create production Nitro app",
+      "Step 2: Run with gunicorn",
+      "Step 3: Verify app serves requests correctly"
+    ],
+    "passes": true
+  },
+  {
+    "category": "deployment",
+    "description": "Nitro app works with Uvicorn",
+    "steps": [
+      "Step 1: Create async Nitro app",
+      "Step 2: Run with uvicorn",
+      "Step 3: Verify async operations work correctly"
     ],
     "passes": true
   },
