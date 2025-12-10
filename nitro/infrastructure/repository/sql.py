@@ -5,6 +5,7 @@ from uuid import UUID
 
 import sqlalchemy as sa
 from sqlalchemy import func, or_
+from sqlalchemy.orm import selectinload
 from sqlmodel import Session, SQLModel, create_engine, select
 
 from .base import EntityRepositoryInterface
@@ -216,7 +217,36 @@ class SQLModelRepository(EntityRepositoryInterface):
 
     def find(self, model: Type[SQLModel], id: Any) -> Optional[SQLModel]:
         with Session(self.engine) as session:
-            result = session.get(model, id)
+            # Build query with eager loading for all relationships
+            stmt = select(model).where(model.id == id)
+
+            # Eagerly load all relationships to avoid DetachedInstanceError
+            for attr_name in dir(model):
+                if not attr_name.startswith('_'):
+                    attr = getattr(model, attr_name, None)
+                    # Check if it's a relationship attribute
+                    if hasattr(attr, 'property') and hasattr(attr.property, 'mapper'):
+                        stmt = stmt.options(selectinload(attr))
+
+            result = session.exec(stmt).first()
+
+            # If not found with relationships, try simple get
+            if result is None:
+                result = session.get(model, id)
+
+            # Ensure all relationships are loaded before returning
+            if result:
+                # Access relationships to trigger loading while session is active
+                for attr_name in dir(model):
+                    if not attr_name.startswith('_'):
+                        try:
+                            attr = getattr(model, attr_name, None)
+                            if hasattr(attr, 'property') and hasattr(attr.property, 'mapper'):
+                                # Access the relationship to load it
+                                getattr(result, attr_name)
+                        except:
+                            pass
+
             return result
 
     def find_by(self, model: Type[SQLModel], **kwargs) -> Optional[SQLModel]:
@@ -256,6 +286,22 @@ class SQLModelRepository(EntityRepositoryInterface):
     def save(self, record: SQLModel) -> bool:
         data = record.model_dump()
         model = type(record)
+
+        # Get model fields to filter out computed fields
+        model_fields = model.model_fields
+        computed_fields = set()
+
+        # Identify computed fields (they have no setter)
+        for field_name in data.keys():
+            if field_name not in model_fields:
+                # Check if it's a computed field
+                attr = getattr(model, field_name, None)
+                if attr and isinstance(attr, property) and not attr.fset:
+                    computed_fields.add(field_name)
+
+        # Remove computed fields from data
+        data = {k: v for k, v in data.items() if k not in computed_fields}
+
         with Session(self.engine) as session:
             if "id" in data:
                 db_record = session.get(model, data["id"])
@@ -272,8 +318,10 @@ class SQLModelRepository(EntityRepositoryInterface):
             session.refresh(db_record)
 
             # Update the original record with any database-generated values
+            # But skip computed fields
             for key, value in db_record.model_dump().items():
-                setattr(record, key, value)
+                if key not in computed_fields:
+                    setattr(record, key, value)
 
             return True
 

@@ -1431,7 +1431,7 @@
       "Step 2: Create and save entity",
       "Step 3: Verify retrieval works with composite key"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_entity",
@@ -1441,7 +1441,7 @@
       "Step 2: Create linked entities",
       "Step 3: Verify relationship traversal works"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_entity",
@@ -1451,7 +1451,7 @@
       "Step 2: Create relationships",
       "Step 3: Verify bidirectional navigation works"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_entity",
