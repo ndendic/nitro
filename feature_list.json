@@ -1109,7 +1109,7 @@
       "Step 2: Create Dialog('Title', 'Content')",
       "Step 3: Verify HTML has proper modal structure"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "components",
@@ -1119,7 +1119,7 @@
       "Step 2: Create CodeBlock('print(\"hello\")', language='python')",
       "Step 3: Verify code is wrapped with highlight.js classes"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "components",
@@ -1129,7 +1129,7 @@
       "Step 2: Create Accordion with items",
       "Step 3: Verify proper HTML structure for expand/collapse"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "components",
@@ -1139,7 +1139,7 @@
       "Step 2: Create Tabs with multiple tab items",
       "Step 3: Verify tab switching works"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "components",
@@ -1149,7 +1149,7 @@
       "Step 2: Create input with validation rules",
       "Step 3: Verify validation attributes are set"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "components",
@@ -1159,7 +1159,7 @@
       "Step 2: Create Icon('user')",
       "Step 3: Verify correct Lucide icon markup"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "performance",
