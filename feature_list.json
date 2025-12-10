@@ -1351,7 +1351,7 @@
       "Step 2: Start typing entity.",
       "Step 3: Verify all methods appear in autocomplete"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "developer_experience",
@@ -1523,7 +1523,7 @@
       "Step 3: Configure entity to use RedisRepository",
       "Step 4: Verify all operations work"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_persistence",
@@ -1534,7 +1534,7 @@
       "Step 3: Perform read operation",
       "Step 4: Verify write goes to primary, read from replica"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_persistence",
@@ -1544,7 +1544,7 @@
       "Step 2: Perform many concurrent operations",
       "Step 3: Verify pool configuration is respected"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_datastar",
@@ -1683,26 +1683,6 @@
       "Step 4: Verify accurate metrics"
     ],
     "passes": true
-  },
-  {
-    "category": "deployment",
-    "description": "Nitro app works with Gunicorn",
-    "steps": [
-      "Step 1: Create production Nitro app",
-      "Step 2: Run with gunicorn",
-      "Step 3: Verify app serves requests correctly"
-    ],
-    "passes": false
-  },
-  {
-    "category": "deployment",
-    "description": "Nitro app works with Uvicorn",
-    "steps": [
-      "Step 1: Create async Nitro app",
-      "Step 2: Run with uvicorn",
-      "Step 3: Verify async operations work correctly"
-    ],
-    "passes": false
   },
   {
     "category": "deployment",

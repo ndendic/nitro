@@ -18,13 +18,53 @@ class SQLModelRepository(EntityRepositoryInterface):
     _instance = None
     _initialized = False
 
-    def __new__(cls, url: Optional[str] = config.db_url, echo: bool = False):
+    def __new__(
+        cls,
+        url: Optional[str] = config.db_url,
+        echo: bool = False,
+        pool_size: Optional[int] = None,
+        max_overflow: Optional[int] = None,
+        pool_timeout: Optional[float] = None,
+        **engine_kwargs
+    ):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance.engine = create_engine(url, echo=echo)
+
+            # Build engine creation kwargs
+            create_kwargs = {"echo": echo}
+
+            # Add pool configuration if provided (only for non-SQLite databases)
+            # SQLite uses SingletonThreadPool which doesn't support these parameters
+            is_sqlite = url and url.startswith("sqlite:")
+
+            if not is_sqlite:
+                if pool_size is not None:
+                    create_kwargs["pool_size"] = pool_size
+                if max_overflow is not None:
+                    create_kwargs["max_overflow"] = max_overflow
+                if pool_timeout is not None:
+                    create_kwargs["pool_timeout"] = pool_timeout
+
+            # Add any additional engine kwargs
+            create_kwargs.update(engine_kwargs)
+
+            cls._instance.engine = create_engine(url, **create_kwargs)
+            cls._instance.pool_config = {
+                "pool_size": pool_size,
+                "max_overflow": max_overflow,
+                "pool_timeout": pool_timeout
+            }
         return cls._instance
 
-    def __init__(self, url: Optional[str] = config.db_url, echo: bool = False):
+    def __init__(
+        self,
+        url: Optional[str] = config.db_url,
+        echo: bool = False,
+        pool_size: Optional[int] = None,
+        max_overflow: Optional[int] = None,
+        pool_timeout: Optional[float] = None,
+        **engine_kwargs
+    ):
         if not self._initialized:
             SQLModelRepository._initialized = True
 
