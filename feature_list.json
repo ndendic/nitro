@@ -1586,7 +1586,7 @@
       "Step 3: Verify counter updates reactively",
       "Step 4: Verify state persists (if using persistence)"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "examples",
@@ -1597,7 +1597,7 @@
       "Step 3: Verify all operations work correctly",
       "Step 4: Verify data persists to database"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "examples",
@@ -1608,7 +1608,7 @@
       "Step 3: Verify relationships work",
       "Step 4: Verify nested data displays correctly"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "examples",
