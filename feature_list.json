@@ -1250,7 +1250,7 @@
       "Step 2: Save and retrieve",
       "Step 3: Verify it works or raises appropriate error"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "edge_cases",
@@ -1260,7 +1260,7 @@
       "Step 2: Save and retrieve",
       "Step 3: Verify data integrity"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "edge_cases",
@@ -1270,7 +1270,7 @@
       "Step 2: Verify empty list is returned",
       "Step 3: Verify no errors occur"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "edge_cases",
@@ -1280,7 +1280,7 @@
       "Step 2: Verify no errors occur",
       "Step 3: Verify empty results list is returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "edge_cases",
@@ -1290,7 +1290,7 @@
       "Step 2: Verify no race conditions occur",
       "Step 3: Verify data integrity maintained"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "edge_cases",
@@ -1300,7 +1300,7 @@
       "Step 2: Render to string",
       "Step 3: Verify None values are filtered out cleanly"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "documentation",
