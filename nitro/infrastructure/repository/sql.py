@@ -210,6 +210,10 @@ class SQLModelRepository(EntityRepositoryInterface):
             else:
                 return results
 
+    def get(self, model: Type[SQLModel], id: Any) -> Optional[SQLModel]:
+        """Get an entity by ID. Alias for find()."""
+        return self.find(model, id)
+
     def find(self, model: Type[SQLModel], id: Any) -> Optional[SQLModel]:
         with Session(self.engine) as session:
             result = session.get(model, id)
@@ -239,15 +243,17 @@ class SQLModelRepository(EntityRepositoryInterface):
             return record.model_dump()
 
 
-    def delete(self, record: SQLModel) -> None:
+    def delete(self, record: SQLModel) -> bool:
         with Session(self.engine) as session:
-            record = session.get(type(record), record.id)
-            if record:
-                session.delete(record)
+            db_record = session.get(type(record), record.id)
+            if db_record:
+                session.delete(db_record)
                 session.commit()
+                return True
+            return False
 
 
-    def save(self, record: SQLModel) -> SQLModel:
+    def save(self, record: SQLModel) -> bool:
         data = record.model_dump()
         model = type(record)
         with Session(self.engine) as session:
@@ -265,7 +271,11 @@ class SQLModelRepository(EntityRepositoryInterface):
             session.commit()
             session.refresh(db_record)
 
-            return db_record
+            # Update the original record with any database-generated values
+            for key, value in db_record.model_dump().items():
+                setattr(record, key, value)
+
+            return True
 
 
     def bulk_create(self, model: Type[SQLModel], data: List[Dict[str, Any]]) -> List[SQLModel]:

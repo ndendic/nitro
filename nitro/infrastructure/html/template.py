@@ -80,6 +80,7 @@ def Page(
     htmlkw: dict | None = None,
     bodykw: dict | None = None,
     datastar: bool = True,
+    ds_version: str = "1.0.0-RC.6",
     monsterui: bool = False,
     tailwind4: bool = False,
     lucide: bool = False,
@@ -114,7 +115,7 @@ def Page(
             
             *hdrs if hdrs else (),
             Script(
-                src="https://cdn.jsdelivr.net/gh/starfederation/datastar@main/bundles/datastar.js",
+                src=f"https://cdn.jsdelivr.net/gh/starfederation/datastar@{ds_version}/bundles/datastar.js",
                 type="module",
             )
             if datastar
@@ -139,6 +140,7 @@ def create_template(
     htmlkw: Optional[dict] = None,
     bodykw: Optional[dict] = None,
     datastar: bool = True,
+    ds_version: str = "1.0.0-RC.6",
     monsterui: bool = False,
     lucide: bool = True,
     highlightjs: bool = False,
@@ -156,6 +158,7 @@ def create_template(
         htmlkw=htmlkw,
         bodykw=bodykw,
         datastar=datastar,
+        ds_version=ds_version,
         monsterui=monsterui,
         lucide=lucide,
         highlightjs=highlightjs,
@@ -191,6 +194,7 @@ def page_template(
     htmlkw: Optional[dict] = None,
     bodykw: Optional[dict] = None,
     datastar: bool = True,
+    ds_version: str = "1.0.0-RC.6",
     monsterui: bool = False,
     tailwind4: bool = False,
     lucide: bool = False,
@@ -209,6 +213,7 @@ def page_template(
         bodykw=bodykw,
         title=page_title,
         datastar=datastar,
+        ds_version=ds_version,
         monsterui=monsterui,
         lucide=lucide,
         tailwind4=tailwind4,
