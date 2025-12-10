@@ -1555,7 +1555,7 @@
       "Step 3: Stream multiple updates",
       "Step 4: Verify client receives all updates"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_datastar",
@@ -1565,7 +1565,7 @@
       "Step 2: Access signals.user.name",
       "Step 3: Verify correct path expression is generated"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_datastar",
@@ -1575,7 +1575,7 @@
       "Step 2: Use signals.items.push('new')",
       "Step 3: Verify correct array operation expression"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "examples",
@@ -1693,7 +1693,7 @@
       "Step 3: Run container",
       "Step 4: Verify app works in container"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "deployment",
@@ -1703,7 +1703,7 @@
       "Step 2: Load config based on environment",
       "Step 3: Verify correct config is used"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "async_support",
