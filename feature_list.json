@@ -1016,7 +1016,7 @@
       "Step 3: Verify total code is under 50 lines",
       "Step 4: Test all CRUD operations work"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "integration_fastapi",
@@ -1026,7 +1026,7 @@
       "Step 2: Change model_config repository to MemoryRepository",
       "Step 3: Verify app works without other code changes"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "integration_fastapi",
@@ -1036,7 +1036,7 @@
       "Step 2: Create FastAPI endpoint returning User",
       "Step 3: Verify response is properly serialized to JSON"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "integration_fastapi",
@@ -1046,7 +1046,7 @@
       "Step 2: Create POST endpoint accepting User",
       "Step 3: Verify Pydantic validation works on request"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "integration_fastapi",
@@ -1056,7 +1056,7 @@
       "Step 2: Emit event from FastAPI endpoint",
       "Step 3: Verify handler executes asynchronously"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "integration_flask",
