@@ -842,7 +842,7 @@
       "Step 2: Verify binary exists in ~/.nitro/cache/",
       "Step 3: Verify config files are created"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_tailwind",
@@ -852,7 +852,7 @@
       "Step 2: Verify input.css file exists",
       "Step 3: Verify tailwind.config.js exists"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_tailwind",
@@ -862,7 +862,7 @@
       "Step 2: Run 'nitro tw init'",
       "Step 3: Verify files created in static/css/"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_tailwind",
@@ -872,7 +872,7 @@
       "Step 2: Run 'nitro tw init'",
       "Step 3: Verify files created at custom location"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_tailwind",
@@ -883,7 +883,7 @@
       "Step 3: Modify input.css",
       "Step 4: Verify output.css is regenerated"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_tailwind",
@@ -894,7 +894,7 @@
       "Step 3: Verify output.css exists",
       "Step 4: Verify CSS is minified"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_tailwind",
@@ -904,7 +904,7 @@
       "Step 2: Run nitro tw commands",
       "Step 3: Verify they work with standalone binary"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_tailwind",
@@ -915,7 +915,7 @@
       "Step 3: Run 'nitro tw init' in different project",
       "Step 4: Verify binary is reused, not re-downloaded"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_db",
@@ -925,7 +925,7 @@
       "Step 2: Run 'nitro db init'",
       "Step 3: Verify tables are created in database"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_db",
@@ -936,7 +936,7 @@
       "Step 3: Run 'nitro db migrations'",
       "Step 4: Verify migration file is created"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_db",
@@ -946,7 +946,7 @@
       "Step 2: Run 'nitro db migrate'",
       "Step 3: Verify database schema is updated"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_general",
@@ -956,7 +956,7 @@
       "Step 2: Verify output shows all command groups",
       "Step 3: Verify output is formatted nicely with Rich"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "cli_general",
@@ -965,7 +965,7 @@
       "Step 1: Run 'nitro --version'",
       "Step 2: Verify version number is displayed"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "config",
