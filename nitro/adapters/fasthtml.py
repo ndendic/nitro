@@ -33,6 +33,8 @@ from typing import Type, List, Optional, Dict, Any, Callable
 from inspect import signature, iscoroutinefunction
 import asyncio
 
+from starlette.responses import JSONResponse
+
 from ..infrastructure.routing import NitroDispatcher, ActionMetadata
 from ..domain.entities.base_entity import Entity
 
@@ -98,20 +100,20 @@ class FastHTMLDispatcher(NitroDispatcher):
                 if isinstance(result, dict) and "error" in result:
                     error_status = result["error"].get("status_code", 500)
                     # Return JSON response for API endpoints
-                    return result, error_status
+                    return JSONResponse(content=result, status_code=error_status)
 
                 # Format response
                 response_data = self.format_response(result, metadata)
-                return response_data, metadata.status_code
+                return JSONResponse(content=response_data, status_code=metadata.status_code)
 
             except ValueError as e:
                 # 422 Unprocessable Entity (validation error)
                 error = self.format_error(422, str(e), "ValidationError")
-                return error, 422
+                return JSONResponse(content=error, status_code=422)
             except Exception as e:
                 # 500 Internal Server Error
                 error = self.format_error(500, str(e), "InternalServerError")
-                return error, 500
+                return JSONResponse(content=error, status_code=500)
 
         # Determine HTTP methods for FastHTML
         http_method = metadata.method.upper()
