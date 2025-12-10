@@ -1089,7 +1089,7 @@
       "Step 3: Create routes using RustyTags",
       "Step 4: Verify seamless integration"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "integration_starlette",
