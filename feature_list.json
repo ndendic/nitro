@@ -1337,7 +1337,7 @@
     "description": "Installation just works with pip install",
     "steps": [
       "Step 1: Create fresh virtual environment",
-      "Step 2: Run pip install nitro",
+      "Step 2: Run uv pip install nitro-boost",
       "Step 3: Verify import nitro works",
       "Step 4: Verify no manual steps required"
     ],
@@ -1660,7 +1660,7 @@
       "Step 2: Perform entity operations",
       "Step 3: Verify operations are logged with details"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "monitoring",
@@ -1671,7 +1671,7 @@
       "Step 3: Query stats (queries executed, cache hits, etc.)",
       "Step 4: Verify accurate statistics"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "monitoring",
@@ -1682,7 +1682,7 @@
       "Step 3: Query metrics (events fired, handlers executed)",
       "Step 4: Verify accurate metrics"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "deployment",
