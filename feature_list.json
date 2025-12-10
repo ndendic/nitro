@@ -120,7 +120,7 @@
       "Step 2: Call User.search('test', limit=10, offset=5)",
       "Step 3: Verify 10 results starting from 6th match"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -150,7 +150,7 @@
       "Step 2: Call User.filter(name='Ali', exact_match=False)",
       "Step 3: Verify both 'Alice' and 'Alicia' are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -170,7 +170,7 @@
       "Step 2: Call User.filter(email=None)",
       "Step 3: Verify only users with null email are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -180,7 +180,7 @@
       "Step 2: Call User.filter(nonexistent_field='value')",
       "Step 3: Verify ValueError is raised with appropriate message"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -210,7 +210,7 @@
       "Step 2: Access user.signals",
       "Step 3: Verify it returns Signals instance with correct data"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -220,7 +220,7 @@
       "Step 2: Try to create User(id='1', age='invalid')",
       "Step 3: Verify Pydantic ValidationError is raised"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -230,7 +230,7 @@
       "Step 2: Call user.model_dump()",
       "Step 3: Verify it returns dict with all fields"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -241,7 +241,7 @@
       "Step 3: Retrieve and verify datetime is preserved",
       "Step 4: Verify model_dump() serializes datetime to ISO format"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -251,7 +251,7 @@
       "Step 2: Create user without email",
       "Step 3: Verify save and retrieve works correctly"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_sql",
