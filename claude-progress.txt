@@ -2073,3 +2073,186 @@ Total: 119 auto-routing tests passing
 - Session 30 Agent
 ═══════════════════════════════════════════════════════════════════════════════
 
+
+
+═══════════════════════════════════════════════════════════════════════════════
+SESSION 31 - Phase 2.2 Priority 1: Route Prefixes & API Versioning
+═══════════════════════════════════════════════════════════════════════════════
+
+Date: 2025-12-10
+Agent: Session 31 (Coding Agent)
+Duration: ~2.5 hours
+Starting Commit: 83bd4f2 (from Session 30)
+Ending Commit: cbcb298
+
+MISSION: Implement and document route prefix functionality for API versioning
+
+═══════════════════════════════════════════════════════════════════════════════
+ACCOMPLISHMENTS
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ 1. CREATED COMPREHENSIVE TEST SUITE
+   - File: tests/test_routing_prefixes_clean.py (350 lines)
+   - 10 tests total, ALL PASSING
+   - FastAPI: 5 tests (single prefix, multiple prefixes, versioning)
+   - Flask: 2 tests (single prefix, functional)
+   - Edge cases: 3 tests (normalization, nested, empty)
+   - Discovered framework limitations and documented workarounds
+
+✅ 2. CREATED VERSIONED API DEMO APPLICATION
+   - File: examples/versioned_api_demo.py (350+ lines)
+   - V1 API: Simple counter (legacy behavior)
+   - V2 API: Enhanced counter (timestamps, metadata, new features)
+   - Both versions coexist on same FastAPI app
+   - Interactive HTML documentation page
+   - Migration guide included
+   - Runs on port 8090
+
+✅ 3. CREATED COMPREHENSIVE DOCUMENTATION
+   - File: docs/route_prefixes_guide.md (400+ lines)
+   - Usage for all 3 frameworks
+   - API versioning strategies
+   - Migration best practices
+   - Troubleshooting guide
+   - Code examples throughout
+
+═══════════════════════════════════════════════════════════════════════════════
+TECHNICAL DISCOVERIES
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ Prefix Support Status:
+   - FastAPI: PERFECT (multiple prefixes work flawlessly)
+   - Flask: GOOD (single prefix works, multiple has endpoint conflicts)
+   - FastHTML: GOOD (single prefix works, multiple needs separate apps)
+
+⚠️  Framework Limitations Found:
+   1. Flask: Endpoint name conflicts when registering same entity multiple times
+      Workaround: Use unique entity names per version (CounterV1, CounterV2)
+   
+   2. FastHTML: rt() decorator doesn't support multiple configure_nitro calls
+      Workaround: Create separate app instances for each version
+
+✅ Testing Patterns:
+   - Use unique table names: __tablename__ = "prefix_test_counter"
+   - Initialize DB in autouse fixture
+   - Clean up after each test
+   - Avoid entity name conflicts across test files
+
+═══════════════════════════════════════════════════════════════════════════════
+FILES CREATED
+═══════════════════════════════════════════════════════════════════════════════
+
+1. tests/test_routing_prefixes_clean.py
+   - 10 comprehensive tests
+   - FastAPI, Flask, and edge case coverage
+   - All tests passing
+
+2. examples/versioned_api_demo.py
+   - Production-quality example
+   - V1 and V2 APIs
+   - Interactive documentation
+
+3. docs/route_prefixes_guide.md
+   - Complete guide
+   - Migration strategies
+   - Best practices
+
+4. verify_system.py
+   - System verification utility
+   - Tests running servers
+
+═══════════════════════════════════════════════════════════════════════════════
+TEST RESULTS
+═══════════════════════════════════════════════════════════════════════════════
+
+Before Session 31:
+  - Pytest: 473/473 passing
+  - Features: 171/171 passing
+
+After Session 31:
+  - Pytest: 483/483 passing (+10 new tests)
+  - Features: 171/171 passing (no regressions)
+
+New Tests Added:
+  test_routing_prefixes_clean.py: 10/10 passing
+  - test_single_prefix_routes_registered
+  - test_prefix_routes_work_functionally  
+  - test_multiple_prefixes_for_versioning
+  - test_multiple_prefixes_work_independently
+  - test_no_prefix_still_works
+  - test_single_prefix_routes_registered (Flask)
+  - test_prefix_routes_work_functionally (Flask)
+  - test_prefix_normalization
+  - test_nested_prefix
+  - test_empty_prefix_is_default
+
+═══════════════════════════════════════════════════════════════════════════════
+PROJECT STATUS
+═══════════════════════════════════════════════════════════════════════════════
+
+Phase 1: 100% Complete (171 features) ✅
+Phase 2.1: 100% Complete (Auto-routing system) ✅
+Phase 2.2: 25% Complete (1/4 priorities)
+  - Priority 1: Route Prefixes ✅ COMPLETE
+  - Priority 2: Custom Route Naming ⏳ NEXT
+  - Priority 3: Route Grouping ⏳ PENDING
+  - Priority 4: Middleware Integration ⏳ PENDING
+
+═══════════════════════════════════════════════════════════════════════════════
+EXAMPLE USAGE
+═══════════════════════════════════════════════════════════════════════════════
+
+Run the demo:
+  uvicorn examples.versioned_api_demo:app --reload --port 8090
+
+Test V1 API:
+  curl -X POST 'http://localhost:8090/api/v1/counterv1/demo/increment?amount=5'
+  curl 'http://localhost:8090/api/v1/counterv1/demo/status'
+
+Test V2 API:
+  curl -X POST 'http://localhost:8090/api/v2/counterv2/demo/increment?amount=5'
+  curl 'http://localhost:8090/api/v2/counterv2/demo/status'
+
+Visit documentation:
+  http://localhost:8090/              # Interactive guide
+  http://localhost:8090/docs          # OpenAPI docs
+
+═══════════════════════════════════════════════════════════════════════════════
+NEXT SESSION
+═══════════════════════════════════════════════════════════════════════════════
+
+Priority 2: Custom Route Naming (2-3 hours estimated)
+
+Goal: Allow customizing route paths per entity or action
+
+Features to implement:
+  1. path parameter in @action decorator
+  2. __route_name__ class attribute for entity
+  3. Custom path templates
+  4. Tests for all frameworks
+  5. Documentation and examples
+
+Example of desired functionality:
+  class Counter(Entity):
+      __route_name__ = 'counters'  # Override default 'counter'
+      
+      @action(method='POST', path='/add')  # Custom path
+      def increment(self, amount: int = 1):
+          ...
+  
+  # Routes become:
+  # POST /counters/{id}/add (instead of /counter/{id}/increment)
+
+═══════════════════════════════════════════════════════════════════════════════
+COMMIT
+═══════════════════════════════════════════════════════════════════════════════
+
+Commit cbcb298: Phase 2.2: Add route prefix tests, versioned API example, and documentation
+
+✅ 10 new tests (all passing)
+✅ Working versioned API demo
+✅ Comprehensive documentation guide
+✅ No regressions
+
+═══════════════════════════════════════════════════════════════════════════════
+
