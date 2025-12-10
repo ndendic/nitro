@@ -1447,3 +1447,138 @@ Or tackle integration_fastapi (5 features) for more significant impact.
 
 ═══════════════════════════════════════════════════════════════════════════════
 
+
+
+═══════════════════════════════════════════════════════════════════════════════
+SESSION 12 - FLASK INTEGRATION CATEGORY COMPLETE
+═══════════════════════════════════════════════════════════════════════════════
+
+Date: 2025-12-10
+Starting Progress: 133/171 (77.8%)
+Ending Progress: 135/171 (78.9%)
+Features Completed: 2
+Categories Completed: 1
+Commits: 1 (6eff604)
+
+CATEGORY COMPLETED THIS SESSION:
+✓ integration_flask (2 features) - Full CRUD Todo app + Page() component demo
+
+FILES CREATED:
+- examples/flask_todo_app.py (195 lines) - Complete Todo CRUD application
+- examples/flask_page_demo.py (145 lines) - Multi-page demo with Page() component
+
+Total Code: 340 lines demonstrating Flask integration
+
+═══════════════════════════════════════════════════════════════════════════════
+ACCOMPLISHMENT 1: Flask Todo App (integration_flask feature 1)
+═══════════════════════════════════════════════════════════════════════════════
+
+Feature: Nitro works with Flask
+Status: ✓ PASSING
+
+Implementation:
+- Created examples/flask_todo_app.py (195 lines)
+- Full CRUD Todo application with Flask
+- Entity persistence with SQLModelRepository
+- RustyTags HTML generation with Tailwind4
+- Fixed sys.path to use local nitro package (not parent directory)
+- Disabled debug mode to avoid Flask reloader conflicts
+
+Routes Implemented:
+✓ GET / - Homepage with todo list
+✓ POST /add - Create new todo
+✓ GET /toggle/{id} - Toggle todo completion
+✓ GET /delete/{id} - Delete todo
+✓ GET /api/todos - JSON list of all todos
+✓ GET /api/todo/{id} - JSON for specific todo
+
+Test Steps Verified:
+1. ✓ Create Flask app - Working
+2. ✓ Define Entity with SQLModelRepository - Working
+3. ✓ Create CRUD routes - All 6 routes working
+4. ✓ Verify full functionality - All operations tested
+
+Tests Passed (6/6):
+✓ Homepage renders with Tailwind CSS
+✓ POST /add creates todo successfully
+✓ GET /api/todos returns JSON list
+✓ GET /api/todo/{id} returns specific todo
+✓ GET /toggle/{id} toggles completion status
+✓ GET /delete/{id} deletes todo
+
+Key Fix:
+- Added sys.path.insert(0, str(nitro_path)) to ensure local nitro package is used
+- This prevents import conflicts with parent directory's nitro package
+
+═══════════════════════════════════════════════════════════════════════════════
+ACCOMPLISHMENT 2: Flask Page() Integration (integration_flask feature 2)
+═══════════════════════════════════════════════════════════════════════════════
+
+Feature: Page() integrates with Flask templates
+Status: ✓ PASSING
+
+Implementation:
+- Created examples/flask_page_demo.py (145 lines)
+- Multi-page application demonstrating Page() component
+- RustyTags HTML generation with declarative syntax
+- Tailwind4 CSS via CDN
+- No template files needed
+
+Routes Implemented:
+✓ GET / - Homepage with features list
+✓ GET /about - About page with Nitro info
+✓ GET /contact - Contact page with form
+
+Test Steps Verified:
+1. ✓ Create Flask route returning Page() - Working
+2. ✓ Render Page to HTML string - Working (str(page))
+3. ✓ Return from Flask route - Working
+4. ✓ Verify HTML renders correctly in browser - Verified
+
+Tests Passed (4/4):
+✓ Homepage renders with title and Tailwind CSS
+✓ About page displays correctly
+✓ Contact page displays correctly
+✓ Valid HTML structure (DOCTYPE, head, body, title)
+
+═══════════════════════════════════════════════════════════════════════════════
+OVERALL PROGRESS
+═══════════════════════════════════════════════════════════════════════════════
+
+COMPLETED: 135/171 features (78.9%)
+
+COMPLETED CATEGORIES (17 of ~29):
+✓ core_entity, events, templating, persistence_sql, persistence_memory
+✓ components, config, error_handling, edge_cases, async_support
+✓ testing, cli_tailwind, cli_db, cli_general, security
+✓ advanced_entity, advanced_events
+✓ integration_starlette, integration_fasthtml
+✓ integration_flask ⭐ NEW
+
+REMAINING: 36 features (21.1%)
+
+REMAINING CATEGORIES:
+- migration (1 feature) - Documentation task
+- backwards_compatibility (2 features) - Documentation
+- documentation (3 features) - Check/create docs
+- advanced_persistence (3 features) - Custom backends
+- advanced_datastar (3 features) - SSE, nested paths
+- monitoring (3 features) - Logging, stats, metrics
+- performance (4 features) - Benchmarks
+- developer_experience (4 features) - DX improvements
+- examples (4 features) - Counter, Todo, Blog, E-commerce demos
+- deployment (4 features) - Gunicorn, Uvicorn, Docker
+- integration_fastapi (5 features) - FastAPI integration
+
+═══════════════════════════════════════════════════════════════════════════════
+NEXT SESSION PRIORITIES
+═══════════════════════════════════════════════════════════════════════════════
+
+Continue with small categories:
+1. migration (1 feature) - Create StarModel migration example
+2. backwards_compatibility (2 features) - Deprecation warnings, changelog
+3. documentation (3 features) - README, API docs, tutorials
+
+Or tackle integration_fastapi (5 features) for significant impact.
+
+═══════════════════════════════════════════════════════════════════════════════
