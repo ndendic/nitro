@@ -38,13 +38,9 @@ class MemoryRepository(EntityRepositoryInterface):
             self._expiry: Dict[str, float] = {}
             MemoryRepository._initialized = True
             
-            # Initialize parent class for cleanup functionality 
+            # Initialize parent class for cleanup functionality
             super().__init__()
-            
-            # Register this backend for global cleanup management
-            from . import register_backend
-            register_backend(self)
-            
+
             # Start automatic cleanup by default
             self.start_cleanup()
     
@@ -92,6 +88,10 @@ class MemoryRepository(EntityRepositoryInterface):
             print(f"Error deleting entity from memory: {e}")
             return False
     
+    def exists(self, key: str) -> bool:
+        """Check if entity exists in memory (implements abstract method)."""
+        return self.exists_sync(key)
+
     def exists_sync(self, key: str) -> bool:
         """Check if entity exists in memory."""
         try:
@@ -100,9 +100,9 @@ class MemoryRepository(EntityRepositoryInterface):
                 self._data.pop(key, None)
                 self._expiry.pop(key, None)
                 return False
-            
+
             return key in self._data
-            
+
         except Exception as e:
             print(f"Error checking entity existence in memory: {e}")
             return False
@@ -115,16 +115,30 @@ class MemoryRepository(EntityRepositoryInterface):
                 key for key, expiry_time in self._expiry.items()
                 if current_time > expiry_time
             ]
-            
+
             for key in expired_keys:
                 self._data.pop(key, None)
                 self._expiry.pop(key, None)
-            
+
             return len(expired_keys)
-            
+
         except Exception as e:
             print(f"Error cleaning up expired entities: {e}")
             return 0
+
+    def start_cleanup(self, interval: int = 300):
+        """
+        Start automatic cleanup of expired entities.
+
+        Args:
+            interval: Cleanup interval in seconds (default: 300 = 5 minutes)
+
+        Note: This is a placeholder for future async cleanup implementation.
+        For now, cleanup happens automatically on access (lazy cleanup).
+        """
+        # Placeholder for future implementation
+        # Current implementation uses lazy cleanup on access
+        pass
 
 # Convenience function to get singleton instance
 def get_memory_persistence() -> MemoryRepository:

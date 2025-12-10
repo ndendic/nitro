@@ -392,7 +392,7 @@
       "Step 1: Get MemoryRepository instance twice",
       "Step 2: Verify both references point to same object"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_memory",
@@ -402,7 +402,7 @@
       "Step 2: Call repository.save(entity)",
       "Step 3: Verify entity can be retrieved with find()"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_memory",
@@ -413,7 +413,7 @@
       "Step 3: Wait 2 seconds",
       "Step 4: Verify entity no longer exists"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_memory",
@@ -424,7 +424,7 @@
       "Step 3: Call find()",
       "Step 4: Verify it returns None"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_memory",
@@ -435,7 +435,7 @@
       "Step 3: Verify find() returns None",
       "Step 4: Verify delete() returns True"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_memory",
@@ -444,7 +444,7 @@
       "Step 1: Call delete('nonexistent')",
       "Step 2: Verify it returns False"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_memory",
@@ -455,7 +455,7 @@
       "Step 3: Delete entity",
       "Step 4: Verify exists_sync(id) returns False"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_memory",
@@ -468,7 +468,7 @@
       "Step 5: Verify it returns 5 (expired count)",
       "Step 6: Verify only non-TTL entities remain"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_memory",
@@ -479,7 +479,7 @@
       "Step 3: Save entities with TTL",
       "Step 4: Verify they are auto-cleaned after expiration"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "persistence_memory",
@@ -490,7 +490,7 @@
       "Step 3: Verify latest data is stored",
       "Step 4: Verify only one instance exists in memory"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
