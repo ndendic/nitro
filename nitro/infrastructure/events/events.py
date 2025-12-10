@@ -162,19 +162,21 @@ class Event(NamedSignal):
     
     async def emit_async(self, sender: Any = ANY, *args, **kwargs):
         """Fully async emit with parallel execution"""
-        tasks_results = []
+        tasks = []
         for receiver in self.receivers_for(sender):
             async def consume():
                 results = []
                 async for item in _aiter_results(receiver, sender, *args, **kwargs):
                     if item is not None: results.append(item)
                 return results
-            
-            result = asyncio.create_task(consume())
-            result = await result
-            tasks_results.append(result) if result is not None else None
-        
-        return tasks_results
+
+            task = asyncio.create_task(consume())
+            tasks.append(task)
+
+        # Await all tasks in parallel
+        tasks_results = await asyncio.gather(*tasks, return_exceptions=False)
+
+        return [r for r in tasks_results if r is not None]
 
 
 def on(evt: str|Event, sender: Any = ANY, weak: bool = True) -> c.Callable[[F], F]:

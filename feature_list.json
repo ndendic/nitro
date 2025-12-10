@@ -500,7 +500,7 @@
       "Step 2: Emit 'user.created' event",
       "Step 3: Verify handler is called"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -510,7 +510,7 @@
       "Step 2: Emit 'user.created' and 'user.updated'",
       "Step 3: Verify handler is called for both events"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -521,7 +521,7 @@
       "Step 3: Verify handler receives sender and executes",
       "Step 4: Verify emit() returns list of results"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -532,7 +532,7 @@
       "Step 3: Verify handler completes",
       "Step 4: Verify emit_async() returns list of results"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -542,7 +542,7 @@
       "Step 2: Emit event",
       "Step 3: Verify all yielded values are collected in results"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -552,7 +552,7 @@
       "Step 2: Call emit_async()",
       "Step 3: Verify all yielded values are collected"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -562,7 +562,7 @@
       "Step 2: Call event('my.event') again",
       "Step 3: Verify both calls return same Event instance"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -573,7 +573,7 @@
       "Step 3: Emit event with sender='app2'",
       "Step 4: Verify handler only called for 'app1'"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -583,7 +583,7 @@
       "Step 2: Emit from multiple senders",
       "Step 3: Verify handler called for all"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -594,7 +594,7 @@
       "Step 3: Emit 'user.created'",
       "Step 4: Verify filtered connection works"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -605,7 +605,7 @@
       "Step 3: Verify all 3 handlers are called",
       "Step 4: Verify results list has 3 items"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -615,7 +615,7 @@
       "Step 2: Emit event with custom kwargs",
       "Step 3: Verify handler receives correct kwargs"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -626,7 +626,7 @@
       "Step 3: Verify emit() returns immediately",
       "Step 4: Verify handler eventually completes"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -636,7 +636,7 @@
       "Step 2: Call emit_async()",
       "Step 3: Verify total time is close to longest delay, not sum"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -646,7 +646,7 @@
       "Step 2: Create events in that namespace",
       "Step 3: Verify events are isolated from default namespace"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -656,7 +656,7 @@
       "Step 2: Call filter_signals('user.*')",
       "Step 3: Verify only user events are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -667,7 +667,7 @@
       "Step 3: Emit event",
       "Step 4: Verify handler still executes"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -679,7 +679,7 @@
       "Step 4: Emit event",
       "Step 5: Verify handler no longer executes"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "events",
@@ -690,7 +690,7 @@
       "Step 3: Verify generator yields are collected",
       "Step 4: Verify no blocking occurs"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "templating",
