@@ -102,8 +102,9 @@ class Event(NamedSignal):
         self.namespace: Namespace = namespace
         self.connect_filtered(sender=ANY, weak=False) # connect to all receivers in the namespace
 
-        # Store handler metadata (priority, condition)
+        # Store handler metadata (priority, condition, registration_order)
         self._handler_metadata: dict[Any, dict[str, Any]] = {}
+        self._registration_counter: int = 0  # Track registration order for stable sorting
 
     def connect(self, receiver: F, sender: Any = ANY, weak: bool = True, priority: int = 0, condition: Callable | None = None) -> F:
         """Connect a receiver with optional priority and condition.
@@ -118,12 +119,14 @@ class Event(NamedSignal):
         super().connect(receiver, sender, weak)
         self.connect_filtered(sender, weak)
 
-        # Store metadata for this handler
+        # Store metadata for this handler including registration order
         self._handler_metadata[id(receiver)] = {
             'priority': priority,
             'condition': condition,
-            'receiver': receiver
+            'receiver': receiver,
+            'registration_order': self._registration_counter
         }
+        self._registration_counter += 1
 
         return receiver
 
@@ -145,11 +148,11 @@ class Event(NamedSignal):
         receivers = list(self.receivers_for(sender))
         receivers_with_priority = []
         for receiver in receivers:
-            metadata = self._handler_metadata.get(id(receiver), {'priority': 0, 'condition': None})
+            metadata = self._handler_metadata.get(id(receiver), {'priority': 0, 'condition': None, 'registration_order': 0})
             receivers_with_priority.append((receiver, metadata))
 
-        # Sort by priority (descending) and maintain registration order for same priority
-        receivers_with_priority.sort(key=lambda x: -x[1]['priority'])
+        # Sort by priority (descending), then by registration order (ascending) for stable sorting
+        receivers_with_priority.sort(key=lambda x: (-x[1]['priority'], x[1]['registration_order']))
 
         # Execute handlers in priority order
         for receiver, metadata in receivers_with_priority:
