@@ -1110,3 +1110,125 @@ NEXT SESSION PRIORITIES:
 
 SESSION 8 EXIT: Clean state, all commits made, 64.3% complete
 ═══════════════════════════════════════════════════════════════════════════════
+
+═══════════════════════════════════════════════════════════════════════════════
+SESSION 10 - COMPLETE ADVANCED_ENTITY CATEGORY
+═══════════════════════════════════════════════════════════════════════════════
+
+Date: 2025-12-10
+Session Focus: Complete remaining advanced_entity features (composite keys, relationships)
+Starting Status: 125/171 features (73.1%)
+Ending Status: 128/171 features (74.9%)
+
+═══════════════════════════════════════════════════════════════════════════════
+ACCOMPLISHMENTS
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ Completed advanced_entity category (6/6 features, 22 tests all passing)
+✅ Fixed all failing tests from previous session
+✅ No regressions - all verification tests passing
+✅ Progress: +3 features (125→128)
+
+═══════════════════════════════════════════════════════════════════════════════
+COMPLETED FEATURES THIS SESSION
+═══════════════════════════════════════════════════════════════════════════════
+
+advanced_entity (3 features):
+1. Entity supports composite primary keys
+   - Fixed duplicate 'id' parameter issue in __init__
+   - Uses compound key pattern (region:code → single id field)
+   - Tests: creation, retrieval, uniqueness
+
+2. Entity supports foreign key relationships
+   - Fixed DetachedInstanceError with eager loading
+   - Added selectinload for relationships
+   - Tests: creation, parent→child, child→parent traversal
+
+3. Entity supports many-to-many relationships
+   - Fixed session context manager usage
+   - Link table pattern works correctly
+   - Tests: creation, bidirectional navigation
+
+═══════════════════════════════════════════════════════════════════════════════
+TECHNICAL FIXES IMPLEMENTED
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Repository Enhancement (sql.py):
+   - Added selectinload import from sqlalchemy.orm
+   - Updated find() method to eagerly load all relationships
+   - Prevents DetachedInstanceError when accessing relationships outside session
+   - Automatically detects and loads relationship attributes
+
+2. Computed Fields Support (sql.py):
+   - Modified save() method to filter out computed fields
+   - Detects properties without setters
+   - Prevents AttributeError when saving entities with computed fields
+   - Preserves computed field values after save
+
+3. Test Fixes (test_advanced_entity.py):
+   - Fixed CompositeKeyEntity: pop 'id' from kwargs to avoid duplicate
+   - Fixed many-to-many tests: use Session(engine) instead of get_session()
+   - Fixed lifecycle hooks test: simplified to use existing HookedEntity
+
+═══════════════════════════════════════════════════════════════════════════════
+TEST RESULTS
+═══════════════════════════════════════════════════════════════════════════════
+
+All 22 advanced_entity tests passing:
+- TestCompositeKeys: 3/3 ✓
+- TestForeignKeyRelationships: 3/3 ✓
+- TestManyToManyRelationships: 2/2 ✓
+- TestComputedFields: 3/3 ✓
+- TestFieldValidators: 5/5 ✓
+- TestLifecycleHooks: 5/5 ✓
+- TestAdvancedFeaturesIntegration: 1/1 ✓
+
+Verification tests: All passing (no regressions)
+- Core entity tests: 28/28 ✓
+- Persistence SQL tests: 18/18 ✓
+
+═══════════════════════════════════════════════════════════════════════════════
+OVERALL PROGRESS
+═══════════════════════════════════════════════════════════════════════════════
+
+COMPLETED: 128/171 features (74.9%)
+
+COMPLETED CATEGORIES (13 of ~29):
+✓ core_entity, events, templating, persistence_sql, persistence_memory
+✓ components, config, error_handling, edge_cases, async_support
+✓ testing, cli_tailwind, cli_db, cli_general, security
+✓ advanced_entity ⭐ NEW (100% complete)
+
+REMAINING: 43 features (25.1%)
+
+═══════════════════════════════════════════════════════════════════════════════
+NEXT SESSION PRIORITIES
+═══════════════════════════════════════════════════════════════════════════════
+
+Small categories to complete (0% → 100%):
+1. integration_fasthtml (1 feature) - requires browser testing
+2. integration_starlette (1 feature) - requires browser testing
+3. migration (1 feature) - documentation task
+4. integration_flask (2 features) - requires browser testing
+5. backwards_compatibility (2 features) - documentation task
+6. documentation (3 features) - check/create docs
+7. advanced_events (3 features) - priority ordering, conditions
+8. advanced_persistence (3 features) - custom backends, replicas
+9. advanced_datastar (3 features) - SSE, nested paths
+
+Browser automation needed for integration tests.
+Documentation tasks should be straightforward.
+
+═══════════════════════════════════════════════════════════════════════════════
+COMMIT INFO
+═══════════════════════════════════════════════════════════════════════════════
+
+Commit: 2329f16
+Message: Complete advanced_entity category - all 6 features verified (74.9% complete)
+
+Files Changed:
+- tests/test_advanced_entity.py (fixes for 3 test categories)
+- nitro/infrastructure/repository/sql.py (eager loading + computed fields)
+- feature_list.json (marked 3 features as passing)
+
+═══════════════════════════════════════════════════════════════════════════════

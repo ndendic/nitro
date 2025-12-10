@@ -1491,7 +1491,7 @@
       "Step 2: Emit event",
       "Step 3: Verify handlers execute in priority order"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_events",
@@ -1501,7 +1501,7 @@
       "Step 2: Emit events with different data",
       "Step 3: Verify handler only executes when condition is true"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_events",
@@ -1512,7 +1512,7 @@
       "Step 3: Emit event",
       "Step 4: Verify second handler doesn't execute"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "advanced_persistence",

@@ -94,7 +94,7 @@ def filter_signals(filter_query: str, namespace: Namespace = default_namespace) 
     return filter_dict(filter_query, namespace)
 
 
-class Event(NamedSignal):    
+class Event(NamedSignal):
 
     def __init__(self, name: str, namespace: Namespace = default_namespace, doc: str | None = None) -> None:
         super().__init__(name, doc)
@@ -102,9 +102,29 @@ class Event(NamedSignal):
         self.namespace: Namespace = namespace
         self.connect_filtered(sender=ANY, weak=False) # connect to all receivers in the namespace
 
-    def connect(self, receiver: F, sender: Any = ANY, weak: bool = True) -> F:
+        # Store handler metadata (priority, condition)
+        self._handler_metadata: dict[Any, dict[str, Any]] = {}
+
+    def connect(self, receiver: F, sender: Any = ANY, weak: bool = True, priority: int = 0, condition: Callable | None = None) -> F:
+        """Connect a receiver with optional priority and condition.
+
+        Args:
+            receiver: The handler function to connect
+            sender: The sender to filter on (default: ANY)
+            weak: Whether to use weak references (default: True)
+            priority: Handler priority (higher = executes first, default: 0)
+            condition: Optional condition function that must return True for handler to execute
+        """
         super().connect(receiver, sender, weak)
         self.connect_filtered(sender, weak)
+
+        # Store metadata for this handler
+        self._handler_metadata[id(receiver)] = {
+            'priority': priority,
+            'condition': condition,
+            'receiver': receiver
+        }
+
         return receiver
 
     def connect_filtered(self, sender: Any = ANY, weak: bool = True):
@@ -118,15 +138,43 @@ class Event(NamedSignal):
                     
 
     def emit(self, sender: Any = ANY, *args, **kwargs):
-        """Enhanced emit that handles all handler types"""
+        """Enhanced emit that handles all handler types with priority, conditions, and cancellation"""
         results = []
-        for receiver in self.receivers_for(sender):
+
+        # Get receivers and sort by priority (higher priority first)
+        receivers = list(self.receivers_for(sender))
+        receivers_with_priority = []
+        for receiver in receivers:
+            metadata = self._handler_metadata.get(id(receiver), {'priority': 0, 'condition': None})
+            receivers_with_priority.append((receiver, metadata))
+
+        # Sort by priority (descending) and maintain registration order for same priority
+        receivers_with_priority.sort(key=lambda x: -x[1]['priority'])
+
+        # Execute handlers in priority order
+        for receiver, metadata in receivers_with_priority:
+            # Check condition if present
+            condition = metadata.get('condition')
+            if condition is not None:
+                try:
+                    if not condition(sender, **kwargs):
+                        continue  # Skip this handler if condition is False
+                except Exception:
+                    continue  # Skip on condition error
+
             # Determine handler type and consume appropriately
             if self._is_async(receiver):
                 result = self._schedule_async(receiver, sender, *args, **kwargs)
             else:
                 result = self._consume_sync(receiver, sender, *args, **kwargs)
-            results.append(result) if result is not None else None
+
+            # Check for cancellation (handler returns False)
+            if result is False or (isinstance(result, list) and False in result):
+                break  # Stop propagation
+
+            if result is not None:
+                results.append(result)
+
         return results
     
     def _is_async(self, func):
@@ -179,12 +227,21 @@ class Event(NamedSignal):
         return [r for r in tasks_results if r is not None]
 
 
-def on(evt: str|Event, sender: Any = ANY, weak: bool = True) -> c.Callable[[F], F]:
+def on(evt: str|Event, sender: Any = ANY, weak: bool = True, priority: int = 0, condition: Callable | None = None) -> c.Callable[[F], F]:
+    """Decorator to connect a handler to an event.
+
+    Args:
+        evt: Event name or Event instance
+        sender: The sender to filter on (default: ANY)
+        weak: Whether to use weak references (default: True)
+        priority: Handler priority (higher = executes first, default: 0)
+        condition: Optional condition function that must return True for handler to execute
+    """
     sigs = filter_signals(evt, default_namespace)
     if not sigs: sigs = {evt: event(evt)}
     def decorator(fn):
         for tpc, sig in sigs.items():
-            sig.connect(fn, sender, weak)
+            sig.connect(fn, sender, weak, priority, condition)
         return fn
     return decorator
 
