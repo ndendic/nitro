@@ -63,7 +63,7 @@ class SQLModelRepository(EntityRepositoryInterface):
     ) -> List[Dict[str, Any]]:
         with Session(self.engine) as session:
             # Validate that all filter fields exist in the model
-            invalid_fields = [field for field in kwargs.keys() if field not in model.__fields__]
+            invalid_fields = [field for field in kwargs.keys() if field not in model.model_fields]
             if invalid_fields:
                 raise ValueError(f"Invalid fields for filtering: {', '.join(invalid_fields)}")
 
@@ -79,7 +79,7 @@ class SQLModelRepository(EntityRepositoryInterface):
                     query = query.filter(getattr(model, field).is_(None))
                     continue
 
-                field_type = model.__fields__[field].annotation
+                field_type = model.model_fields[field].annotation
                 # Get the underlying type if it's Optional
                 if get_origin(field_type) is Union:
                     # Optional[T] is actually Union[T, None]
@@ -126,7 +126,7 @@ class SQLModelRepository(EntityRepositoryInterface):
 
             # Add sorting
             if sorting_field:
-                if sorting_field in model.__fields__:
+                if sorting_field in model.model_fields:
                     order_field = getattr(model, sorting_field)
                     query = query.order_by(
                         order_field.desc()
@@ -172,7 +172,7 @@ class SQLModelRepository(EntityRepositoryInterface):
 
             if search_value:
                 string_fields = [
-                    k for k, v in model.__fields__.items() if v.annotation is str
+                    k for k, v in model.model_fields.items() if v.annotation is str
                 ]
                 if string_fields:
                     conditions = [
@@ -182,7 +182,7 @@ class SQLModelRepository(EntityRepositoryInterface):
                     query = query.filter(or_(*conditions))
 
             if sorting_field:
-                if sorting_field in model.__fields__:
+                if sorting_field in model.model_fields:
                     order_field = getattr(model, sorting_field)
                     query = query.order_by(
                         order_field.desc()
@@ -205,7 +205,7 @@ class SQLModelRepository(EntityRepositoryInterface):
             results = session.exec(query).all()
 
             if as_dict:
-                dict_results = [result._asdict() for result in results]
+                dict_results = [result.model_dump() for result in results]
                 return dict_results
             else:
                 return results

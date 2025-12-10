@@ -8,7 +8,7 @@
       "Step 3: Call user.save()",
       "Step 4: Verify User.get('user1') returns the instance with correct data"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -18,7 +18,7 @@
       "Step 2: Call User.get('nonexistent')",
       "Step 3: Verify it returns None"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -29,7 +29,7 @@
       "Step 3: Verify User.get(user.id) returns None",
       "Step 4: Verify delete() returns True"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -40,7 +40,7 @@
       "Step 3: Delete user",
       "Step 4: Verify User.exists(user.id) returns False"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -50,7 +50,7 @@
       "Step 2: Call User.all()",
       "Step 3: Verify it returns list of 3 users"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -60,7 +60,7 @@
       "Step 2: Call User.where(User.age > 18)",
       "Step 3: Verify only users with age > 18 are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -70,7 +70,7 @@
       "Step 2: Call User.where(order_by='name')",
       "Step 3: Verify results are sorted by name ascending"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -80,7 +80,7 @@
       "Step 2: Call User.where(limit=5)",
       "Step 3: Verify only 5 results are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -90,7 +90,7 @@
       "Step 2: Call User.where(offset=5, limit=5)",
       "Step 3: Verify results start from 6th entity"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -100,7 +100,7 @@
       "Step 2: Call User.search(search_value='Alice')",
       "Step 3: Verify only users with 'Alice' in string fields are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -110,7 +110,7 @@
       "Step 2: Call User.search('test', sorting_field='name', sort_direction='desc')",
       "Step 3: Verify results are sorted correctly"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -130,7 +130,7 @@
       "Step 2: Call User.search('test', as_dict=True)",
       "Step 3: Verify results are dictionaries, not Entity instances"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -140,7 +140,7 @@
       "Step 2: Call User.filter(status='active')",
       "Step 3: Verify only active users are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -160,7 +160,7 @@
       "Step 2: Call User.filter(status='active', age=25)",
       "Step 3: Verify only users matching both conditions are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -190,7 +190,7 @@
       "Step 2: Call User.find('user123')",
       "Step 3: Verify correct user is returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",
@@ -200,7 +200,7 @@
       "Step 2: Call User.find_by(email='alice@example.com')",
       "Step 3: Verify correct user is returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_entity",

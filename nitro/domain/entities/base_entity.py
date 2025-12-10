@@ -30,15 +30,15 @@ class Entity(SQLModel):
         from_attributes=True,
         validate_assignment=True,
         json_encoders={datetime: lambda dt: dt.isoformat()},
-        repository=SQLModelRepository()
     )
 
-    
+
     id: str = Field(primary_key=True)
 
     @classmethod
     def repository(cls) -> SQLModelRepository:
-        return cls.model_config['repository']
+        """Get the singleton repository instance."""
+        return SQLModelRepository()
 
     @classmethod
     def get(cls, id: Any) -> Optional["Entity"]:

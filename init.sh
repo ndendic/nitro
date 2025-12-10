@@ -106,7 +106,7 @@ if [ -d "$SCRIPT_DIR/nitro" ]; then
     cd "$SCRIPT_DIR/nitro"
 
     # Install with dev dependencies
-    if pip install -e ".[dev]"; then
+    if uv pip install -e ".[dev]"; then
         print_success "Nitro installed in editable mode with dev dependencies"
     else
         print_warning "Failed to install with dev dependencies, trying without..."

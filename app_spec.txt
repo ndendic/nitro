@@ -1,0 +1,192 @@
+<project_specification>
+  <project_name>Nitro Framework - The Python Web Performance Layer</project_name>
+
+  <overview>
+    Nitro is a full-stack Python web framework add-on layer that treats business logic as first-class citizens.
+    It functions as a performance-enhancing boost for existing frameworks (FastAPI, Flask, Django, Sanic, Starlette, FastHTML and others),
+    providing rich domain entities, hybrid persistence, event-driven architecture, and reactive HTML templating.
+    The goal is to allow developers to build simple prototypes that scale to enterprise complexity without rewrites.
+  </overview>
+
+  <vision>
+    <core_intent>
+      1. Business Logic Belongs in Domain Entities: Logic lives in entity methods, not service layers.
+      2. Persistence Should Match Your Needs: Hybrid persistence allows mixing Memory, SQL, Redis, etc.
+      3. Use built in RustyTags for generating HTML 
+      4. Use RustyTags Datastar integration for building interactive forms and server comunnication
+      5. Framework-Agnostic by Design: Works on top of any Python web framework.
+      6. Events for Decoupled Architecture: Side effects are handled via a robust event system.
+    </core_intent>
+  </vision>
+
+  <technology_stack>
+    <core_dependencies>
+      <language>Python 3.10+</language>
+      <html_generation>RustyTags (Rust-powered, high performance)</html_generation>
+      <data_validation>Pydantic (>=2.11.9)</data_validation>
+      <persistence>SQLModel (combines SQLAlchemy + Pydantic)</persistence>
+      <events>Blinker (>=1.9.0) with Async Support</events>
+      <cli>Typer (>=0.19.2) with Rich</cli>
+      <configuration>Pydantic Settings</configuration>
+    </core_dependencies>
+    <frontend_integration>
+      <templating>RustyTags + Datastar SDK</templating>
+      <reactivity>Datastar (Server-Sent Events + Signals)</reactivity>
+      <styling>Tailwind CSS (via built-in CLI wrapper)</styling>
+      <icons>Lucide Icons</icons>
+    </frontend_integration>
+  </technology_stack>
+
+  <architecture>
+    <structure_pattern>Clean Architecture (Domain, Application, Infrastructure)</structure_pattern>
+    <directory_layout>
+      nitro/
+      ├── application/        # CLI, Templates, Tailwind Builder
+      ├── domain/             # Entities, Business Rules
+      ├── infrastructure/     # Repositories, Events, HTML Generation
+      ├── config.py           # Configuration
+      └── utils.py            # Utilities
+    </directory_layout>
+  </architecture>
+
+  <core_features>
+    <rich_domain_entities>
+      - Active Record pattern implementation
+      - Built-in validation via Pydantic
+      - Lifecycle methods (save, delete, exists)
+      - Query interface (get, all, where, find_by, search, filter)
+      - Signal generation for reactive UIs
+    </rich_domain_entities>
+
+    <hybrid_persistence>
+      - Pluggable repository backend system
+      - Singleton repository instance per entity type
+      - Memory Repository (for testing/prototyping)
+      - SQL Repository (SQLModel/SQLAlchemy based)
+      - Automatic session management
+    </hybrid_persistence>
+
+    <event_driven_architecture>
+      - Enhanced Blinker-based signal system
+      - Support for Sync and Async handlers
+      - Generator support (Sync and Async) for streaming results
+      - Wildcard/Namespace event support
+      - Parallel async execution (emit_async)
+    </event_driven_architecture>
+
+    <reactive_templating>
+      - Rust-powered HTML generation (RustyTags)
+      - Datastar integration for HTMX-like reactivity
+      - Page wrapper with built-in CDN management
+      - Component system
+      - Tailwind CSS CLI integration
+    </reactive_templating>
+  </core_features>
+
+  <developed_components>
+    <status>Phase 0: Foundation & Architecture Validation</status>
+    
+    <domain_layer>
+      <entities>
+        - Base `Entity` class (Pydantic + SQLModel)
+        - Core methods: `save`, `delete`, `get`, `exists`, `all`, `where`, `search`, `filter`
+        - `signals` property for Datastar integration
+      </entities>
+    </domain_layer>
+
+    <infrastructure_layer>
+      <persistence>
+        - `SQLModelRepository`: Singleton SQL backend with session management
+        - `MemoryRepository`: In-memory backend for testing/prototyping with TTL support
+        - Repository Interface (`EntityRepositoryInterface`)
+      </persistence>
+      <events>
+        - Async-compatible Event system
+        - `emit`, `emit_async`, `on` decorators
+        - Event namespace support
+        - Generator result consumption
+      </events>
+      <html_generation>
+        - `Page` component with Datastar/Tailwind/Lucide/Highlight.js support
+        - `create_template` decorator for view functions
+        - `Datastar` SDK integration (`Signals`, `ServerSentEvents`)
+      </html_generation>
+    </infrastructure_layer>
+
+    <application_layer>
+      <cli>
+        - Entry point: `nitro`
+        - Tailwind commands (`nitro tw init`, `dev`, `build`)
+        - Database commands (`nitro db init`, `migrations`, `migrate`)
+      </cli>
+    </application_layer>
+  </developed_components>
+
+  <api_surface>
+    <entity_api>
+      - `Entity.get(id) -> Optional[Entity]`
+      - `Entity.all() -> List[Entity]`
+      - `Entity.where(*expressions, ...)`
+      - `Entity.search(query, ...)`
+      - `entity.save() -> bool`
+      - `entity.delete() -> bool`
+      - `entity.signals -> Signals`
+    </entity_api>
+    
+    <event_api>
+      - `@on(event_name)`: Decorator for event handlers
+      - `emit(event_name, sender, **kwargs)`: Synchronous emission
+      - `await emit_async(event_name, sender, **kwargs)`: Asynchronous emission
+      - `event(name)`: Create/Get named event handle
+    </event_api>
+
+    <templating_api>
+      - `Page(*content, **config)`: Renders full HTML page
+      - `create_template(title, ...)`: Decorator for views
+      - Imports from `rusty_tags` (Div, Span, H1, etc.)
+    </templating_api>
+  </api_surface>
+
+  <implementation_roadmap>
+    <phase_1_foundation>
+      - Merge StarModel persistence layer (Completed)
+      - Finalize Entity API (Completed)
+      - Build Examples (Counter, Todo)
+      - Documentation & Migration Guide
+    </phase_1_foundation>
+
+    <phase_2_automagic>
+      - Auto-routing strategy
+      - CRUD UI generation helpers
+      - Admin interface generation
+      - Support for 3+ frameworks adapters
+    </phase_2_automagic>
+
+    <phase_3_enterprise>
+      - CQRS pattern implementation
+      - Unit of Work pattern
+      - Multi-instance coordination (Redis Pub/Sub)
+      - Background job processing
+    </phase_3_enterprise>
+  </implementation_roadmap>
+
+  <success_criteria>
+    <functionality>
+      - Build a Todo app in < 50 lines of code
+      - Swap persistence backend in 1 line
+      - Zero critical bugs in core entity/event logic
+    </functionality>
+    
+    <performance>
+      - HTML generation 3-10x faster than pure Python (via RustyTags)
+      - < 10ms overhead per request for core framework
+    </performance>
+
+    <developer_experience>
+      - "It just works" installation
+      - Clear error messages
+      - Rich CLI feedback
+      - Intuitive API for Python developers
+    </developer_experience>
+  </success_criteria>
+</project_specification>
