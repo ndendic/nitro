@@ -1693,3 +1693,33 @@ REMAINING WORK
 
 Next session should focus on documentation (3) for quick win.
 
+═══════════════════════════════════════════════════════════════════════════════
+SESSION 14 - EXAMPLES CATEGORY
+═══════════════════════════════════════════════════════════════════════════════
+
+Date: 2025-12-10
+Progress: 146/171 → 149/171 (85.4% → 87.1%)
+Commit: 292c482
+
+COMPLETED:
+✓ Counter app example (counter_demo.py - 188 lines)
+✓ Todo app example (fastapi_todo_app.py - tested CRUD)
+✓ Blog app example (blog_demo.py - 235 lines with relationships)
+
+TESTING:
+- Counter: 6 tests (increment, decrement, reset, persistence)
+- Todo: 6 tests (full CRUD operations)
+- Blog: 3 tests (relationships, nested data)
+
+All examples verified end-to-end with automated HTTP tests.
+
+REMAINING: 22/171 features (12.9%)
+- examples (1 - E-commerce)
+- monitoring (3)
+- performance (4)
+- developer_experience (4)
+- deployment (4)
+- advanced_datastar (3)
+- advanced_persistence (3)
+
+- Session 14 Agent
