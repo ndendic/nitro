@@ -9,6 +9,7 @@ from fastapi.responses import HTMLResponse
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from domain.page_model import DocPage
+from components.sidebar import Sidebar
 from rusty_tags import Div, H1, P, Article, Nav, A
 from nitro.infrastructure.html import Page
 
@@ -38,11 +39,34 @@ async def view_doc(slug: str):
         doc_page = DocPage.load_from_fs(content_path)
         rendered_html = doc_page.render()
 
-        # Create the page with the docs layout
+        # Load all pages for sidebar
+        content_dir = Path(__file__).parent.parent / "content"
+        md_files = list(content_dir.rglob("*.md"))
+        all_pages = []
+        for md_file in md_files:
+            try:
+                page_obj = DocPage.load_from_fs(md_file)
+                all_pages.append(page_obj)
+            except Exception as e:
+                print(f"Error loading {md_file}: {e}")
+                continue
+
+        # Create the page with sidebar layout
         page = Page(
-            Article(
-                rendered_html,
-                cls="prose prose-slate dark:prose-invert max-w-none"
+            Div(
+                # Sidebar
+                Sidebar(all_pages, current_page=slug, mobile=True),
+
+                # Main content
+                Div(
+                    Article(
+                        rendered_html,
+                        cls="prose prose-slate dark:prose-invert max-w-none"
+                    ),
+                    cls="flex-1 p-8 ml-0 lg:ml-64 transition-all"
+                ),
+
+                cls="flex min-h-screen"
             ),
             title=doc_page.title,
             datastar=True,

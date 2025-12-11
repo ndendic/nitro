@@ -382,7 +382,7 @@
       "Step 3: Verify categories are grouped",
       "Step 4: Verify pages within categories are ordered"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "navigation_sidebar",
@@ -392,7 +392,7 @@
       "Step 2: Verify corresponding link has active class/styling",
       "Step 3: Verify other links don't have active styling"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "navigation_sidebar",
@@ -402,7 +402,7 @@
       "Step 2: Verify links have data-on-click attributes",
       "Step 3: Verify navigation doesn't cause full page reload"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "navigation_sidebar",
@@ -412,7 +412,7 @@
       "Step 2: Verify collapse/expand controls exist",
       "Step 3: Verify responsive classes are applied"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "navigation_breadcrumbs",
