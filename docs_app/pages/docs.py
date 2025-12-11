@@ -15,10 +15,13 @@ from components.toc import TableOfContents
 from rusty_tags import Div, H1, P, Article, Nav, A
 from nitro.infrastructure.html import Page
 
+from .templates.base import hdrs, htmlkws, bodykws, ftrs, page
+
 router = APIRouter()
 
 
 @router.get("/documentation/{slug}", response_class=HTMLResponse)
+# @page(title="Nitro Documentation")
 async def view_doc(slug: str):
     """Display a documentation page by slug"""
 
@@ -99,7 +102,11 @@ async def view_doc(slug: str):
             datastar=True,
             highlightjs=True,
             tailwind4=True,
-            lucide=True
+            lucide=True,
+            hdrs=hdrs,
+            htmlkw=htmlkws,
+            bodykw=bodykws,
+            ftrs=ftrs,
         )
 
         return str(page)

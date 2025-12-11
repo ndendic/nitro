@@ -6,6 +6,7 @@ from nitro import Client, event, Signals
 from pages.accordion import router as accordion_router
 from pages.anchor import router as anchor_router
 from pages.codeblock import router as codeblock_router
+from pages.code_playground import router as code_playground_router
 from pages.dialog import router as dialog_router
 from pages.docs import router as docs_router
 from pages.index import router as index_router
@@ -21,6 +22,7 @@ app.include_router(docs_router)
 app.include_router(accordion_router)
 app.include_router(anchor_router)
 app.include_router(codeblock_router)
+app.include_router(code_playground_router)
 app.include_router(dialog_router)
 app.include_router(playground_router)
 app.include_router(rustytags_router)
