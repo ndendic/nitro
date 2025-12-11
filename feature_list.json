@@ -319,7 +319,7 @@
       "Step 2: Verify entity saves successfully",
       "Step 3: Verify all fields are accessible"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "doc_page_entity",
@@ -330,7 +330,7 @@
       "Step 3: Verify entity is created with correct metadata",
       "Step 4: Verify content is loaded"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "doc_page_entity",
@@ -341,7 +341,7 @@
       "Step 3: Verify output is HTML string",
       "Step 4: Verify markdown is converted to Nitro components"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "doc_page_entity",
@@ -351,7 +351,7 @@
       "Step 2: Retrieve with DocPage.get(slug)",
       "Step 3: Verify data matches original"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "doc_page_entity",
@@ -361,7 +361,7 @@
       "Step 2: Call DocPage.all()",
       "Step 3: Verify pages are sorted by order field ascending"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "doc_page_entity",
@@ -371,7 +371,7 @@
       "Step 2: Call DocPage.filter(category='guide')",
       "Step 3: Verify only guide pages are returned"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "navigation_sidebar",

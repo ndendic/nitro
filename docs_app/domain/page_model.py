@@ -1,7 +1,7 @@
 """DocPage entity for documentation pages"""
 
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 import mistletoe
 
 from nitro.domain.entities.base_entity import Entity
@@ -78,6 +78,18 @@ class DocPage(Entity, table=True):
         )
 
         return page
+
+    @classmethod
+    def all(cls) -> List['DocPage']:
+        """
+        Get all documentation pages sorted by order field.
+
+        Returns:
+            List of DocPage entities sorted by order (ascending)
+        """
+        # Use where() with order_by to sort by order field
+        from sqlmodel import col
+        return cls.where(order_by=col(cls.order))
 
     def render(self) -> str:
         """
