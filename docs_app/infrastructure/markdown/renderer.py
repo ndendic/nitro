@@ -3,10 +3,12 @@ import mistletoe
 from mistletoe.span_token import SpanToken, RawText, Emphasis, Strong, InlineCode, Link, Image, EscapeSequence, LineBreak
 from mistletoe.block_token import Document, BlockToken, Heading, Quote, CodeFence, ThematicBreak, Paragraph, List, ListItem, Table, TableRow, TableCell
 from rusty_tags import (
-    Div, H1, H2, H3, H4, H5, H6, P, Ul, Ol, Li, A, Img, Pre, Code as HtmlCode, 
+    Div, H1, H2, H3, H4, H5, H6, P, Ul, Ol, Li, A, Img, Pre, Code as HtmlCode,
     Blockquote, Hr, Table as HtmlTable, Thead, Tbody, Tr, Th, Td, Span, Strong as HtmlStrong, Em as HtmlEm, Br
 )
 from nitro.infrastructure.html.components.codeblock import CodeBlock
+from components.alert import Alert
+from infrastructure.markdown.plugins import AlertBlock
 from typing import Any, List as TyList
 
 class NitroRenderer(mistletoe.BaseRenderer):
@@ -18,6 +20,8 @@ class NitroRenderer(mistletoe.BaseRenderer):
         }
         # Override CodeFence to use our custom render_code_fence method
         self.render_map['CodeFence'] = self.render_code_fence
+        # Register AlertBlock custom token
+        self.render_map['AlertBlock'] = self.render_alert_block
 
     def render_document(self, token: Document) -> Any:
         return Div(*[self.render(child) for child in token.children], cls="markdown-content space-y-4")
@@ -219,5 +223,22 @@ class NitroRenderer(mistletoe.BaseRenderer):
 
     def render_escape_sequence(self, token: EscapeSequence) -> Any:
         return token.children[0].content
+
+    def render_alert_block(self, token: AlertBlock) -> Any:
+        """
+        Render AlertBlock custom token to Alert component.
+
+        Args:
+            token: AlertBlock token with variant and content
+
+        Returns:
+            Alert component with rendered children
+        """
+        # Render all children (markdown content inside the alert)
+        rendered_children = [self.render(child) for child in token.children]
+
+        # Create Alert component with the appropriate variant
+        variant_value = getattr(token, 'alert_type', 'info')
+        return Alert(*rendered_children, variant=variant_value)
 
 

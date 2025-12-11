@@ -47,7 +47,8 @@ async def view_doc(slug: str):
             title=doc_page.title,
             datastar=True,
             highlightjs=True,
-            tailwind4=True
+            tailwind4=True,
+            lucide=True
         )
 
         return str(page)

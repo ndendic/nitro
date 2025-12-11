@@ -73,3 +73,21 @@ Table with alignment:
 |:-----|:------:|------:|
 | A | B | C |
 | D | E | F |
+
+### Alert Examples
+
+::: info
+This is an informational alert with some **important** information. It can contain markdown content.
+:::
+
+::: warning
+This is a warning alert. Be careful with this operation!
+:::
+
+::: danger
+This is a danger alert. This action cannot be undone!
+:::
+
+::: tip
+This is a helpful tip. Try using keyboard shortcuts for faster navigation.
+:::
