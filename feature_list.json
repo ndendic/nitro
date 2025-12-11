@@ -64,7 +64,7 @@
       "Step 3: Verify button has appropriate data attributes for copying",
       "Step 4: Verify code content is accessible for copying"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_code",
@@ -119,7 +119,7 @@
       "Step 3: Verify outer Ul contains Li with inner Ul",
       "Step 4: Verify nesting structure is preserved"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_links",
@@ -130,7 +130,7 @@
       "Step 3: Verify link has data-on-click attribute for Datastar",
       "Step 4: Verify href='/docs/guide' is preserved for accessibility"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_links",
@@ -141,7 +141,7 @@
       "Step 3: Verify target='_blank' attribute",
       "Step 4: Verify rel='noopener noreferrer' for security"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_links",
@@ -152,7 +152,7 @@
       "Step 3: Verify href='#section'",
       "Step 4: Verify smooth scroll behavior is enabled"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_alerts",

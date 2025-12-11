@@ -109,11 +109,33 @@ class NitroRenderer(mistletoe.BaseRenderer):
         return HtmlCode(content, cls="relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold")
 
     def render_link(self, token: Link) -> Any:
-        return A(
-            *[self.render(child) for child in token.children], 
-            href=token.target,
-            cls="font-medium text-primary underline underline-offset-4 hover:no-underline"
-        )
+        """
+        Render links with smart routing:
+        - Internal links (starting with /) use Datastar navigation
+        - External links (http://, https://) open in new tab with security attributes
+        - Anchor links (#section) work as regular anchor links
+        """
+        href = token.target
+        attrs = {
+            "href": href,
+            "cls": "font-medium text-primary underline underline-offset-4 hover:no-underline"
+        }
+
+        # Check if it's an external link
+        if href.startswith("http://") or href.startswith("https://"):
+            # External link - open in new tab with security
+            attrs["target"] = "_blank"
+            attrs["rel"] = "noopener noreferrer"
+        # Check if it's an anchor link (same page)
+        elif href.startswith("#"):
+            # Anchor link - just use regular href (browser handles smooth scroll)
+            pass
+        # Otherwise, it's an internal link - use Datastar navigation
+        elif href.startswith("/"):
+            # Internal link - use Datastar for SPA navigation
+            attrs["data-on-click"] = f"$$get('{href}')"
+
+        return A(*[self.render(child) for child in token.children], **attrs)
 
     def render_image(self, token: Image) -> Any:
         return Img(src=token.src, alt=token.title if token.title else "", cls="rounded-md border")
