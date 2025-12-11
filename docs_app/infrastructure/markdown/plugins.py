@@ -22,13 +22,22 @@ class AlertBlock(BlockToken):
 
     pattern = re.compile(r'^:::[ ]*(\w+)[ ]*$')
 
-    def __init__(self, tokenize_func=None):
+    def __init__(self, result):
         """
-        Initialize AlertBlock. This is called by mistletoe's tokenizer.
-        The actual initialization is done in read().
+        Initialize AlertBlock.
+
+        Args:
+            result: Tuple of (variant, children_list) from read() method
         """
-        # Don't call super().__init__() - we handle everything in read()
-        pass
+        if isinstance(result, tuple) and len(result) == 2:
+            # Called from read() method
+            variant, children = result
+            self._alert_type = variant
+            self.children = children
+        else:
+            # Fallback - shouldn't happen but just in case
+            self._alert_type = 'info'
+            self.children = []
 
     @classmethod
     def start(cls, line):
@@ -55,7 +64,7 @@ class AlertBlock(BlockToken):
             lines: Iterator of remaining lines
 
         Returns:
-            AlertBlock instance
+            Tuple of (variant, children_list) that will be passed to __init__
         """
         # Get the opening line
         line = next(lines)
@@ -66,7 +75,6 @@ class AlertBlock(BlockToken):
 
         # Extract variant from the opening line
         variant_str = match_obj.group(1).lower()
-        print(f"DEBUG: Extracted variant: {variant_str!r} (type: {type(variant_str)})")
 
         # Read content lines until we hit the closing :::
         content_lines = []
@@ -81,10 +89,7 @@ class AlertBlock(BlockToken):
         content_text = ''.join(content_lines)  # Preserve line endings for proper parsing
         doc = Document(content_text)
 
-        # Create the token using object.__new__ to bypass __init__
-        token = object.__new__(cls)
-        token.alert_type = variant_str  # Use alert_type instead of variant to avoid conflicts
-        token.children = doc.children if doc.children else []
-        token.line_number = 1
+        # Return a tuple that will be passed to __init__
+        children_list = list(doc.children) if doc.children else []
 
-        return token
+        return (variant_str, children_list)

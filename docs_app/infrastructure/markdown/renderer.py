@@ -238,7 +238,7 @@ class NitroRenderer(mistletoe.BaseRenderer):
         rendered_children = [self.render(child) for child in token.children]
 
         # Create Alert component with the appropriate variant
-        variant_value = getattr(token, 'alert_type', 'info')
+        variant_value = getattr(token, '_alert_type', 'info')
         return Alert(*rendered_children, variant=variant_value)
 
 

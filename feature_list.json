@@ -163,7 +163,7 @@
       "Step 3: Verify Alert component is used",
       "Step 4: Verify variant='warning' or similar prop is set"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_alerts",
@@ -173,7 +173,7 @@
       "Step 2: Render the page",
       "Step 3: Verify Alert component with info styling"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_alerts",
@@ -183,7 +183,7 @@
       "Step 2: Render the page",
       "Step 3: Verify Alert component with danger styling"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_alerts",
@@ -193,7 +193,7 @@
       "Step 2: Render the page",
       "Step 3: Verify Alert component with tip styling"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_tables",
