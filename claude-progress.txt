@@ -1,6 +1,140 @@
 # Claude Progress Report - Nitro Documentation Platform
 
-## Session 6 (Current) - 2025-12-11
+## Session 7 (Current) - 2025-12-11
+**Branch**: auto-nitro
+**Status**: ✅ Component injection and DocPage entity complete - 10 tests passing!
+
+### 🎯 SESSION ACCOMPLISHMENTS
+
+#### 1. Implemented Component Injection (::demo: syntax)
+**Feature**: Custom markdown syntax for embedding interactive component demos
+- Created DemoBlock custom mistletoe token (similar to AlertBlock pattern)
+- Built demo components library in `docs_app/components/demos.py`
+- Integrated with NitroRenderer via render_demo_block method
+
+**Demo Components Created**:
+- **ButtonDemo**: Interactive counter with Datastar signals (`$button_clicks++`)
+- **DialogDemo**: Modal dialog with open/close functionality using native `<dialog>` element
+- **CodeBlockDemo**: Syntax highlighted code display with examples
+- **UnknownDemo**: Error component showing available demos
+
+**Tests Verified (26-29)**:
+- ✅ `::demo:button` renders live Button component with interactivity
+- ✅ `::demo:dialog` renders Dialog component with modal functionality
+- ✅ `::demo:codeblock` renders CodeBlock with syntax highlighting
+- ✅ `::demo:nonexistent` shows proper error message
+
+#### 2. Implemented DocPage Entity Operations
+**Feature**: Full entity persistence and database operations
+- DocPage entity initialization with all required fields
+- Filesystem loading with frontmatter parsing
+- Markdown rendering to Nitro HTML
+- Database persistence with SQLModel
+- Sorted retrieval with custom `.all()` method
+- Category-based filtering
+
+**Key Implementation Details**:
+- Override `.all()` to sort by `order` field using `cls.where(order_by=col(cls.order))`
+- Use `cls.repository().init_db()` to initialize database
+- Frontmatter parsing supports `title`, `category`, `order` metadata
+- Slugs auto-generated from filename
+
+**Tests Verified (30-35)**:
+- ✅ DocPage initializes with slug, title, category, content, order
+- ✅ `load_from_fs()` reads markdown files and parses frontmatter correctly
+- ✅ `render()` converts markdown to HTML using NitroRenderer
+- ✅ `save()`/`get()` persist and retrieve entities from database
+- ✅ `all()` returns pages sorted by order field (ascending)
+- ✅ `filter(category='guide')` returns filtered results
+
+### 📊 PROGRESS METRICS
+
+**Feature List Status**: 35/94 tests passing (37.2%)
+**Progress this session**: +10 tests (from 25 to 35)
+
+**Tests completed**:
+- Tests #26-29: Component injection with ::demo: syntax (4 tests)
+- Tests #30-35: DocPage entity operations (6 tests)
+
+### 🔧 TECHNICAL DETAILS
+
+**Files Created**:
+- `docs_app/components/demos.py` - Demo component library with registry pattern
+- `test_docpage_entity.py` - Comprehensive entity test suite
+
+**Files Modified**:
+- `docs_app/infrastructure/markdown/plugins.py` - Added DemoBlock token
+- `docs_app/infrastructure/markdown/renderer.py` - Added render_demo_block method
+- `docs_app/domain/page_model.py` - Added custom .all() with ordering, imported DemoBlock
+- `docs_app/content/test/test-page.md` - Added demo examples
+- `feature_list.json` - Updated 10 tests to passing
+
+### 🎓 KEY LESSONS LEARNED
+
+**Mistletoe Custom Token Pattern (Refined)**:
+- Return data from `read()` that `__init__` can process
+- Don't use `object.__new__()` - let mistletoe handle initialization
+- Keep pattern consistent: AlertBlock uses tuple, DemoBlock uses string
+- Both work because `__init__` handles the data appropriately
+
+**Entity Repository Pattern**:
+- Use `cls.repository()` (classmethod) not `cls._repository` (doesn't exist)
+- Call `cls.repository().init_db()` to create tables
+- Override class methods like `.all()` to add custom behavior (sorting, etc.)
+- Use `cls.where(order_by=col(cls.field))` for sorted queries
+
+**Demo Component Registry**:
+- Dictionary-based registry pattern: `DEMO_COMPONENTS = {'button': ButtonDemo, ...}`
+- Factory function: `get_demo(name)` returns component or error
+- Keeps renderer clean - just calls `get_demo(component_name)`
+
+### 🎯 NEXT STEPS
+
+**Priority for next session**:
+
+1. **Navigation Sidebar** (Tests #36-43)
+   - Auto-generate sidebar from DocPage categories
+   - Highlight current active page
+   - Implement Datastar navigation for SPA feel
+   - Make collapsible on mobile
+   - Add expand/collapse animations
+
+2. **Table of Contents** (Tests #44-47)
+   - Generate TOC from H2/H3 headers in page content
+   - Smooth scroll to sections
+   - Highlight current section during scroll
+
+3. **Breadcrumbs** (Tests #48-50)
+   - Path-based breadcrumb generation
+   - Category → Page hierarchy
+   - Datastar navigation integration
+
+4. **Search System** (Tests #51-60)
+   - Content indexing on startup
+   - Command palette with Cmd+K
+   - Live filtering as you type
+   - Search across titles, categories, and content
+
+### 📋 CURRENT STATE
+
+**Server**: Running on http://localhost:8800
+**Database**: SQLite at `nitro.db` with DocPage table
+**Routes working**:
+- ✅ `/documentation` - Index page
+- ✅ `/documentation/test-page` - Full test page with all features
+- ✅ All markdown features rendering correctly
+- ✅ All 4 alert variants working
+- ✅ All 3 demo components working (+ error for unknown)
+- ✅ Datastar navigation for internal links
+- ✅ Code blocks with syntax highlighting
+- ✅ Tables with proper structure and alignment
+- ✅ Images with alt text and titles
+
+**No breaking issues** - All previously passing tests still work.
+
+---
+
+## Session 6 - 2025-12-11
 **Branch**: auto-nitro
 **Status**: ✅ Custom alert syntax fully implemented - 4 tests passing!
 
