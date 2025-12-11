@@ -91,3 +91,23 @@ This is a danger alert. This action cannot be undone!
 ::: tip
 This is a helpful tip. Try using keyboard shortcuts for faster navigation.
 :::
+
+### Interactive Component Demos
+
+These demos showcase interactive Nitro components:
+
+#### Button Demo
+
+::demo:button
+
+#### Dialog Demo
+
+::demo:dialog
+
+#### CodeBlock Demo
+
+::demo:codeblock
+
+#### Unknown Component Test
+
+::demo:nonexistent

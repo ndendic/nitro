@@ -279,7 +279,7 @@
       "Step 3: Verify actual Button component is rendered",
       "Step 4: Verify component is interactive"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_component_injection",
@@ -289,7 +289,7 @@
       "Step 2: Render the page",
       "Step 3: Verify Dialog component renders with demo content"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_component_injection",
@@ -299,7 +299,7 @@
       "Step 2: Render the page",
       "Step 3: Verify CodeBlock component with prop controls"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_component_injection",
@@ -309,7 +309,7 @@
       "Step 2: Render the page",
       "Step 3: Verify error message is shown instead of crash"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "doc_page_entity",

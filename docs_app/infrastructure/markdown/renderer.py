@@ -8,7 +8,8 @@ from rusty_tags import (
 )
 from nitro.infrastructure.html.components.codeblock import CodeBlock
 from components.alert import Alert
-from infrastructure.markdown.plugins import AlertBlock
+from components.demos import get_demo
+from infrastructure.markdown.plugins import AlertBlock, DemoBlock
 from typing import Any, List as TyList
 
 class NitroRenderer(mistletoe.BaseRenderer):
@@ -22,6 +23,8 @@ class NitroRenderer(mistletoe.BaseRenderer):
         self.render_map['CodeFence'] = self.render_code_fence
         # Register AlertBlock custom token
         self.render_map['AlertBlock'] = self.render_alert_block
+        # Register DemoBlock custom token
+        self.render_map['DemoBlock'] = self.render_demo_block
 
     def render_document(self, token: Document) -> Any:
         return Div(*[self.render(child) for child in token.children], cls="markdown-content space-y-4")
@@ -240,5 +243,21 @@ class NitroRenderer(mistletoe.BaseRenderer):
         # Create Alert component with the appropriate variant
         variant_value = getattr(token, '_alert_type', 'info')
         return Alert(*rendered_children, variant=variant_value)
+
+    def render_demo_block(self, token: DemoBlock) -> Any:
+        """
+        Render DemoBlock custom token to interactive demo component.
+
+        Args:
+            token: DemoBlock token with component name
+
+        Returns:
+            Interactive demo component or error message
+        """
+        # Get component name from token
+        component_name = getattr(token, '_component_name', 'unknown')
+
+        # Get and render the demo component
+        return get_demo(component_name)
 
 

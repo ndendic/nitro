@@ -6,7 +6,7 @@ import mistletoe
 
 from nitro.domain.entities.base_entity import Entity
 from infrastructure.markdown.renderer import NitroRenderer
-from infrastructure.markdown.plugins import AlertBlock
+from infrastructure.markdown.plugins import AlertBlock, DemoBlock
 
 
 class DocPage(Entity, table=True):
@@ -88,12 +88,16 @@ class DocPage(Entity, table=True):
         """
         import mistletoe.block_token as block_token
 
-        # Add AlertBlock to _token_types (before Paragraph so it has priority)
+        # Add custom tokens to _token_types (before Paragraph so they have priority)
         original_token_types = list(block_token._token_types)
 
         if AlertBlock not in block_token._token_types:
             # Insert before Paragraph (which is last)
             block_token._token_types.insert(-1, AlertBlock)
+
+        if DemoBlock not in block_token._token_types:
+            # Insert before Paragraph (which is last)
+            block_token._token_types.insert(-1, DemoBlock)
 
         try:
             with NitroRenderer() as renderer:
