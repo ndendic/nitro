@@ -10,6 +10,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from domain.page_model import DocPage
 from components.sidebar import Sidebar
+from components.breadcrumbs import Breadcrumbs
+from components.toc import TableOfContents
 from rusty_tags import Div, H1, P, Article, Nav, A
 from nitro.infrastructure.html import Page
 
@@ -51,17 +53,42 @@ async def view_doc(slug: str):
                 print(f"Error loading {md_file}: {e}")
                 continue
 
+        # Build breadcrumb path
+        # Path: Docs > Category > Page Title
+        breadcrumb_segments = [
+            ("Documentation", "/documentation")
+        ]
+
+        # Add category if it's not the default
+        if doc_page.category and doc_page.category.lower() != "uncategorized":
+            breadcrumb_segments.append((doc_page.category, f"/documentation"))
+
+        # Extract headers for TOC
+        headers = doc_page.extract_headers()
+
         # Create the page with sidebar layout
         page = Page(
             Div(
                 # Sidebar
                 Sidebar(all_pages, current_page=slug, mobile=True),
 
-                # Main content
+                # Main content area with TOC
                 Div(
-                    Article(
-                        rendered_html,
-                        cls="prose prose-slate dark:prose-invert max-w-none"
+                    # Breadcrumbs
+                    Breadcrumbs(breadcrumb_segments, doc_page.title),
+
+                    # Content with TOC
+                    Div(
+                        # Article content
+                        Article(
+                            rendered_html,
+                            cls="prose prose-slate dark:prose-invert max-w-none"
+                        ),
+
+                        # Table of Contents (on right side)
+                        TableOfContents(headers),
+
+                        cls="flex gap-8"
                     ),
                     cls="flex-1 p-8 ml-0 lg:ml-64 transition-all"
                 ),

@@ -423,7 +423,7 @@
       "Step 3: Verify path shows: Docs > Guide > Getting Started",
       "Step 4: Verify each segment is clickable"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "navigation_breadcrumbs",
@@ -433,7 +433,7 @@
       "Step 2: Verify each link has Datastar attributes",
       "Step 3: Verify clicking doesn't reload page"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "navigation_toc",
@@ -444,7 +444,7 @@
       "Step 3: Verify TOC contains all headers with proper nesting",
       "Step 4: Verify links point to header anchor IDs"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "navigation_toc",
@@ -455,7 +455,7 @@
       "Step 3: Verify TOC updates active section indicator",
       "Step 4: Verify Datastar or JS handles scroll spy"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "navigation_toc",
@@ -465,7 +465,7 @@
       "Step 2: Verify smooth scroll behavior",
       "Step 3: Verify URL updates with anchor hash"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "playground_execution",

@@ -91,6 +91,35 @@ class DocPage(Entity, table=True):
         from sqlmodel import col
         return cls.where(order_by=col(cls.order))
 
+    def extract_headers(self) -> List[tuple[str, str, int]]:
+        """
+        Extract H2 and H3 headers from markdown content for TOC generation.
+
+        Returns:
+            List of (title, anchor_id, level) tuples
+        """
+        import re
+
+        headers = []
+        lines = self.content.split('\n')
+
+        for line in lines:
+            # Match headers (## or ###)
+            match = re.match(r'^(#{2,3})\s+(.+)$', line)
+            if match:
+                hashes, title = match.groups()
+                level = len(hashes)
+
+                # Generate anchor ID (slugify)
+                anchor_id = title.lower()
+                anchor_id = re.sub(r'[^\w\s-]', '', anchor_id)
+                anchor_id = re.sub(r'[-\s]+', '-', anchor_id)
+                anchor_id = anchor_id.strip('-')
+
+                headers.append((title, anchor_id, level))
+
+        return headers
+
     def render(self) -> str:
         """
         Render the markdown content to Nitro HTML components.
