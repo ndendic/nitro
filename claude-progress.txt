@@ -1,6 +1,158 @@
 # Claude Progress Report - Nitro Documentation Platform
 
-## Session 7 (Current) - 2025-12-11
+## Session 8 (Current) - 2025-12-11
+**Branch**: auto-nitro
+**Status**: ✅ Breadcrumbs and Table of Contents complete - 5 more tests passing!
+
+### 🎯 SESSION ACCOMPLISHMENTS
+
+#### 1. Implemented Breadcrumb Navigation
+**Feature**: Path-based navigation showing current page location
+- Created Breadcrumbs component in `docs_app/components/breadcrumbs.py`
+- Automatic path generation: Docs > Category > Page Title
+- Datastar navigation for all breadcrumb links (`data-on-click="$$get('/url')"`)
+- Current page displayed as text with `aria-current="page"`
+- Responsive separators with proper ARIA attributes
+- Integrated into docs page layout above content
+
+**Key Implementation Details**:
+- `Breadcrumbs(path_segments, current_title)` function signature
+- Path segments as list of `(title, url)` tuples
+- Current page not clickable (accessibility best practice)
+- Hover effects on breadcrumb links
+
+**Tests Verified (40-41)**:
+- ✅ Breadcrumbs show path to current page (Docs > Category > Title)
+- ✅ Breadcrumbs use Datastar navigation (no page reloads)
+
+#### 2. Implemented Table of Contents (TOC)
+**Feature**: Auto-generated TOC from page headers with scroll spy
+- Created TableOfContents component in `docs_app/components/toc.py`
+- Extracts H2 and H3 headers from markdown content
+- Added `DocPage.extract_headers()` method for header extraction
+- Proper nesting (H2 = no indent, H3 = pl-4)
+- Sticky positioning on right side of page
+- Responsive (hidden below xl breakpoint)
+
+**Advanced Features**:
+- **Smooth scroll**: CSS `scroll-behavior: smooth` for anchor links
+- **Scroll spy**: IntersectionObserver tracks visible sections
+- **Active highlighting**: Current section highlighted in TOC
+- **URL updates**: Hash updates when clicking TOC links via `history.pushState()`
+
+**Key Implementation Details**:
+- Header extraction using regex: `^(#{2,3})\s+(.+)$`
+- Anchor ID generation (slugify): lowercase, strip special chars, replace spaces with hyphens
+- IntersectionObserver with `rootMargin: '-100px 0px -66%'` for proper scroll detection
+- Active class: `text-primary font-medium` vs inactive `text-muted-foreground`
+
+**Tests Verified (42-44)**:
+- ✅ Table of contents generated from H2/H3 headers with proper nesting
+- ✅ TOC highlights current section on scroll (IntersectionObserver)
+- ✅ TOC links scroll smoothly to sections with URL hash updates
+
+### 📊 PROGRESS METRICS
+
+**Feature List Status**: 44/94 tests passing (46.8%)
+**Progress this session**: +5 tests (from 39 to 44)
+
+**Tests completed**:
+- Tests #40-41: Breadcrumb navigation (2 tests)
+- Tests #42-44: Table of Contents with scroll spy (3 tests)
+
+### 🔧 TECHNICAL DETAILS
+
+**Files Created**:
+- `docs_app/components/breadcrumbs.py` - Breadcrumb navigation component
+- `docs_app/components/toc.py` - Table of contents with scroll spy
+
+**Files Modified**:
+- `docs_app/pages/docs.py` - Integrated breadcrumbs and TOC into layout
+- `docs_app/domain/page_model.py` - Added extract_headers() method
+- `feature_list.json` - Updated 5 tests to passing
+
+### 🎓 KEY LESSONS LEARNED
+
+**Layout Composition**:
+- Three-column layout: Sidebar (left) + Content (center) + TOC (right)
+- Flexbox arrangement: `flex gap-8` for content and TOC
+- Responsive breakpoints: sidebar at lg, TOC at xl
+- Proper spacing with margin adjustments for sidebar offset
+
+**Scroll Spy Pattern**:
+- IntersectionObserver more performant than scroll listeners
+- `rootMargin` creates trigger zones for better UX
+- Toggle classes instead of adding/removing for smoother transitions
+- Observe elements after DOM ready to ensure they exist
+
+**Header Extraction**:
+- Regex parsing of markdown faster than AST traversal for simple cases
+- Slugify algorithm must match renderer's anchor ID generation
+- Store level (2 for H2, 3 for H3) for indentation calculation
+
+**URL Management**:
+- `history.pushState(null, null, hash)` updates URL without navigation
+- Smooth scroll CSS applies to both anchor clicks and programmatic scrolls
+- Hash updates improve shareability (deep linking)
+
+### 🎯 NEXT STEPS
+
+**Priority for next session**:
+
+1. **Playground Features** (Tests #45-60) - Complex feature, may take full session
+   - Backend code execution endpoint
+   - Sandbox/isolation for safety
+   - SSE streaming for output
+   - Editor integration (CodeMirror)
+   - Console and preview panes
+   - PlaygroundSnippet entity
+   - Execution timeout protection
+
+2. **Component Gallery** (Tests #61-70)
+   - Auto-discover components from nitro/components
+   - Render with default props
+   - Introspect function signatures
+   - Generate form controls for props
+   - Real-time component updates
+   - Source code display
+
+3. **Search System** (Tests #71-80)
+   - Content indexing on startup
+   - Command palette with Cmd+K
+   - Live filtering
+   - Search across titles and content
+
+### 📋 CURRENT STATE
+
+**Server**: Running on http://localhost:8800
+**Database**: SQLite at `nitro.db` with DocPage table
+**Routes working**:
+- ✅ `/documentation` - Index page with category listing
+- ✅ `/documentation/{slug}` - Full documentation page with:
+  - Sidebar navigation (left)
+  - Breadcrumbs (top)
+  - Content (center)
+  - Table of contents with scroll spy (right)
+  - All markdown features working
+
+**Visual Layout**:
+```
++----------+------------------------+----------+
+| Sidebar  | Breadcrumbs            |          |
+|          |------------------------|   TOC    |
+| Category | Content Area           |  (right) |
+| - Page1  | # Header               |          |
+| - Page2  | Paragraph...           | - Link1  |
+|          | ## Section             | - Link2  |
+|          |                        | - Link3  |
++----------+------------------------+----------+
+```
+
+**No breaking issues** - All previously passing tests still work.
+
+---
+
+## Session 7 - 2025-12-11
 **Branch**: auto-nitro
 **Status**: ✅ Component injection and DocPage entity complete - 10 tests passing!
 
