@@ -33,6 +33,15 @@ for i in range(3):
 def code_playground():
     """Display the interactive code playground"""
 
+    # Create custom bodykws with playground signals merged with base signals
+    custom_bodykws = dict(
+        cls="bg-background text-foreground",
+        signals=Signals(
+            message="", conn="", darkMode=True, theme="claude",  # Base signals
+            code=DEFAULT_CODE, output="", error=""  # Playground signals
+        )
+    )
+
     page = Page(
         Div(
             H1("Python Code Playground", cls="text-4xl font-bold mb-4"),
@@ -57,13 +66,13 @@ def code_playground():
                 Div(
                     Button(
                         "▶ Run Code",
-                        data_on_click="$$get('/playground/execute?code=' + encodeURIComponent($code))",
+                        **{"data-on:click": "$$get('/playground/execute?code=' + encodeURIComponent($code))"},
                         cls="btn btn-primary",
                         id="run-button"
                     ),
                     Button(
                         "Clear Output",
-                        data_on_click="$output = ''; $error = ''",
+                        **{"data-on:click": "$output = ''; $error = ''"},
                         cls="btn"
                     ),
                     cls="flex gap-2 mb-6"
@@ -74,7 +83,7 @@ def code_playground():
                     Div("Output", cls="text-sm font-medium mb-2"),
                     Pre(
                         Code(
-                            data_text="$output || 'No output yet. Click \"Run Code\" to execute.'",
+                            data_text="$output || 'No output yet. Click Run Code to execute.'",
                             cls="text-sm"
                         ),
                         id="output-console",
@@ -102,17 +111,16 @@ def code_playground():
                 cls="max-w-6xl mx-auto"
             ),
 
-            cls="p-8",
-            signals=Signals(code=DEFAULT_CODE, output="", error="")
+            cls="p-8"
         ),
         title="Code Playground - Nitro Documentation",
-        datastar=True,
+        datastar=False,  # Already included in hdrs
         highlightjs=True,
         tailwind4=True,
         lucide=True,
         hdrs=hdrs,
         htmlkw=htmlkws,
-        bodykw=bodykws,
+        bodykw=custom_bodykws,  # Use custom bodykws with playground signals
         ftrs=ftrs,
     )
 

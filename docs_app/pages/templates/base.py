@@ -27,6 +27,7 @@ hdrs = (
         type="text/css",
     ),
     Script("""{"imports": {"datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"}}""", type='importmap'),
+    Script(type='module', src='https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js'),
     Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-persist@latest/dist/index.js'),
 
     Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.6/dist/js/basecoat.min.js', defer=''),

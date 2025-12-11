@@ -13,6 +13,7 @@ from pages.index import router as index_router
 from pages.playground import router as playground_router
 from pages.rustytags import router as rustytags_router
 from pages.tabs import router as tabs_router
+from pages.test_signals import router as test_signals_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -27,6 +28,7 @@ app.include_router(dialog_router)
 app.include_router(playground_router)
 app.include_router(rustytags_router)
 app.include_router(tabs_router)
+app.include_router(test_signals_router)
 
 
 @app.get("/cmds/{command}/{sender}")
