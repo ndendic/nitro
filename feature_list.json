@@ -204,7 +204,7 @@
       "Step 3: Verify Table component is used",
       "Step 4: Verify Thead, Tbody, Tr, Th, Td structure"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_tables",
@@ -214,7 +214,7 @@
       "Step 2: Render the page",
       "Step 3: Verify left, center, right text alignment in cells"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_images",
@@ -225,7 +225,7 @@
       "Step 3: Verify Img component with src='/path/to/image.png'",
       "Step 4: Verify alt='Alt text' attribute"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_images",
@@ -235,7 +235,7 @@
       "Step 2: Render the page",
       "Step 3: Verify title='Title' attribute on Img"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_blockquotes",
@@ -246,7 +246,7 @@
       "Step 3: Verify Blockquote component is used",
       "Step 4: Verify appropriate styling classes"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_emphasis",
@@ -257,7 +257,7 @@
       "Step 3: Verify Strong component for bold",
       "Step 4: Verify Em component for italic"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_markdown_paragraphs",

@@ -74,28 +74,80 @@ class NitroRenderer(mistletoe.BaseRenderer):
         return Hr(cls="my-8 border-gray-200 dark:border-gray-800")
 
     def render_table(self, token: Table) -> Any:
-        # Mistletoe structure: Table -> [TableRow...]
-        # First row is header if token.header is set (Wait, mistletoe Table token structure varies)
-        # Checking mistletoe source/docs: Table has header (TableRow) and children (TableRows)
-        
-        # Simplified table rendering
-        rows = [self.render(child) for child in token.children]
-        
-        # Split into head and body if desired, but for now just Table(Tr...)
-        # mistletoe 0.9+ might differ. assuming children are rows.
-        
+        """
+        Render markdown tables with proper Thead/Tbody structure.
+        - token.header contains the header row (TableRow)
+        - token.children contains the data rows (list of TableRow)
+        - token.column_align contains alignment for each column [None, 'left', 'center', 'right']
+        """
+        # Store column alignment for use in cell rendering
+        self._table_column_align = getattr(token, 'column_align', [])
+        self._is_header_row = False
+
+        # Render header row if present
+        header_content = []
+        if hasattr(token, 'header') and token.header:
+            self._is_header_row = True
+            header_row = self.render(token.header)
+            header_content = [Thead(header_row)]
+            self._is_header_row = False
+
+        # Render body rows
+        body_rows = [self.render(child) for child in token.children]
+        body_content = [Tbody(*body_rows)] if body_rows else []
+
+        # Clear alignment info
+        self._table_column_align = []
+
         return Div(
-            HtmlTable(*rows, cls="w-full caption-bottom text-sm"),
+            HtmlTable(*header_content, *body_content, cls="w-full caption-bottom text-sm"),
             cls="my-6 w-full overflow-y-auto"
         )
 
     def render_table_row(self, token: TableRow) -> Any:
-        return Tr(*[self.render(child) for child in token.children], cls="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted")
+        """Render table row with appropriate class based on whether it's a header or data row."""
+        cls = "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+
+        # Track current cell index for alignment
+        self._current_cell_index = 0
+
+        result = Tr(*[self.render(child) for child in token.children], cls=cls)
+
+        # Reset cell index
+        self._current_cell_index = 0
+
+        return result
 
     def render_table_cell(self, token: TableCell) -> Any:
-        # Check if it's a header cell? Mistletoe doesn't strictly distinguish in the token class itself usually
-        # but passed context might. For now using Td.
-        return Td(*[self.render(child) for child in token.children], cls="p-4 align-middle [&:has([role=checkbox])]:pr-0")
+        """Render table cell as Th (header) or Td (data) with alignment."""
+        # Determine if this is a header cell
+        is_header = getattr(self, '_is_header_row', False)
+        tag = Th if is_header else Td
+
+        # Get alignment for this column
+        cell_index = getattr(self, '_current_cell_index', 0)
+        column_align = getattr(self, '_table_column_align', [])
+        alignment = column_align[cell_index] if cell_index < len(column_align) else None
+
+        # Increment cell index
+        self._current_cell_index = cell_index + 1
+
+        # Build cell classes
+        base_cls = "p-4 align-middle [&:has([role=checkbox])]:pr-0"
+
+        # Add alignment class (mistletoe uses: None=left/default, 0=center, 1=right)
+        if alignment == 0:  # center
+            cls = f"{base_cls} text-center"
+        elif alignment == 1:  # right
+            cls = f"{base_cls} text-right"
+        else:  # None or anything else = left (default)
+            cls = f"{base_cls} text-left"
+
+        # Add header-specific styling
+        if is_header:
+            cls = f"{cls} font-medium"
+
+        return tag(*[self.render(child) for child in token.children], cls=cls)
 
     def render_strong(self, token: Strong) -> Any:
         return HtmlStrong(*[self.render(child) for child in token.children], cls="font-semibold")
@@ -138,7 +190,26 @@ class NitroRenderer(mistletoe.BaseRenderer):
         return A(*[self.render(child) for child in token.children], **attrs)
 
     def render_image(self, token: Image) -> Any:
-        return Img(src=token.src, alt=token.title if token.title else "", cls="rounded-md border")
+        """
+        Render images with proper alt text and optional title attribute.
+        - Alt text comes from the token's children (the text in brackets)
+        - Title attribute comes from token.title (the text in quotes after URL)
+        """
+        # Extract alt text from children
+        alt_text = "".join([self.render(child) for child in token.children]) if token.children else ""
+
+        # Build attributes
+        attrs = {
+            "src": token.src,
+            "alt": alt_text,
+            "cls": "rounded-md border"
+        }
+
+        # Add title attribute if present (for tooltip)
+        if token.title:
+            attrs["title"] = token.title
+
+        return Img(**attrs)
 
     def render_raw_text(self, token: RawText) -> Any:
         return token.content

@@ -51,3 +51,25 @@ Here are different types of links:
 2. [External link](https://example.com) - should open in new tab
 3. [Anchor link](#test-header) - should jump to the header
 4. [Another external](https://github.com) - another external link test
+
+### Image Examples
+
+![Alt text for image](https://via.placeholder.com/400x200 "This is the image title")
+
+Regular image without title:
+![Just alt text](https://via.placeholder.com/300x150)
+
+### Table Example
+
+| Name | Age | City |
+|------|-----|------|
+| Alice | 30 | NYC |
+| Bob | 25 | LA |
+| Charlie | 35 | Chicago |
+
+Table with alignment:
+
+| Left | Center | Right |
+|:-----|:------:|------:|
+| A | B | C |
+| D | E | F |
