@@ -1,178 +1,170 @@
-#!/usr/bin/env bash
-#
-# init.sh - Hybrid Python/Rust Environment Setup for Nitro Framework
-#
-# This script sets up the development environment for the Nitro Framework,
-# which requires both Rust (for RustyTags) and Python.
-#
+#!/bin/bash
+
+# init.sh - Setup and launch the Nitro Documentation Platform
+# This script handles environment setup, dependency installation, and application startup
 
 set -e  # Exit on error
 
-# Color codes for output
-RED='\033[0;31m'
+# Colors for output
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
 NC='\033[0m' # No Color
 
-# Helper functions
-print_status() {
-    echo -e "${BLUE}==>${NC} $1"
-}
-
-print_success() {
-    echo -e "${GREEN}✓${NC} $1"
-}
-
-print_warning() {
-    echo -e "${YELLOW}⚠${NC} $1"
-}
-
-print_error() {
-    echo -e "${RED}✗${NC} $1"
-}
-
-# Get the directory where this script is located
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-print_status "Initializing Nitro Framework Development Environment"
+echo -e "${BLUE}╔═══════════════════════════════════════════════════════════╗${NC}"
+echo -e "${BLUE}║                                                           ║${NC}"
+echo -e "${BLUE}║        Nitro Documentation Platform - Initializer         ║${NC}"
+echo -e "${BLUE}║                                                           ║${NC}"
+echo -e "${BLUE}╚═══════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
-# Step 1: Check for Rust toolchain
-print_status "Checking Rust toolchain..."
-if ! command -v cargo &> /dev/null; then
-    print_error "cargo not found. Rust is required for building RustyTags."
-    echo ""
-    echo "Please install Rust from https://rustup.rs/"
-    echo "Run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+# Check if we're in the right directory
+if [ ! -d "nitro" ]; then
+    echo -e "${RED}Error: nitro/ directory not found. Please run this script from the project root.${NC}"
     exit 1
 fi
 
-if ! command -v rustc &> /dev/null; then
-    print_error "rustc not found. Rust compiler is required."
-    echo ""
-    echo "Please install Rust from https://rustup.rs/"
+# Step 1: Install Nitro framework in editable mode
+echo -e "${YELLOW}[1/5] Installing Nitro framework in editable mode...${NC}"
+cd nitro
+if pip install -e ".[dev]" > /dev/null 2>&1; then
+    echo -e "${GREEN}✓ Nitro framework installed successfully${NC}"
+else
+    echo -e "${RED}✗ Failed to install Nitro framework${NC}"
+    exit 1
+fi
+cd ..
+
+# Step 2: Verify imports
+echo -e "${YELLOW}[2/5] Verifying package imports...${NC}"
+
+# Check nitro import
+if python -c "import nitro" 2>/dev/null; then
+    echo -e "${GREEN}✓ nitro package imports successfully${NC}"
+else
+    echo -e "${RED}✗ Failed to import nitro package${NC}"
     exit 1
 fi
 
-RUST_VERSION=$(rustc --version)
-print_success "Rust found: $RUST_VERSION"
-
-# Step 2: Check for Python
-print_status "Checking Python..."
-if ! command -v python3 &> /dev/null; then
-    print_error "python3 not found. Python 3.10+ is required."
-    echo ""
-    echo "Please install Python 3.10 or higher."
+# Check rusty_tags import
+if python -c "import rusty_tags" 2>/dev/null; then
+    echo -e "${GREEN}✓ rusty_tags package imports successfully${NC}"
+else
+    echo -e "${RED}✗ Failed to import rusty_tags package${NC}"
     exit 1
 fi
 
-PYTHON_VERSION=$(python3 --version)
-print_success "Python found: $PYTHON_VERSION"
-
-# Step 3: Check for maturin
-print_status "Checking for maturin..."
-if ! command -v maturin &> /dev/null; then
-    print_warning "maturin not found. Installing maturin..."
-    pip install maturin
-    print_success "maturin installed"
-else
-    MATURIN_VERSION=$(maturin --version)
-    print_success "maturin found: $MATURIN_VERSION"
+# Check mistletoe import (or install if missing)
+if ! python -c "import mistletoe" 2>/dev/null; then
+    echo -e "${YELLOW}  Installing mistletoe...${NC}"
+    pip install mistletoe > /dev/null 2>&1
 fi
 
-# Step 4: Build RustyTags Python extension
-print_status "Building RustyTags (this may take a few minutes on first build)..."
-if [ -d "$SCRIPT_DIR/RustyTags" ]; then
-    cd "$SCRIPT_DIR/RustyTags"
-
-    # Build the extension
-    if maturin develop; then
-        print_success "RustyTags built successfully"
-    else
-        print_error "Failed to build RustyTags"
-        exit 1
-    fi
-
-    cd "$SCRIPT_DIR"
+if python -c "import mistletoe" 2>/dev/null; then
+    echo -e "${GREEN}✓ mistletoe package imports successfully${NC}"
 else
-    print_warning "RustyTags directory not found at $SCRIPT_DIR/RustyTags"
-    print_warning "Skipping RustyTags build. This is OK if you're not developing RustyTags."
-fi
-
-# Step 5: Install Nitro framework in editable mode
-print_status "Installing Nitro framework..."
-if [ -d "$SCRIPT_DIR/nitro" ]; then
-    cd "$SCRIPT_DIR/nitro"
-
-    # Install with dev dependencies
-    if uv pip install -e ".[dev]"; then
-        print_success "Nitro installed in editable mode with dev dependencies"
-    else
-        print_warning "Failed to install with dev dependencies, trying without..."
-        if pip install -e .; then
-            print_success "Nitro installed in editable mode (without dev dependencies)"
-        else
-            print_error "Failed to install Nitro"
-            exit 1
-        fi
-    fi
-
-    cd "$SCRIPT_DIR"
-else
-    print_error "nitro directory not found at $SCRIPT_DIR/nitro"
+    echo -e "${RED}✗ Failed to import mistletoe package${NC}"
     exit 1
 fi
 
-# Step 6: Verify the setup
-print_status "Verifying installation..."
+# Step 3: Set up PYTHONPATH if needed
+echo -e "${YELLOW}[3/5] Configuring Python path...${NC}"
+export PYTHONPATH="${PWD}:${PWD}/nitro:${PYTHONPATH}"
+echo -e "${GREEN}✓ PYTHONPATH configured${NC}"
 
-# Test imports
-if python3 -c "import nitro" 2>/dev/null; then
-    print_success "nitro module imports successfully"
-else
-    print_error "Failed to import nitro module"
-    exit 1
-fi
+# Step 4: Initialize docs_app directory structure
+echo -e "${YELLOW}[4/5] Verifying docs_app directory structure...${NC}"
+DOCS_APP_DIR="nitro/docs_app"
 
-if python3 -c "import rusty_tags" 2>/dev/null; then
-    print_success "rusty_tags module imports successfully"
-else
-    print_warning "rusty_tags module not available (this is OK if RustyTags wasn't built)"
-fi
+# Create necessary directories if they don't exist
+mkdir -p "${DOCS_APP_DIR}"/{domain,infrastructure/{markdown,navigation},components,pages,content}
 
-# Test basic functionality
-print_status "Testing basic functionality..."
-python3 << 'EOF'
-try:
-    from nitro.domain.entities.base_entity import Entity
-    from nitro.infrastructure.events.events import event, on, emit
-    print("✓ Core Nitro components import successfully")
-except Exception as e:
-    print(f"✗ Error importing core components: {e}")
-    exit(1)
+# Create __init__.py files
+touch "${DOCS_APP_DIR}/__init__.py"
+touch "${DOCS_APP_DIR}/domain/__init__.py"
+touch "${DOCS_APP_DIR}/infrastructure/__init__.py"
+touch "${DOCS_APP_DIR}/infrastructure/markdown/__init__.py"
+touch "${DOCS_APP_DIR}/components/__init__.py"
+touch "${DOCS_APP_DIR}/pages/__init__.py"
+
+echo -e "${GREEN}✓ Directory structure verified/created${NC}"
+
+# Step 5: Start the FastAPI application
+echo -e "${YELLOW}[5/5] Starting Documentation Platform...${NC}"
+echo ""
+
+# Check if app.py exists
+if [ ! -f "${DOCS_APP_DIR}/app.py" ]; then
+    echo -e "${YELLOW}Warning: ${DOCS_APP_DIR}/app.py not found. Creating placeholder...${NC}"
+    cat > "${DOCS_APP_DIR}/app.py" << 'EOF'
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+
+app = FastAPI(title="Nitro Documentation Platform")
+
+@app.get("/", response_class=HTMLResponse)
+def index():
+    return """
+    <html>
+        <head>
+            <title>Nitro Docs - Coming Soon</title>
+            <style>
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100vh;
+                    margin: 0;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                }
+                .container {
+                    text-align: center;
+                }
+                h1 {
+                    font-size: 3rem;
+                    margin-bottom: 1rem;
+                }
+                p {
+                    font-size: 1.2rem;
+                    opacity: 0.9;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>🚀 Nitro Documentation Platform</h1>
+                <p>Foundation is ready. Implementation in progress...</p>
+            </div>
+        </body>
+    </html>
+    """
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "service": "nitro-docs"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 EOF
+fi
 
-# Step 7: Print summary
+# Launch banner
+echo -e "${GREEN}╔═══════════════════════════════════════════════════════════╗${NC}"
+echo -e "${GREEN}║                                                           ║${NC}"
+echo -e "${GREEN}║      🚀 Nitro Documentation Platform Starting...         ║${NC}"
+echo -e "${GREEN}║                                                           ║${NC}"
+echo -e "${GREEN}║      Access at: ${BLUE}http://localhost:8000${GREEN}                    ║${NC}"
+echo -e "${GREEN}║      API docs:  ${BLUE}http://localhost:8000/docs${GREEN}               ║${NC}"
+echo -e "${GREEN}║                                                           ║${NC}"
+echo -e "${GREEN}║      Press Ctrl+C to stop the server                     ║${NC}"
+echo -e "${GREEN}║                                                           ║${NC}"
+echo -e "${GREEN}╚═══════════════════════════════════════════════════════════╝${NC}"
 echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-print_success "Environment setup complete!"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
-echo "Summary:"
-echo "  • Rust toolchain: ✓"
-echo "  • Python environment: ✓"
-echo "  • RustyTags extension: ✓"
-echo "  • Nitro framework: ✓"
-echo ""
-echo "Next steps:"
-echo "  1. Review feature_list.json for test coverage"
-echo "  2. Run tests: pytest nitro/tests/"
-echo "  3. Start developing: python examples/counter_app.py"
-echo ""
-echo "Development notes:"
-echo "  • After modifying Rust code in RustyTags/, run: maturin develop"
-echo "  • Nitro is installed in editable mode, Python changes take effect immediately"
-echo "  • Use 'nitro --help' to see available CLI commands"
-echo ""
-echo "Happy coding! 🚀"
+
+# Start uvicorn with reload enabled
+cd "${DOCS_APP_DIR}"
+exec uvicorn app:app --host 0.0.0.0 --port 8000 --reload

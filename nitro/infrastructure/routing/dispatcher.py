@@ -108,15 +108,19 @@ class NitroDispatcher(ABC):
     def _register_all_routes(self) -> None:
         """Register all discovered routes with the framework."""
         for entity_class, actions in self.routes.items():
+            # Check for custom entity route name
+            entity_route_name = getattr(entity_class, '__route_name__', None)
+
             for method_name, (method, metadata) in actions.items():
-                self.register_route(entity_class, method, metadata)
+                self.register_route(entity_class, method, metadata, entity_route_name)
 
     @abstractmethod
     def register_route(
         self,
         entity_class: Type,
         method: Callable,
-        metadata: ActionMetadata
+        metadata: ActionMetadata,
+        entity_route_name: Optional[str] = None
     ) -> None:
         """
         Register a single route with the framework.
@@ -127,11 +131,12 @@ class NitroDispatcher(ABC):
             entity_class: The Entity class
             method: The @action decorated method
             metadata: ActionMetadata with routing information
+            entity_route_name: Custom entity route name from __route_name__ attribute
 
         Example:
             ```python
-            def register_route(self, entity_class, method, metadata):
-                url = metadata.generate_url_path(self.prefix)
+            def register_route(self, entity_class, method, metadata, entity_route_name=None):
+                url = metadata.generate_url_path(self.prefix, entity_route_name)
                 self.app.add_route(url, self._create_handler(...))
             ```
         """

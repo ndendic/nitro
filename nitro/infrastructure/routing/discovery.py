@@ -176,6 +176,7 @@ def validate_action_uniqueness(
     Validate that all generated URLs are unique.
 
     Checks for URL conflicts that would cause routing issues.
+    Respects __route_name__ attribute for custom entity route names.
 
     Args:
         routes: Routes dictionary from discover_all_routes()
@@ -195,8 +196,11 @@ def validate_action_uniqueness(
     seen_urls = {}
 
     for entity_class, actions in routes.items():
+        # Check for custom entity route name
+        entity_route_name = getattr(entity_class, '__route_name__', None)
+
         for method_name, (method, metadata) in actions.items():
-            url = metadata.generate_url_path(prefix=prefix)
+            url = metadata.generate_url_path(prefix=prefix, entity_name_override=entity_route_name)
             http_method = metadata.method
 
             # URL + HTTP method combination must be unique

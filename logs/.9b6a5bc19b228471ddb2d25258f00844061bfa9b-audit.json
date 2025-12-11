@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/home/ndendic/Projects/auto-nitro/nitro/logs/.9b6a5bc19b228471ddb2d25258f00844061bfa9b-audit.json",
+    "files": [
+        {
+            "date": 1765458169233,
+            "name": "/home/ndendic/Projects/auto-nitro/nitro/logs/mcp-puppeteer-2025-12-11.log",
+            "hash": "35794739cc14ab517e68cd751d6f9c1ac7605bfe0a66a1b475d29f3c68d20601"
+        }
+    ],
+    "hashType": "sha256"
+}

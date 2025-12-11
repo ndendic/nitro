@@ -1,0 +1,1759 @@
+[
+  {
+    "category": "core_entity",
+    "description": "Entity.save() persists data to SQLModelRepository",
+    "steps": [
+      "Step 1: Define User(Entity) with table=True",
+      "Step 2: Create user = User(id='user1', name='Alice')",
+      "Step 3: Call user.save()",
+      "Step 4: Verify User.get('user1') returns the instance with correct data"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.get() returns None for non-existent entity",
+    "steps": [
+      "Step 1: Define User(Entity)",
+      "Step 2: Call User.get('nonexistent')",
+      "Step 3: Verify it returns None"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.delete() removes entity from repository",
+    "steps": [
+      "Step 1: Create and save user entity",
+      "Step 2: Call user.delete()",
+      "Step 3: Verify User.get(user.id) returns None",
+      "Step 4: Verify delete() returns True"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.exists() checks entity presence",
+    "steps": [
+      "Step 1: Create and save user entity",
+      "Step 2: Verify User.exists(user.id) returns True",
+      "Step 3: Delete user",
+      "Step 4: Verify User.exists(user.id) returns False"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.all() returns all entities of type",
+    "steps": [
+      "Step 1: Create and save 3 user entities",
+      "Step 2: Call User.all()",
+      "Step 3: Verify it returns list of 3 users"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.where() filters entities by expressions",
+    "steps": [
+      "Step 1: Create users with different ages",
+      "Step 2: Call User.where(User.age > 18)",
+      "Step 3: Verify only users with age > 18 are returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.where() supports order_by parameter",
+    "steps": [
+      "Step 1: Create users with different names",
+      "Step 2: Call User.where(order_by='name')",
+      "Step 3: Verify results are sorted by name ascending"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.where() supports limit parameter",
+    "steps": [
+      "Step 1: Create 10 user entities",
+      "Step 2: Call User.where(limit=5)",
+      "Step 3: Verify only 5 results are returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.where() supports offset parameter",
+    "steps": [
+      "Step 1: Create 10 user entities",
+      "Step 2: Call User.where(offset=5, limit=5)",
+      "Step 3: Verify results start from 6th entity"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.search() finds entities by text search",
+    "steps": [
+      "Step 1: Create users with different names",
+      "Step 2: Call User.search(search_value='Alice')",
+      "Step 3: Verify only users with 'Alice' in string fields are returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.search() supports sorting",
+    "steps": [
+      "Step 1: Create users with searchable text",
+      "Step 2: Call User.search('test', sorting_field='name', sort_direction='desc')",
+      "Step 3: Verify results are sorted correctly"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.search() supports pagination",
+    "steps": [
+      "Step 1: Create 20 users",
+      "Step 2: Call User.search('test', limit=10, offset=5)",
+      "Step 3: Verify 10 results starting from 6th match"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.search() returns dicts when as_dict=True",
+    "steps": [
+      "Step 1: Create user entities",
+      "Step 2: Call User.search('test', as_dict=True)",
+      "Step 3: Verify results are dictionaries, not Entity instances"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.filter() filters by exact field matches",
+    "steps": [
+      "Step 1: Create users with different statuses",
+      "Step 2: Call User.filter(status='active')",
+      "Step 3: Verify only active users are returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.filter() supports exact_match=False for fuzzy matching",
+    "steps": [
+      "Step 1: Create users with names 'Alice', 'Alicia', 'Bob'",
+      "Step 2: Call User.filter(name='Ali', exact_match=False)",
+      "Step 3: Verify both 'Alice' and 'Alicia' are returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.filter() supports multiple filters",
+    "steps": [
+      "Step 1: Create users with various attributes",
+      "Step 2: Call User.filter(status='active', age=25)",
+      "Step 3: Verify only users matching both conditions are returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.filter() handles None values correctly",
+    "steps": [
+      "Step 1: Create users, some with email=None",
+      "Step 2: Call User.filter(email=None)",
+      "Step 3: Verify only users with null email are returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.filter() raises ValueError for invalid fields",
+    "steps": [
+      "Step 1: Define User entity",
+      "Step 2: Call User.filter(nonexistent_field='value')",
+      "Step 3: Verify ValueError is raised with appropriate message"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.find() retrieves entity by ID",
+    "steps": [
+      "Step 1: Create and save user with id='user123'",
+      "Step 2: Call User.find('user123')",
+      "Step 3: Verify correct user is returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.find_by() finds entity by field values",
+    "steps": [
+      "Step 1: Create users with unique emails",
+      "Step 2: Call User.find_by(email='alice@example.com')",
+      "Step 3: Verify correct user is returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.signals property returns Signals object",
+    "steps": [
+      "Step 1: Create user with name='Alice', age=25",
+      "Step 2: Access user.signals",
+      "Step 3: Verify it returns Signals instance with correct data"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity validation via Pydantic works correctly",
+    "steps": [
+      "Step 1: Define User(Entity) with age: int field",
+      "Step 2: Try to create User(id='1', age='invalid')",
+      "Step 3: Verify Pydantic ValidationError is raised"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity.model_dump() serializes entity to dict",
+    "steps": [
+      "Step 1: Create user entity",
+      "Step 2: Call user.model_dump()",
+      "Step 3: Verify it returns dict with all fields"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity supports datetime fields with proper serialization",
+    "steps": [
+      "Step 1: Define entity with datetime field",
+      "Step 2: Create and save entity with current datetime",
+      "Step 3: Retrieve and verify datetime is preserved",
+      "Step 4: Verify model_dump() serializes datetime to ISO format"
+    ],
+    "passes": true
+  },
+  {
+    "category": "core_entity",
+    "description": "Entity supports Optional fields",
+    "steps": [
+      "Step 1: Define User with Optional[str] email field",
+      "Step 2: Create user without email",
+      "Step 3: Verify save and retrieve works correctly"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository is singleton",
+    "steps": [
+      "Step 1: Get SQLModelRepository instance twice",
+      "Step 2: Verify both references point to same object"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.init_db() creates tables",
+    "steps": [
+      "Step 1: Define User(Entity)",
+      "Step 2: Call repository.init_db()",
+      "Step 3: Verify user table exists in database"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.schema() returns database schema",
+    "steps": [
+      "Step 1: Initialize database with User table",
+      "Step 2: Call repository.schema()",
+      "Step 3: Verify it returns string with table and column information"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.get_session() yields Session",
+    "steps": [
+      "Step 1: Call repository.get_session()",
+      "Step 2: Verify it yields SQLModel Session object",
+      "Step 3: Verify session is properly closed after use"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.save() creates new record",
+    "steps": [
+      "Step 1: Create new user entity",
+      "Step 2: Call repository.save(user)",
+      "Step 3: Verify record exists in database"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.save() updates existing record",
+    "steps": [
+      "Step 1: Save user entity",
+      "Step 2: Modify user.name",
+      "Step 3: Call repository.save(user)",
+      "Step 4: Verify database record has updated name"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.bulk_create() inserts multiple records",
+    "steps": [
+      "Step 1: Prepare list of 10 user dicts",
+      "Step 2: Call repository.bulk_create(User, data)",
+      "Step 3: Verify all 10 records are in database"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.bulk_upsert() updates existing records",
+    "steps": [
+      "Step 1: Create 5 users in database",
+      "Step 2: Prepare list with updated data for those users",
+      "Step 3: Call repository.bulk_upsert(User, data)",
+      "Step 4: Verify all records are updated"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.count() returns total records",
+    "steps": [
+      "Step 1: Create 7 user entities",
+      "Step 2: Call repository.count(User)",
+      "Step 3: Verify it returns 7"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.filter() handles UUID fields",
+    "steps": [
+      "Step 1: Define entity with UUID field",
+      "Step 2: Create entity with UUID value",
+      "Step 3: Call filter with UUID string",
+      "Step 4: Verify entity is found"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.filter() handles date range queries",
+    "steps": [
+      "Step 1: Create entities with different dates",
+      "Step 2: Call filter(created_at=(start_date, end_date))",
+      "Step 3: Verify only entities within range are returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository.filter() handles IN queries with lists",
+    "steps": [
+      "Step 1: Create users with different statuses",
+      "Step 2: Call filter(status=['active', 'pending'])",
+      "Step 3: Verify only users with those statuses are returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_sql",
+    "description": "SQLModelRepository handles connection pooling",
+    "steps": [
+      "Step 1: Perform 100 concurrent database operations",
+      "Step 2: Verify all complete successfully",
+      "Step 3: Verify no connection leaks occur"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_memory",
+    "description": "MemoryRepository is singleton",
+    "steps": [
+      "Step 1: Get MemoryRepository instance twice",
+      "Step 2: Verify both references point to same object"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_memory",
+    "description": "MemoryRepository.save() stores entity in memory",
+    "steps": [
+      "Step 1: Create entity with MemoryRepository",
+      "Step 2: Call repository.save(entity)",
+      "Step 3: Verify entity can be retrieved with find()"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_memory",
+    "description": "MemoryRepository.save() with TTL expires data",
+    "steps": [
+      "Step 1: Save entity with ttl=1 second",
+      "Step 2: Verify entity exists immediately",
+      "Step 3: Wait 2 seconds",
+      "Step 4: Verify entity no longer exists"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_memory",
+    "description": "MemoryRepository.find() returns None for expired entities",
+    "steps": [
+      "Step 1: Save entity with short TTL",
+      "Step 2: Wait for expiration",
+      "Step 3: Call find()",
+      "Step 4: Verify it returns None"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_memory",
+    "description": "MemoryRepository.delete() removes entity",
+    "steps": [
+      "Step 1: Save entity",
+      "Step 2: Call delete(entity.id)",
+      "Step 3: Verify find() returns None",
+      "Step 4: Verify delete() returns True"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_memory",
+    "description": "MemoryRepository.delete() returns False for non-existent entity",
+    "steps": [
+      "Step 1: Call delete('nonexistent')",
+      "Step 2: Verify it returns False"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_memory",
+    "description": "MemoryRepository.exists_sync() checks entity presence",
+    "steps": [
+      "Step 1: Save entity",
+      "Step 2: Verify exists_sync(id) returns True",
+      "Step 3: Delete entity",
+      "Step 4: Verify exists_sync(id) returns False"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_memory",
+    "description": "MemoryRepository.cleanup_expired_sync() removes expired entities",
+    "steps": [
+      "Step 1: Save 5 entities with 1 second TTL",
+      "Step 2: Save 5 entities without TTL",
+      "Step 3: Wait 2 seconds",
+      "Step 4: Call cleanup_expired_sync()",
+      "Step 5: Verify it returns 5 (expired count)",
+      "Step 6: Verify only non-TTL entities remain"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_memory",
+    "description": "MemoryRepository.start_cleanup() begins automatic cleanup",
+    "steps": [
+      "Step 1: Create repository",
+      "Step 2: Verify start_cleanup() is called during init",
+      "Step 3: Save entities with TTL",
+      "Step 4: Verify they are auto-cleaned after expiration"
+    ],
+    "passes": true
+  },
+  {
+    "category": "persistence_memory",
+    "description": "MemoryRepository data persists across multiple saves",
+    "steps": [
+      "Step 1: Save entity with id='test1'",
+      "Step 2: Modify and save again",
+      "Step 3: Verify latest data is stored",
+      "Step 4: Verify only one instance exists in memory"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "@on decorator connects handler to event",
+    "steps": [
+      "Step 1: Define function with @on('user.created')",
+      "Step 2: Emit 'user.created' event",
+      "Step 3: Verify handler is called"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "@on decorator supports wildcard patterns",
+    "steps": [
+      "Step 1: Define handler with @on('user.*')",
+      "Step 2: Emit 'user.created' and 'user.updated'",
+      "Step 3: Verify handler is called for both events"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "emit() synchronously triggers handlers",
+    "steps": [
+      "Step 1: Define synchronous handler",
+      "Step 2: Call emit('test.event', sender='app')",
+      "Step 3: Verify handler receives sender and executes",
+      "Step 4: Verify emit() returns list of results"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "emit_async() awaits all async handlers",
+    "steps": [
+      "Step 1: Define async handler",
+      "Step 2: Call await emit_async('test.event')",
+      "Step 3: Verify handler completes",
+      "Step 4: Verify emit_async() returns list of results"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Event handlers can be generators",
+    "steps": [
+      "Step 1: Define handler as generator yielding multiple values",
+      "Step 2: Emit event",
+      "Step 3: Verify all yielded values are collected in results"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Event handlers can be async generators",
+    "steps": [
+      "Step 1: Define async generator handler",
+      "Step 2: Call emit_async()",
+      "Step 3: Verify all yielded values are collected"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "event() creates/gets named event",
+    "steps": [
+      "Step 1: Call event('my.event')",
+      "Step 2: Call event('my.event') again",
+      "Step 3: Verify both calls return same Event instance"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Events support sender filtering",
+    "steps": [
+      "Step 1: Connect handler with sender='app1'",
+      "Step 2: Emit event with sender='app1'",
+      "Step 3: Emit event with sender='app2'",
+      "Step 4: Verify handler only called for 'app1'"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Events support ANY sender",
+    "steps": [
+      "Step 1: Connect handler with sender=ANY",
+      "Step 2: Emit from multiple senders",
+      "Step 3: Verify handler called for all"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Event.connect_filtered() matches namespace patterns",
+    "steps": [
+      "Step 1: Create events 'user.created' and 'user.*'",
+      "Step 2: Connect handler to 'user.*'",
+      "Step 3: Emit 'user.created'",
+      "Step 4: Verify filtered connection works"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Multiple handlers can connect to same event",
+    "steps": [
+      "Step 1: Connect 3 different handlers to 'test.event'",
+      "Step 2: Emit event",
+      "Step 3: Verify all 3 handlers are called",
+      "Step 4: Verify results list has 3 items"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Event handlers receive kwargs passed to emit()",
+    "steps": [
+      "Step 1: Define handler accepting **kwargs",
+      "Step 2: Emit event with custom kwargs",
+      "Step 3: Verify handler receives correct kwargs"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Async handlers are scheduled without blocking",
+    "steps": [
+      "Step 1: Define async handler with sleep",
+      "Step 2: Call emit() (not emit_async)",
+      "Step 3: Verify emit() returns immediately",
+      "Step 4: Verify handler eventually completes"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "emit_async() executes handlers in parallel",
+    "steps": [
+      "Step 1: Define 3 async handlers with delays",
+      "Step 2: Call emit_async()",
+      "Step 3: Verify total time is close to longest delay, not sum"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Namespace can be created and used for events",
+    "steps": [
+      "Step 1: Create custom Namespace()",
+      "Step 2: Create events in that namespace",
+      "Step 3: Verify events are isolated from default namespace"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "filter_signals() finds matching events",
+    "steps": [
+      "Step 1: Create events 'user.created', 'user.updated', 'order.created'",
+      "Step 2: Call filter_signals('user.*')",
+      "Step 3: Verify only user events are returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Event handlers with weak=False are not garbage collected",
+    "steps": [
+      "Step 1: Connect handler with weak=False",
+      "Step 2: Delete handler reference",
+      "Step 3: Emit event",
+      "Step 4: Verify handler still executes"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Event handlers with weak=True can be garbage collected",
+    "steps": [
+      "Step 1: Connect handler with weak=True",
+      "Step 2: Delete handler reference",
+      "Step 3: Force garbage collection",
+      "Step 4: Emit event",
+      "Step 5: Verify handler no longer executes"
+    ],
+    "passes": true
+  },
+  {
+    "category": "events",
+    "description": "Sync generators are bridged to async properly",
+    "steps": [
+      "Step 1: Define sync generator handler",
+      "Step 2: Call emit_async()",
+      "Step 3: Verify generator yields are collected",
+      "Step 4: Verify no blocking occurs"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "Page() renders complete HTML page",
+    "steps": [
+      "Step 1: Create Page(H1('Hello'), title='Test')",
+      "Step 2: Render to string",
+      "Step 3: Verify HTML has <!DOCTYPE>, <html>, <head>, <body>",
+      "Step 4: Verify title is set"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "Page() includes Datastar when datastar=True",
+    "steps": [
+      "Step 1: Create Page(Div(), datastar=True)",
+      "Step 2: Render to string",
+      "Step 3: Verify Datastar CDN script is included in <head>"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "Page() includes Tailwind CSS link when tailwind=True",
+    "steps": [
+      "Step 1: Create Page(Div(), tailwind=True, tailwind_output='style.css')",
+      "Step 2: Render to string",
+      "Step 3: Verify <link> to style.css is in <head>"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "Page() includes Lucide icons when lucide=True",
+    "steps": [
+      "Step 1: Create Page(Div(), lucide=True)",
+      "Step 2: Render to string",
+      "Step 3: Verify Lucide CDN script is included"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "Page() includes highlight.js when highlight=True",
+    "steps": [
+      "Step 1: Create Page(Div(), highlight=True)",
+      "Step 2: Render to string",
+      "Step 3: Verify highlight.js CSS and JS are included"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "create_template decorator returns Page wrapper",
+    "steps": [
+      "Step 1: Define view function with @create_template(title='Test')",
+      "Step 2: Call view function",
+      "Step 3: Verify it returns Page instance with correct title",
+      "Step 4: Verify function return value is wrapped in Page"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "Signals object generates data-* attributes",
+    "steps": [
+      "Step 1: Create Signals(counter=0)",
+      "Step 2: Access signals as attributes",
+      "Step 3: Verify it generates correct Datastar data-* attributes"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "Signals supports arithmetic operations",
+    "steps": [
+      "Step 1: Create Signals(count=0)",
+      "Step 2: Use signals.count.add(1) and signals.count.sub(1)",
+      "Step 3: Verify correct Datastar expressions are generated"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "Signals.set() generates assignment expression",
+    "steps": [
+      "Step 1: Create Signals(name='Alice')",
+      "Step 2: Use signals.name.set('Bob')",
+      "Step 3: Verify correct Datastar set expression"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "Signals.toggle() generates boolean toggle",
+    "steps": [
+      "Step 1: Create Signals(visible=True)",
+      "Step 2: Use signals.visible.toggle()",
+      "Step 3: Verify correct Datastar toggle expression"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "RustyTags Div() generates <div> element",
+    "steps": [
+      "Step 1: Create Div('content', class_='container')",
+      "Step 2: Render to string",
+      "Step 3: Verify output is <div class=\"container\">content</div>"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "RustyTags supports nested elements",
+    "steps": [
+      "Step 1: Create Div(H1('Title'), P('Content'))",
+      "Step 2: Render to string",
+      "Step 3: Verify proper nesting in HTML output"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "RustyTags Button supports event handlers",
+    "steps": [
+      "Step 1: Create Button('Click', on_click='handleClick()')",
+      "Step 2: Render to string",
+      "Step 3: Verify onclick attribute is set"
+    ],
+    "passes": true
+  },
+  {
+    "category": "templating",
+    "description": "Component system allows reusable UI elements",
+    "steps": [
+      "Step 1: Define custom component function returning RustyTags elements",
+      "Step 2: Use component in Page",
+      "Step 3: Verify component renders correctly"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_tailwind",
+    "description": "nitro tw init downloads Tailwind binary",
+    "steps": [
+      "Step 1: Run 'nitro tw init' in clean directory",
+      "Step 2: Verify binary exists in ~/.nitro/cache/",
+      "Step 3: Verify config files are created"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_tailwind",
+    "description": "nitro tw init creates input.css and tailwind.config.js",
+    "steps": [
+      "Step 1: Run 'nitro tw init'",
+      "Step 2: Verify input.css file exists",
+      "Step 3: Verify tailwind.config.js exists"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_tailwind",
+    "description": "nitro tw init detects static/ directory",
+    "steps": [
+      "Step 1: Create static/ directory",
+      "Step 2: Run 'nitro tw init'",
+      "Step 3: Verify files created in static/css/"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_tailwind",
+    "description": "nitro tw init respects environment variables",
+    "steps": [
+      "Step 1: Set NITRO_TAILWIND_CSS_INPUT env var",
+      "Step 2: Run 'nitro tw init'",
+      "Step 3: Verify files created at custom location"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_tailwind",
+    "description": "nitro tw dev starts watch mode",
+    "steps": [
+      "Step 1: Run 'nitro tw init'",
+      "Step 2: Run 'nitro tw dev' in background",
+      "Step 3: Modify input.css",
+      "Step 4: Verify output.css is regenerated"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_tailwind",
+    "description": "nitro tw build creates production CSS",
+    "steps": [
+      "Step 1: Run 'nitro tw init'",
+      "Step 2: Run 'nitro tw build'",
+      "Step 3: Verify output.css exists",
+      "Step 4: Verify CSS is minified"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_tailwind",
+    "description": "Tailwind CLI works without Node.js",
+    "steps": [
+      "Step 1: Verify Node.js is not required in environment",
+      "Step 2: Run nitro tw commands",
+      "Step 3: Verify they work with standalone binary"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_tailwind",
+    "description": "Tailwind binary is cached and reused",
+    "steps": [
+      "Step 1: Run 'nitro tw init' first time",
+      "Step 2: Note download happens",
+      "Step 3: Run 'nitro tw init' in different project",
+      "Step 4: Verify binary is reused, not re-downloaded"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_db",
+    "description": "nitro db init initializes database tables",
+    "steps": [
+      "Step 1: Define Entity models",
+      "Step 2: Run 'nitro db init'",
+      "Step 3: Verify tables are created in database"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_db",
+    "description": "nitro db migrations generates migration files",
+    "steps": [
+      "Step 1: Create initial models and init db",
+      "Step 2: Modify models",
+      "Step 3: Run 'nitro db migrations'",
+      "Step 4: Verify migration file is created"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_db",
+    "description": "nitro db migrate applies pending migrations",
+    "steps": [
+      "Step 1: Create migration files",
+      "Step 2: Run 'nitro db migrate'",
+      "Step 3: Verify database schema is updated"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_general",
+    "description": "nitro --help shows available commands",
+    "steps": [
+      "Step 1: Run 'nitro --help'",
+      "Step 2: Verify output shows all command groups",
+      "Step 3: Verify output is formatted nicely with Rich"
+    ],
+    "passes": true
+  },
+  {
+    "category": "cli_general",
+    "description": "nitro --version shows framework version",
+    "steps": [
+      "Step 1: Run 'nitro --version'",
+      "Step 2: Verify version number is displayed"
+    ],
+    "passes": true
+  },
+  {
+    "category": "config",
+    "description": "NitroConfig loads from environment variables",
+    "steps": [
+      "Step 1: Set NITRO_DB_URL env var",
+      "Step 2: Create NitroConfig()",
+      "Step 3: Verify config.db_url matches env var"
+    ],
+    "passes": true
+  },
+  {
+    "category": "config",
+    "description": "NitroConfig loads from .env file",
+    "steps": [
+      "Step 1: Create .env file with NITRO_DB_URL",
+      "Step 2: Create NitroConfig()",
+      "Step 3: Verify config loads from .env"
+    ],
+    "passes": true
+  },
+  {
+    "category": "config",
+    "description": "NitroConfig has sensible defaults",
+    "steps": [
+      "Step 1: Create NitroConfig() without env vars",
+      "Step 2: Verify default db_url is sqlite",
+      "Step 3: Verify default Tailwind paths are set"
+    ],
+    "passes": true
+  },
+  {
+    "category": "config",
+    "description": "NitroConfig validates Tailwind content paths",
+    "steps": [
+      "Step 1: Set invalid NITRO_TAILWIND_CONTENT_PATHS",
+      "Step 2: Try to create NitroConfig()",
+      "Step 3: Verify validation error is raised"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration_fastapi",
+    "description": "Build Todo app with FastAPI in < 50 lines",
+    "steps": [
+      "Step 1: Define Todo(Entity) with SQLModelRepository",
+      "Step 2: Create FastAPI app with CRUD endpoints",
+      "Step 3: Verify total code is under 50 lines",
+      "Step 4: Test all CRUD operations work"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration_fastapi",
+    "description": "Swap persistence backend in 1 line",
+    "steps": [
+      "Step 1: Create Todo app with SQLModelRepository",
+      "Step 2: Change model_config repository to MemoryRepository",
+      "Step 3: Verify app works without other code changes"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration_fastapi",
+    "description": "Entity works as FastAPI response model",
+    "steps": [
+      "Step 1: Define User(Entity)",
+      "Step 2: Create FastAPI endpoint returning User",
+      "Step 3: Verify response is properly serialized to JSON"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration_fastapi",
+    "description": "Entity works as FastAPI request body",
+    "steps": [
+      "Step 1: Define User(Entity)",
+      "Step 2: Create POST endpoint accepting User",
+      "Step 3: Verify Pydantic validation works on request"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration_fastapi",
+    "description": "Events work with FastAPI background tasks",
+    "steps": [
+      "Step 1: Define event handler as async function",
+      "Step 2: Emit event from FastAPI endpoint",
+      "Step 3: Verify handler executes asynchronously"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration_flask",
+    "description": "Nitro works with Flask",
+    "steps": [
+      "Step 1: Create Flask app",
+      "Step 2: Define Entity with SQLModelRepository",
+      "Step 3: Create CRUD routes",
+      "Step 4: Verify full functionality"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration_flask",
+    "description": "Page() integrates with Flask templates",
+    "steps": [
+      "Step 1: Create Flask route returning Page()",
+      "Step 2: Render Page to HTML string",
+      "Step 3: Return from Flask route",
+      "Step 4: Verify HTML renders correctly in browser"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration_fasthtml",
+    "description": "Nitro Entity works with FastHTML",
+    "steps": [
+      "Step 1: Create FastHTML app",
+      "Step 2: Define Entity models",
+      "Step 3: Create routes using RustyTags",
+      "Step 4: Verify seamless integration"
+    ],
+    "passes": true
+  },
+  {
+    "category": "integration_starlette",
+    "description": "Nitro works with Starlette",
+    "steps": [
+      "Step 1: Create Starlette app",
+      "Step 2: Use Entity and events",
+      "Step 3: Verify async support works properly"
+    ],
+    "passes": true
+  },
+  {
+    "category": "components",
+    "description": "Dialog component renders modal dialog",
+    "steps": [
+      "Step 1: Import Dialog from components",
+      "Step 2: Create Dialog('Title', 'Content')",
+      "Step 3: Verify HTML has proper modal structure"
+    ],
+    "passes": true
+  },
+  {
+    "category": "components",
+    "description": "CodeBlock component renders syntax-highlighted code",
+    "steps": [
+      "Step 1: Import CodeBlock",
+      "Step 2: Create CodeBlock('print(\"hello\")', language='python')",
+      "Step 3: Verify code is wrapped with highlight.js classes"
+    ],
+    "passes": true
+  },
+  {
+    "category": "components",
+    "description": "Accordion component creates collapsible sections",
+    "steps": [
+      "Step 1: Import Accordion",
+      "Step 2: Create Accordion with items",
+      "Step 3: Verify proper HTML structure for expand/collapse"
+    ],
+    "passes": true
+  },
+  {
+    "category": "components",
+    "description": "Tabs component creates tabbed interface",
+    "steps": [
+      "Step 1: Import Tabs",
+      "Step 2: Create Tabs with multiple tab items",
+      "Step 3: Verify tab switching works"
+    ],
+    "passes": true
+  },
+  {
+    "category": "components",
+    "description": "Input components support validation",
+    "steps": [
+      "Step 1: Import input components",
+      "Step 2: Create input with validation rules",
+      "Step 3: Verify validation attributes are set"
+    ],
+    "passes": true
+  },
+  {
+    "category": "components",
+    "description": "Icons component integrates Lucide icons",
+    "steps": [
+      "Step 1: Import Icon helper",
+      "Step 2: Create Icon('user')",
+      "Step 3: Verify correct Lucide icon markup"
+    ],
+    "passes": true
+  },
+  {
+    "category": "performance",
+    "description": "RustyTags is 3-10x faster than pure Python",
+    "steps": [
+      "Step 1: Benchmark RustyTags HTML generation",
+      "Step 2: Benchmark equivalent pure Python string building",
+      "Step 3: Verify RustyTags is at least 3x faster"
+    ],
+    "passes": true
+  },
+  {
+    "category": "performance",
+    "description": "Entity operations have < 10ms overhead",
+    "steps": [
+      "Step 1: Measure time for direct SQLAlchemy operation",
+      "Step 2: Measure time for equivalent Entity operation",
+      "Step 3: Verify difference is under 10ms"
+    ],
+    "passes": true
+  },
+  {
+    "category": "performance",
+    "description": "Event emission has minimal overhead",
+    "steps": [
+      "Step 1: Benchmark direct function call",
+      "Step 2: Benchmark same function via event system",
+      "Step 3: Verify overhead is negligible"
+    ],
+    "passes": true
+  },
+  {
+    "category": "performance",
+    "description": "MemoryRepository is faster than SQL for reads",
+    "steps": [
+      "Step 1: Perform 1000 reads from MemoryRepository",
+      "Step 2: Perform 1000 reads from SQLModelRepository",
+      "Step 3: Verify MemoryRepository is significantly faster"
+    ],
+    "passes": true
+  },
+  {
+    "category": "error_handling",
+    "description": "Entity.save() handles validation errors gracefully",
+    "steps": [
+      "Step 1: Create entity with invalid data",
+      "Step 2: Try to save()",
+      "Step 3: Verify clear ValidationError is raised"
+    ],
+    "passes": true
+  },
+  {
+    "category": "error_handling",
+    "description": "Repository connection errors are caught",
+    "steps": [
+      "Step 1: Configure invalid database URL",
+      "Step 2: Try to perform operation",
+      "Step 3: Verify helpful error message"
+    ],
+    "passes": true
+  },
+  {
+    "category": "error_handling",
+    "description": "Event handler exceptions don't crash app",
+    "steps": [
+      "Step 1: Define handler that raises exception",
+      "Step 2: Emit event",
+      "Step 3: Verify exception is caught and logged",
+      "Step 4: Verify app continues running"
+    ],
+    "passes": true
+  },
+  {
+    "category": "error_handling",
+    "description": "CLI commands show helpful error messages",
+    "steps": [
+      "Step 1: Run nitro command with invalid arguments",
+      "Step 2: Verify error message is clear and actionable",
+      "Step 3: Verify suggestions are provided"
+    ],
+    "passes": true
+  },
+  {
+    "category": "edge_cases",
+    "description": "Entity handles empty string IDs",
+    "steps": [
+      "Step 1: Create entity with id=''",
+      "Step 2: Save and retrieve",
+      "Step 3: Verify it works or raises appropriate error"
+    ],
+    "passes": true
+  },
+  {
+    "category": "edge_cases",
+    "description": "Entity handles very long field values",
+    "steps": [
+      "Step 1: Create entity with 10MB string field",
+      "Step 2: Save and retrieve",
+      "Step 3: Verify data integrity"
+    ],
+    "passes": true
+  },
+  {
+    "category": "edge_cases",
+    "description": "Entity.filter() handles empty result set",
+    "steps": [
+      "Step 1: Filter with criteria matching nothing",
+      "Step 2: Verify empty list is returned",
+      "Step 3: Verify no errors occur"
+    ],
+    "passes": true
+  },
+  {
+    "category": "edge_cases",
+    "description": "Event emission with no handlers is safe",
+    "steps": [
+      "Step 1: Emit event with no connected handlers",
+      "Step 2: Verify no errors occur",
+      "Step 3: Verify empty results list is returned"
+    ],
+    "passes": true
+  },
+  {
+    "category": "edge_cases",
+    "description": "MemoryRepository handles concurrent access",
+    "steps": [
+      "Step 1: Spawn 100 threads doing save/load operations",
+      "Step 2: Verify no race conditions occur",
+      "Step 3: Verify data integrity maintained"
+    ],
+    "passes": true
+  },
+  {
+    "category": "edge_cases",
+    "description": "Page() handles None children",
+    "steps": [
+      "Step 1: Create Page(None, Div(), None)",
+      "Step 2: Render to string",
+      "Step 3: Verify None values are filtered out cleanly"
+    ],
+    "passes": true
+  },
+  {
+    "category": "documentation",
+    "description": "README has clear installation instructions",
+    "steps": [
+      "Step 1: Read README.md",
+      "Step 2: Verify pip install command is present",
+      "Step 3: Verify it mentions Rust requirement for development"
+    ],
+    "passes": true
+  },
+  {
+    "category": "documentation",
+    "description": "API reference documents all Entity methods",
+    "steps": [
+      "Step 1: Check docs for Entity API",
+      "Step 2: Verify all public methods are documented",
+      "Step 3: Verify examples are provided"
+    ],
+    "passes": true
+  },
+  {
+    "category": "documentation",
+    "description": "Tutorial walks through Todo app creation",
+    "steps": [
+      "Step 1: Follow tutorial steps",
+      "Step 2: Verify working app is created",
+      "Step 3: Verify tutorial is under 5 minutes to complete"
+    ],
+    "passes": true
+  },
+  {
+    "category": "developer_experience",
+    "description": "Installation just works with pip install",
+    "steps": [
+      "Step 1: Create fresh virtual environment",
+      "Step 2: Run pip install nitro",
+      "Step 3: Verify import nitro works",
+      "Step 4: Verify no manual steps required"
+    ],
+    "passes": true
+  },
+  {
+    "category": "developer_experience",
+    "description": "Type hints enable IDE autocomplete",
+    "steps": [
+      "Step 1: Open Entity class in IDE",
+      "Step 2: Start typing entity.",
+      "Step 3: Verify all methods appear in autocomplete"
+    ],
+    "passes": true
+  },
+  {
+    "category": "developer_experience",
+    "description": "Error messages include helpful context",
+    "steps": [
+      "Step 1: Trigger various errors intentionally",
+      "Step 2: Read error messages",
+      "Step 3: Verify they explain what went wrong and how to fix"
+    ],
+    "passes": true
+  },
+  {
+    "category": "developer_experience",
+    "description": "CLI provides rich colored output",
+    "steps": [
+      "Step 1: Run various nitro commands",
+      "Step 2: Verify output uses colors and formatting",
+      "Step 3: Verify progress indicators are shown"
+    ],
+    "passes": true
+  },
+  {
+    "category": "testing",
+    "description": "pytest fixtures available for Nitro entities",
+    "steps": [
+      "Step 1: Create test using pytest",
+      "Step 2: Use Nitro fixture for temporary database",
+      "Step 3: Verify clean isolation between tests"
+    ],
+    "passes": true
+  },
+  {
+    "category": "testing",
+    "description": "MemoryRepository perfect for unit tests",
+    "steps": [
+      "Step 1: Write test using MemoryRepository",
+      "Step 2: Run test suite",
+      "Step 3: Verify tests are fast and isolated"
+    ],
+    "passes": true
+  },
+  {
+    "category": "testing",
+    "description": "Entity models work with factory pattern",
+    "steps": [
+      "Step 1: Create factory for generating test entities",
+      "Step 2: Use factory in tests",
+      "Step 3: Verify clean test data generation"
+    ],
+    "passes": true
+  },
+  {
+    "category": "security",
+    "description": "SQL injection prevented by parameterized queries",
+    "steps": [
+      "Step 1: Try to inject SQL via filter parameters",
+      "Step 2: Verify injection is prevented",
+      "Step 3: Verify no SQL errors occur"
+    ],
+    "passes": true
+  },
+  {
+    "category": "security",
+    "description": "Entity validation prevents malicious data",
+    "steps": [
+      "Step 1: Define entity with strict field types",
+      "Step 2: Try to save entity with script tags in string field",
+      "Step 3: Verify validation catches malicious patterns if configured"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_entity",
+    "description": "Entity supports composite primary keys",
+    "steps": [
+      "Step 1: Define entity with multiple primary key fields",
+      "Step 2: Create and save entity",
+      "Step 3: Verify retrieval works with composite key"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_entity",
+    "description": "Entity supports foreign key relationships",
+    "steps": [
+      "Step 1: Define User and Post entities with relationship",
+      "Step 2: Create linked entities",
+      "Step 3: Verify relationship traversal works"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_entity",
+    "description": "Entity supports many-to-many relationships",
+    "steps": [
+      "Step 1: Define Student and Course with many-to-many",
+      "Step 2: Create relationships",
+      "Step 3: Verify bidirectional navigation works"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_entity",
+    "description": "Entity supports computed fields",
+    "steps": [
+      "Step 1: Define entity with @property computed field",
+      "Step 2: Access computed field",
+      "Step 3: Verify it's calculated correctly but not stored"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_entity",
+    "description": "Entity supports field validators",
+    "steps": [
+      "Step 1: Define entity with @validator decorator",
+      "Step 2: Try to create entity with invalid value",
+      "Step 3: Verify validator is called and prevents creation"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_entity",
+    "description": "Entity lifecycle hooks (before_save, after_save)",
+    "steps": [
+      "Step 1: Define entity with lifecycle hook methods",
+      "Step 2: Save entity",
+      "Step 3: Verify hooks are called at correct times"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_events",
+    "description": "Events support priority ordering",
+    "steps": [
+      "Step 1: Connect handlers with different priorities",
+      "Step 2: Emit event",
+      "Step 3: Verify handlers execute in priority order"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_events",
+    "description": "Events support conditional handlers",
+    "steps": [
+      "Step 1: Connect handler with condition function",
+      "Step 2: Emit events with different data",
+      "Step 3: Verify handler only executes when condition is true"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_events",
+    "description": "Events can be cancelled by handlers",
+    "steps": [
+      "Step 1: Connect handler that cancels event propagation",
+      "Step 2: Connect second handler",
+      "Step 3: Emit event",
+      "Step 4: Verify second handler doesn't execute"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_persistence",
+    "description": "Custom persistence backend can be implemented",
+    "steps": [
+      "Step 1: Implement EntityRepositoryInterface",
+      "Step 2: Create RedisRepository class",
+      "Step 3: Configure entity to use RedisRepository",
+      "Step 4: Verify all operations work"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_persistence",
+    "description": "Repository supports read replicas",
+    "steps": [
+      "Step 1: Configure primary and replica database URLs",
+      "Step 2: Perform write operation",
+      "Step 3: Perform read operation",
+      "Step 4: Verify write goes to primary, read from replica"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_persistence",
+    "description": "Repository supports connection pooling configuration",
+    "steps": [
+      "Step 1: Configure pool size parameters",
+      "Step 2: Perform many concurrent operations",
+      "Step 3: Verify pool configuration is respected"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_datastar",
+    "description": "Datastar SSE endpoint streams updates",
+    "steps": [
+      "Step 1: Create endpoint using ServerSentEvents",
+      "Step 2: Connect client",
+      "Step 3: Stream multiple updates",
+      "Step 4: Verify client receives all updates"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_datastar",
+    "description": "Signals support nested object paths",
+    "steps": [
+      "Step 1: Create Signals(user={'name': 'Alice', 'age': 25})",
+      "Step 2: Access signals.user.name",
+      "Step 3: Verify correct path expression is generated"
+    ],
+    "passes": true
+  },
+  {
+    "category": "advanced_datastar",
+    "description": "Signals support array operations",
+    "steps": [
+      "Step 1: Create Signals(items=[])",
+      "Step 2: Use signals.items.push('new')",
+      "Step 3: Verify correct array operation expression"
+    ],
+    "passes": true
+  },
+  {
+    "category": "examples",
+    "description": "Counter app example works end-to-end",
+    "steps": [
+      "Step 1: Run counter example app",
+      "Step 2: Click increment/decrement buttons",
+      "Step 3: Verify counter updates reactively",
+      "Step 4: Verify state persists (if using persistence)"
+    ],
+    "passes": true
+  },
+  {
+    "category": "examples",
+    "description": "Todo app example supports CRUD operations",
+    "steps": [
+      "Step 1: Run todo example app",
+      "Step 2: Create, read, update, delete todos",
+      "Step 3: Verify all operations work correctly",
+      "Step 4: Verify data persists to database"
+    ],
+    "passes": true
+  },
+  {
+    "category": "examples",
+    "description": "Blog example demonstrates relationships",
+    "steps": [
+      "Step 1: Run blog example",
+      "Step 2: Create users, posts, comments",
+      "Step 3: Verify relationships work",
+      "Step 4: Verify nested data displays correctly"
+    ],
+    "passes": true
+  },
+  {
+    "category": "examples",
+    "description": "E-commerce example shows event-driven workflow",
+    "steps": [
+      "Step 1: Run e-commerce example",
+      "Step 2: Place an order",
+      "Step 3: Verify order.placed event triggers email",
+      "Step 4: Verify inventory is updated via event handler"
+    ],
+    "passes": true
+  },
+  {
+    "category": "migration",
+    "description": "Migration from StarModel is straightforward",
+    "steps": [
+      "Step 1: Take existing StarModel code",
+      "Step 2: Change imports to nitro",
+      "Step 3: Verify minimal code changes needed",
+      "Step 4: Verify app works identically"
+    ],
+    "passes": true
+  },
+  {
+    "category": "backwards_compatibility",
+    "description": "Deprecated features show warnings",
+    "steps": [
+      "Step 1: Use deprecated API",
+      "Step 2: Verify DeprecationWarning is raised",
+      "Step 3: Verify warning suggests new API"
+    ],
+    "passes": true
+  },
+  {
+    "category": "backwards_compatibility",
+    "description": "Major version changes documented in CHANGELOG",
+    "steps": [
+      "Step 1: Read CHANGELOG.md",
+      "Step 2: Verify breaking changes are clearly marked",
+      "Step 3: Verify migration guides are provided"
+    ],
+    "passes": true
+  },
+  {
+    "category": "monitoring",
+    "description": "Entity operations can be logged",
+    "steps": [
+      "Step 1: Configure logging for Nitro",
+      "Step 2: Perform entity operations",
+      "Step 3: Verify operations are logged with details"
+    ],
+    "passes": true
+  },
+  {
+    "category": "monitoring",
+    "description": "Repository statistics can be collected",
+    "steps": [
+      "Step 1: Enable repository stats",
+      "Step 2: Perform various operations",
+      "Step 3: Query stats (queries executed, cache hits, etc.)",
+      "Step 4: Verify accurate statistics"
+    ],
+    "passes": true
+  },
+  {
+    "category": "monitoring",
+    "description": "Event bus metrics are available",
+    "steps": [
+      "Step 1: Enable event metrics",
+      "Step 2: Emit various events",
+      "Step 3: Query metrics (events fired, handlers executed)",
+      "Step 4: Verify accurate metrics"
+    ],
+    "passes": true
+  },
+  {
+    "category": "deployment",
+    "description": "Nitro app works with Gunicorn",
+    "steps": [
+      "Step 1: Create production Nitro app",
+      "Step 2: Run with gunicorn",
+      "Step 3: Verify app serves requests correctly"
+    ],
+    "passes": true
+  },
+  {
+    "category": "deployment",
+    "description": "Nitro app works with Uvicorn",
+    "steps": [
+      "Step 1: Create async Nitro app",
+      "Step 2: Run with uvicorn",
+      "Step 3: Verify async operations work correctly"
+    ],
+    "passes": true
+  },
+  {
+    "category": "deployment",
+    "description": "Nitro app containerizes with Docker",
+    "steps": [
+      "Step 1: Create Dockerfile",
+      "Step 2: Build image",
+      "Step 3: Run container",
+      "Step 4: Verify app works in container"
+    ],
+    "passes": true
+  },
+  {
+    "category": "deployment",
+    "description": "Environment-specific configuration works",
+    "steps": [
+      "Step 1: Create .env.development and .env.production",
+      "Step 2: Load config based on environment",
+      "Step 3: Verify correct config is used"
+    ],
+    "passes": true
+  },
+  {
+    "category": "async_support",
+    "description": "Entity operations work in async context",
+    "steps": [
+      "Step 1: Define async function using Entity",
+      "Step 2: Perform save/load operations",
+      "Step 3: Verify operations complete correctly"
+    ],
+    "passes": true
+  },
+  {
+    "category": "async_support",
+    "description": "Async event handlers execute concurrently",
+    "steps": [
+      "Step 1: Connect 5 async handlers with delays",
+      "Step 2: Call emit_async()",
+      "Step 3: Measure total execution time",
+      "Step 4: Verify concurrent execution (time < sum of delays)"
+    ],
+    "passes": true
+  },
+  {
+    "category": "async_support",
+    "description": "MemoryRepository works in async context",
+    "steps": [
+      "Step 1: Use MemoryRepository in async function",
+      "Step 2: Perform concurrent saves/loads",
+      "Step 3: Verify no race conditions"
+    ],
+    "passes": true
+  }
+]

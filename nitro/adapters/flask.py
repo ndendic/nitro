@@ -66,7 +66,8 @@ class FlaskDispatcher(NitroDispatcher):
         self,
         entity_class: Type[Entity],
         method: Callable,
-        metadata: ActionMetadata
+        metadata: ActionMetadata,
+        entity_route_name: Optional[str] = None
     ) -> None:
         """
         Register a single route with Flask.
@@ -75,9 +76,10 @@ class FlaskDispatcher(NitroDispatcher):
             entity_class: The Entity class containing the method
             method: The @action decorated method
             metadata: Routing metadata from @action decorator
+            entity_route_name: Custom entity route name from __route_name__ attribute
         """
         # Generate URL path (Flask uses <id> not {id})
-        url_path = metadata.generate_url_path(self.prefix)
+        url_path = metadata.generate_url_path(self.prefix, entity_route_name)
         flask_url_path = url_path.replace("{id}", "<id>")
 
         # Create route handler

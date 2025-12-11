@@ -198,6 +198,149 @@ class MyComponent:
 Div(MyComponent())
 ```
 
+## 🚀 Auto-Routing System (Phase 2)
+
+Nitro's auto-routing system dramatically reduces boilerplate by automatically generating RESTful routes from entity methods. This feature is framework-agnostic and works with FastAPI, Flask, and FastHTML.
+
+### Quick Example
+
+```python
+from nitro.domain.entities.base_entity import Entity
+from nitro.infrastructure.routing import action
+from fastapi import FastAPI
+from nitro.adapters.fastapi import configure_nitro
+
+# Define entity with actions
+class Counter(Entity, table=True):
+    count: int = 0
+
+    @action()  # Automatically routed!
+    def increment(self, amount: int = 1) -> dict:
+        self.count += amount
+        self.save()
+        return {"count": self.count}
+
+    @action()
+    def reset(self) -> dict:
+        self.count = 0
+        self.save()
+        return {"count": 0}
+
+# Configure app (one line!)
+app = FastAPI()
+configure_nitro(app, entities=[Counter])
+
+# Routes automatically generated:
+# POST /counter/{id}/increment?amount=5
+# POST /counter/{id}/reset
+```
+
+**Before Auto-Routing:** 190 lines of boilerplate route handlers
+**After Auto-Routing:** < 50 lines of pure business logic
+
+### Custom Route Naming
+
+Control your API design with custom entity names and action paths:
+
+#### Custom Entity Names
+
+Use `__route_name__` for plural forms or custom naming:
+
+```python
+class User(Entity):
+    __route_name__ = "users"  # Plural form
+
+    username: str = ""
+
+    @action()
+    def activate(self):
+        self.is_active = True
+        self.save()
+        return {"status": "activated"}
+
+# Generated URL: POST /users/{id}/activate (not /user/{id}/activate)
+```
+
+#### Custom Action Paths
+
+Use `@action(path="...")` for cleaner URLs:
+
+```python
+class BlogPost(Entity):
+    __route_name__ = "posts"
+
+    title: str = ""
+    is_published: bool = False
+
+    @action(path="/publish")  # Custom path
+    def make_public(self):
+        self.is_published = True
+        self.save()
+        return {"status": "published"}
+
+# Generated URL: POST /posts/{id}/publish (not /posts/{id}/make_public)
+```
+
+#### Combined Customization
+
+```python
+class BlogPost(Entity):
+    __route_name__ = "posts"     # Custom entity name
+
+    @action(path="/publish")     # Custom action path
+    def make_public(self):
+        ...
+
+# Generated URL: POST /posts/{id}/publish
+```
+
+### API Versioning with Prefixes
+
+Support multiple API versions simultaneously:
+
+```python
+# V1 API - Simple counter
+configure_nitro(app, entities=[CounterV1], prefix="/api/v1")
+
+# V2 API - Enhanced counter with new features
+configure_nitro(app, entities=[CounterV2], prefix="/api/v2")
+
+# Both versions coexist:
+# POST /api/v1/counter/{id}/increment
+# POST /api/v2/counter/{id}/increment
+```
+
+### Features
+
+- **🎯 Zero Boilerplate**: Define business logic once, routes generated automatically
+- **🔄 Type Safety**: Parameter extraction from type hints with Pydantic validation
+- **🎨 Custom Naming**: Full control over entity names and action paths
+- **📦 Multi-Framework**: Works with FastAPI, Flask, and FastHTML
+- **🔌 Plug & Play**: One-line configuration per framework
+- **📚 OpenAPI**: Automatic Swagger/ReDoc documentation (FastAPI)
+- **🎭 Versioning**: API prefixes for versioning support
+
+### Try It
+
+Run the interactive demo:
+
+```bash
+# Custom routing demo
+uvicorn examples.custom_routes_demo:app --port 8095
+
+# API versioning demo
+uvicorn examples.versioned_api_demo:app --port 8090
+```
+
+Then visit `http://localhost:8095/` for interactive documentation and examples.
+
+### Learn More
+
+- **📖 [Custom Route Naming Guide](docs/custom_route_naming.md)**: Complete guide with examples
+- **📖 [Route Prefixes Guide](docs/route_prefixes_guide.md)**: API versioning strategies
+- **🎯 [Phase 2 Design](PHASE_2_AUTO_ROUTING_DESIGN.md)**: Technical architecture
+- **💡 [Examples](examples/)**: Working demo applications
+
 ## ⚡ Tailwind CSS CLI
 
 Nitro includes a powerful, framework-agnostic CLI for Tailwind CSS integration that works with any Python web framework.

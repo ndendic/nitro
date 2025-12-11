@@ -70,7 +70,8 @@ class FastAPIDispatcher(NitroDispatcher):
         self,
         entity_class: Type[Entity],
         method: Callable,
-        metadata: ActionMetadata
+        metadata: ActionMetadata,
+        entity_route_name: Optional[str] = None
     ) -> None:
         """
         Register a single route with FastAPI.
@@ -79,9 +80,10 @@ class FastAPIDispatcher(NitroDispatcher):
             entity_class: The Entity class containing the method
             method: The @action decorated method
             metadata: Routing metadata from @action decorator
+            entity_route_name: Custom entity route name from __route_name__ attribute
         """
         # Generate URL path
-        url_path = metadata.generate_url_path(self.prefix)
+        url_path = metadata.generate_url_path(self.prefix, entity_route_name)
 
         # Check if method requires entity ID in path
         has_id_param = "{id}" in url_path

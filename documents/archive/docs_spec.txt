@@ -1,0 +1,198 @@
+<project_specification>
+  <project_name>Nitro Documentation Platform</project_name>
+
+  <overview>
+    The official documentation platform for Nitro Framework, built as a showcase Nitro application.
+    It serves dual purposes: providing comprehensive documentation and demonstrating the framework's capabilities
+    through a "dogfooding" approach. The site transforms static Markdown content into dynamic, interactive
+    Nitro components and features a live playground for experimenting with framework features.
+  </overview>
+
+  <vision>
+    <core_intent>
+      1. **Documentation as Code**: Content lives in Markdown but renders as rich Nitro components.
+      2. **Interactive by Default**: Code examples should be executable where possible.
+      3. **Showcase Architecture**: The docs app itself demonstrates best practices (Clean Architecture, Entity usage).
+      4. **Unified Source**: Aggregates content from `nitro/documents`, code docstrings, and interactive examples.
+      5. **Advanced UX**: Uses Datastar for SPA-like navigation and server-side interactions without full page reloads.
+    </core_intent>
+  </vision>
+
+  <technology_stack>
+    <core_dependencies>
+      <framework>Nitro Framework (latest)</framework>
+      <markdown_engine>Mistletoe (AST-based Markdown parsing)</markdown_engine>
+      <syntax_highlighting>Highlight.js (via Nitro templates)</syntax_highlighting>
+      <search>Server-side (Nitro Entity Search)</search>
+      <styling>Tailwind CSS (v4 via Nitro)</styling>
+      <icons>Lucide Icons</icons>
+    </core_dependencies>
+    <infrastructure>
+      <server>FastAPI (hosting the Nitro app)</server>
+      <deployment>Dynamic Web Server (Docker/Railpack/Dokploy compatible)</deployment>
+    </infrastructure>
+  </technology_stack>
+
+  <architecture>
+    <directory_layout>
+      nitro/
+      └── docs_app/           # New application root
+          ├── app.py          # Entry point
+          ├── content/        # Static content (symlinked or copied)
+          ├── domain/         # Doc-specific entities
+          │   ├── page_model.py # Represents a documentation page
+          │   └── section.py    # Represents a section of docs
+          ├── infrastructure/
+          │   ├── markdown/   # Mistletoe custom renderers
+          │   │   ├── renderer.py # AST -> Nitro Components
+          │   │   └── plugins.py  # Custom tokens (e.g. ::: warning)
+          │   └── navigation.py # Sidebar/Menu generation
+          ├── components/     # UI Components for Docs
+          │   ├── layout.py   # Main docs layout
+          │   ├── sidebar.py  # Navigation sidebar
+          │   ├── playground.py # Interactive code runner
+          │   └── md_components.py # Markdown mapping (H1 -> H1, etc.)
+          └── pages/          # Route handlers
+              ├── docs.py     # Generic docs page handler
+              ├── playground.py # Live playground handler
+              └── gallery.py  # Component gallery
+    </directory_layout>
+    
+    <entity_models>
+      <doc_page>
+        class DocPage(Entity):
+            slug: str (primary key)
+            title: str
+            category: str
+            content: str (markdown content)
+            order: int
+            
+            @classmethod
+            def load_from_fs(cls, path: Path): ...
+            
+            def render(self) -> HtmlString: ...
+      </doc_page>
+      
+      <playground_snippet>
+        class PlaygroundSnippet(Entity):
+            id: str
+            code: str
+            title: str
+            description: str
+      </playground_snippet>
+    </entity_models>
+  </architecture>
+
+  <core_features>
+    <markdown_engine>
+      <ast_translation>
+        - **Custom Mistletoe Renderer**: Direct AST traversal to Nitro Components.
+        - **Code Blocks**: Mapped to `CodeBlock` component with copy button and highlighting.
+        - **Headings**: Mapped to `H1`-`H6` with auto-generated anchor links for TOC.
+        - **Links**: Smart routing - relative links use Datastar navigation, external open in new tab.
+        - **Alerts/Callouts**: Custom syntax `::: warning` mapped to Alert components.
+      </ast_translation>
+      
+      <component_injection>
+        - **Demo Syntax**: `::demo:button` renders the live `Button` component demo.
+        - **Interactive Props**: Demo blocks allow tweaking props via UI controls.
+      </component_injection>
+    </markdown_engine>
+
+    <interactive_playground>
+      <execution_engine>
+        - **Safe Execution**: Backend sandbox (process isolation or restricted scope).
+        - **Event Loop Integration**: Support for `async` code and Nitro events.
+        - **Output Capture**: Stdout/Stderr streaming via Datastar SSE.
+      </execution_engine>
+      
+      <ui_features>
+        - **Editor**: CodeMirror or Monaco (via simple wrapper or CDN).
+        - **Live Preview**: Rendered HTML output pane.
+        - **Console**: Text output pane for print statements.
+      </ui_features>
+    </interactive_playground>
+
+    <component_gallery>
+      <visual_library>
+        - **Auto-Discovery**: Scans `nitro/components` for exported components.
+        - **Live Examples**: Renders each component with default props.
+      </visual_library>
+      
+      <prop_explorer>
+        - **Introspection**: Inspects function signatures to generate form controls.
+        - **Real-time Updates**: Changing form values updates the rendered component.
+      </prop_explorer>
+    </component_gallery>
+
+    <search_system>
+      <indexing>
+        - **Content Index**: All markdown pages parsed and indexed on startup.
+        - **API Index**: Codebase scanned for classes/functions with docstrings.
+      </indexing>
+      
+      <ui>
+        - **Command Palette**: `Cmd+K` interface for quick navigation.
+        - **Live Filtering**: Instant results as you type.
+      </ui>
+    </search_system>
+    
+    <navigation_system>
+      - **Auto-Sidebar**: Generated from file structure and frontmatter `order`.
+      - **Breadcrumbs**: Path-based navigation helper.
+      - **Table of Contents**: In-page navigation generated from H2/H3 headers.
+    </navigation_system>
+  </core_features>
+
+  <implementation_roadmap>
+    <phase_1_core_engine>
+      - Implement `MarkdownToNitro` renderer (Token -> `rusty_tags`).
+      - Map basic Markdown (Headers, Lists, Code, Links) to Nitro components.
+      - Implement Syntax Highlighting pipeline.
+      - Build Navigation generator from directory structure.
+    </phase_1_core_engine>
+
+    <phase_2_content_integration>
+      - Ingest `nitro/documents/*.md`.
+      - Ingest `DEVELOPMENT_REPORT.md` (as changelog/history).
+      - Create "Getting Started" section from `TUTORIAL.md`.
+      - Create "API Reference" section from `API_REFERENCE.md`.
+    </phase_2_content_integration>
+
+    <phase_3_advanced_features>
+      - Build `Playground` component with backend event loop.
+      - Implement `ComponentGallery` with "Controls" pattern.
+      - Add search functionality.
+    </phase_3_advanced_features>
+  </implementation_roadmap>
+
+  <design_guidelines>
+    <visual_style>
+      - **Styling system**: Uses input.css to manage different themes and should really on basecoat styling provided there and on https://basecoatui.com/
+      - **Typography**: Inter / Geist Sans.
+      - **Color Palette**: Slate/Zinc for neutrals, Blue/Indigo for accents (matching Nitro brand).
+      - **Dark Mode**: First-class citizen, strictly supported via Tailwind `dark:` variants.
+    </visual_style>
+    
+    <ux_patterns>
+      - **SPA Feel**: Use Datastar for all internal navigation to preserve state (scroll position, sidebar).
+      - **Keyboard First**: Shortcuts for search, playground execution, theme toggle.
+    </ux_patterns>
+  </design_guidelines>
+
+  <success_criteria>
+    <functional>
+      - All existing markdown files render correctly as Nitro pages.
+      - "Try it" buttons in docs actually execute code (where safe/mocked).
+      - Navigation is auto-generated and deep-linkable.
+    </functional>
+    <performance>
+      - Page transitions < 100ms via Datastar.
+      - Server startup time < 2s.
+    </performance>
+    <visual>
+      - Dark/Light mode support (inherited from Tailwind setup).
+      - Responsive design for mobile reading.
+    </visual>
+  </success_criteria>
+</project_specification>

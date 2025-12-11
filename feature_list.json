@@ -1,1759 +1,992 @@
 [
   {
-    "category": "core_entity",
-    "description": "Entity.save() persists data to SQLModelRepository",
+    "category": "core_engine_markdown_headers",
+    "description": "Mistletoe renderer converts H1 headers to Nitro H1 tags with anchor links",
     "steps": [
-      "Step 1: Define User(Entity) with table=True",
-      "Step 2: Create user = User(id='user1', name='Alice')",
-      "Step 3: Call user.save()",
-      "Step 4: Verify User.get('user1') returns the instance with correct data"
+      "Step 1: Create a DocPage entity with markdown content '# Test Header'",
+      "Step 2: Render the page using the MarkdownToNitro renderer",
+      "Step 3: Verify output contains H1 tag with id='test-header'",
+      "Step 4: Verify output contains an anchor link to #test-header"
     ],
     "passes": true
   },
   {
-    "category": "core_entity",
-    "description": "Entity.get() returns None for non-existent entity",
+    "category": "core_engine_markdown_headers",
+    "description": "Mistletoe renderer converts H2 headers to Nitro H2 tags with anchor links",
     "steps": [
-      "Step 1: Define User(Entity)",
-      "Step 2: Call User.get('nonexistent')",
-      "Step 3: Verify it returns None"
+      "Step 1: Create markdown content '## Second Level'",
+      "Step 2: Render the page",
+      "Step 3: Verify output contains H2 tag with id='second-level'",
+      "Step 4: Verify anchor link is present"
     ],
     "passes": true
   },
   {
-    "category": "core_entity",
-    "description": "Entity.delete() removes entity from repository",
+    "category": "core_engine_markdown_headers",
+    "description": "Mistletoe renderer converts H3-H6 headers with proper hierarchy",
     "steps": [
-      "Step 1: Create and save user entity",
-      "Step 2: Call user.delete()",
-      "Step 3: Verify User.get(user.id) returns None",
-      "Step 4: Verify delete() returns True"
+      "Step 1: Create markdown with ### H3, #### H4, ##### H5, ###### H6",
+      "Step 2: Render all headers",
+      "Step 3: Verify each level uses correct Nitro tag (H3, H4, H5, H6)",
+      "Step 4: Verify all have unique anchor IDs"
     ],
     "passes": true
   },
   {
-    "category": "core_entity",
-    "description": "Entity.exists() checks entity presence",
+    "category": "core_engine_markdown_headers",
+    "description": "Header anchor IDs are properly slugified (spaces, special chars)",
     "steps": [
-      "Step 1: Create and save user entity",
-      "Step 2: Verify User.exists(user.id) returns True",
-      "Step 3: Delete user",
-      "Step 4: Verify User.exists(user.id) returns False"
+      "Step 1: Create header '# Hello World! & More?'",
+      "Step 2: Render the page",
+      "Step 3: Verify id='hello-world-more' (normalized slug)",
+      "Step 4: Verify anchor link works with the normalized slug"
     ],
     "passes": true
   },
   {
-    "category": "core_entity",
-    "description": "Entity.all() returns all entities of type",
+    "category": "core_engine_markdown_code",
+    "description": "Code blocks render with CodeBlock component and syntax highlighting",
     "steps": [
-      "Step 1: Create and save 3 user entities",
-      "Step 2: Call User.all()",
-      "Step 3: Verify it returns list of 3 users"
+      "Step 1: Create markdown with ```python\\nprint('hello')\\n```",
+      "Step 2: Render the page",
+      "Step 3: Verify CodeBlock component is used",
+      "Step 4: Verify language='python' attribute is set",
+      "Step 5: Verify Highlight.js integration is present"
     ],
     "passes": true
   },
   {
-    "category": "core_entity",
-    "description": "Entity.where() filters entities by expressions",
+    "category": "core_engine_markdown_code",
+    "description": "Code blocks include copy button functionality",
     "steps": [
-      "Step 1: Create users with different ages",
-      "Step 2: Call User.where(User.age > 18)",
-      "Step 3: Verify only users with age > 18 are returned"
+      "Step 1: Render code block with sample code",
+      "Step 2: Verify copy button element exists in output",
+      "Step 3: Verify button has appropriate data attributes for copying",
+      "Step 4: Verify code content is accessible for copying"
     ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.where() supports order_by parameter",
-    "steps": [
-      "Step 1: Create users with different names",
-      "Step 2: Call User.where(order_by='name')",
-      "Step 3: Verify results are sorted by name ascending"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.where() supports limit parameter",
-    "steps": [
-      "Step 1: Create 10 user entities",
-      "Step 2: Call User.where(limit=5)",
-      "Step 3: Verify only 5 results are returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.where() supports offset parameter",
-    "steps": [
-      "Step 1: Create 10 user entities",
-      "Step 2: Call User.where(offset=5, limit=5)",
-      "Step 3: Verify results start from 6th entity"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.search() finds entities by text search",
-    "steps": [
-      "Step 1: Create users with different names",
-      "Step 2: Call User.search(search_value='Alice')",
-      "Step 3: Verify only users with 'Alice' in string fields are returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.search() supports sorting",
-    "steps": [
-      "Step 1: Create users with searchable text",
-      "Step 2: Call User.search('test', sorting_field='name', sort_direction='desc')",
-      "Step 3: Verify results are sorted correctly"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.search() supports pagination",
-    "steps": [
-      "Step 1: Create 20 users",
-      "Step 2: Call User.search('test', limit=10, offset=5)",
-      "Step 3: Verify 10 results starting from 6th match"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.search() returns dicts when as_dict=True",
-    "steps": [
-      "Step 1: Create user entities",
-      "Step 2: Call User.search('test', as_dict=True)",
-      "Step 3: Verify results are dictionaries, not Entity instances"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.filter() filters by exact field matches",
-    "steps": [
-      "Step 1: Create users with different statuses",
-      "Step 2: Call User.filter(status='active')",
-      "Step 3: Verify only active users are returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.filter() supports exact_match=False for fuzzy matching",
-    "steps": [
-      "Step 1: Create users with names 'Alice', 'Alicia', 'Bob'",
-      "Step 2: Call User.filter(name='Ali', exact_match=False)",
-      "Step 3: Verify both 'Alice' and 'Alicia' are returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.filter() supports multiple filters",
-    "steps": [
-      "Step 1: Create users with various attributes",
-      "Step 2: Call User.filter(status='active', age=25)",
-      "Step 3: Verify only users matching both conditions are returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.filter() handles None values correctly",
-    "steps": [
-      "Step 1: Create users, some with email=None",
-      "Step 2: Call User.filter(email=None)",
-      "Step 3: Verify only users with null email are returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.filter() raises ValueError for invalid fields",
-    "steps": [
-      "Step 1: Define User entity",
-      "Step 2: Call User.filter(nonexistent_field='value')",
-      "Step 3: Verify ValueError is raised with appropriate message"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.find() retrieves entity by ID",
-    "steps": [
-      "Step 1: Create and save user with id='user123'",
-      "Step 2: Call User.find('user123')",
-      "Step 3: Verify correct user is returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.find_by() finds entity by field values",
-    "steps": [
-      "Step 1: Create users with unique emails",
-      "Step 2: Call User.find_by(email='alice@example.com')",
-      "Step 3: Verify correct user is returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.signals property returns Signals object",
-    "steps": [
-      "Step 1: Create user with name='Alice', age=25",
-      "Step 2: Access user.signals",
-      "Step 3: Verify it returns Signals instance with correct data"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity validation via Pydantic works correctly",
-    "steps": [
-      "Step 1: Define User(Entity) with age: int field",
-      "Step 2: Try to create User(id='1', age='invalid')",
-      "Step 3: Verify Pydantic ValidationError is raised"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity.model_dump() serializes entity to dict",
-    "steps": [
-      "Step 1: Create user entity",
-      "Step 2: Call user.model_dump()",
-      "Step 3: Verify it returns dict with all fields"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity supports datetime fields with proper serialization",
-    "steps": [
-      "Step 1: Define entity with datetime field",
-      "Step 2: Create and save entity with current datetime",
-      "Step 3: Retrieve and verify datetime is preserved",
-      "Step 4: Verify model_dump() serializes datetime to ISO format"
-    ],
-    "passes": true
-  },
-  {
-    "category": "core_entity",
-    "description": "Entity supports Optional fields",
-    "steps": [
-      "Step 1: Define User with Optional[str] email field",
-      "Step 2: Create user without email",
-      "Step 3: Verify save and retrieve works correctly"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository is singleton",
-    "steps": [
-      "Step 1: Get SQLModelRepository instance twice",
-      "Step 2: Verify both references point to same object"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.init_db() creates tables",
-    "steps": [
-      "Step 1: Define User(Entity)",
-      "Step 2: Call repository.init_db()",
-      "Step 3: Verify user table exists in database"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.schema() returns database schema",
-    "steps": [
-      "Step 1: Initialize database with User table",
-      "Step 2: Call repository.schema()",
-      "Step 3: Verify it returns string with table and column information"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.get_session() yields Session",
-    "steps": [
-      "Step 1: Call repository.get_session()",
-      "Step 2: Verify it yields SQLModel Session object",
-      "Step 3: Verify session is properly closed after use"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.save() creates new record",
-    "steps": [
-      "Step 1: Create new user entity",
-      "Step 2: Call repository.save(user)",
-      "Step 3: Verify record exists in database"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.save() updates existing record",
-    "steps": [
-      "Step 1: Save user entity",
-      "Step 2: Modify user.name",
-      "Step 3: Call repository.save(user)",
-      "Step 4: Verify database record has updated name"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.bulk_create() inserts multiple records",
-    "steps": [
-      "Step 1: Prepare list of 10 user dicts",
-      "Step 2: Call repository.bulk_create(User, data)",
-      "Step 3: Verify all 10 records are in database"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.bulk_upsert() updates existing records",
-    "steps": [
-      "Step 1: Create 5 users in database",
-      "Step 2: Prepare list with updated data for those users",
-      "Step 3: Call repository.bulk_upsert(User, data)",
-      "Step 4: Verify all records are updated"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.count() returns total records",
-    "steps": [
-      "Step 1: Create 7 user entities",
-      "Step 2: Call repository.count(User)",
-      "Step 3: Verify it returns 7"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.filter() handles UUID fields",
-    "steps": [
-      "Step 1: Define entity with UUID field",
-      "Step 2: Create entity with UUID value",
-      "Step 3: Call filter with UUID string",
-      "Step 4: Verify entity is found"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.filter() handles date range queries",
-    "steps": [
-      "Step 1: Create entities with different dates",
-      "Step 2: Call filter(created_at=(start_date, end_date))",
-      "Step 3: Verify only entities within range are returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository.filter() handles IN queries with lists",
-    "steps": [
-      "Step 1: Create users with different statuses",
-      "Step 2: Call filter(status=['active', 'pending'])",
-      "Step 3: Verify only users with those statuses are returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_sql",
-    "description": "SQLModelRepository handles connection pooling",
-    "steps": [
-      "Step 1: Perform 100 concurrent database operations",
-      "Step 2: Verify all complete successfully",
-      "Step 3: Verify no connection leaks occur"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_memory",
-    "description": "MemoryRepository is singleton",
-    "steps": [
-      "Step 1: Get MemoryRepository instance twice",
-      "Step 2: Verify both references point to same object"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_memory",
-    "description": "MemoryRepository.save() stores entity in memory",
-    "steps": [
-      "Step 1: Create entity with MemoryRepository",
-      "Step 2: Call repository.save(entity)",
-      "Step 3: Verify entity can be retrieved with find()"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_memory",
-    "description": "MemoryRepository.save() with TTL expires data",
-    "steps": [
-      "Step 1: Save entity with ttl=1 second",
-      "Step 2: Verify entity exists immediately",
-      "Step 3: Wait 2 seconds",
-      "Step 4: Verify entity no longer exists"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_memory",
-    "description": "MemoryRepository.find() returns None for expired entities",
-    "steps": [
-      "Step 1: Save entity with short TTL",
-      "Step 2: Wait for expiration",
-      "Step 3: Call find()",
-      "Step 4: Verify it returns None"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_memory",
-    "description": "MemoryRepository.delete() removes entity",
-    "steps": [
-      "Step 1: Save entity",
-      "Step 2: Call delete(entity.id)",
-      "Step 3: Verify find() returns None",
-      "Step 4: Verify delete() returns True"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_memory",
-    "description": "MemoryRepository.delete() returns False for non-existent entity",
-    "steps": [
-      "Step 1: Call delete('nonexistent')",
-      "Step 2: Verify it returns False"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_memory",
-    "description": "MemoryRepository.exists_sync() checks entity presence",
-    "steps": [
-      "Step 1: Save entity",
-      "Step 2: Verify exists_sync(id) returns True",
-      "Step 3: Delete entity",
-      "Step 4: Verify exists_sync(id) returns False"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_memory",
-    "description": "MemoryRepository.cleanup_expired_sync() removes expired entities",
-    "steps": [
-      "Step 1: Save 5 entities with 1 second TTL",
-      "Step 2: Save 5 entities without TTL",
-      "Step 3: Wait 2 seconds",
-      "Step 4: Call cleanup_expired_sync()",
-      "Step 5: Verify it returns 5 (expired count)",
-      "Step 6: Verify only non-TTL entities remain"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_memory",
-    "description": "MemoryRepository.start_cleanup() begins automatic cleanup",
-    "steps": [
-      "Step 1: Create repository",
-      "Step 2: Verify start_cleanup() is called during init",
-      "Step 3: Save entities with TTL",
-      "Step 4: Verify they are auto-cleaned after expiration"
-    ],
-    "passes": true
-  },
-  {
-    "category": "persistence_memory",
-    "description": "MemoryRepository data persists across multiple saves",
-    "steps": [
-      "Step 1: Save entity with id='test1'",
-      "Step 2: Modify and save again",
-      "Step 3: Verify latest data is stored",
-      "Step 4: Verify only one instance exists in memory"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "@on decorator connects handler to event",
-    "steps": [
-      "Step 1: Define function with @on('user.created')",
-      "Step 2: Emit 'user.created' event",
-      "Step 3: Verify handler is called"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "@on decorator supports wildcard patterns",
-    "steps": [
-      "Step 1: Define handler with @on('user.*')",
-      "Step 2: Emit 'user.created' and 'user.updated'",
-      "Step 3: Verify handler is called for both events"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "emit() synchronously triggers handlers",
-    "steps": [
-      "Step 1: Define synchronous handler",
-      "Step 2: Call emit('test.event', sender='app')",
-      "Step 3: Verify handler receives sender and executes",
-      "Step 4: Verify emit() returns list of results"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "emit_async() awaits all async handlers",
-    "steps": [
-      "Step 1: Define async handler",
-      "Step 2: Call await emit_async('test.event')",
-      "Step 3: Verify handler completes",
-      "Step 4: Verify emit_async() returns list of results"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Event handlers can be generators",
-    "steps": [
-      "Step 1: Define handler as generator yielding multiple values",
-      "Step 2: Emit event",
-      "Step 3: Verify all yielded values are collected in results"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Event handlers can be async generators",
-    "steps": [
-      "Step 1: Define async generator handler",
-      "Step 2: Call emit_async()",
-      "Step 3: Verify all yielded values are collected"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "event() creates/gets named event",
-    "steps": [
-      "Step 1: Call event('my.event')",
-      "Step 2: Call event('my.event') again",
-      "Step 3: Verify both calls return same Event instance"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Events support sender filtering",
-    "steps": [
-      "Step 1: Connect handler with sender='app1'",
-      "Step 2: Emit event with sender='app1'",
-      "Step 3: Emit event with sender='app2'",
-      "Step 4: Verify handler only called for 'app1'"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Events support ANY sender",
-    "steps": [
-      "Step 1: Connect handler with sender=ANY",
-      "Step 2: Emit from multiple senders",
-      "Step 3: Verify handler called for all"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Event.connect_filtered() matches namespace patterns",
-    "steps": [
-      "Step 1: Create events 'user.created' and 'user.*'",
-      "Step 2: Connect handler to 'user.*'",
-      "Step 3: Emit 'user.created'",
-      "Step 4: Verify filtered connection works"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Multiple handlers can connect to same event",
-    "steps": [
-      "Step 1: Connect 3 different handlers to 'test.event'",
-      "Step 2: Emit event",
-      "Step 3: Verify all 3 handlers are called",
-      "Step 4: Verify results list has 3 items"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Event handlers receive kwargs passed to emit()",
-    "steps": [
-      "Step 1: Define handler accepting **kwargs",
-      "Step 2: Emit event with custom kwargs",
-      "Step 3: Verify handler receives correct kwargs"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Async handlers are scheduled without blocking",
-    "steps": [
-      "Step 1: Define async handler with sleep",
-      "Step 2: Call emit() (not emit_async)",
-      "Step 3: Verify emit() returns immediately",
-      "Step 4: Verify handler eventually completes"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "emit_async() executes handlers in parallel",
-    "steps": [
-      "Step 1: Define 3 async handlers with delays",
-      "Step 2: Call emit_async()",
-      "Step 3: Verify total time is close to longest delay, not sum"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Namespace can be created and used for events",
-    "steps": [
-      "Step 1: Create custom Namespace()",
-      "Step 2: Create events in that namespace",
-      "Step 3: Verify events are isolated from default namespace"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "filter_signals() finds matching events",
-    "steps": [
-      "Step 1: Create events 'user.created', 'user.updated', 'order.created'",
-      "Step 2: Call filter_signals('user.*')",
-      "Step 3: Verify only user events are returned"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Event handlers with weak=False are not garbage collected",
-    "steps": [
-      "Step 1: Connect handler with weak=False",
-      "Step 2: Delete handler reference",
-      "Step 3: Emit event",
-      "Step 4: Verify handler still executes"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Event handlers with weak=True can be garbage collected",
-    "steps": [
-      "Step 1: Connect handler with weak=True",
-      "Step 2: Delete handler reference",
-      "Step 3: Force garbage collection",
-      "Step 4: Emit event",
-      "Step 5: Verify handler no longer executes"
-    ],
-    "passes": true
-  },
-  {
-    "category": "events",
-    "description": "Sync generators are bridged to async properly",
-    "steps": [
-      "Step 1: Define sync generator handler",
-      "Step 2: Call emit_async()",
-      "Step 3: Verify generator yields are collected",
-      "Step 4: Verify no blocking occurs"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "Page() renders complete HTML page",
-    "steps": [
-      "Step 1: Create Page(H1('Hello'), title='Test')",
-      "Step 2: Render to string",
-      "Step 3: Verify HTML has <!DOCTYPE>, <html>, <head>, <body>",
-      "Step 4: Verify title is set"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "Page() includes Datastar when datastar=True",
-    "steps": [
-      "Step 1: Create Page(Div(), datastar=True)",
-      "Step 2: Render to string",
-      "Step 3: Verify Datastar CDN script is included in <head>"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "Page() includes Tailwind CSS link when tailwind=True",
-    "steps": [
-      "Step 1: Create Page(Div(), tailwind=True, tailwind_output='style.css')",
-      "Step 2: Render to string",
-      "Step 3: Verify <link> to style.css is in <head>"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "Page() includes Lucide icons when lucide=True",
-    "steps": [
-      "Step 1: Create Page(Div(), lucide=True)",
-      "Step 2: Render to string",
-      "Step 3: Verify Lucide CDN script is included"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "Page() includes highlight.js when highlight=True",
-    "steps": [
-      "Step 1: Create Page(Div(), highlight=True)",
-      "Step 2: Render to string",
-      "Step 3: Verify highlight.js CSS and JS are included"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "create_template decorator returns Page wrapper",
-    "steps": [
-      "Step 1: Define view function with @create_template(title='Test')",
-      "Step 2: Call view function",
-      "Step 3: Verify it returns Page instance with correct title",
-      "Step 4: Verify function return value is wrapped in Page"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "Signals object generates data-* attributes",
-    "steps": [
-      "Step 1: Create Signals(counter=0)",
-      "Step 2: Access signals as attributes",
-      "Step 3: Verify it generates correct Datastar data-* attributes"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "Signals supports arithmetic operations",
-    "steps": [
-      "Step 1: Create Signals(count=0)",
-      "Step 2: Use signals.count.add(1) and signals.count.sub(1)",
-      "Step 3: Verify correct Datastar expressions are generated"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "Signals.set() generates assignment expression",
-    "steps": [
-      "Step 1: Create Signals(name='Alice')",
-      "Step 2: Use signals.name.set('Bob')",
-      "Step 3: Verify correct Datastar set expression"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "Signals.toggle() generates boolean toggle",
-    "steps": [
-      "Step 1: Create Signals(visible=True)",
-      "Step 2: Use signals.visible.toggle()",
-      "Step 3: Verify correct Datastar toggle expression"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "RustyTags Div() generates <div> element",
-    "steps": [
-      "Step 1: Create Div('content', class_='container')",
-      "Step 2: Render to string",
-      "Step 3: Verify output is <div class=\"container\">content</div>"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "RustyTags supports nested elements",
-    "steps": [
-      "Step 1: Create Div(H1('Title'), P('Content'))",
-      "Step 2: Render to string",
-      "Step 3: Verify proper nesting in HTML output"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "RustyTags Button supports event handlers",
-    "steps": [
-      "Step 1: Create Button('Click', on_click='handleClick()')",
-      "Step 2: Render to string",
-      "Step 3: Verify onclick attribute is set"
-    ],
-    "passes": true
-  },
-  {
-    "category": "templating",
-    "description": "Component system allows reusable UI elements",
-    "steps": [
-      "Step 1: Define custom component function returning RustyTags elements",
-      "Step 2: Use component in Page",
-      "Step 3: Verify component renders correctly"
-    ],
-    "passes": true
-  },
-  {
-    "category": "cli_tailwind",
-    "description": "nitro tw init downloads Tailwind binary",
-    "steps": [
-      "Step 1: Run 'nitro tw init' in clean directory",
-      "Step 2: Verify binary exists in ~/.nitro/cache/",
-      "Step 3: Verify config files are created"
-    ],
-    "passes": true
-  },
-  {
-    "category": "cli_tailwind",
-    "description": "nitro tw init creates input.css and tailwind.config.js",
-    "steps": [
-      "Step 1: Run 'nitro tw init'",
-      "Step 2: Verify input.css file exists",
-      "Step 3: Verify tailwind.config.js exists"
-    ],
-    "passes": true
-  },
-  {
-    "category": "cli_tailwind",
-    "description": "nitro tw init detects static/ directory",
-    "steps": [
-      "Step 1: Create static/ directory",
-      "Step 2: Run 'nitro tw init'",
-      "Step 3: Verify files created in static/css/"
-    ],
-    "passes": true
-  },
-  {
-    "category": "cli_tailwind",
-    "description": "nitro tw init respects environment variables",
-    "steps": [
-      "Step 1: Set NITRO_TAILWIND_CSS_INPUT env var",
-      "Step 2: Run 'nitro tw init'",
-      "Step 3: Verify files created at custom location"
-    ],
-    "passes": true
-  },
-  {
-    "category": "cli_tailwind",
-    "description": "nitro tw dev starts watch mode",
-    "steps": [
-      "Step 1: Run 'nitro tw init'",
-      "Step 2: Run 'nitro tw dev' in background",
-      "Step 3: Modify input.css",
-      "Step 4: Verify output.css is regenerated"
-    ],
-    "passes": true
-  },
-  {
-    "category": "cli_tailwind",
-    "description": "nitro tw build creates production CSS",
-    "steps": [
-      "Step 1: Run 'nitro tw init'",
-      "Step 2: Run 'nitro tw build'",
-      "Step 3: Verify output.css exists",
-      "Step 4: Verify CSS is minified"
-    ],
-    "passes": true
-  },
-  {
-    "category": "cli_tailwind",
-    "description": "Tailwind CLI works without Node.js",
-    "steps": [
-      "Step 1: Verify Node.js is not required in environment",
-      "Step 2: Run nitro tw commands",
-      "Step 3: Verify they work with standalone binary"
-    ],
-    "passes": true
-  },
-  {
-    "category": "cli_tailwind",
-    "description": "Tailwind binary is cached and reused",
-    "steps": [
-      "Step 1: Run 'nitro tw init' first time",
-      "Step 2: Note download happens",
-      "Step 3: Run 'nitro tw init' in different project",
-      "Step 4: Verify binary is reused, not re-downloaded"
-    ],
-    "passes": true
-  },
-  {
-    "category": "cli_db",
-    "description": "nitro db init initializes database tables",
-    "steps": [
-      "Step 1: Define Entity models",
-      "Step 2: Run 'nitro db init'",
-      "Step 3: Verify tables are created in database"
-    ],
-    "passes": true
-  },
-  {
-    "category": "cli_db",
-    "description": "nitro db migrations generates migration files",
-    "steps": [
-      "Step 1: Create initial models and init db",
-      "Step 2: Modify models",
-      "Step 3: Run 'nitro db migrations'",
-      "Step 4: Verify migration file is created"
-    ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "cli_db",
-    "description": "nitro db migrate applies pending migrations",
+    "category": "core_engine_markdown_code",
+    "description": "Inline code renders with appropriate styling",
     "steps": [
-      "Step 1: Create migration files",
-      "Step 2: Run 'nitro db migrate'",
-      "Step 3: Verify database schema is updated"
+      "Step 1: Create markdown with `inline code` syntax",
+      "Step 2: Render the page",
+      "Step 3: Verify inline code uses Code or similar Nitro component",
+      "Step 4: Verify styling distinguishes it from regular text"
     ],
     "passes": true
   },
   {
-    "category": "cli_general",
-    "description": "nitro --help shows available commands",
+    "category": "core_engine_markdown_code",
+    "description": "Code blocks without language specifier still render correctly",
     "steps": [
-      "Step 1: Run 'nitro --help'",
-      "Step 2: Verify output shows all command groups",
-      "Step 3: Verify output is formatted nicely with Rich"
+      "Step 1: Create markdown with ``` (no language)",
+      "Step 2: Render the page",
+      "Step 3: Verify CodeBlock component renders",
+      "Step 4: Verify no syntax highlighting errors occur"
     ],
     "passes": true
   },
   {
-    "category": "cli_general",
-    "description": "nitro --version shows framework version",
+    "category": "core_engine_markdown_lists",
+    "description": "Unordered lists render as Nitro Ul/Li components",
     "steps": [
-      "Step 1: Run 'nitro --version'",
-      "Step 2: Verify version number is displayed"
+      "Step 1: Create markdown with - Item 1\\n- Item 2\\n- Item 3",
+      "Step 2: Render the page",
+      "Step 3: Verify Ul component is used",
+      "Step 4: Verify three Li components are nested inside"
     ],
     "passes": true
   },
   {
-    "category": "config",
-    "description": "NitroConfig loads from environment variables",
+    "category": "core_engine_markdown_lists",
+    "description": "Ordered lists render as Nitro Ol/Li components",
     "steps": [
-      "Step 1: Set NITRO_DB_URL env var",
-      "Step 2: Create NitroConfig()",
-      "Step 3: Verify config.db_url matches env var"
+      "Step 1: Create markdown with 1. First\\n2. Second\\n3. Third",
+      "Step 2: Render the page",
+      "Step 3: Verify Ol component is used",
+      "Step 4: Verify three Li components maintain order"
     ],
     "passes": true
   },
   {
-    "category": "config",
-    "description": "NitroConfig loads from .env file",
+    "category": "core_engine_markdown_lists",
+    "description": "Nested lists render with proper hierarchy",
     "steps": [
-      "Step 1: Create .env file with NITRO_DB_URL",
-      "Step 2: Create NitroConfig()",
-      "Step 3: Verify config loads from .env"
+      "Step 1: Create markdown with nested lists (- Item\\n  - Nested)",
+      "Step 2: Render the page",
+      "Step 3: Verify outer Ul contains Li with inner Ul",
+      "Step 4: Verify nesting structure is preserved"
     ],
-    "passes": true
-  },
-  {
-    "category": "config",
-    "description": "NitroConfig has sensible defaults",
-    "steps": [
-      "Step 1: Create NitroConfig() without env vars",
-      "Step 2: Verify default db_url is sqlite",
-      "Step 3: Verify default Tailwind paths are set"
-    ],
-    "passes": true
-  },
-  {
-    "category": "config",
-    "description": "NitroConfig validates Tailwind content paths",
-    "steps": [
-      "Step 1: Set invalid NITRO_TAILWIND_CONTENT_PATHS",
-      "Step 2: Try to create NitroConfig()",
-      "Step 3: Verify validation error is raised"
-    ],
-    "passes": true
-  },
-  {
-    "category": "integration_fastapi",
-    "description": "Build Todo app with FastAPI in < 50 lines",
-    "steps": [
-      "Step 1: Define Todo(Entity) with SQLModelRepository",
-      "Step 2: Create FastAPI app with CRUD endpoints",
-      "Step 3: Verify total code is under 50 lines",
-      "Step 4: Test all CRUD operations work"
-    ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "integration_fastapi",
-    "description": "Swap persistence backend in 1 line",
+    "category": "core_engine_markdown_links",
+    "description": "Internal relative links use Datastar navigation",
     "steps": [
-      "Step 1: Create Todo app with SQLModelRepository",
-      "Step 2: Change model_config repository to MemoryRepository",
-      "Step 3: Verify app works without other code changes"
+      "Step 1: Create markdown with [Link](/docs/guide)",
+      "Step 2: Render the page",
+      "Step 3: Verify link has data-on-click attribute for Datastar",
+      "Step 4: Verify href='/docs/guide' is preserved for accessibility"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "integration_fastapi",
-    "description": "Entity works as FastAPI response model",
+    "category": "core_engine_markdown_links",
+    "description": "External links open in new tab with security attributes",
     "steps": [
-      "Step 1: Define User(Entity)",
-      "Step 2: Create FastAPI endpoint returning User",
-      "Step 3: Verify response is properly serialized to JSON"
+      "Step 1: Create markdown with [External](https://example.com)",
+      "Step 2: Render the page",
+      "Step 3: Verify target='_blank' attribute",
+      "Step 4: Verify rel='noopener noreferrer' for security"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "integration_fastapi",
-    "description": "Entity works as FastAPI request body",
+    "category": "core_engine_markdown_links",
+    "description": "Anchor links (same page) work correctly",
     "steps": [
-      "Step 1: Define User(Entity)",
-      "Step 2: Create POST endpoint accepting User",
-      "Step 3: Verify Pydantic validation works on request"
+      "Step 1: Create markdown with [Jump](#section)",
+      "Step 2: Render the page",
+      "Step 3: Verify href='#section'",
+      "Step 4: Verify smooth scroll behavior is enabled"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "integration_fastapi",
-    "description": "Events work with FastAPI background tasks",
+    "category": "core_engine_markdown_alerts",
+    "description": "Custom alert syntax ::: warning renders Alert component",
     "steps": [
-      "Step 1: Define event handler as async function",
-      "Step 2: Emit event from FastAPI endpoint",
-      "Step 3: Verify handler executes asynchronously"
+      "Step 1: Create markdown with ::: warning\\nMessage\\n:::",
+      "Step 2: Render the page",
+      "Step 3: Verify Alert component is used",
+      "Step 4: Verify variant='warning' or similar prop is set"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "integration_flask",
-    "description": "Nitro works with Flask",
+    "category": "core_engine_markdown_alerts",
+    "description": "Custom alert syntax ::: info renders Alert component",
     "steps": [
-      "Step 1: Create Flask app",
-      "Step 2: Define Entity with SQLModelRepository",
-      "Step 3: Create CRUD routes",
-      "Step 4: Verify full functionality"
+      "Step 1: Create markdown with ::: info\\nMessage\\n:::",
+      "Step 2: Render the page",
+      "Step 3: Verify Alert component with info styling"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "integration_flask",
-    "description": "Page() integrates with Flask templates",
+    "category": "core_engine_markdown_alerts",
+    "description": "Custom alert syntax ::: danger renders Alert component",
     "steps": [
-      "Step 1: Create Flask route returning Page()",
-      "Step 2: Render Page to HTML string",
-      "Step 3: Return from Flask route",
-      "Step 4: Verify HTML renders correctly in browser"
+      "Step 1: Create markdown with ::: danger\\nMessage\\n:::",
+      "Step 2: Render the page",
+      "Step 3: Verify Alert component with danger styling"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "integration_fasthtml",
-    "description": "Nitro Entity works with FastHTML",
+    "category": "core_engine_markdown_alerts",
+    "description": "Custom alert syntax ::: tip renders Alert component",
     "steps": [
-      "Step 1: Create FastHTML app",
-      "Step 2: Define Entity models",
-      "Step 3: Create routes using RustyTags",
-      "Step 4: Verify seamless integration"
+      "Step 1: Create markdown with ::: tip\\nMessage\\n:::",
+      "Step 2: Render the page",
+      "Step 3: Verify Alert component with tip styling"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "integration_starlette",
-    "description": "Nitro works with Starlette",
+    "category": "core_engine_markdown_tables",
+    "description": "Markdown tables render as Nitro Table components",
     "steps": [
-      "Step 1: Create Starlette app",
-      "Step 2: Use Entity and events",
-      "Step 3: Verify async support works properly"
+      "Step 1: Create markdown table with | Header | Header |\\n|---|---|\\n| Cell | Cell |",
+      "Step 2: Render the page",
+      "Step 3: Verify Table component is used",
+      "Step 4: Verify Thead, Tbody, Tr, Th, Td structure"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "components",
-    "description": "Dialog component renders modal dialog",
+    "category": "core_engine_markdown_tables",
+    "description": "Table alignment modifiers work correctly",
     "steps": [
-      "Step 1: Import Dialog from components",
-      "Step 2: Create Dialog('Title', 'Content')",
-      "Step 3: Verify HTML has proper modal structure"
+      "Step 1: Create table with |:---|:---:|---:| alignment",
+      "Step 2: Render the page",
+      "Step 3: Verify left, center, right text alignment in cells"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "components",
-    "description": "CodeBlock component renders syntax-highlighted code",
+    "category": "core_engine_markdown_images",
+    "description": "Image markdown renders as Img component",
     "steps": [
-      "Step 1: Import CodeBlock",
-      "Step 2: Create CodeBlock('print(\"hello\")', language='python')",
-      "Step 3: Verify code is wrapped with highlight.js classes"
+      "Step 1: Create markdown with ![Alt text](/path/to/image.png)",
+      "Step 2: Render the page",
+      "Step 3: Verify Img component with src='/path/to/image.png'",
+      "Step 4: Verify alt='Alt text' attribute"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "components",
-    "description": "Accordion component creates collapsible sections",
+    "category": "core_engine_markdown_images",
+    "description": "Image with title renders tooltip",
     "steps": [
-      "Step 1: Import Accordion",
-      "Step 2: Create Accordion with items",
-      "Step 3: Verify proper HTML structure for expand/collapse"
+      "Step 1: Create ![Alt](/image.png \"Title\")",
+      "Step 2: Render the page",
+      "Step 3: Verify title='Title' attribute on Img"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "components",
-    "description": "Tabs component creates tabbed interface",
+    "category": "core_engine_markdown_blockquotes",
+    "description": "Blockquotes render with proper styling",
     "steps": [
-      "Step 1: Import Tabs",
-      "Step 2: Create Tabs with multiple tab items",
-      "Step 3: Verify tab switching works"
+      "Step 1: Create markdown with > Quote text",
+      "Step 2: Render the page",
+      "Step 3: Verify Blockquote component is used",
+      "Step 4: Verify appropriate styling classes"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "components",
-    "description": "Input components support validation",
+    "category": "core_engine_markdown_emphasis",
+    "description": "Bold and italic text render correctly",
     "steps": [
-      "Step 1: Import input components",
-      "Step 2: Create input with validation rules",
-      "Step 3: Verify validation attributes are set"
+      "Step 1: Create markdown with **bold** and *italic*",
+      "Step 2: Render the page",
+      "Step 3: Verify Strong component for bold",
+      "Step 4: Verify Em component for italic"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "components",
-    "description": "Icons component integrates Lucide icons",
+    "category": "core_engine_markdown_paragraphs",
+    "description": "Paragraphs render as P components",
     "steps": [
-      "Step 1: Import Icon helper",
-      "Step 2: Create Icon('user')",
-      "Step 3: Verify correct Lucide icon markup"
+      "Step 1: Create markdown with paragraph text",
+      "Step 2: Render the page",
+      "Step 3: Verify P component wraps text",
+      "Step 4: Verify multiple paragraphs are separate P elements"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "performance",
-    "description": "RustyTags is 3-10x faster than pure Python",
+    "category": "core_engine_component_injection",
+    "description": "Demo syntax ::demo:button renders live Button component",
     "steps": [
-      "Step 1: Benchmark RustyTags HTML generation",
-      "Step 2: Benchmark equivalent pure Python string building",
-      "Step 3: Verify RustyTags is at least 3x faster"
+      "Step 1: Create markdown with ::demo:button",
+      "Step 2: Render the page",
+      "Step 3: Verify actual Button component is rendered",
+      "Step 4: Verify component is interactive"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "performance",
-    "description": "Entity operations have < 10ms overhead",
+    "category": "core_engine_component_injection",
+    "description": "Demo syntax ::demo:dialog renders live Dialog component",
     "steps": [
-      "Step 1: Measure time for direct SQLAlchemy operation",
-      "Step 2: Measure time for equivalent Entity operation",
-      "Step 3: Verify difference is under 10ms"
+      "Step 1: Create markdown with ::demo:dialog",
+      "Step 2: Render the page",
+      "Step 3: Verify Dialog component renders with demo content"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "performance",
-    "description": "Event emission has minimal overhead",
+    "category": "core_engine_component_injection",
+    "description": "Demo syntax ::demo:codeblock renders CodeBlock with controls",
     "steps": [
-      "Step 1: Benchmark direct function call",
-      "Step 2: Benchmark same function via event system",
-      "Step 3: Verify overhead is negligible"
+      "Step 1: Create markdown with ::demo:codeblock",
+      "Step 2: Render the page",
+      "Step 3: Verify CodeBlock component with prop controls"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "performance",
-    "description": "MemoryRepository is faster than SQL for reads",
+    "category": "core_engine_component_injection",
+    "description": "Unknown demo components show error message",
     "steps": [
-      "Step 1: Perform 1000 reads from MemoryRepository",
-      "Step 2: Perform 1000 reads from SQLModelRepository",
-      "Step 3: Verify MemoryRepository is significantly faster"
+      "Step 1: Create markdown with ::demo:nonexistent",
+      "Step 2: Render the page",
+      "Step 3: Verify error message is shown instead of crash"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "error_handling",
-    "description": "Entity.save() handles validation errors gracefully",
+    "category": "doc_page_entity",
+    "description": "DocPage entity initializes with required fields",
     "steps": [
-      "Step 1: Create entity with invalid data",
-      "Step 2: Try to save()",
-      "Step 3: Verify clear ValidationError is raised"
+      "Step 1: Create DocPage(slug='test', title='Test', category='guide', content='# Test', order=1)",
+      "Step 2: Verify entity saves successfully",
+      "Step 3: Verify all fields are accessible"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "error_handling",
-    "description": "Repository connection errors are caught",
+    "category": "doc_page_entity",
+    "description": "DocPage.load_from_fs reads markdown file correctly",
     "steps": [
-      "Step 1: Configure invalid database URL",
-      "Step 2: Try to perform operation",
-      "Step 3: Verify helpful error message"
+      "Step 1: Create test markdown file with frontmatter",
+      "Step 2: Call DocPage.load_from_fs(path)",
+      "Step 3: Verify entity is created with correct metadata",
+      "Step 4: Verify content is loaded"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "error_handling",
-    "description": "Event handler exceptions don't crash app",
+    "category": "doc_page_entity",
+    "description": "DocPage.render() converts markdown to Nitro components",
     "steps": [
-      "Step 1: Define handler that raises exception",
-      "Step 2: Emit event",
-      "Step 3: Verify exception is caught and logged",
-      "Step 4: Verify app continues running"
+      "Step 1: Create DocPage with markdown content",
+      "Step 2: Call page.render()",
+      "Step 3: Verify output is HTML string",
+      "Step 4: Verify markdown is converted to Nitro components"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "error_handling",
-    "description": "CLI commands show helpful error messages",
+    "category": "doc_page_entity",
+    "description": "DocPage entities persist to database",
     "steps": [
-      "Step 1: Run nitro command with invalid arguments",
-      "Step 2: Verify error message is clear and actionable",
-      "Step 3: Verify suggestions are provided"
+      "Step 1: Create and save DocPage entity",
+      "Step 2: Retrieve with DocPage.get(slug)",
+      "Step 3: Verify data matches original"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "edge_cases",
-    "description": "Entity handles empty string IDs",
+    "category": "doc_page_entity",
+    "description": "DocPage.all() returns pages sorted by order field",
     "steps": [
-      "Step 1: Create entity with id=''",
-      "Step 2: Save and retrieve",
-      "Step 3: Verify it works or raises appropriate error"
+      "Step 1: Create multiple DocPage entities with different orders",
+      "Step 2: Call DocPage.all()",
+      "Step 3: Verify pages are sorted by order field ascending"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "edge_cases",
-    "description": "Entity handles very long field values",
+    "category": "doc_page_entity",
+    "description": "DocPage.filter(category='guide') returns filtered results",
     "steps": [
-      "Step 1: Create entity with 10MB string field",
-      "Step 2: Save and retrieve",
-      "Step 3: Verify data integrity"
+      "Step 1: Create DocPages with categories 'guide', 'api', 'tutorial'",
+      "Step 2: Call DocPage.filter(category='guide')",
+      "Step 3: Verify only guide pages are returned"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "edge_cases",
-    "description": "Entity.filter() handles empty result set",
+    "category": "navigation_sidebar",
+    "description": "Sidebar auto-generates from DocPage categories",
     "steps": [
-      "Step 1: Filter with criteria matching nothing",
-      "Step 2: Verify empty list is returned",
-      "Step 3: Verify no errors occur"
+      "Step 1: Create DocPages in multiple categories",
+      "Step 2: Generate sidebar navigation",
+      "Step 3: Verify categories are grouped",
+      "Step 4: Verify pages within categories are ordered"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "edge_cases",
-    "description": "Event emission with no handlers is safe",
+    "category": "navigation_sidebar",
+    "description": "Sidebar highlights current active page",
     "steps": [
-      "Step 1: Emit event with no connected handlers",
-      "Step 2: Verify no errors occur",
-      "Step 3: Verify empty results list is returned"
+      "Step 1: Render sidebar with current page='/docs/guide'",
+      "Step 2: Verify corresponding link has active class/styling",
+      "Step 3: Verify other links don't have active styling"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "edge_cases",
-    "description": "MemoryRepository handles concurrent access",
+    "category": "navigation_sidebar",
+    "description": "Sidebar uses Datastar for navigation",
     "steps": [
-      "Step 1: Spawn 100 threads doing save/load operations",
-      "Step 2: Verify no race conditions occur",
-      "Step 3: Verify data integrity maintained"
+      "Step 1: Render sidebar links",
+      "Step 2: Verify links have data-on-click attributes",
+      "Step 3: Verify navigation doesn't cause full page reload"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "edge_cases",
-    "description": "Page() handles None children",
+    "category": "navigation_sidebar",
+    "description": "Sidebar is collapsible on mobile",
     "steps": [
-      "Step 1: Create Page(None, Div(), None)",
-      "Step 2: Render to string",
-      "Step 3: Verify None values are filtered out cleanly"
+      "Step 1: Render sidebar with mobile viewport",
+      "Step 2: Verify collapse/expand controls exist",
+      "Step 3: Verify responsive classes are applied"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "documentation",
-    "description": "README has clear installation instructions",
+    "category": "navigation_breadcrumbs",
+    "description": "Breadcrumbs show path to current page",
     "steps": [
-      "Step 1: Read README.md",
-      "Step 2: Verify pip install command is present",
-      "Step 3: Verify it mentions Rust requirement for development"
+      "Step 1: Navigate to /docs/guide/getting-started",
+      "Step 2: Render breadcrumbs",
+      "Step 3: Verify path shows: Docs > Guide > Getting Started",
+      "Step 4: Verify each segment is clickable"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "documentation",
-    "description": "API reference documents all Entity methods",
+    "category": "navigation_breadcrumbs",
+    "description": "Breadcrumbs use Datastar navigation",
     "steps": [
-      "Step 1: Check docs for Entity API",
-      "Step 2: Verify all public methods are documented",
-      "Step 3: Verify examples are provided"
+      "Step 1: Render breadcrumbs",
+      "Step 2: Verify each link has Datastar attributes",
+      "Step 3: Verify clicking doesn't reload page"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "documentation",
-    "description": "Tutorial walks through Todo app creation",
+    "category": "navigation_toc",
+    "description": "Table of contents generated from H2/H3 headers",
     "steps": [
-      "Step 1: Follow tutorial steps",
-      "Step 2: Verify working app is created",
-      "Step 3: Verify tutorial is under 5 minutes to complete"
+      "Step 1: Create page with ## Section 1, ### Subsection, ## Section 2",
+      "Step 2: Generate TOC",
+      "Step 3: Verify TOC contains all headers with proper nesting",
+      "Step 4: Verify links point to header anchor IDs"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "developer_experience",
-    "description": "Installation just works with pip install",
+    "category": "navigation_toc",
+    "description": "TOC highlights current section on scroll",
     "steps": [
-      "Step 1: Create fresh virtual environment",
-      "Step 2: Run pip install nitro",
-      "Step 3: Verify import nitro works",
-      "Step 4: Verify no manual steps required"
+      "Step 1: Render page with TOC",
+      "Step 2: Simulate scroll to different sections",
+      "Step 3: Verify TOC updates active section indicator",
+      "Step 4: Verify Datastar or JS handles scroll spy"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "developer_experience",
-    "description": "Type hints enable IDE autocomplete",
+    "category": "navigation_toc",
+    "description": "TOC links scroll smoothly to sections",
     "steps": [
-      "Step 1: Open Entity class in IDE",
-      "Step 2: Start typing entity.",
-      "Step 3: Verify all methods appear in autocomplete"
+      "Step 1: Click TOC link",
+      "Step 2: Verify smooth scroll behavior",
+      "Step 3: Verify URL updates with anchor hash"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "developer_experience",
-    "description": "Error messages include helpful context",
+    "category": "playground_execution",
+    "description": "Playground executes Python code via backend",
     "steps": [
-      "Step 1: Trigger various errors intentionally",
-      "Step 2: Read error messages",
-      "Step 3: Verify they explain what went wrong and how to fix"
+      "Step 1: Submit Python code 'print(\"hello\")' to playground endpoint",
+      "Step 2: Verify backend captures stdout",
+      "Step 3: Verify execution completes successfully"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "developer_experience",
-    "description": "CLI provides rich colored output",
+    "category": "playground_execution",
+    "description": "Playground streams output via SSE",
     "steps": [
-      "Step 1: Run various nitro commands",
-      "Step 2: Verify output uses colors and formatting",
-      "Step 3: Verify progress indicators are shown"
+      "Step 1: Submit code that prints multiple lines",
+      "Step 2: Verify SSE events stream to client",
+      "Step 3: Verify output appears incrementally in UI"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "testing",
-    "description": "pytest fixtures available for Nitro entities",
+    "category": "playground_execution",
+    "description": "Playground handles async code correctly",
     "steps": [
-      "Step 1: Create test using pytest",
-      "Step 2: Use Nitro fixture for temporary database",
-      "Step 3: Verify clean isolation between tests"
+      "Step 1: Submit async def main(): await asyncio.sleep(0.1)",
+      "Step 2: Verify async code executes in event loop",
+      "Step 3: Verify output/errors are captured"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "testing",
-    "description": "MemoryRepository perfect for unit tests",
+    "category": "playground_execution",
+    "description": "Playground captures stderr for errors",
     "steps": [
-      "Step 1: Write test using MemoryRepository",
-      "Step 2: Run test suite",
-      "Step 3: Verify tests are fast and isolated"
+      "Step 1: Submit code with syntax error",
+      "Step 2: Verify stderr is captured",
+      "Step 3: Verify error displayed in console pane"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "testing",
-    "description": "Entity models work with factory pattern",
+    "category": "playground_execution",
+    "description": "Playground execution is sandboxed/isolated",
     "steps": [
-      "Step 1: Create factory for generating test entities",
-      "Step 2: Use factory in tests",
-      "Step 3: Verify clean test data generation"
+      "Step 1: Attempt dangerous operations (file system access)",
+      "Step 2: Verify operations are blocked or restricted",
+      "Step 3: Verify security error message is shown"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "security",
-    "description": "SQL injection prevented by parameterized queries",
+    "category": "playground_execution",
+    "description": "Playground supports Nitro component rendering",
     "steps": [
-      "Step 1: Try to inject SQL via filter parameters",
-      "Step 2: Verify injection is prevented",
-      "Step 3: Verify no SQL errors occur"
+      "Step 1: Submit code that creates Nitro components",
+      "Step 2: Execute code",
+      "Step 3: Verify rendered HTML appears in preview pane"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "security",
-    "description": "Entity validation prevents malicious data",
+    "category": "playground_execution",
+    "description": "Playground has execution timeout protection",
     "steps": [
-      "Step 1: Define entity with strict field types",
-      "Step 2: Try to save entity with script tags in string field",
-      "Step 3: Verify validation catches malicious patterns if configured"
+      "Step 1: Submit infinite loop code",
+      "Step 2: Verify execution times out after threshold",
+      "Step 3: Verify timeout error message shown"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_entity",
-    "description": "Entity supports composite primary keys",
+    "category": "playground_ui",
+    "description": "Playground editor has syntax highlighting",
     "steps": [
-      "Step 1: Define entity with multiple primary key fields",
-      "Step 2: Create and save entity",
-      "Step 3: Verify retrieval works with composite key"
+      "Step 1: Open playground editor",
+      "Step 2: Type Python code",
+      "Step 3: Verify syntax highlighting is active",
+      "Step 4: Verify CodeMirror or Monaco is integrated"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_entity",
-    "description": "Entity supports foreign key relationships",
+    "category": "playground_ui",
+    "description": "Playground has live preview pane",
     "steps": [
-      "Step 1: Define User and Post entities with relationship",
-      "Step 2: Create linked entities",
-      "Step 3: Verify relationship traversal works"
+      "Step 1: Submit code that generates HTML",
+      "Step 2: Verify preview pane shows rendered output",
+      "Step 3: Verify preview updates after execution"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_entity",
-    "description": "Entity supports many-to-many relationships",
+    "category": "playground_ui",
+    "description": "Playground has console output pane",
     "steps": [
-      "Step 1: Define Student and Course with many-to-many",
-      "Step 2: Create relationships",
-      "Step 3: Verify bidirectional navigation works"
+      "Step 1: Submit code with print statements",
+      "Step 2: Verify console pane displays output",
+      "Step 3: Verify output includes both stdout and stderr"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_entity",
-    "description": "Entity supports computed fields",
+    "category": "playground_ui",
+    "description": "Playground has clear/reset button",
     "steps": [
-      "Step 1: Define entity with @property computed field",
-      "Step 2: Access computed field",
-      "Step 3: Verify it's calculated correctly but not stored"
+      "Step 1: Fill editor with code and execute",
+      "Step 2: Click clear/reset button",
+      "Step 3: Verify editor and output are cleared"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_entity",
-    "description": "Entity supports field validators",
+    "category": "playground_ui",
+    "description": "Playground has keyboard shortcut for execution",
     "steps": [
-      "Step 1: Define entity with @validator decorator",
-      "Step 2: Try to create entity with invalid value",
-      "Step 3: Verify validator is called and prevents creation"
+      "Step 1: Focus on editor",
+      "Step 2: Press Cmd+Enter or Ctrl+Enter",
+      "Step 3: Verify code executes"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_entity",
-    "description": "Entity lifecycle hooks (before_save, after_save)",
+    "category": "playground_snippet",
+    "description": "PlaygroundSnippet entity stores code examples",
     "steps": [
-      "Step 1: Define entity with lifecycle hook methods",
+      "Step 1: Create PlaygroundSnippet with code, title, description",
       "Step 2: Save entity",
-      "Step 3: Verify hooks are called at correct times"
+      "Step 3: Retrieve and verify data"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_events",
-    "description": "Events support priority ordering",
+    "category": "playground_snippet",
+    "description": "Playground loads snippet examples",
     "steps": [
-      "Step 1: Connect handlers with different priorities",
-      "Step 2: Emit event",
-      "Step 3: Verify handlers execute in priority order"
+      "Step 1: Create multiple PlaygroundSnippets",
+      "Step 2: Render snippet selector in playground",
+      "Step 3: Click snippet",
+      "Step 4: Verify code loads into editor"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_events",
-    "description": "Events support conditional handlers",
+    "category": "component_gallery_discovery",
+    "description": "Gallery auto-discovers components from nitro/components",
     "steps": [
-      "Step 1: Connect handler with condition function",
-      "Step 2: Emit events with different data",
-      "Step 3: Verify handler only executes when condition is true"
+      "Step 1: Scan nitro/components directory",
+      "Step 2: Identify exported components",
+      "Step 3: Verify component list is complete",
+      "Step 4: Verify missing components don't cause errors"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_events",
-    "description": "Events can be cancelled by handlers",
+    "category": "component_gallery_display",
+    "description": "Gallery renders each component with default props",
     "steps": [
-      "Step 1: Connect handler that cancels event propagation",
-      "Step 2: Connect second handler",
-      "Step 3: Emit event",
-      "Step 4: Verify second handler doesn't execute"
+      "Step 1: Navigate to component gallery",
+      "Step 2: Verify each discovered component renders",
+      "Step 3: Verify default props produce valid output"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_persistence",
-    "description": "Custom persistence backend can be implemented",
+    "category": "component_gallery_props",
+    "description": "Gallery inspects function signatures for prop types",
     "steps": [
-      "Step 1: Implement EntityRepositoryInterface",
-      "Step 2: Create RedisRepository class",
-      "Step 3: Configure entity to use RedisRepository",
-      "Step 4: Verify all operations work"
+      "Step 1: Select component in gallery",
+      "Step 2: Verify prop explorer shows all parameters",
+      "Step 3: Verify types are inferred/displayed correctly"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_persistence",
-    "description": "Repository supports read replicas",
+    "category": "component_gallery_props",
+    "description": "Gallery generates form controls for props",
     "steps": [
-      "Step 1: Configure primary and replica database URLs",
-      "Step 2: Perform write operation",
-      "Step 3: Perform read operation",
-      "Step 4: Verify write goes to primary, read from replica"
+      "Step 1: View component with string, bool, int props",
+      "Step 2: Verify text input for strings",
+      "Step 3: Verify checkbox for booleans",
+      "Step 4: Verify number input for integers"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_persistence",
-    "description": "Repository supports connection pooling configuration",
+    "category": "component_gallery_props",
+    "description": "Gallery updates component in real-time when props change",
     "steps": [
-      "Step 1: Configure pool size parameters",
-      "Step 2: Perform many concurrent operations",
-      "Step 3: Verify pool configuration is respected"
+      "Step 1: Change prop value in form control",
+      "Step 2: Verify component re-renders immediately",
+      "Step 3: Verify new prop value is applied"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_datastar",
-    "description": "Datastar SSE endpoint streams updates",
+    "category": "component_gallery_ui",
+    "description": "Gallery shows component source code",
     "steps": [
-      "Step 1: Create endpoint using ServerSentEvents",
-      "Step 2: Connect client",
-      "Step 3: Stream multiple updates",
-      "Step 4: Verify client receives all updates"
+      "Step 1: Select component in gallery",
+      "Step 2: Click 'View Source' or similar",
+      "Step 3: Verify actual component code is displayed with syntax highlighting"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_datastar",
-    "description": "Signals support nested object paths",
+    "category": "component_gallery_ui",
+    "description": "Gallery has search/filter functionality",
     "steps": [
-      "Step 1: Create Signals(user={'name': 'Alice', 'age': 25})",
-      "Step 2: Access signals.user.name",
-      "Step 3: Verify correct path expression is generated"
+      "Step 1: Type component name in search box",
+      "Step 2: Verify gallery filters to matching components",
+      "Step 3: Verify non-matching components are hidden"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "advanced_datastar",
-    "description": "Signals support array operations",
+    "category": "search_indexing",
+    "description": "Search indexes all markdown page content on startup",
     "steps": [
-      "Step 1: Create Signals(items=[])",
-      "Step 2: Use signals.items.push('new')",
-      "Step 3: Verify correct array operation expression"
+      "Step 1: Start application",
+      "Step 2: Verify all DocPage entities are indexed",
+      "Step 3: Verify index includes title, content, headers"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "examples",
-    "description": "Counter app example works end-to-end",
+    "category": "search_indexing",
+    "description": "Search indexes API docstrings from codebase",
     "steps": [
-      "Step 1: Run counter example app",
-      "Step 2: Click increment/decrement buttons",
-      "Step 3: Verify counter updates reactively",
-      "Step 4: Verify state persists (if using persistence)"
+      "Step 1: Scan nitro codebase for classes/functions with docstrings",
+      "Step 2: Extract docstrings into search index",
+      "Step 3: Verify API items are searchable"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "examples",
-    "description": "Todo app example supports CRUD operations",
+    "category": "search_ui",
+    "description": "Search opens with Cmd+K keyboard shortcut",
     "steps": [
-      "Step 1: Run todo example app",
-      "Step 2: Create, read, update, delete todos",
-      "Step 3: Verify all operations work correctly",
-      "Step 4: Verify data persists to database"
+      "Step 1: Press Cmd+K (or Ctrl+K on Windows/Linux)",
+      "Step 2: Verify search modal/command palette opens",
+      "Step 3: Verify focus is on search input"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "examples",
-    "description": "Blog example demonstrates relationships",
+    "category": "search_ui",
+    "description": "Search provides instant results while typing",
     "steps": [
-      "Step 1: Run blog example",
-      "Step 2: Create users, posts, comments",
-      "Step 3: Verify relationships work",
-      "Step 4: Verify nested data displays correctly"
+      "Step 1: Open search",
+      "Step 2: Type query character by character",
+      "Step 3: Verify results update after each keystroke",
+      "Step 4: Verify results are relevant to query"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "examples",
-    "description": "E-commerce example shows event-driven workflow",
+    "category": "search_ui",
+    "description": "Search results show page titles and excerpts",
     "steps": [
-      "Step 1: Run e-commerce example",
-      "Step 2: Place an order",
-      "Step 3: Verify order.placed event triggers email",
-      "Step 4: Verify inventory is updated via event handler"
+      "Step 1: Perform search query",
+      "Step 2: Verify each result shows page title",
+      "Step 3: Verify excerpt with match context is shown",
+      "Step 4: Verify matched terms are highlighted"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "migration",
-    "description": "Migration from StarModel is straightforward",
+    "category": "search_ui",
+    "description": "Search results are navigable with keyboard",
     "steps": [
-      "Step 1: Take existing StarModel code",
-      "Step 2: Change imports to nitro",
-      "Step 3: Verify minimal code changes needed",
-      "Step 4: Verify app works identically"
+      "Step 1: Open search and type query",
+      "Step 2: Press arrow down/up keys",
+      "Step 3: Verify selection moves through results",
+      "Step 4: Press Enter to navigate to selected result"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "backwards_compatibility",
-    "description": "Deprecated features show warnings",
+    "category": "search_ui",
+    "description": "Search escapes/closes with Esc key",
     "steps": [
-      "Step 1: Use deprecated API",
-      "Step 2: Verify DeprecationWarning is raised",
-      "Step 3: Verify warning suggests new API"
+      "Step 1: Open search modal",
+      "Step 2: Press Esc key",
+      "Step 3: Verify search modal closes"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "backwards_compatibility",
-    "description": "Major version changes documented in CHANGELOG",
+    "category": "content_integration",
+    "description": "Docs load from nitro/documents/*.md directory",
     "steps": [
-      "Step 1: Read CHANGELOG.md",
-      "Step 2: Verify breaking changes are clearly marked",
-      "Step 3: Verify migration guides are provided"
+      "Step 1: Place markdown files in nitro/documents/",
+      "Step 2: Start application",
+      "Step 3: Verify DocPage entities created for each file",
+      "Step 4: Verify pages are accessible via routes"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "monitoring",
-    "description": "Entity operations can be logged",
+    "category": "content_integration",
+    "description": "DEVELOPMENT_REPORT.md renders as changelog page",
     "steps": [
-      "Step 1: Configure logging for Nitro",
-      "Step 2: Perform entity operations",
-      "Step 3: Verify operations are logged with details"
+      "Step 1: Load DEVELOPMENT_REPORT.md",
+      "Step 2: Navigate to changelog route",
+      "Step 3: Verify content renders correctly",
+      "Step 4: Verify formatting is preserved"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "monitoring",
-    "description": "Repository statistics can be collected",
+    "category": "content_integration",
+    "description": "TUTORIAL.md content populates Getting Started section",
     "steps": [
-      "Step 1: Enable repository stats",
-      "Step 2: Perform various operations",
-      "Step 3: Query stats (queries executed, cache hits, etc.)",
-      "Step 4: Verify accurate statistics"
+      "Step 1: Load TUTORIAL.md",
+      "Step 2: Navigate to Getting Started",
+      "Step 3: Verify tutorial content is displayed",
+      "Step 4: Verify examples are runnable"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "monitoring",
-    "description": "Event bus metrics are available",
+    "category": "content_integration",
+    "description": "API_REFERENCE.md content populates API Reference section",
     "steps": [
-      "Step 1: Enable event metrics",
-      "Step 2: Emit various events",
-      "Step 3: Query metrics (events fired, handlers executed)",
-      "Step 4: Verify accurate metrics"
+      "Step 1: Load API_REFERENCE.md",
+      "Step 2: Navigate to API Reference",
+      "Step 3: Verify API documentation is displayed",
+      "Step 4: Verify code examples render in CodeBlock components"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "deployment",
-    "description": "Nitro app works with Gunicorn",
+    "category": "layout_structure",
+    "description": "Main docs layout has header, sidebar, content, footer",
     "steps": [
-      "Step 1: Create production Nitro app",
-      "Step 2: Run with gunicorn",
-      "Step 3: Verify app serves requests correctly"
+      "Step 1: Render any docs page",
+      "Step 2: Verify header component exists at top",
+      "Step 3: Verify sidebar component exists on left",
+      "Step 4: Verify main content area",
+      "Step 5: Verify footer component at bottom"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "deployment",
-    "description": "Nitro app works with Uvicorn",
+    "category": "layout_structure",
+    "description": "Header contains logo, navigation, theme toggle",
     "steps": [
-      "Step 1: Create async Nitro app",
-      "Step 2: Run with uvicorn",
-      "Step 3: Verify async operations work correctly"
+      "Step 1: Render header component",
+      "Step 2: Verify Nitro logo/branding present",
+      "Step 3: Verify main navigation links",
+      "Step 4: Verify dark/light theme toggle button"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "deployment",
-    "description": "Nitro app containerizes with Docker",
+    "category": "layout_structure",
+    "description": "Footer contains links and attribution",
     "steps": [
-      "Step 1: Create Dockerfile",
-      "Step 2: Build image",
-      "Step 3: Run container",
-      "Step 4: Verify app works in container"
+      "Step 1: Render footer component",
+      "Step 2: Verify social/external links present",
+      "Step 3: Verify copyright/license info",
+      "Step 4: Verify built with Nitro attribution"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "deployment",
-    "description": "Environment-specific configuration works",
+    "category": "styling_visual",
+    "description": "Dark mode toggle switches between light/dark themes",
     "steps": [
-      "Step 1: Create .env.development and .env.production",
-      "Step 2: Load config based on environment",
-      "Step 3: Verify correct config is used"
+      "Step 1: Render page in light mode",
+      "Step 2: Click dark mode toggle",
+      "Step 3: Verify Tailwind dark: classes activate",
+      "Step 4: Verify all components respect theme",
+      "Step 5: Toggle back and verify light theme returns"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "async_support",
-    "description": "Entity operations work in async context",
+    "category": "styling_visual",
+    "description": "Typography uses Inter or Geist Sans font",
     "steps": [
-      "Step 1: Define async function using Entity",
-      "Step 2: Perform save/load operations",
-      "Step 3: Verify operations complete correctly"
+      "Step 1: Render page",
+      "Step 2: Inspect computed styles",
+      "Step 3: Verify font-family includes Inter or Geist Sans"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "async_support",
-    "description": "Async event handlers execute concurrently",
+    "category": "styling_visual",
+    "description": "Color palette uses Slate/Zinc for neutrals",
     "steps": [
-      "Step 1: Connect 5 async handlers with delays",
-      "Step 2: Call emit_async()",
-      "Step 3: Measure total execution time",
-      "Step 4: Verify concurrent execution (time < sum of delays)"
+      "Step 1: Inspect CSS variables or Tailwind config",
+      "Step 2: Verify neutral colors use slate or zinc scales",
+      "Step 3: Verify consistency across components"
     ],
-    "passes": true
+    "passes": false
   },
   {
-    "category": "async_support",
-    "description": "MemoryRepository works in async context",
+    "category": "styling_visual",
+    "description": "Color palette uses Blue/Indigo for accents",
     "steps": [
-      "Step 1: Use MemoryRepository in async function",
-      "Step 2: Perform concurrent saves/loads",
-      "Step 3: Verify no race conditions"
+      "Step 1: Inspect accent colors (links, buttons, highlights)",
+      "Step 2: Verify blue or indigo color scales are used",
+      "Step 3: Verify brand consistency"
     ],
-    "passes": true
+    "passes": false
+  },
+  {
+    "category": "styling_visual",
+    "description": "Responsive design works on mobile viewports",
+    "steps": [
+      "Step 1: Render page with mobile viewport (< 640px)",
+      "Step 2: Verify layout adapts (sidebar collapse, etc.)",
+      "Step 3: Verify text is readable",
+      "Step 4: Verify interactive elements are accessible"
+    ],
+    "passes": false
+  },
+  {
+    "category": "styling_visual",
+    "description": "Responsive design works on tablet viewports",
+    "steps": [
+      "Step 1: Render page with tablet viewport (768px-1024px)",
+      "Step 2: Verify layout uses space efficiently",
+      "Step 3: Verify navigation is accessible"
+    ],
+    "passes": false
+  },
+  {
+    "category": "datastar_navigation",
+    "description": "Internal navigation uses Datastar to avoid page reload",
+    "steps": [
+      "Step 1: Navigate from page A to page B via link",
+      "Step 2: Verify no full page reload occurs",
+      "Step 3: Verify content swaps via Datastar",
+      "Step 4: Verify scroll position and state preserved"
+    ],
+    "passes": false
+  },
+  {
+    "category": "datastar_navigation",
+    "description": "Browser back/forward buttons work with Datastar navigation",
+    "steps": [
+      "Step 1: Navigate through multiple pages",
+      "Step 2: Click browser back button",
+      "Step 3: Verify previous page loads correctly",
+      "Step 4: Click forward button and verify"
+    ],
+    "passes": false
+  },
+  {
+    "category": "datastar_navigation",
+    "description": "Deep linking works (direct URL access)",
+    "steps": [
+      "Step 1: Navigate to deep URL like /docs/api/entity",
+      "Step 2: Verify page loads correctly without navigation",
+      "Step 3: Verify sidebar and breadcrumbs show correct context"
+    ],
+    "passes": false
+  },
+  {
+    "category": "performance",
+    "description": "Page transitions complete in < 100ms",
+    "steps": [
+      "Step 1: Instrument navigation timing",
+      "Step 2: Navigate between pages",
+      "Step 3: Measure time from click to content visible",
+      "Step 4: Verify average < 100ms"
+    ],
+    "passes": false
+  },
+  {
+    "category": "performance",
+    "description": "Server startup time is < 2 seconds",
+    "steps": [
+      "Step 1: Start application from cold state",
+      "Step 2: Measure time until ready to accept requests",
+      "Step 3: Verify startup time < 2s"
+    ],
+    "passes": false
+  },
+  {
+    "category": "performance",
+    "description": "Markdown rendering is cached for repeated requests",
+    "steps": [
+      "Step 1: Request same page twice",
+      "Step 2: Verify second request uses cached HTML",
+      "Step 3: Verify response time improvement"
+    ],
+    "passes": false
+  },
+  {
+    "category": "error_handling",
+    "description": "404 page shows when route not found",
+    "steps": [
+      "Step 1: Navigate to /docs/nonexistent",
+      "Step 2: Verify 404 page is displayed",
+      "Step 3: Verify helpful message and navigation links"
+    ],
+    "passes": false
+  },
+  {
+    "category": "error_handling",
+    "description": "Markdown parsing errors show graceful error",
+    "steps": [
+      "Step 1: Create DocPage with malformed markdown",
+      "Step 2: Attempt to render",
+      "Step 3: Verify error is caught and user-friendly message shown",
+      "Step 4: Verify server doesn't crash"
+    ],
+    "passes": false
+  },
+  {
+    "category": "error_handling",
+    "description": "Playground execution errors are displayed clearly",
+    "steps": [
+      "Step 1: Submit code with runtime error",
+      "Step 2: Verify error message with traceback in console",
+      "Step 3: Verify user can continue using playground"
+    ],
+    "passes": false
   }
 ]

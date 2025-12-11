@@ -60,12 +60,17 @@ class ActionMetadata:
                 f"Must be between 100 and 599"
             )
 
-    def generate_url_path(self, prefix: str = "") -> str:
+    def generate_url_path(
+        self,
+        prefix: str = "",
+        entity_name_override: Optional[str] = None
+    ) -> str:
         """
         Generate URL path for this action.
 
         Args:
             prefix: URL prefix (e.g., "/api/v1")
+            entity_name_override: Custom entity name (e.g., "users" instead of "user")
 
         Returns:
             Generated URL path
@@ -73,23 +78,42 @@ class ActionMetadata:
         Examples:
             Counter.increment -> "/counter/{id}/increment"
             Product.search -> "/product/search" (class method, no {id})
+            With override: "/users/{id}/activate" (entity_name_override="users")
+            With custom path: @action(path="/add") -> "/counter/{id}/add"
         """
-        if self.path:
-            # Custom path provided
-            return f"{prefix}{self.path}" if prefix else self.path
-
-        # Auto-generate: /{entity_name}/{id}/{method_name}
-        entity_name = self.entity_class_name.lower()
-        method_name = self.function_name
+        # Get entity name (custom or default)
+        entity_name = (entity_name_override or self.entity_class_name).lower()
 
         # Check if method requires instance (has 'self' parameter)
         requires_id = "self" in self.parameters
 
+        # Determine the action segment (custom path or method name)
+        if self.path:
+            # Check if this is an absolute custom path (contains multiple segments or /)
+            # Absolute path: "/custom/path" or "/api/custom"
+            # Relative path: "add", "/add" (single segment after /)
+            path_parts = self.path.strip('/').split('/')
+
+            if len(path_parts) > 1:
+                # Multiple segments = absolute custom path, use as-is
+                custom_path = self.path if self.path.startswith('/') else f'/{self.path}'
+                return f"{prefix}{custom_path}" if prefix else custom_path
+            else:
+                # Single segment = replace action name only
+                action_segment = path_parts[0]
+        else:
+            # Use method name
+            action_segment = self.function_name
+
+        # Build final path with entity name
         if requires_id:
-            return f"{prefix}/{entity_name}/{{id}}/{method_name}"
+            path = f"/{entity_name}/{{id}}/{action_segment}"
         else:
             # Class method - no {id} in path
-            return f"{prefix}/{entity_name}/{method_name}"
+            path = f"/{entity_name}/{action_segment}"
+
+        # Add prefix if provided
+        return f"{prefix}{path}" if prefix else path
 
     def __repr__(self) -> str:
         """String representation for debugging."""
