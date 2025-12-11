@@ -268,7 +268,7 @@
       "Step 3: Verify P component wraps text",
       "Step 4: Verify multiple paragraphs are separate P elements"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "core_engine_component_injection",

@@ -1,8 +1,79 @@
 # Claude Progress Report - Nitro Documentation Platform
 
-## Session 5 (Current) - 2025-12-11
+## Session 6 (Current) - 2025-12-11
 **Branch**: auto-nitro
-**Status**: 🟡 Custom alert syntax partially implemented (bug in progress)
+**Status**: ✅ Custom alert syntax fully implemented - 4 tests passing!
+
+### 🎯 SESSION ACCOMPLISHMENTS
+
+#### Fixed Critical AlertBlock Rendering Bug
+**Problem**: Token attributes were being lost between `read()` and rendering
+- `read()` method was creating token with `object.__new__()` and setting attributes
+- Mistletoe was re-initializing the token, causing attribute loss
+- `token.children` was None and `_alert_type` was missing in renderer
+
+**Solution**: Changed initialization pattern
+- Modified `__init__` to accept tuple `(variant, children)` from `read()`
+- Changed `read()` to return tuple instead of creating token directly
+- This allows mistletoe to properly initialize token with our data
+- Attributes are preserved through the full lifecycle
+
+**Code Changes**:
+```python
+# plugins.py - __init__ method
+def __init__(self, result):
+    if isinstance(result, tuple) and len(result) == 2:
+        variant, children = result
+        self._alert_type = variant
+        self.children = children
+
+# plugins.py - read method returns tuple
+return (variant_str, children_list)
+```
+
+#### Verification Complete
+- ✅ All 4 alert variants render correctly (info, warning, danger, tip)
+- ✅ Proper color schemes: blue, yellow, red, green
+- ✅ Lucide icons display: info, alert-triangle, alert-circle, lightbulb
+- ✅ Markdown content inside alerts renders (bold, links, etc.)
+- ✅ `data-variant` attribute set correctly for each type
+- ✅ Screenshot verification shows proper visual rendering
+- ✅ Previous tests still passing (headers, links, tables, etc.)
+
+#### Created Browser Automation Tool
+- **Location**: `simple_browser.js`
+- **Purpose**: Take screenshots in headless environment
+- **Features**: Puppeteer-based, full page screenshots
+- **Usage**: `node simple_browser.js <url> <output.png>`
+
+### 📊 PROGRESS METRICS
+
+**Feature List Status**: 24/94 tests passing (25.5%)
+**Progress this session**: +4 tests (from 20 to 24)
+
+**Tests completed**:
+- ✅ Test #15: Custom alert syntax `::: warning` renders Alert component
+- ✅ Test #16: Custom alert syntax `::: info` renders Alert component
+- ✅ Test #17: Custom alert syntax `::: danger` renders Alert component
+- ✅ Test #18: Custom alert syntax `::: tip` renders Alert component
+
+### 🎓 KEY LESSONS LEARNED
+
+**Mistletoe Custom Token Lifecycle**:
+1. `start(line)` - Check if line starts this token type
+2. `read(lines)` - Parse content and return data for `__init__`
+3. `__init__(result)` - Initialize token with data from `read()`
+4. Renderer receives fully initialized token
+
+**Don't bypass `__init__`**: Using `object.__new__()` in `read()` causes issues because mistletoe re-initializes tokens. Instead, return data from `read()` and handle it in `__init__`.
+
+**Token Attributes**: Use private attributes (e.g., `_alert_type`) to avoid potential conflicts with mistletoe's internal attributes.
+
+---
+
+## Session 5 - 2025-12-11
+**Branch**: auto-nitro
+**Status**: 🟡 Custom alert syntax partially implemented (bug discovered)
 
 ### 🎯 ACCOMPLISHMENTS
 
