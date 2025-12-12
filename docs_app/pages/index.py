@@ -14,14 +14,32 @@ def index():
         H1("RustyTags Documentation", cls="text-4xl font-bold mb-4"),
         P("A high-performance HTML generation library that combines Rust-powered performance with modern Python web development."),
         
-        Section("Component Documentation",
-            P("Explore the RustyTags Xtras components:"),
+        Section("Foundation Components",
+            P("Basic building blocks for your UI:"),
+            Ul(
+                Li(A("Button", href="/xtras/button", cls="color-blue-6 text-decoration-underline"), " - Versatile button with variants and sizes"),
+                Li(A("Card", href="/xtras/card", cls="color-blue-6 text-decoration-underline"), " - Container for grouping related content"),
+                Li(A("Badge", href="/xtras/badge", cls="color-blue-6 text-decoration-underline"), " - Status indicators and labels"),
+                Li(A("Alert", href="/xtras/alert", cls="color-blue-6 text-decoration-underline"), " - Contextual feedback messages"),
+                Li(A("Label", href="/xtras/label", cls="color-blue-6 text-decoration-underline"), " - Form input labels"),
+                Li(A("Kbd", href="/xtras/kbd", cls="color-blue-6 text-decoration-underline"), " - Keyboard shortcut display"),
+            ),
+        ),
+
+        Section("Interactive Components",
+            P("Complex components with state and behavior:"),
+            Ul(
+                Li(A("Tabs", href="/xtras/tabs", cls="color-blue-6 text-decoration-underline"), " - Tabbed content panels"),
+                Li(A("Accordion", href="/xtras/accordion", cls="color-blue-6 text-decoration-underline"), " - Collapsible content sections"),
+                Li(A("Dialog", href="/xtras/dialog", cls="color-blue-6 text-decoration-underline"), " - Modal dialogs"),
+            ),
+        ),
+
+        Section("Utilities",
+            P("Helper components and documentation:"),
             Ul(
                 Li(A("RustyTags Datastar SDK", href="/xtras/rustytags", cls="color-blue-6 text-decoration-underline")),
-                Li(A("CodeBlock Component", href="/xtras/codeblock", cls="color-blue-6 text-decoration-underline")),
-                Li(A("Tabs Component", href="/xtras/tabs", cls="color-blue-6 text-decoration-underline")),
-                Li(A("Accordion Component (Simplified)", href="/xtras/accordion", cls="color-blue-6 text-decoration-underline")),
-                Li(A("Dialog Component", href="/xtras/dialog", cls="color-blue-6 text-decoration-underline")),
+                Li(A("CodeBlock", href="/xtras/codeblock", cls="color-blue-6 text-decoration-underline"), " - Syntax highlighted code"),
             ),
         ),
         
