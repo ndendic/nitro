@@ -16,3 +16,11 @@ from .dialog import (
     DialogClose,
 )
 from .icons import LucideIcon
+
+# P0 Foundation Components
+from .button import Button, ButtonGroup
+from .card import Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter
+from .badge import Badge
+from .alert import Alert, AlertTitle, AlertDescription
+from .label import Label
+from .kbd import Kbd
