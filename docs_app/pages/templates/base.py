@@ -9,11 +9,28 @@ from nitro import *  # noqa: F403
 from nitro.infrastructure.html import Section as HTMLSection
 from nitro.infrastructure.html.components import *
 from typing import Callable, ParamSpec, TypeVar
+from pathlib import Path
+from domain.page_model import DocPage
 from .components import Sidebar, Navbar
 from functools import wraps
 
+
 _P = ParamSpec("_P")
 _R = TypeVar("_R")
+
+def get_pages():
+    content_dir = Path(__file__).parent.parent.parent / "content"
+    md_files = list(content_dir.rglob("*.md"))
+    all_pages = []
+    for md_file in md_files:
+        try:
+            page_obj = DocPage.load_from_fs(md_file)
+            all_pages.append(page_obj)
+        except Exception as e:
+            print(f"Error loading {md_file}: {e}")
+            continue
+    return all_pages
+
 # Shared headers for all documentation pages
 hdrs = (
     Link(
@@ -66,7 +83,7 @@ def template(title: str):
         @wraps(func)
         def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
             return Fragment(
-                Sidebar(),
+                Sidebar(get_pages()),
                 Main(
                     Navbar(),
                     Div(

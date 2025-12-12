@@ -37,7 +37,52 @@ def Navbar():
     #     cls="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
     # )
 
-def Sidebar():
+def Sidebar(pages: list = []):
+
+    # Group pages by category
+    categories = {}
+    for page in pages:
+        category = page.category
+        if category not in categories:
+            categories[category] = []
+        categories[category].append(page)
+
+    # Sort pages within each category by order
+    for category in categories:
+        categories[category].sort(key=lambda p: p.order)
+
+    # Build sidebar sections
+    sections = []
+    for category, category_pages in sorted(categories.items()):        
+        # Pages in category
+        page_links = []
+        for page in category_pages:
+            page_links.append(
+                Li(
+                    A(
+                        page.title,
+                        href=f"/documentation/{page.slug}",
+                        data_on_click=f"@get('/documentation/{page.slug}')",
+                    ),
+                    cls="mb-1"
+                )
+            )
+
+        # Category header
+        sections.append(
+            Details(
+                Summary(
+                    LucideIcon('book'),
+                    category,
+                    aria_controls='submenu-content-1-3-content'
+                ),
+                Ul(
+                    *page_links,
+                    cls="mb-6 space-y-1"
+                )
+            ),
+        )
+        
     return Aside(
         Nav(
             Section(
@@ -46,95 +91,14 @@ def Sidebar():
                     Ul(
                         Li(
                             A(
-                                Svg(
-                                    Path(d='m7 11 2-2-2-2'),
-                                    Path(d='M11 13h4'),
-                                    Rect(width='18', height='18', x='3', y='3', rx='2', ry='2'),
-                                    xmlns='http://www.w3.org/2000/svg',
-                                    width='24',
-                                    height='24',
-                                    viewbox='0 0 24 24',
-                                    fill='none',
-                                    stroke='currentColor',
-                                    stroke_width='2',
-                                    stroke_linecap='round',
-                                    stroke_linejoin='round'
-                                ),
+                                LucideIcon('terminal'),
                                 Span('Playground'),
                                 href='#'
                             )
                         ),
+
                         Li(
-                            A(
-                                Svg(
-                                    Path(d='M12 8V4H8'),
-                                    Rect(width='16', height='12', x='4', y='8', rx='2'),
-                                    Path(d='M2 14h2'),
-                                    Path(d='M20 14h2'),
-                                    Path(d='M15 13v2'),
-                                    Path(d='M9 13v2'),
-                                    xmlns='http://www.w3.org/2000/svg',
-                                    width='24',
-                                    height='24',
-                                    viewbox='0 0 24 24',
-                                    fill='none',
-                                    stroke='currentColor',
-                                    stroke_width='2',
-                                    stroke_linecap='round',
-                                    stroke_linejoin='round'
-                                ),
-                                Span('Models'),
-                                href='#'
-                            )
-                        ),
-                        Li(
-                            Details(
-                                Summary(
-                                    Svg(
-                                        Path(d='M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z'),
-                                        Circle(cx='12', cy='12', r='3'),
-                                        xmlns='http://www.w3.org/2000/svg',
-                                        width='24',
-                                        height='24',
-                                        viewbox='0 0 24 24',
-                                        fill='none',
-                                        stroke='currentColor',
-                                        stroke_width='2',
-                                        stroke_linecap='round',
-                                        stroke_linejoin='round'
-                                    ),
-                                    'Settings',
-                                    aria_controls='submenu-content-1-3-content'
-                                ),
-                                Ul(
-                                    Li(
-                                        A(
-                                            Span('General'),
-                                            href='#'
-                                        )
-                                    ),
-                                    Li(
-                                        A(
-                                            Span('Team'),
-                                            href='#'
-                                        )
-                                    ),
-                                    Li(
-                                        A(
-                                            Span('Billing'),
-                                            href='#'
-                                        )
-                                    ),
-                                    Li(
-                                        A(
-                                            Span('Limits'),
-                                            href='#'
-                                        )
-                                    ),
-                                    id='submenu-content-1-3-content'
-                                ),
-                                id='submenu-content-1-3'
-                            )
+                            *sections
                         )
                     ),
                     role='group',

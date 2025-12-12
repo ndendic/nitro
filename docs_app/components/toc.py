@@ -108,12 +108,11 @@ def TableOfContents(headers: List[Tuple[str, str, int]]):
             Div(
                 Span("On this page", cls="text-sm font-semibold mb-2 block"),
                 Ul(*items, cls="space-y-1"),
-                cls="sticky top-6"
             ),
             aria_label="Table of contents",
-            cls="toc-nav"
+            cls="toc-nav sticky top-22 space-y-2 [&_ul]:m-0 [&_ul]:list-none [&_ul_ul]:pl-4 [&_li]:mt-0 [&_li]:pt-2 [&_a]:inline-block [&_a]:no-underline [&_a]:transition-colors [&_a]:hover:text-foreground [&_a]:text-muted-foreground"
         ),
         Div(scroll_behavior_styles),  # Include smooth scroll CSS
         Div(scroll_spy_script),  # Include scroll spy script
-        cls="hidden xl:block w-64 shrink-0"
+        cls="hidden sticky top-6 xl:block w-64 shrink-0"
     )

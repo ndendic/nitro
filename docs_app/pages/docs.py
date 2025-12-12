@@ -15,14 +15,14 @@ from components.toc import TableOfContents
 from rusty_tags import Div, H1, P, Article, Nav, A
 from nitro.infrastructure.html import Page
 
-from .templates.base import hdrs, htmlkws, bodykws, ftrs, page
+from .templates.base import hdrs, htmlkws, bodykws, ftrs, template
 
 router = APIRouter()
 
 
 @router.get("/documentation/{slug}", response_class=HTMLResponse)
-# @page(title="Nitro Documentation")
-async def view_doc(slug: str):
+@template(title="Nitro Documentation")
+def view_doc(slug: str):
     """Display a documentation page by slug"""
 
     # Try to load the markdown file
@@ -70,53 +70,34 @@ async def view_doc(slug: str):
         headers = doc_page.extract_headers()
 
         # Create the page with sidebar layout
-        page = Page(
-            Div(
-                # Sidebar
-                Sidebar(all_pages, current_page=slug, mobile=True),
+        return Div(
+                # Breadcrumbs
+                Breadcrumbs(breadcrumb_segments, doc_page.title),
 
-                # Main content area with TOC
+                # Content with TOC
                 Div(
-                    # Breadcrumbs
-                    Breadcrumbs(breadcrumb_segments, doc_page.title),
-
-                    # Content with TOC
-                    Div(
-                        # Article content
-                        Article(
-                            rendered_html,
-                            cls="prose prose-slate dark:prose-invert max-w-none"
-                        ),
-
-                        # Table of Contents (on right side)
-                        TableOfContents(headers),
-
-                        cls="flex gap-8"
+                    # Article content
+                    Article(
+                        rendered_html,
+                        cls="prose prose-slate dark:prose-invert max-w-none"
                     ),
-                    cls="flex-1 p-8 ml-0 lg:ml-64 transition-all"
+
+                    # Table of Contents (on right side)
+                    TableOfContents(headers),
+
+                    cls="flex gap-8"
                 ),
+                cls="flex-1 transition-all"
+            )
 
-                cls="flex min-h-screen"
-            ),
-            title=doc_page.title,
-            datastar=True,
-            highlightjs=True,
-            tailwind4=True,
-            lucide=True,
-            hdrs=hdrs,
-            htmlkw=htmlkws,
-            bodykw=bodykws,
-            ftrs=ftrs,
-        )
-
-        return str(page)
-
+            
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error rendering page: {str(e)}")
 
 
 @router.get("/documentation", response_class=HTMLResponse)
-async def docs_index():
+@template(title="Nitro Documentation")
+def docs_index():
     """Display documentation index page"""
 
     # List all available documentation pages
@@ -164,15 +145,8 @@ async def docs_index():
             )
         )
 
-    page = Page(
-        Article(
+    return Article(
             H1("Documentation", cls="text-4xl font-bold mb-8"),
             *sections,
             cls="max-w-4xl mx-auto py-8"
-        ),
-        title="Nitro Documentation",
-        datastar=True,
-        tailwind4=True
-    )
-
-    return str(page)
+        )
