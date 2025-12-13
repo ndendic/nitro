@@ -48,6 +48,7 @@ def index():
                 Li(A("Accordion", href="/xtras/accordion", cls="color-blue-6 text-decoration-underline"), " - Collapsible content sections"),
                 Li(A("Dialog", href="/xtras/dialog", cls="color-blue-6 text-decoration-underline"), " - Modal dialogs"),
                 Li(A("Dropdown Menu", href="/xtras/dropdown", cls="color-blue-6 text-decoration-underline"), " - Accessible dropdown menu"),
+                Li(A("Popover", href="/xtras/popover", cls="color-blue-6 text-decoration-underline"), " - Positioned overlay container"),
             ),
         ),
 

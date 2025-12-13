@@ -30,6 +30,7 @@ from pages.textarea import router as textarea_router
 from pages.field import router as field_router
 from pages.input_group import router as input_group_router
 from pages.dropdown import router as dropdown_router
+from pages.popover import router as popover_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -61,6 +62,7 @@ app.include_router(textarea_router)
 app.include_router(field_router)
 app.include_router(input_group_router)
 app.include_router(dropdown_router)
+app.include_router(popover_router)
 
 
 @app.get("/cmds/{command}/{sender}")

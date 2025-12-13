@@ -27,7 +27,7 @@ Dropdown, Popover, and Tooltip using Datastar signals for visibility and positio
 | # | Feature | Description | Status |
 |---|---------|-------------|--------|
 | 1 | [Dropdown Menu](features/01-dropdown-menu.md) | Dropdown menu with compound component pattern | Completed |
-| 2 | [Popover](features/02-popover.md) | Positioned overlay container | Pending |
+| 2 | [Popover](features/02-popover.md) | Positioned overlay container | Completed |
 | 3 | [Tooltip](features/03-tooltip.md) | Pure CSS tooltip (no JavaScript) | Pending |
 | 4 | [Alert Dialog](features/04-alert-dialog.md) | Confirmation dialog with native HTML dialog | Pending |
 | 5 | [Documentation](features/05-documentation.md) | Documentation pages for all P2 components | Pending |
@@ -60,27 +60,30 @@ Dropdown, Popover, and Tooltip using Datastar signals for visibility and positio
 **Session completed: 2024-12-13**
 
 ### Completed this session:
-- ✅ Implemented DropdownMenu component with compound component pattern (closure-based)
-- ✅ Created documentation page at `/xtras/dropdown` with 6 examples
-- ✅ Added Dropdown Menu link to index page Interactive Components section
-- ✅ Verified dropdown opens/closes on trigger click
-- ✅ Verified click outside closes dropdown
-- ✅ Escape key closes overlays
-- ✅ ARIA attributes present and working with Datastar dynamic updates
+- ✅ Implemented Popover component with compound component pattern (closure-based)
+- ✅ Created documentation page at `/xtras/popover` with 6 examples (basic, form content, positioning, alignment, close button, rich content)
+- ✅ Added Popover link to index page Interactive Components section
+- ✅ Fixed PopoverClose component - changed from closure to direct component with `popover_id` parameter
+- ✅ PopoverContent now processes child closures for nested components
+- ✅ All ARIA attributes present with Datastar dynamic updates
 
 ### Implementation notes:
-- Component file: `nitro/infrastructure/html/components/dropdown.py`
-- Documentation: `docs_app/pages/dropdown.py`
-- Uses Basecoat CSS classes: `.dropdown-menu`, `[data-popover]`, `[role="menuitem"]`
+- Component file: `nitro/infrastructure/html/components/popover.py`
+- Documentation: `docs_app/pages/popover.py`
+- Uses Basecoat CSS classes: `.popover`, `[data-popover]`
 - Uses Datastar signals for open/close state with `data-on-click--outside` and `data-on-keydown--escape`
-- Fixed issue with `aria-hidden` needing both initial static value AND `data-attr-aria-hidden` for dynamic updates
+- `PopoverClose` requires explicit `popover_id` parameter to work when nested inside other elements
+
+### Components completed in Phase 2:
+1. DropdownMenu - Complete
+2. Popover - Complete
 
 ### Next feature to implement:
-- Feature 2: Popover component (similar pattern to dropdown but more general purpose)
+- Feature 3: Tooltip component (pure CSS, no JavaScript)
 
 ### What to work on next:
-1. Read `features/02-popover.md` for Popover requirements
-2. Implement Popover component following same compound component pattern
-3. Popover is more general purpose than dropdown (no menu semantics)
+1. Read `features/03-tooltip.md` for Tooltip requirements
+2. Implement Tooltip component (should be simpler - CSS-only hover behavior)
+3. Then implement Alert Dialog (Feature 4)
 ------------------------------------
 Remove resolved and obsolete comments and leave relevant instructions between markers! <--DO NOT DELETE THIS SENTANCE

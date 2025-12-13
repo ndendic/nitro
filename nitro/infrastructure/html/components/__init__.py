@@ -45,3 +45,9 @@ from .dropdown import (
     DropdownSeparator,
     DropdownLabel,
 )
+from .popover import (
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverClose,
+)
