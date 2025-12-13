@@ -1,6 +1,6 @@
 # Feature: Select Component
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 1 - Form Controls  
 **Priority**: High  
 
@@ -71,10 +71,10 @@ Field(
 
 ## Acceptance Criteria
 
-- [ ] Select renders with options
-- [ ] Datastar binding updates signal
-- [ ] Placeholder shows correctly
-- [ ] Disabled state works
-- [ ] Documentation shows signal changes
+- [x] Select renders with options
+- [x] Datastar binding updates signal
+- [x] Placeholder shows correctly
+- [x] Disabled state works
+- [x] Documentation shows signal changes
 - [ ] Pyright passes
 

@@ -29,7 +29,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 | 1 | [Checkbox](features/01-checkbox.md) | Checkbox input with Datastar binding | Completed |
 | 2 | [Radio Group](features/02-radio-group.md) | Radio group with compound component pattern | Completed |
 | 3 | [Switch](features/03-switch.md) | Toggle switch using checkbox with role="switch" | Completed |
-| 4 | [Select](features/04-select.md) | Native select with Datastar binding | Pending |
+| 4 | [Select](features/04-select.md) | Native select with Datastar binding | Completed |
 | 5 | [Textarea](features/05-textarea.md) | Textarea with two-way binding | Pending |
 | 6 | [Field](features/06-field.md) | Form field wrapper with label, description, error | Pending |
 | 7 | [Input Group](features/07-input-group.md) | Input with prefix/suffix elements | Pending |
@@ -46,7 +46,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 - [x] Checkbox toggles and signal updates
 - [x] Radio group only allows one selection
 - [x] Switch animates smoothly
-- [ ] Select dropdown works with Datastar binding
+- [x] Select dropdown works with Datastar binding
 - [ ] Field shows error state correctly
 - [ ] Keyboard navigation works (Tab, Space, Enter)
 - [ ] Documentation pages show signal state changes in Preview
@@ -153,8 +153,48 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 - Disabled states render correctly
 
 **Next Steps:**
-- Continue with Feature #4: Select component
+- Continue with Feature #5: Textarea component
 - Consider running Pyright to verify type hints for all P1 components
+
+------------------------------------
+**Session: 2025-12-13 (Select implementation)**
+
+**Completed:**
+- ✅ Select component implemented (`nitro/infrastructure/html/components/select.py`)
+- ✅ SelectOption helper for option elements
+- ✅ SelectOptGroup for option grouping
+- ✅ Documentation page created (`docs_app/pages/select.py`)
+- ✅ Router registered in `app.py`
+- ✅ Exported from components `__init__.py` (Select, SelectOption, SelectOptGroup)
+- ✅ Added to index page under "Form Controls" section
+
+**Implementation Notes:**
+- Select supports Datastar `data_bind` for two-way binding (string or Signal)
+- Uses `.select` class for Basecoat styling (context-based: inside `.field` or standalone)
+- `id` parameter is optional (made backward-compatible with existing Navbar usage)
+- Placeholder is implemented as a disabled first option
+- SelectOptGroup allows organizing options into logical groups
+
+**Documentation Route:** `/xtras/select`
+
+**Documentation Examples:**
+- Basic select with options
+- Select with placeholder
+- Select with Datastar binding showing live state
+- Option groups example
+- Disabled states (both select and individual options)
+- API reference for Select, SelectOption, SelectOptGroup
+
+**Verified:**
+- Select renders correctly with Basecoat styling
+- Placeholder option shows correctly
+- Option groups render correctly
+- Datastar binding attributes present in HTML output
+- All documentation sections render without errors
+
+**Next Steps:**
+- Continue with Feature #5: Textarea component
+- Run Pyright to verify type hints for all P1 components so far
 
 ------------------------------------
 Remove resolved and obsolete comments and leave relevant instructions between markers! <--DO NOT DELETE THIS SENTANCE
