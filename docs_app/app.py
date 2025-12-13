@@ -28,6 +28,7 @@ from pages.switch import router as switch_router
 from pages.select import router as select_router
 from pages.textarea import router as textarea_router
 from pages.field import router as field_router
+from pages.input_group import router as input_group_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -57,6 +58,7 @@ app.include_router(switch_router)
 app.include_router(select_router)
 app.include_router(textarea_router)
 app.include_router(field_router)
+app.include_router(input_group_router)
 
 
 @app.get("/cmds/{command}/{sender}")

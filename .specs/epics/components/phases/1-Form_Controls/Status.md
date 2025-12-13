@@ -32,7 +32,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 | 4 | [Select](features/04-select.md) | Native select with Datastar binding | Completed |
 | 5 | [Textarea](features/05-textarea.md) | Textarea with two-way binding | Completed |
 | 6 | [Field](features/06-field.md) | Form field wrapper with label, description, error | Completed |
-| 7 | [Input Group](features/07-input-group.md) | Input with prefix/suffix elements | Pending |
+| 7 | [Input Group](features/07-input-group.md) | Input with prefix/suffix elements | Completed |
 | 8 | [Documentation](features/08-documentation.md) | Documentation pages for all P1 components | Pending |
 
 ## Mandatory Testing Success Criteria
@@ -272,13 +272,54 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 - Datastar binding works (checkbox state updates reflected in UI)
 - All documentation sections render without errors
 
+------------------------------------
+**Session: 2025-12-13 (Input Group implementation)**
+
+**Completed:**
+- ✅ InputGroup component implemented (`nitro/infrastructure/html/components/input_group.py`)
+- ✅ InputPrefix component for prefix elements (text, icons)
+- ✅ InputSuffix component for suffix elements (text, icons)
+- ✅ Documentation page created (`docs_app/pages/input_group.py`)
+- ✅ Router registered in `app.py`
+- ✅ Exported from components `__init__.py` (InputGroup, InputPrefix, InputSuffix)
+- ✅ Added to index page under "Form Controls" section
+
+**Implementation Notes:**
+- Uses Tailwind utility classes (no custom CSS) as per spec
+- InputGroup uses flexbox for layout with items-stretch for equal height
+- Border radius handled via Tailwind selectors: first-child rounded-l, last-child rounded-r
+- Double borders removed via [&>*:not(:first-child)]:border-l-0
+- Input fills available space via [&>input]:flex-1
+- InputPrefix/InputSuffix use bg-muted/50, text-muted-foreground for subtle styling
+
+**Documentation Route:** `/xtras/input-group`
+
+**Documentation Examples:**
+- Prefix with text ($)
+- Suffix with text (.com)
+- Prefix with icon (search, credit card, user)
+- Suffix with icon (mail)
+- Both prefix and suffix (https://.../.path)
+- With Datastar binding showing live state
+- With Field wrapper for complete forms
+- Common variations (credit card, phone, twitter, percentage)
+
+**Verified:**
+- Prefix/suffix render correctly
+- Border radius handled at edges
+- Input fills available space
+- Icons render in prefix/suffix
+- Datastar binding works (typing updates state display)
+- All documentation sections render without errors
+
 **Progress Summary:**
-- Phase 1: 6/8 features completed (Checkbox, Radio, Switch, Select, Textarea, Field)
-- Remaining: Input Group, Documentation pages
+- Phase 1: 7/8 features completed (Checkbox, Radio, Switch, Select, Textarea, Field, InputGroup)
+- Remaining: Documentation pages (Feature #8)
 
 **Next Steps:**
-- Continue with Feature #7: Input Group component
+- Feature #8 is about documentation pages - most are already done as each component has its own doc page
 - Run Pyright to verify type hints for all P1 components
+- Consider Phase 1 substantially complete - only final documentation review needed
 
 ------------------------------------
 Remove resolved and obsolete comments and leave relevant instructions between markers! <--DO NOT DELETE THIS SENTANCE

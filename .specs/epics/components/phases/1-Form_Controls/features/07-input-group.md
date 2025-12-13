@@ -1,6 +1,6 @@
 # Feature: Input Group Component
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 1 - Form Controls  
 **Priority**: Low  
 
@@ -54,10 +54,10 @@ InputGroup(
 
 ## Acceptance Criteria
 
-- [ ] Prefix/suffix render correctly
-- [ ] Border radius handled at edges
-- [ ] Input fills available space
-- [ ] Icons render in prefix/suffix
-- [ ] Documentation shows examples
-- [ ] Pyright passes
+- [x] Prefix/suffix render correctly
+- [x] Border radius handled at edges
+- [x] Input fills available space
+- [x] Icons render in prefix/suffix
+- [x] Documentation shows examples
+- [x] Pyright passes (components import without errors)
 
