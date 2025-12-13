@@ -1,6 +1,6 @@
 # Feature: Checkbox Component
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 1 - Form Controls  
 **Priority**: High  
 
@@ -49,8 +49,8 @@ Checkbox("I agree", id="agree", bind=accepted)
 
 ## Documentation Page
 
-**File**: `nitro/docs_app/pages/components/checkbox.py`  
-**Route**: `/components/checkbox`
+**File**: `nitro/docs_app/pages/checkbox.py`
+**Route**: `/xtras/checkbox`
 
 ### Required Examples
 - Basic checkbox with label
@@ -60,10 +60,10 @@ Checkbox("I agree", id="agree", bind=accepted)
 
 ## Acceptance Criteria
 
-- [ ] Checkbox toggles correctly
-- [ ] Datastar bind updates signal
-- [ ] Label clicking toggles checkbox
-- [ ] Disabled state works
-- [ ] Documentation shows signal changes
+- [x] Checkbox toggles correctly
+- [x] Datastar bind updates signal
+- [x] Label clicking toggles checkbox
+- [x] Disabled state works
+- [x] Documentation shows signal changes
 - [ ] Pyright passes
 

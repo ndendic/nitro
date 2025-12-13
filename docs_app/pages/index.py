@@ -28,6 +28,13 @@ def index():
             ),
         ),
 
+        Section("Form Controls",
+            P("Form input components with Datastar binding:"),
+            Ul(
+                Li(A("Checkbox", href="/xtras/checkbox", cls="color-blue-6 text-decoration-underline"), " - Checkbox with two-way binding"),
+            ),
+        ),
+
         Section("Interactive Components",
             P("Complex components with state and behavior:"),
             Ul(

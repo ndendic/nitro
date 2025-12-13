@@ -26,3 +26,6 @@ from .label import Label
 from .kbd import Kbd
 from .spinner import Spinner
 from .skeleton import Skeleton
+
+# P1 Form Controls
+from .checkbox import Checkbox

@@ -26,7 +26,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 
 | # | Feature | Description | Status |
 |---|---------|-------------|--------|
-| 1 | [Checkbox](features/01-checkbox.md) | Checkbox input with Datastar binding | Pending |
+| 1 | [Checkbox](features/01-checkbox.md) | Checkbox input with Datastar binding | Completed |
 | 2 | [Radio Group](features/02-radio-group.md) | Radio group with compound component pattern | Pending |
 | 3 | [Switch](features/03-switch.md) | Toggle switch using checkbox with role="switch" | Pending |
 | 4 | [Select](features/04-select.md) | Native select with Datastar binding | Pending |
@@ -43,7 +43,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 - [ ] Documentation pages render without errors
 
 ### Visual Verification using skill or MCP
-- [ ] Checkbox toggles and signal updates
+- [x] Checkbox toggles and signal updates
 - [ ] Radio group only allows one selection
 - [ ] Switch animates smoothly
 - [ ] Select dropdown works with Datastar binding
@@ -60,6 +60,27 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 ## Handover notes for next developer
 
 ------------------------------------
-HANDOVER NOTES GO HERE! Summarize your handover notes and leave them!
+**Session: 2025-12-13**
+
+**Completed:**
+- ✅ Checkbox component implemented (`nitro/infrastructure/html/components/checkbox.py`)
+- ✅ Documentation page created (`docs_app/pages/checkbox.py`)
+- ✅ Router registered in `app.py`
+- ✅ Exported from components `__init__.py`
+- ✅ Added to index page under "Form Controls" section
+
+**Implementation Notes:**
+- Checkbox supports Datastar `data_bind` for two-way binding
+- Uses Basecoat's context-based styling (checkbox inside `.field` gets styled automatically)
+- When `*children` are provided, wraps checkbox+label in `<label>` for accessibility
+- When no children, returns just the `<input>` for custom layouts
+- Fixed bug with `cls="None"` appearing when cls is empty string
+
+**Documentation Route:** `/xtras/checkbox`
+
+**Next Steps:**
+- Continue with Feature #2: Radio Group
+- Consider running Pyright to verify type hints
+
 ------------------------------------
 Remove resolved and obsolete comments and leave relevant instructions between markers! <--DO NOT DELETE THIS SENTANCE
