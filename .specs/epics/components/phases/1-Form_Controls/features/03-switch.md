@@ -1,7 +1,7 @@
 # Feature: Switch Component
 
-**Status**: Pending  
-**Phase**: 1 - Form Controls  
+**Status**: Completed
+**Phase**: 1 - Form Controls
 **Priority**: High  
 
 ## Overview
@@ -44,8 +44,8 @@ Switch("Dark mode", id="dark", bind=settings.dark_mode)
 
 ## Documentation Page
 
-**File**: `nitro/docs_app/pages/components/switch.py`  
-**Route**: `/components/switch`
+**File**: `nitro/docs_app/pages/switch.py`
+**Route**: `/xtras/switch`
 
 ### Required Examples
 - Basic switch with label
@@ -55,10 +55,10 @@ Switch("Dark mode", id="dark", bind=settings.dark_mode)
 
 ## Acceptance Criteria
 
-- [ ] Switch toggles smoothly
-- [ ] role="switch" attribute present
-- [ ] Datastar binding updates signal
-- [ ] CSS animation works
-- [ ] Documentation shows signal changes
+- [x] Switch toggles smoothly
+- [x] role="switch" attribute present
+- [x] Datastar binding updates signal
+- [x] CSS animation works
+- [x] Documentation shows signal changes
 - [ ] Pyright passes
 

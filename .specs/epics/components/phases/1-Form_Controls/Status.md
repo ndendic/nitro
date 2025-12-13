@@ -28,7 +28,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 |---|---------|-------------|--------|
 | 1 | [Checkbox](features/01-checkbox.md) | Checkbox input with Datastar binding | Completed |
 | 2 | [Radio Group](features/02-radio-group.md) | Radio group with compound component pattern | Completed |
-| 3 | [Switch](features/03-switch.md) | Toggle switch using checkbox with role="switch" | Pending |
+| 3 | [Switch](features/03-switch.md) | Toggle switch using checkbox with role="switch" | Completed |
 | 4 | [Select](features/04-select.md) | Native select with Datastar binding | Pending |
 | 5 | [Textarea](features/05-textarea.md) | Textarea with two-way binding | Pending |
 | 6 | [Field](features/06-field.md) | Form field wrapper with label, description, error | Pending |
@@ -45,7 +45,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 ### Visual Verification using skill or MCP
 - [x] Checkbox toggles and signal updates
 - [x] Radio group only allows one selection
-- [ ] Switch animates smoothly
+- [x] Switch animates smoothly
 - [ ] Select dropdown works with Datastar binding
 - [ ] Field shows error state correctly
 - [ ] Keyboard navigation works (Tab, Space, Enter)
@@ -112,8 +112,49 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 - Disabled options render correctly
 
 **Next Steps:**
-- Continue with Feature #3: Switch component
+- Continue with Feature #4: Select component
 - Consider running Pyright to verify type hints
+
+------------------------------------
+**Session: 2025-12-13 (Switch implementation)**
+
+**Completed:**
+- ✅ Switch component implemented (`nitro/infrastructure/html/components/switch.py`)
+- ✅ Documentation page created (`docs_app/pages/switch.py`)
+- ✅ Router registered in `app.py`
+- ✅ Exported from components `__init__.py`
+- ✅ Added to index page under "Form Controls" section
+
+**Implementation Notes:**
+- Switch uses `role="switch"` attribute for Basecoat CSS styling
+- Added `class="input"` to ensure Basecoat styling works outside `.form`/`.field` context
+- Basecoat CSS targets: `.form/.field input[role='switch']` OR `.input[role='switch']`
+- Supports Datastar `data_bind` for two-way binding (same pattern as Checkbox)
+- When `*children` are provided, wraps switch+label in `<label>` for accessibility
+- When no children, returns just the `<input>` for custom layouts (e.g., settings panels)
+- CSS animation shows sliding toggle via `:checked` pseudo-class + `before:` pseudo-element
+
+**Documentation Route:** `/xtras/switch`
+
+**Documentation Examples:**
+- Basic switch with label
+- Switches with Datastar binding showing live state
+- Settings panel example (realistic use case)
+- Disabled states (both on and off)
+- Field context example
+- Without integrated label example
+
+**Verified:**
+- Switch toggles smoothly with CSS animation
+- role="switch" attribute present in HTML output
+- Datastar binding updates signal correctly
+- Signal state changes reflect in UI immediately
+- Dark mode toggle actually toggles dark mode (demonstrates full reactivity)
+- Disabled states render correctly
+
+**Next Steps:**
+- Continue with Feature #4: Select component
+- Consider running Pyright to verify type hints for all P1 components
 
 ------------------------------------
 Remove resolved and obsolete comments and leave relevant instructions between markers! <--DO NOT DELETE THIS SENTANCE
