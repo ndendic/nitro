@@ -23,6 +23,7 @@ from pages.test_signals import router as test_signals_router
 from pages.spinner import router as spinner_router
 from pages.skeleton import router as skeleton_router
 from pages.checkbox import router as checkbox_router
+from pages.radio import router as radio_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -47,6 +48,7 @@ app.include_router(test_signals_router)
 app.include_router(spinner_router)
 app.include_router(skeleton_router)
 app.include_router(checkbox_router)
+app.include_router(radio_router)
 
 
 @app.get("/cmds/{command}/{sender}")

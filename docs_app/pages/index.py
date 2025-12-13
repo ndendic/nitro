@@ -32,6 +32,7 @@ def index():
             P("Form input components with Datastar binding:"),
             Ul(
                 Li(A("Checkbox", href="/xtras/checkbox", cls="color-blue-6 text-decoration-underline"), " - Checkbox with two-way binding"),
+                Li(A("Radio Group", href="/xtras/radio", cls="color-blue-6 text-decoration-underline"), " - Radio buttons with compound component pattern"),
             ),
         ),
 

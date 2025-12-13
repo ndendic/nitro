@@ -42,12 +42,16 @@ async function navigate(url, screenshotPath) {
     }
 }
 
-async function click(selector, screenshotPath) {
+async function click(selector, screenshotPath, url) {
     const browser = await getBrowser();
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 800 });
 
     try {
+        // Navigate to URL if provided
+        if (url) {
+            await page.goto(url, { waitUntil: 'networkidle0', timeout: 30000 });
+        }
         await page.waitForSelector(selector, { timeout: 10000 });
         await page.click(selector);
 
@@ -118,7 +122,7 @@ switch (command) {
         navigate(args[0], args[1]).catch(console.error);
         break;
     case 'click':
-        click(args[0], args[1]).catch(console.error);
+        click(args[0], args[1], args[2]).catch(console.error);
         break;
     case 'type':
         typeText(args[0], args[1], args[2]).catch(console.error);

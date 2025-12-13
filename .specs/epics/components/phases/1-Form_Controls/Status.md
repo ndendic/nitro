@@ -27,7 +27,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 | # | Feature | Description | Status |
 |---|---------|-------------|--------|
 | 1 | [Checkbox](features/01-checkbox.md) | Checkbox input with Datastar binding | Completed |
-| 2 | [Radio Group](features/02-radio-group.md) | Radio group with compound component pattern | Pending |
+| 2 | [Radio Group](features/02-radio-group.md) | Radio group with compound component pattern | Completed |
 | 3 | [Switch](features/03-switch.md) | Toggle switch using checkbox with role="switch" | Pending |
 | 4 | [Select](features/04-select.md) | Native select with Datastar binding | Pending |
 | 5 | [Textarea](features/05-textarea.md) | Textarea with two-way binding | Pending |
@@ -44,7 +44,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 
 ### Visual Verification using skill or MCP
 - [x] Checkbox toggles and signal updates
-- [ ] Radio group only allows one selection
+- [x] Radio group only allows one selection
 - [ ] Switch animates smoothly
 - [ ] Select dropdown works with Datastar binding
 - [ ] Field shows error state correctly
@@ -79,7 +79,40 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 **Documentation Route:** `/xtras/checkbox`
 
 **Next Steps:**
-- Continue with Feature #2: Radio Group
+- Continue with Feature #3: Switch component
+- Consider running Pyright to verify type hints
+
+------------------------------------
+**Session: 2025-12-13 (continued)**
+
+**Completed:**
+- ✅ Radio Group component implemented (`nitro/infrastructure/html/components/radio.py`)
+- ✅ Documentation page created (`docs_app/pages/radio.py`)
+- ✅ Router registered in `app.py`
+- ✅ Exported from components `__init__.py` (RadioGroup, RadioItem)
+- ✅ Added to index page under "Form Controls" section
+- ✅ Fixed browser_tool.js to support URL parameter for click command
+
+**Implementation Notes:**
+- RadioGroup uses compound component pattern with closure
+- RadioItem returns a closure that receives `signal_name` from parent
+- Supports `orientation` parameter: "vertical" (default) or "horizontal"
+- Uses Basecoat's context-based styling (radio inside `.field` gets styled automatically)
+- Generates unique IDs for radio inputs: `radio-{signal_name}-{value}`
+- All radio items share the same `name` attribute (from signal name)
+
+**Documentation Route:** `/xtras/radio`
+
+**Verified:**
+- Radio group displays correctly with vertical layout
+- Horizontal orientation works
+- Signal binding updates when selection changes
+- Only one option can be selected at a time
+- Pre-selected values work
+- Disabled options render correctly
+
+**Next Steps:**
+- Continue with Feature #3: Switch component
 - Consider running Pyright to verify type hints
 
 ------------------------------------

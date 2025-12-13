@@ -1,6 +1,6 @@
 # Feature: Radio Group Component
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 1 - Form Controls  
 **Priority**: High  
 
@@ -56,8 +56,8 @@ RadioGroup(
 
 ## Documentation Page
 
-**File**: `nitro/docs_app/pages/components/radio.py`  
-**Route**: `/components/radio`
+**File**: `docs_app/pages/radio.py`
+**Route**: `/xtras/radio`
 
 ### Required Examples
 - Vertical radio group
@@ -67,10 +67,10 @@ RadioGroup(
 
 ## Acceptance Criteria
 
-- [ ] Only one option can be selected
-- [ ] Datastar binding updates signal
-- [ ] Orientation options work
-- [ ] Compound pattern passes signal correctly
-- [ ] Documentation shows signal changes
+- [x] Only one option can be selected
+- [x] Datastar binding updates signal
+- [x] Orientation options work
+- [x] Compound pattern passes signal correctly
+- [x] Documentation shows signal changes
 - [ ] Pyright passes
 
