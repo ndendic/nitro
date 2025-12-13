@@ -31,7 +31,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 | 3 | [Switch](features/03-switch.md) | Toggle switch using checkbox with role="switch" | Completed |
 | 4 | [Select](features/04-select.md) | Native select with Datastar binding | Completed |
 | 5 | [Textarea](features/05-textarea.md) | Textarea with two-way binding | Completed |
-| 6 | [Field](features/06-field.md) | Form field wrapper with label, description, error | Pending |
+| 6 | [Field](features/06-field.md) | Form field wrapper with label, description, error | Completed |
 | 7 | [Input Group](features/07-input-group.md) | Input with prefix/suffix elements | Pending |
 | 8 | [Documentation](features/08-documentation.md) | Documentation pages for all P1 components | Pending |
 
@@ -47,7 +47,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 - [x] Radio group only allows one selection
 - [x] Switch animates smoothly
 - [x] Select dropdown works with Datastar binding
-- [ ] Field shows error state correctly
+- [x] Field shows error state correctly
 - [ ] Keyboard navigation works (Tab, Space, Enter)
 - [ ] Documentation pages show signal state changes in Preview
 
@@ -233,12 +233,51 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 - Character count updates in real-time
 - All documentation sections render without errors
 
+------------------------------------
+**Session: 2025-12-13 (Field implementation)**
+
+**Completed:**
+- ✅ Field component implemented (`nitro/infrastructure/html/components/field.py`)
+- ✅ Fieldset component implemented (for grouping related fields)
+- ✅ Documentation page created (`docs_app/pages/field.py`)
+- ✅ Router registered in `app.py`
+- ✅ Exported from components `__init__.py` (Field, Fieldset)
+- ✅ Added to index page under "Form Controls" section
+
+**Implementation Notes:**
+- Field uses `.field` class for Basecoat context-based styling
+- Supports `label`, `label_for`, `description`, `error`, `required` parameters
+- `orientation` parameter: "vertical" (default) or "horizontal"
+- Error state adds `data-invalid="true"` attribute and `role="alert"` on error message
+- Fieldset companion component for grouping fields with legend and description
+- Label uses `<label>` when `label_for` is provided, `<h3>` otherwise
+
+**Documentation Route:** `/xtras/field`
+
+**Documentation Examples:**
+- Basic field with label
+- Field with description
+- Field with error state (red styling visible)
+- Required field indicator (*)
+- Horizontal orientation (checkboxes side-by-side)
+- Fieldset with legend
+- Complete form example with Datastar binding
+
+**Verified:**
+- Field renders correctly with Basecoat styling
+- Label association works via `label_for`
+- Description shows correctly
+- Error state shows red text and invalid styling
+- Horizontal orientation working for checkbox fields
+- Datastar binding works (checkbox state updates reflected in UI)
+- All documentation sections render without errors
+
 **Progress Summary:**
-- Phase 1: 5/8 features completed (Checkbox, Radio, Switch, Select, Textarea)
-- Remaining: Field, Input Group, Documentation pages
+- Phase 1: 6/8 features completed (Checkbox, Radio, Switch, Select, Textarea, Field)
+- Remaining: Input Group, Documentation pages
 
 **Next Steps:**
-- Continue with Feature #6: Field component
+- Continue with Feature #7: Input Group component
 - Run Pyright to verify type hints for all P1 components
 
 ------------------------------------
