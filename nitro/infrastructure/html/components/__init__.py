@@ -35,3 +35,13 @@ from .select import Select, SelectOption, SelectOptGroup
 from .textarea import Textarea
 from .field import Field, Fieldset
 from .input_group import InputGroup, InputPrefix, InputSuffix
+
+# P2 Interactive Overlays
+from .dropdown import (
+    DropdownMenu,
+    DropdownTrigger,
+    DropdownContent,
+    DropdownItem,
+    DropdownSeparator,
+    DropdownLabel,
+)

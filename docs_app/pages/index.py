@@ -47,6 +47,7 @@ def index():
                 Li(A("Tabs", href="/xtras/tabs", cls="color-blue-6 text-decoration-underline"), " - Tabbed content panels"),
                 Li(A("Accordion", href="/xtras/accordion", cls="color-blue-6 text-decoration-underline"), " - Collapsible content sections"),
                 Li(A("Dialog", href="/xtras/dialog", cls="color-blue-6 text-decoration-underline"), " - Modal dialogs"),
+                Li(A("Dropdown Menu", href="/xtras/dropdown", cls="color-blue-6 text-decoration-underline"), " - Accessible dropdown menu"),
             ),
         ),
 

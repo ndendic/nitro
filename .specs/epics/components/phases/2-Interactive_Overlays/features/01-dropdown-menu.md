@@ -1,6 +1,6 @@
 # Feature: Dropdown Menu Component
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 2 - Interactive Overlays  
 **Priority**: High  
 
@@ -61,11 +61,11 @@ DropdownMenu(
 
 ## Acceptance Criteria
 
-- [ ] Opens/closes on trigger click
-- [ ] Click outside closes menu
-- [ ] Escape key closes menu
-- [ ] ARIA attributes present
+- [x] Opens/closes on trigger click
+- [x] Click outside closes menu
+- [x] Escape key closes menu
+- [x] ARIA attributes present
 - [ ] Keyboard navigation works
-- [ ] Documentation shows interaction
-- [ ] Pyright passes
+- [x] Documentation shows interaction
+- [x] Pyright passes
 

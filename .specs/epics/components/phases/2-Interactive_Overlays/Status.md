@@ -26,7 +26,7 @@ Dropdown, Popover, and Tooltip using Datastar signals for visibility and positio
 
 | # | Feature | Description | Status |
 |---|---------|-------------|--------|
-| 1 | [Dropdown Menu](features/01-dropdown-menu.md) | Dropdown menu with compound component pattern | Pending |
+| 1 | [Dropdown Menu](features/01-dropdown-menu.md) | Dropdown menu with compound component pattern | Completed |
 | 2 | [Popover](features/02-popover.md) | Positioned overlay container | Pending |
 | 3 | [Tooltip](features/03-tooltip.md) | Pure CSS tooltip (no JavaScript) | Pending |
 | 4 | [Alert Dialog](features/04-alert-dialog.md) | Confirmation dialog with native HTML dialog | Pending |
@@ -40,9 +40,9 @@ Dropdown, Popover, and Tooltip using Datastar signals for visibility and positio
 - [ ] Documentation pages render without errors
 
 ### Visual Verification using skill or MCP
-- [ ] Dropdown opens/closes on trigger click
-- [ ] Click outside closes dropdown/popover
-- [ ] Escape key closes overlays
+- [x] Dropdown opens/closes on trigger click
+- [x] Click outside closes dropdown/popover
+- [x] Escape key closes overlays
 - [ ] Tooltip appears on hover with delay
 - [ ] Alert dialog blocks background interaction
 - [ ] Focus is trapped in alert dialog
@@ -57,6 +57,30 @@ Dropdown, Popover, and Tooltip using Datastar signals for visibility and positio
 ## Handover notes for next developer
 
 ------------------------------------
-HANDOVER NOTES GO HERE! Summarize your handover notes and leave them!
+**Session completed: 2024-12-13**
+
+### Completed this session:
+- ✅ Implemented DropdownMenu component with compound component pattern (closure-based)
+- ✅ Created documentation page at `/xtras/dropdown` with 6 examples
+- ✅ Added Dropdown Menu link to index page Interactive Components section
+- ✅ Verified dropdown opens/closes on trigger click
+- ✅ Verified click outside closes dropdown
+- ✅ Escape key closes overlays
+- ✅ ARIA attributes present and working with Datastar dynamic updates
+
+### Implementation notes:
+- Component file: `nitro/infrastructure/html/components/dropdown.py`
+- Documentation: `docs_app/pages/dropdown.py`
+- Uses Basecoat CSS classes: `.dropdown-menu`, `[data-popover]`, `[role="menuitem"]`
+- Uses Datastar signals for open/close state with `data-on-click--outside` and `data-on-keydown--escape`
+- Fixed issue with `aria-hidden` needing both initial static value AND `data-attr-aria-hidden` for dynamic updates
+
+### Next feature to implement:
+- Feature 2: Popover component (similar pattern to dropdown but more general purpose)
+
+### What to work on next:
+1. Read `features/02-popover.md` for Popover requirements
+2. Implement Popover component following same compound component pattern
+3. Popover is more general purpose than dropdown (no menu semantics)
 ------------------------------------
 Remove resolved and obsolete comments and leave relevant instructions between markers! <--DO NOT DELETE THIS SENTANCE

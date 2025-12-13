@@ -58,7 +58,7 @@ Implement 29 remaining Basecoat UI components in the Nitro framework, replacing 
 
 ## Phase 2: Interactive Overlays
 
-**Status**: Pending  
+**Status**: Active  
 **Components**: 4 | **Docs**: 4 pages  
 **Description**: Dropdown, Popover, Tooltip with Datastar signals. Compound component pattern.
 **Details**: [Phase 2 Plan](phases/2-Interactive_Overlays/Status.md)
