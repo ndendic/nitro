@@ -30,7 +30,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 | 2 | [Radio Group](features/02-radio-group.md) | Radio group with compound component pattern | Completed |
 | 3 | [Switch](features/03-switch.md) | Toggle switch using checkbox with role="switch" | Completed |
 | 4 | [Select](features/04-select.md) | Native select with Datastar binding | Completed |
-| 5 | [Textarea](features/05-textarea.md) | Textarea with two-way binding | Pending |
+| 5 | [Textarea](features/05-textarea.md) | Textarea with two-way binding | Completed |
 | 6 | [Field](features/06-field.md) | Form field wrapper with label, description, error | Pending |
 | 7 | [Input Group](features/07-input-group.md) | Input with prefix/suffix elements | Pending |
 | 8 | [Documentation](features/08-documentation.md) | Documentation pages for all P1 components | Pending |
@@ -193,8 +193,53 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 - All documentation sections render without errors
 
 **Next Steps:**
-- Continue with Feature #5: Textarea component
+- Continue with Feature #6: Field component
 - Run Pyright to verify type hints for all P1 components so far
+
+------------------------------------
+**Session: 2025-12-13 (Textarea implementation)**
+
+**Completed:**
+- ✅ Textarea component implemented (`nitro/infrastructure/html/components/textarea.py`)
+- ✅ Documentation page created (`docs_app/pages/textarea.py`)
+- ✅ Router registered in `app.py`
+- ✅ Exported from components `__init__.py`
+- ✅ Added to index page under "Form Controls" section
+
+**Implementation Notes:**
+- Textarea supports Datastar `data_bind` for two-way binding
+- Uses `.textarea` class for Basecoat styling (context-based: inside `.field` or standalone)
+- `id` parameter is optional (consistent with Select component)
+- Supports `rows`, `cols`, `maxlength`, `minlength` attributes
+- Supports `disabled`, `required`, `readonly` states
+- Children are used as default text content
+
+**Documentation Route:** `/xtras/textarea`
+
+**Documentation Examples:**
+- Basic textarea with placeholder
+- Textarea with Datastar binding showing live character count
+- Character limit example with maxlength
+- Different row sizes (2, 4, 8 rows)
+- Disabled and read-only states
+- API reference
+- Character counter pattern example
+
+**Verified:**
+- Textarea renders correctly with Basecoat styling
+- Placeholder shows correctly
+- Different row sizes work
+- Datastar binding attributes present in HTML output
+- Character count updates in real-time
+- All documentation sections render without errors
+
+**Progress Summary:**
+- Phase 1: 5/8 features completed (Checkbox, Radio, Switch, Select, Textarea)
+- Remaining: Field, Input Group, Documentation pages
+
+**Next Steps:**
+- Continue with Feature #6: Field component
+- Run Pyright to verify type hints for all P1 components
 
 ------------------------------------
 Remove resolved and obsolete comments and leave relevant instructions between markers! <--DO NOT DELETE THIS SENTANCE

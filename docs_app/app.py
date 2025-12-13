@@ -26,6 +26,7 @@ from pages.checkbox import router as checkbox_router
 from pages.radio import router as radio_router
 from pages.switch import router as switch_router
 from pages.select import router as select_router
+from pages.textarea import router as textarea_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -53,6 +54,7 @@ app.include_router(checkbox_router)
 app.include_router(radio_router)
 app.include_router(switch_router)
 app.include_router(select_router)
+app.include_router(textarea_router)
 
 
 @app.get("/cmds/{command}/{sender}")

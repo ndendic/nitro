@@ -35,6 +35,7 @@ def index():
                 Li(A("Radio Group", href="/xtras/radio", cls="color-blue-6 text-decoration-underline"), " - Radio buttons with compound component pattern"),
                 Li(A("Switch", href="/xtras/switch", cls="color-blue-6 text-decoration-underline"), " - Toggle switch with smooth animation"),
                 Li(A("Select", href="/xtras/select", cls="color-blue-6 text-decoration-underline"), " - Native select dropdown with Datastar binding"),
+                Li(A("Textarea", href="/xtras/textarea", cls="color-blue-6 text-decoration-underline"), " - Multi-line text input with binding"),
             ),
         ),
 

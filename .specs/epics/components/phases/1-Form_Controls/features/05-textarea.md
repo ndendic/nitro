@@ -1,6 +1,6 @@
 # Feature: Textarea Component
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 1 - Form Controls  
 **Priority**: Medium  
 
@@ -64,10 +64,10 @@ Field(
 
 ## Acceptance Criteria
 
-- [ ] Textarea renders correctly
-- [ ] Datastar binding updates signal
-- [ ] Rows attribute works
-- [ ] Placeholder shows
-- [ ] Documentation shows real-time signal updates
+- [x] Textarea renders correctly
+- [x] Datastar binding updates signal
+- [x] Rows attribute works
+- [x] Placeholder shows
+- [x] Documentation shows real-time signal updates
 - [ ] Pyright passes
 
