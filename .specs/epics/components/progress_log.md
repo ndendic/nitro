@@ -49,8 +49,8 @@ Implement 29 remaining Basecoat UI components in the Nitro framework, replacing 
 
 ## Phase 1: Form Controls (Two-way Binding)
 
-**Status**: Active  
-**Components**: 7 | **Docs**: 7 pages  
+**Status**: Completed
+**Components**: 7 | **Docs**: 7 pages
 **Description**: Form inputs with Datastar `data_bind`. Basecoat context-based styling.
 **Details**: [Phase 1 Plan](phases/1-Form_Controls/Status.md)
 
