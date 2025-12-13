@@ -24,3 +24,5 @@ from .badge import Badge
 from .alert import Alert, AlertTitle, AlertDescription
 from .label import Label
 from .kbd import Kbd
+from .spinner import Spinner
+from .skeleton import Skeleton

@@ -23,6 +23,8 @@ def index():
                 Li(A("Alert", href="/xtras/alert", cls="color-blue-6 text-decoration-underline"), " - Contextual feedback messages"),
                 Li(A("Label", href="/xtras/label", cls="color-blue-6 text-decoration-underline"), " - Form input labels"),
                 Li(A("Kbd", href="/xtras/kbd", cls="color-blue-6 text-decoration-underline"), " - Keyboard shortcut display"),
+                Li(A("Spinner", href="/xtras/spinner", cls="color-blue-6 text-decoration-underline"), " - Loading indicator"),
+                Li(A("Skeleton", href="/xtras/skeleton", cls="color-blue-6 text-decoration-underline"), " - Loading placeholder"),
             ),
         ),
 

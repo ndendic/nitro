@@ -1,4 +1,4 @@
-from rusty_tags.core import HtmlString, HtmlElement
+from rusty_tags.core import HtmlString
 from rusty_tags.utils import show, AttrDict, when, unless
 from .template import Page, create_template, page_template
 
@@ -15,8 +15,7 @@ from rusty_tags.core import (  # noqa: E402
 
     # Fragment and utilities
     Fragment,
-    Safe,
-    
+
     # HTML tags
     A, Aside, B, Body, Br, Button, Code, Div, Em, Form,
     H1, H2, H3, H4, H5, H6, Head, Header, Html, I, Img,
@@ -59,10 +58,10 @@ __description__ = "High-performance HTML generation library with Rust-based Pyth
 
 __all__ = [
     # Core classes
-    "HtmlString", "HtmlElement", "TagBuilder",
+    "HtmlString", "TagBuilder",
 
     # Fragment and utilities
-    "Fragment", "Safe",
+    "Fragment",
     
     # HTML tags - organized alphabetically
     "A", "Aside", "B", "Body", "Br", "Button", "Code", "Div", "Em", "Form",

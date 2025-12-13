@@ -20,6 +20,8 @@ from pages.playground import router as playground_router
 from pages.rustytags import router as rustytags_router
 from pages.tabs import router as tabs_router
 from pages.test_signals import router as test_signals_router
+from pages.spinner import router as spinner_router
+from pages.skeleton import router as skeleton_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -41,6 +43,8 @@ app.include_router(playground_router)
 app.include_router(rustytags_router)
 app.include_router(tabs_router)
 app.include_router(test_signals_router)
+app.include_router(spinner_router)
+app.include_router(skeleton_router)
 
 
 @app.get("/cmds/{command}/{sender}")
@@ -62,4 +66,4 @@ async def event_stream(request: Request, signals: ReadSignals):
 if __name__ == "__main__":
     import uvicorn
 
-    uvicorn.run("app:app", host="0.0.0.0", port=8800, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)

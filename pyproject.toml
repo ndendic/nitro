@@ -1,0 +1,37 @@
+[project]
+name = "nitro"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "ndendic", email = "ndendic@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "blinker>=1.9.0",
+    "pydantic>=2.11.9",
+    "pydantic-settings>=2.11.0",
+    "requests>=2.32.5",
+    "rusty-tags>=0.6.3",
+    "typer>=0.19.2",
+]
+
+[project.scripts]
+nitro = "nitro.application.cli.main:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ty.environment]
+root = ["./nitro","./docs","./notebooks"]
+
+[tool.uv.workspace]
+members = [
+    "autocode",
+]
+
+[dependency-groups]
+dev = [
+    "fastapi[standard]>=0.118.0",
+]

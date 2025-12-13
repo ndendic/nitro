@@ -7,6 +7,7 @@ import inspect
 from fastapi.responses import HTMLResponse
 from nitro import *  # noqa: F403
 from nitro.infrastructure.html import Section as HTMLSection
+from nitro.infrastructure.html import *
 from nitro.infrastructure.html.components import *
 from typing import Callable, ParamSpec, TypeVar
 from pathlib import Path
@@ -54,14 +55,14 @@ hdrs = (
 htmlkws = dict(lang="en", cls="bg-background text-foreground",data_theme="$theme")
 bodykws = dict(
     cls="bg-background text-foreground",
-    signals=Signals(message="", conn="",darkMode=True,theme="claude"),
+    signals=Signals(message="", conn="",dark_mode=True,theme="claude"),
 )
 ftrs = (
     CustomTag("datastar-inspector"),
     Div(
         cls="hidden",
-        data_persist="darkMode, theme",
-        data_effect="$darkMode ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark'); document.documentElement.setAttribute('data-theme', $theme);",
+        data_persist="dark_mode, theme",
+        data_effect="$dark_mode ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark'); document.documentElement.setAttribute('data-theme', $theme);",
     )
 )
 # Shared page template
