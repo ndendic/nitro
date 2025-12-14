@@ -47,5 +47,5 @@ Skeleton(cls="h-[125px] w-[250px] rounded-xl")  # Card
 - [ ] Sizing via cls works correctly
 - [ ] aria-hidden="true" for accessibility
 - [ ] Documentation page renders
-- [ ] Pyright passes
+- [ ] Visual test passes
 

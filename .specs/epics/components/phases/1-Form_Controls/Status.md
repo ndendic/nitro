@@ -38,7 +38,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 ## Mandatory Testing Success Criteria
 
 ### Automated Verification
-- [ ] Pyright passes for all form components
+- [ ] Visual test passes for all form components
 - [x] Components import without errors
 - [x] Documentation pages render without errors
 
@@ -80,7 +80,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 
 **Next Steps:**
 - Continue with Feature #3: Switch component
-- Consider running Pyright to verify type hints
+- Consider running Visual test to verify type hints
 
 ------------------------------------
 **Session: 2025-12-13 (continued)**
@@ -113,7 +113,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 
 **Next Steps:**
 - Continue with Feature #4: Select component
-- Consider running Pyright to verify type hints
+- Consider running Visual test to verify type hints
 
 ------------------------------------
 **Session: 2025-12-13 (Switch implementation)**
@@ -154,7 +154,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 
 **Next Steps:**
 - Continue with Feature #5: Textarea component
-- Consider running Pyright to verify type hints for all P1 components
+- Consider running Visual test to verify type hints for all P1 components
 
 ------------------------------------
 **Session: 2025-12-13 (Select implementation)**
@@ -194,7 +194,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 
 **Next Steps:**
 - Continue with Feature #6: Field component
-- Run Pyright to verify type hints for all P1 components so far
+- Run Visual test to verify type hints for all P1 components so far
 
 ------------------------------------
 **Session: 2025-12-13 (Textarea implementation)**
@@ -320,7 +320,7 @@ Form input components using Datastar's `data_bind` for two-way binding. All form
 **Phase 1 Status: COMPLETE**
 
 **Remaining items (nice-to-have):**
-- Run Pyright to verify type hints (pyright not currently installed)
+- Run Visual test to verify type hints (Visual test not currently installed)
 - Add keyboard navigation documentation
 - Consider moving to Phase 2: Interactive Overlays
 

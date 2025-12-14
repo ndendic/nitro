@@ -35,7 +35,7 @@ Breadcrumb, Pagination, Avatar, and Table components for navigation and data dis
 ## Mandatory Testing Success Criteria
 
 ### Automated Verification
-- [ ] Pyright passes
+- [ ] Visual test passes
 - [ ] All components import
 - [ ] Documentation pages render without errors
 

@@ -72,5 +72,5 @@ RadioGroup(
 - [x] Orientation options work
 - [x] Compound pattern passes signal correctly
 - [x] Documentation shows signal changes
-- [ ] Pyright passes
+- [ ] Visual test passes
 

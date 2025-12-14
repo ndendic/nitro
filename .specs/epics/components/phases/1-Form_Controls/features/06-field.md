@@ -78,5 +78,5 @@ Field(
 - [x] data-invalid attribute set on error
 - [x] Orientation option works
 - [x] Documentation shows all states
-- [x] Pyright passes (components import without errors)
+- [x] Visual test passes (components import without errors)
 

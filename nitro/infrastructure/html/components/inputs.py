@@ -3,7 +3,7 @@ from typing import Literal
 
 
 def Input(
-        label, 
+        label:str = '', 
         type:Literal['date', 'datetime-local', 'email', 'month', 'number', 'password', 'search', 'tel', 'text', 'time', 'url', 'week'] = 'text', 
         placeholder:str = '', 
         supporting_text:str = '', 

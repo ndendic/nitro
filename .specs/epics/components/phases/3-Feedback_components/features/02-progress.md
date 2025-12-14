@@ -64,5 +64,5 @@ Progress(value=50, size="lg")
 - [x] Indeterminate animation works
 - [x] ARIA attributes present
 - [x] Documentation shows value manipulation
-- [x] Pyright passes
+- [x] Visual test passes
 

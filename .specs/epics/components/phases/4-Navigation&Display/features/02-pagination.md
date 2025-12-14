@@ -59,5 +59,5 @@ Pagination(total_pages=20, signal="products_page")
 - [x] Buttons disabled at boundaries
 - [x] ARIA labels present
 - [x] Documentation shows signal changes
-- [x] Pyright passes
+- [x] Visual test passes
 

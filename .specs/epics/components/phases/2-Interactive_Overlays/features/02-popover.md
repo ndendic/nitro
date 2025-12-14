@@ -66,5 +66,5 @@ Popover(
 - [x] Positioning options work
 - [x] ARIA attributes present
 - [x] Documentation shows all positions
-- [ ] Pyright passes
+- [ ] Visual test passes
 

@@ -99,3 +99,4 @@ output.css
 # Nitro cache
 .nitro/
 AGENTS.md
+autocode/

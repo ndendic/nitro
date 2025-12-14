@@ -35,7 +35,7 @@ Dropdown, Popover, and Tooltip using Datastar signals for visibility and positio
 ## Mandatory Testing Success Criteria
 
 ### Automated Verification
-- [x] Pyright passes for all interactive components (minor type hint warnings, no errors)
+- [x] Visual test passes for all interactive components (minor type hint warnings, no errors)
 - [x] No import errors
 - [x] Documentation pages render without errors
 

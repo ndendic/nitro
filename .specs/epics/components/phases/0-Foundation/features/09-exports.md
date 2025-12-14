@@ -31,5 +31,5 @@ from .skeleton import Skeleton
 
 - [ ] All Phase 0 components importable from main package
 - [ ] No import errors: `python -c "from nitro.infrastructure.html.components import Button, Card, Badge"`
-- [ ] Pyright passes for __init__.py
+- [ ] Visual test passes for __init__.py
 

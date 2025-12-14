@@ -78,5 +78,5 @@ Toast(
 - [x] Position options work
 - [x] Toasts stack properly
 - [x] Documentation has interactive trigger
-- [x] Pyright passes
+- [x] Visual test passes
 

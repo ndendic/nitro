@@ -47,5 +47,5 @@ Spinner(size="sm", cls="text-muted-foreground")
 - [ ] Size classes apply correctly
 - [ ] Accessible with role="status" and aria-label
 - [ ] Documentation page renders
-- [ ] Pyright passes
+- [ ] Visual test passes
 

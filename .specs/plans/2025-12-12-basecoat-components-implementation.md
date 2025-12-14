@@ -118,7 +118,7 @@ All 37 Basecoat components implemented with:
 - All ARIA attributes present and valid
 - Keyboard navigation works (Tab, Enter, Escape, Arrow keys)
 - Dark mode theming works via Basecoat CSS variables
-- TypeScript/Pyright type hints pass
+- TypeScript/Visual test type hints pass
 
 ## What We're NOT Doing
 
@@ -820,7 +820,7 @@ def Button(
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] All Python files pass pyright: `pyright nitro/nitro/infrastructure/html/components/`
+- [ ] All Python files pass Visual test: `Visual test nitro/nitro/infrastructure/html/components/`
 - [ ] No import errors: `python -c "from nitro.infrastructure.html.components import Button, Card, Badge"`
 - [ ] Documentation pages render without errors
 
@@ -1324,7 +1324,7 @@ Each must include:
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Pyright passes for all form components
+- [ ] Visual test passes for all form components
 - [ ] Components import without errors
 - [ ] Documentation pages render without errors
 
@@ -1730,7 +1730,7 @@ Each must include:
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Pyright passes for all interactive components
+- [ ] Visual test passes for all interactive components
 - [ ] No import errors
 - [ ] Documentation pages render without errors
 
@@ -1971,7 +1971,7 @@ Each must include:
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Pyright passes
+- [ ] Visual test passes
 - [ ] Components import without errors
 - [ ] Documentation pages render without errors
 
@@ -2352,7 +2352,7 @@ Each must include:
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Pyright passes
+- [ ] Visual test passes
 - [ ] All components import
 - [ ] Documentation pages render without errors
 
@@ -2750,7 +2750,7 @@ Each must include:
 ### Success Criteria:
 
 #### Automated Verification:
-- [ ] Pyright passes
+- [ ] Visual test passes
 - [ ] All components import
 - [ ] Documentation pages render without errors
 

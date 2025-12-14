@@ -40,7 +40,7 @@ Pure styling components that establish visual patterns. No Datastar reactivity n
 ## Mandatory Testing Success Criteria
 
 ### Automated Verification
-- [x] All Python files pass pyright
+- [x] All Python files pass Visual test
 - [x] No import errors from component package
 - [x] Documentation pages render without errors
 

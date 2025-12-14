@@ -43,6 +43,11 @@ def example_variants():
             AlertDescription("There was a problem processing your request."),
             variant="error",
         ),
+        Alert(
+            AlertTitle("Destructive"),
+            AlertDescription("This action cannot be undone."),
+            variant="destructive",
+        ),
         cls="space-y-4"
     )
 
@@ -51,39 +56,39 @@ def example_with_icons():
     return Div(
         Alert(
             Div(
-                LucideIcon("info", cls="size-4"),
                 AlertTitle("Information"),
                 cls="flex items-center gap-2"
             ),
             AlertDescription("This alert includes an icon for visual emphasis."),
             variant="info",
+            icon="bot-message-square",
         ),
         Alert(
             Div(
-                LucideIcon("check-circle", cls="size-4"),
                 AlertTitle("Success"),
                 cls="flex items-center gap-2"
             ),
             AlertDescription("Your account has been created successfully."),
             variant="success",
+            icon="file-check",
         ),
         Alert(
             Div(
-                LucideIcon("alert-triangle", cls="size-4"),
                 AlertTitle("Warning"),
                 cls="flex items-center gap-2"
             ),
             AlertDescription("Your session will expire in 5 minutes."),
             variant="warning",
+            icon="alert-triangle",
         ),
         Alert(
             Div(
-                LucideIcon("x-circle", cls="size-4"),
-                AlertTitle("Error"),
+                AlertTitle("Security Error"),
                 cls="flex items-center gap-2"
             ),
-            AlertDescription("Failed to save changes. Please try again."),
+            AlertDescription("Your account has been compromised. Please reset your password."),
             variant="error",
+            icon="shield-alert",
         ),
         cls="space-y-4"
     )
@@ -118,7 +123,7 @@ def alert_docs():
             "Alerts are used to communicate a state that affects a system, "
             "feature, or page. They display contextual feedback messages."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("Alerts follow accessibility best practices:"),
             Ul(
@@ -128,32 +133,32 @@ def alert_docs():
                 Li("Flexible content - can include icons, links, and custom elements"),
             ),
         ),
-        Section(
+        TitledSection(
             "Basic Alert",
             P("A simple alert with title and description:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "Variants",
             P("Six variants for different message types:"),
             ComponentShowcase(example_variants),
         ),
-        Section(
+        TitledSection(
             "With Icons",
             P("Add icons for better visual communication:"),
             ComponentShowcase(example_with_icons),
         ),
-        Section(
+        TitledSection(
             "Title Only",
             P("Alerts can be used with just a title:"),
             ComponentShowcase(example_title_only),
         ),
-        Section(
+        TitledSection(
             "Custom Content",
             P("Alert description can contain links and other elements:"),
             ComponentShowcase(example_custom_content),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """

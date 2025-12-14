@@ -63,5 +63,5 @@ Avatar(fallback="AB", size="sm")
 - [x] All sizes render correctly
 - [x] Proper alt text
 - [x] Documentation shows examples
-- [x] Pyright passes
+- [x] Visual test passes
 

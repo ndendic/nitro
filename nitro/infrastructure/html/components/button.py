@@ -4,11 +4,11 @@ from .utils import cn, cva
 
 # Button variant configuration using cva
 button_variants = cva(
-    base="btn",
     config={
+        "base": "",
         "variants": {
             "variant": {
-                "default": "btn-default",
+                "default": "btn",
                 "primary": "btn-primary",
                 "secondary": "btn-secondary",
                 "ghost": "btn-ghost",
@@ -92,10 +92,12 @@ def Button(
         **attrs,
     )
 
+ButtonGroupOrientation = Literal["horizontal", "vertical"]
 
 def ButtonGroup(
     *children: Any,
     cls: str = "",
+    orientation: ButtonGroupOrientation = "horizontal",
     **attrs: Any,
 ) -> HtmlString:
     """Container for grouping related buttons.
@@ -122,6 +124,7 @@ def ButtonGroup(
     return Div(
         *children,
         role="group",
-        cls=cn("btn-group", cls),
+        cls=cn("button-group", cls),
+        data_orientation=orientation,
         **attrs,
     )

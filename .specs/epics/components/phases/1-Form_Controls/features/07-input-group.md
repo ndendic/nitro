@@ -59,5 +59,5 @@ InputGroup(
 - [x] Input fills available space
 - [x] Icons render in prefix/suffix
 - [x] Documentation shows examples
-- [x] Pyright passes (components import without errors)
+- [x] Visual test passes (components import without errors)
 

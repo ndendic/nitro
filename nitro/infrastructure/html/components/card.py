@@ -1,5 +1,5 @@
 from typing import Any, Literal
-from rusty_tags import Div, H3, P, HtmlString
+from rusty_tags import Div, H2, P, HtmlString, Header, Section, Footer
 from .utils import cn
 
 CardVariant = Literal["default", "elevated", "outline", "ghost"]
@@ -76,7 +76,7 @@ def CardHeader(
             CardDescription("Manage your account settings"),
         )
     """
-    return Div(
+    return Header(
         *children,
         cls=cn("card-header", cls),
         **attrs,
@@ -101,7 +101,7 @@ def CardTitle(
     Example:
         CardTitle("User Profile")
     """
-    return H3(
+    return H2(
         *children,
         cls=cn("card-title", cls),
         **attrs,
@@ -156,7 +156,7 @@ def CardContent(
             )
         )
     """
-    return Div(
+    return Section(
         *children,
         cls=cn("card-content", cls),
         **attrs,
@@ -184,7 +184,7 @@ def CardFooter(
             Button("Continue", variant="primary"),
         )
     """
-    return Div(
+    return Footer(
         *children,
         cls=cn("card-footer", cls),
         **attrs,

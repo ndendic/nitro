@@ -60,5 +60,5 @@ Switch("Dark mode", id="dark", bind=settings.dark_mode)
 - [x] Datastar binding updates signal
 - [x] CSS animation works
 - [x] Documentation shows signal changes
-- [ ] Pyright passes
+- [ ] Visual test passes
 

@@ -1,18 +1,18 @@
 from typing import Any, Literal
-from rusty_tags import Div, H5, P, HtmlString
+from rusty_tags import Div, H2, HtmlString, Section
 from .utils import cn, cva
+from .icons import LucideIcon
 
 # Alert variant configuration using cva
 alert_variants = cva(
-    base="alert",
     config={
         "variants": {
             "variant": {
-                "default": "alert-default",
-                "info": "alert-info",
-                "success": "alert-success",
-                "warning": "alert-warning",
-                "error": "alert-error",
+                "default": "alert",
+                "info": "alert",
+                "success": "alert",
+                "warning": "alert",
+                "error": "alert-destructive",
                 "destructive": "alert-destructive",
             },
         },
@@ -27,6 +27,7 @@ AlertVariant = Literal["default", "info", "success", "warning", "error", "destru
 def Alert(
     *children: Any,
     variant: AlertVariant = "default",
+    icon: str|None = None,
     cls: str = "",
     **attrs: Any,
 ) -> HtmlString:
@@ -71,11 +72,20 @@ def Alert(
             variant="success",
         )
     """
+    icon_map = {
+        "info": "info",
+        "success": "check-circle",
+        "warning": "alert-triangle",
+        "error": "x-circle",
+        "destructive": "trash-2",
+        "default": "bell",
+    }
     return Div(
+        LucideIcon(icon_map[variant] if icon is None else icon, cls="size-4"),
+
         *children,
         role="alert",
         cls=cn(alert_variants(variant=variant), cls),
-        data_variant=variant,
         **attrs,
     )
 
@@ -98,7 +108,7 @@ def AlertTitle(
     Example:
         AlertTitle("Warning")
     """
-    return H5(
+    return H2(
         *children,
         cls=cn("alert-title", cls),
         **attrs,
@@ -123,7 +133,7 @@ def AlertDescription(
     Example:
         AlertDescription("Please review the form errors before submitting.")
     """
-    return Div(
+    return Section(
         *children,
         cls=cn("alert-description", cls),
         **attrs,

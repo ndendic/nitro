@@ -52,5 +52,5 @@ Label("Name", for_id="name", required=True)  # Shows * indicator
 - [ ] for_id creates htmlFor attribute
 - [ ] required shows indicator
 - [ ] Documentation page renders
-- [ ] Pyright passes
+- [ ] Visual test passes
 

@@ -27,7 +27,7 @@ def example_sizes():
         Button("Small", size="sm"),
         Button("Medium", size="md"),
         Button("Large", size="lg"),
-        Button(LucideIcon("plus"), size="icon", variant="outline"),
+        Button(LucideIcon("plus"), size="icon"),
         cls="flex flex-wrap items-center gap-2"
     )
 
@@ -42,10 +42,19 @@ def example_with_icons():
 
 
 def example_button_group():
-    return ButtonGroup(
-        Button("Left", variant="outline"),
-        Button("Center", variant="outline"),
-        Button("Right", variant="outline"),
+    return Div(
+        ButtonGroup(
+            Button("Left", variant="outline"),
+            Button("Center", variant="outline"),
+            Button("Right", variant="outline"),
+        ),
+        ButtonGroup(
+            Button("Top", variant="outline"),
+            Button("Middle", variant="outline"),
+            Button("Bottom", variant="outline"),
+            orientation="vertical",
+        ),
+        cls="flex flex-wrap gap-2"
     )
 
 

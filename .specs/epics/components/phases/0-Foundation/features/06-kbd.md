@@ -41,5 +41,5 @@ Kbd("Ctrl"), Kbd("+"), Kbd("C")  # For Ctrl+C
 - [ ] Kbd outputs `.kbd` class
 - [ ] Styled correctly with Basecoat
 - [ ] Documentation page renders
-- [ ] Pyright passes
+- [ ] Visual test passes
 

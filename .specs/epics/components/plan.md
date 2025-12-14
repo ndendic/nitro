@@ -20,7 +20,7 @@ All 37 Basecoat components implemented with:
 - All ARIA attributes present and valid
 - Keyboard navigation works (Tab, Enter, Escape, Arrow keys)
 - Dark mode theming works via Basecoat CSS variables
-- TypeScript/Pyright type hints pass
+- TypeScript/Visual test type hints pass
 
 ## What We're NOT Doing
 

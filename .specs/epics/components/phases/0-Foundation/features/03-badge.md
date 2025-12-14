@@ -56,5 +56,5 @@ Badge("v1.0", variant="outline")      # badge-outline
 - [ ] All variants render correctly
 - [ ] cls parameter allows overrides
 - [ ] Documentation page renders
-- [ ] Pyright passes
+- [ ] Visual test passes
 

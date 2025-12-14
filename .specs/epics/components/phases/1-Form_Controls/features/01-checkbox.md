@@ -65,5 +65,5 @@ Checkbox("I agree", id="agree", bind=accepted)
 - [x] Label clicking toggles checkbox
 - [x] Disabled state works
 - [x] Documentation shows signal changes
-- [ ] Pyright passes
+- [ ] Visual test passes
 

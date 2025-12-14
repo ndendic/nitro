@@ -68,5 +68,5 @@ AlertDialog(
 - [x] Action and Cancel buttons work
 - [x] Escape key closes
 - [x] Documentation shows usage
-- [ ] Pyright passes
+- [ ] Visual test passes
 

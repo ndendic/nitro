@@ -68,5 +68,5 @@ Alert(
 - [ ] AlertTitle and AlertDescription work
 - [ ] Variants apply correctly
 - [ ] Documentation page renders
-- [ ] Pyright passes
+- [ ] Visual test passes
 

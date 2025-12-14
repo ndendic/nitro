@@ -37,31 +37,6 @@ def example_simple():
     )
 
 
-def example_variants():
-    return Div(
-        Card(
-            CardHeader(CardTitle("Default")),
-            CardContent(P("Standard card appearance")),
-            variant="default",
-        ),
-        Card(
-            CardHeader(CardTitle("Elevated")),
-            CardContent(P("Card with shadow/elevation")),
-            variant="elevated",
-        ),
-        Card(
-            CardHeader(CardTitle("Outline")),
-            CardContent(P("Border-only card style")),
-            variant="outline",
-        ),
-        Card(
-            CardHeader(CardTitle("Ghost")),
-            CardContent(P("Minimal/transparent card")),
-            variant="ghost",
-        ),
-        cls="grid grid-cols-1 md:grid-cols-2 gap-4"
-    )
-
 
 def example_login_form():
     return Card(
@@ -72,13 +47,11 @@ def example_login_form():
         CardContent(
             Form(
                 Div(
-                    Label("Email", html_for="email"),
-                    Input(type="email", id="email", placeholder="name@example.com", cls="input w-full"),
+                    Input(label="Email", type="email", id="email", placeholder="name@example.com", cls="input w-full"),
                     cls="space-y-2"
                 ),
                 Div(
-                    Label("Password", html_for="password"),
-                    Input(type="password", id="password", cls="input w-full"),
+                    Input(label="Password", type="password", id="password", cls="input w-full"),
                     cls="space-y-2 mt-4"
                 ),
                 cls="space-y-4"
@@ -136,7 +109,7 @@ def card_docs():
             "A flexible container that groups related content and actions. "
             "Works well with compound subcomponents for structured layouts."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("The Card component follows the compound component pattern:"),
             Ul(
@@ -148,32 +121,28 @@ def card_docs():
                 Li("CardFooter - Footer section for actions"),
             ),
         ),
-        Section(
+        TitledSection(
             "Basic Card",
             P("A complete card with header, content, and footer:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "Simple Card",
             P("Cards can be as simple as a container with content:"),
             ComponentShowcase(example_simple),
         ),
-        Section(
-            "Variants",
-            P("Four visual variants for different use cases:"),
-            ComponentShowcase(example_variants),
-        ),
-        Section(
+
+        TitledSection(
             "Login Form Example",
             P("Cards work great for forms:"),
             ComponentShowcase(example_login_form),
         ),
-        Section(
+        TitledSection(
             "Stats Dashboard",
             P("Multiple cards in a grid layout:"),
             ComponentShowcase(example_stats),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """

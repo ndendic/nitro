@@ -63,5 +63,5 @@ Card(
 - [ ] CardHeader, CardContent, CardFooter work
 - [ ] cls parameter allows overrides
 - [ ] Documentation page renders
-- [ ] Pyright passes
+- [ ] Visual test passes
 

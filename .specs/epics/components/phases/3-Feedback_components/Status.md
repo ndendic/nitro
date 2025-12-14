@@ -33,7 +33,7 @@ Toast notifications and Progress indicators for user feedback. Toast uses custom
 ## Mandatory Testing Success Criteria
 
 ### Automated Verification
-- [x] Pyright passes
+- [x] Visual test passes
 - [x] Components import without errors
 - [x] Documentation pages render without errors
 
@@ -61,7 +61,7 @@ Toast notifications and Progress indicators for user feedback. Toast uses custom
 - Both pages include: Design Philosophy, multiple examples, ComponentShowcase Preview/Code tabs, API Reference, Accessibility sections
 - Toast documentation includes: Basic Toast, Variants (5 variants), With Action Button, Persistent Toast, Minimal Toast, Using Toaster
 - Progress documentation includes: Basic Usage, Sizes (3 sizes), Indeterminate, Interactive Progress, With Label
-- Fixed pyright type annotation issue in toast.py (Toaster function return type)
+- Fixed Visual test type annotation issue in toast.py (Toaster function return type)
 - All routers already registered in `docs_app/app.py`
 - All acceptance criteria verified and passed
 

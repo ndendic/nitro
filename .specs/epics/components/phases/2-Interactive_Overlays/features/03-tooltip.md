@@ -1,6 +1,6 @@
 # Feature: Tooltip Component
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 2 - Interactive Overlays  
 **Priority**: Medium  
 
@@ -65,10 +65,10 @@ Tooltip(
 
 ## Acceptance Criteria
 
-- [ ] Tooltip appears on hover
-- [ ] All positioning options work
-- [ ] No JavaScript needed
-- [ ] Works on any element
-- [ ] Documentation shows all positions
-- [ ] Pyright passes
+- [x] Tooltip appears on hover
+- [x] All positioning options work
+- [x] No JavaScript needed
+- [x] Works on any element
+- [x] Documentation shows all positions
+- [ ] Visual test passes
 

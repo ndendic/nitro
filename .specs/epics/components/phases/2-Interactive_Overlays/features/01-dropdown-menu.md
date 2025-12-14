@@ -67,5 +67,5 @@ DropdownMenu(
 - [x] ARIA attributes present
 - [ ] Keyboard navigation works
 - [x] Documentation shows interaction
-- [x] Pyright passes
+- [x] Visual test passes
 

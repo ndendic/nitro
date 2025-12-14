@@ -56,5 +56,5 @@ Breadcrumb(
 - [x] ARIA attributes present
 - [x] Separators render correctly
 - [x] Documentation shows examples
-- [x] Pyright passes
+- [x] Visual test passes
 

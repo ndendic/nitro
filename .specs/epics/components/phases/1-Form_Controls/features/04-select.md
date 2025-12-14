@@ -76,5 +76,5 @@ Field(
 - [x] Placeholder shows correctly
 - [x] Disabled state works
 - [x] Documentation shows signal changes
-- [ ] Pyright passes
+- [ ] Visual test passes
 

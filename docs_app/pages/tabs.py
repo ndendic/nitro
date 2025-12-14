@@ -53,7 +53,7 @@ def tabs_docs():
         P(
             "The Tabs component is our first true anatomical pattern - it handles complex coordination between tab buttons, panels, ARIA relationships, and keyboard navigation."
         ),
-        Section(
+        TitledSection(
             "Component Purpose",
             P("Tabs is an anatomical pattern that solves:"),
             Ul(
@@ -64,14 +64,14 @@ def tabs_docs():
                 Li("🎯 Focus management and proper tab order"),
             ),
         ),
-        Section(
+        TitledSection(
             "Basic Usage Demo",
             P(
                 "Try the tabs below - they showcase the component itself using the new function closure API!"
             ),
             ComponentShowcase(example_1),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """

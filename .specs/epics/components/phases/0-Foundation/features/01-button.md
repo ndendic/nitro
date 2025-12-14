@@ -63,5 +63,5 @@ Button(LucideIcon("settings"), size="icon")  # btn-icon
 - [ ] Disabled state applies correctly
 - [ ] cls parameter appends Tailwind overrides
 - [ ] Documentation page renders with examples
-- [ ] Pyright passes
+- [ ] Visual test passes
 

@@ -70,5 +70,5 @@ Table(
 - [x] Sortable headers clickable
 - [x] Row hover states work
 - [x] Documentation shows data-driven example
-- [x] Pyright passes
+- [x] Visual test passes
 

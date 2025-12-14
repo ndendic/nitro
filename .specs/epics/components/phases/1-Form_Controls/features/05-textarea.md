@@ -69,5 +69,5 @@ Field(
 - [x] Rows attribute works
 - [x] Placeholder shows
 - [x] Documentation shows real-time signal updates
-- [ ] Pyright passes
+- [ ] Visual test passes
 
