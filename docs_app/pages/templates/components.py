@@ -1,14 +1,79 @@
 from nitro.infrastructure.html import *
 from nitro.infrastructure.html.components import *
+from datetime import datetime
+
+
+def Footer():
+    """Footer component with links and attribution."""
+    current_year = datetime.now().year
+    return CustomTag(
+        "footer",
+        Div(
+            # Left section - Branding
+            Div(
+                Span("Nitro", cls="font-bold text-lg"),
+                Span("Framework", cls="text-muted-foreground ml-1"),
+                cls="flex items-center",
+            ),
+            # Center section - Links
+            Div(
+                A(
+                    "Documentation",
+                    href="/",
+                    cls="text-muted-foreground hover:text-foreground transition-colors",
+                ),
+                A(
+                    "GitHub",
+                    href="https://github.com/ndendic/nitro-systems",
+                    target="_blank",
+                    rel="noopener noreferrer",
+                    cls="text-muted-foreground hover:text-foreground transition-colors",
+                ),
+                A(
+                    "Basecoat UI",
+                    href="https://basecoatui.com/",
+                    target="_blank",
+                    rel="noopener noreferrer",
+                    cls="text-muted-foreground hover:text-foreground transition-colors",
+                ),
+                cls="flex gap-6",
+            ),
+            # Right section - Attribution
+            Div(
+                P(
+                    f"© {current_year} Nitro Framework",
+                    cls="text-muted-foreground text-sm",
+                ),
+                P(
+                    "Built with ",
+                    Span("Nitro", cls="font-medium text-foreground"),
+                    " + ",
+                    Span("RustyTags", cls="font-medium text-foreground"),
+                    cls="text-muted-foreground text-sm",
+                ),
+                cls="text-right",
+            ),
+            cls="container mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center gap-4",
+        ),
+        cls="border-t bg-background mt-auto",
+    )
+
 
 def Navbar():
     return Header(
         Div(
+            # Sidebar toggle button
             Button(
-                LucideIcon('panel-left'), 
-                type='button', 
+                LucideIcon('panel-left'),
+                type='button',
                 onclick="document.dispatchEvent(new CustomEvent('basecoat:sidebar'))",
-                cls="mr-auto"
+            ),
+            # Logo/Branding
+            A(
+                LucideIcon('zap', cls="text-primary"),
+                Span("Nitro", cls="font-bold"),
+                href="/",
+                cls="flex items-center gap-1 mr-auto hover:opacity-80 transition-opacity",
             ),
             Div(
                 Select(

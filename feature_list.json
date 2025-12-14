@@ -808,7 +808,7 @@
       "Step 4: Verify main content area",
       "Step 5: Verify footer component at bottom"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "layout_structure",
@@ -819,7 +819,7 @@
       "Step 3: Verify main navigation links",
       "Step 4: Verify dark/light theme toggle button"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "layout_structure",
@@ -830,7 +830,7 @@
       "Step 3: Verify copyright/license info",
       "Step 4: Verify built with Nitro attribution"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "styling_visual",
@@ -842,7 +842,7 @@
       "Step 4: Verify all components respect theme",
       "Step 5: Toggle back and verify light theme returns"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "styling_visual",

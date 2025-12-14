@@ -12,7 +12,7 @@ from nitro.infrastructure.html.components import *
 from typing import Callable, ParamSpec, TypeVar
 from pathlib import Path
 from domain.page_model import DocPage
-from .components import Sidebar, Navbar
+from .components import Sidebar, Navbar, Footer
 from functools import wraps
 
 
@@ -100,6 +100,8 @@ def template(title: str):
                         func(*args, **kwargs),
                         cls="px-8 lg:px-16 xl:px-32 my-16"
                     ),
+                    Footer(),
+                    cls="min-h-screen flex flex-col",
                 ),
             )
         return wrapper
