@@ -37,6 +37,7 @@ from pages.toast import router as toast_router
 from pages.progress import router as progress_router
 from pages.breadcrumb import router as breadcrumb_router
 from pages.pagination import router as pagination_router
+from pages.avatar import router as avatar_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -75,6 +76,7 @@ app.include_router(toast_router)
 app.include_router(progress_router)
 app.include_router(breadcrumb_router)
 app.include_router(pagination_router)
+app.include_router(avatar_router)
 
 
 @app.get("/cmds/{command}/{sender}")

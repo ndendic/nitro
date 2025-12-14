@@ -67,6 +67,7 @@ def index():
             Ul(
                 Li(A("Breadcrumb", href="/xtras/breadcrumb", cls="color-blue-6 text-decoration-underline"), " - Breadcrumb navigation with separators"),
                 Li(A("Pagination", href="/xtras/pagination", cls="color-blue-6 text-decoration-underline"), " - Page navigation with Datastar signals"),
+                Li(A("Avatar", href="/xtras/avatar", cls="color-blue-6 text-decoration-underline"), " - User avatars with image and fallback initials"),
             ),
         ),
 

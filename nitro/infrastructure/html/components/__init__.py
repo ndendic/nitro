@@ -81,3 +81,4 @@ from .breadcrumb import (
     BreadcrumbEllipsis,
 )
 from .pagination import Pagination, PaginationContent
+from .avatar import Avatar, AvatarGroup
