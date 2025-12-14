@@ -1,9 +1,12 @@
 from datastar_py.fastapi import ReadSignals, datastar_response
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse, RedirectResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from nitro import Client, event, Signals
 
 from pages.accordion import router as accordion_router
+from pages.errors import router as errors_router
 from pages.alert import router as alert_router
 from pages.anchor import router as anchor_router
 from pages.badge import router as badge_router
@@ -85,6 +88,30 @@ app.include_router(table_router)
 app.include_router(combobox_router)
 app.include_router(command_router)
 app.include_router(theme_switcher_router)
+app.include_router(errors_router)
+
+
+# Exception handlers for custom error pages
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
+    """Handle HTTP exceptions with custom error pages."""
+    if exc.status_code == 404:
+        return RedirectResponse(url="/404", status_code=302)
+    elif exc.status_code == 500:
+        return RedirectResponse(url="/500", status_code=302)
+    # For other errors, return JSON response
+    return HTMLResponse(
+        content=f"<h1>Error {exc.status_code}</h1><p>{exc.detail}</p>",
+        status_code=exc.status_code,
+    )
+
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """Handle unexpected errors with custom 500 page."""
+    import traceback
+    traceback.print_exc()
+    return RedirectResponse(url="/500", status_code=302)
 
 
 @app.get("/cmds/{command}/{sender}")
