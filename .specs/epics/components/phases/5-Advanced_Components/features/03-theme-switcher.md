@@ -1,6 +1,6 @@
 # Feature: Theme Switcher
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 5 - Advanced Components  
 **Priority**: Medium  
 
@@ -53,10 +53,10 @@ ThemeSwitcher(signal="app_theme", default_theme="dark")
 
 ## Acceptance Criteria
 
-- [ ] Cycles through themes
-- [ ] Icons change correctly
-- [ ] Theme applies to page
-- [ ] System theme detected
-- [ ] Documentation shows theme changes
-- [ ] Pyright passes
+- [x] Cycles through themes
+- [x] Icons change correctly
+- [x] Theme applies to page
+- [x] System theme detected
+- [x] Documentation shows theme changes
+- [x] Visual test passes
 

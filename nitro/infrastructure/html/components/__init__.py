@@ -92,3 +92,24 @@ from .table import (
     TableCell,
     TableCaption,
 )
+
+# P5 Advanced Components
+from .combobox import (
+    Combobox,
+    ComboboxItem,
+    ComboboxGroup,
+    ComboboxSeparator,
+)
+from .command import (
+    Command,
+    CommandDialog,
+    CommandGroup,
+    CommandItem,
+    CommandSeparator,
+    CommandEmpty,
+)
+from .theme_switcher import (
+    ThemeSwitcher,
+    ThemeSwitcherDropdown,
+    ThemeSelect,
+)

@@ -39,6 +39,9 @@ from pages.breadcrumb import router as breadcrumb_router
 from pages.pagination import router as pagination_router
 from pages.avatar import router as avatar_router
 from pages.table import router as table_router
+from pages.combobox import router as combobox_router
+from pages.command import router as command_router
+from pages.theme_switcher import router as theme_switcher_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -79,6 +82,9 @@ app.include_router(breadcrumb_router)
 app.include_router(pagination_router)
 app.include_router(avatar_router)
 app.include_router(table_router)
+app.include_router(combobox_router)
+app.include_router(command_router)
+app.include_router(theme_switcher_router)
 
 
 @app.get("/cmds/{command}/{sender}")

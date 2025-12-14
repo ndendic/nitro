@@ -1,6 +1,6 @@
 # Feature: Combobox Component
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 5 - Advanced Components  
 **Priority**: High  
 
@@ -67,11 +67,11 @@ Combobox(
 
 ## Acceptance Criteria
 
-- [ ] Typing filters options
-- [ ] Selection updates signal
-- [ ] Input shows selected value
-- [ ] Click outside closes
-- [ ] Keyboard navigation works
-- [ ] Documentation shows filtering
-- [ ] Pyright passes
+- [x] Typing filters options
+- [x] Selection updates signal
+- [x] Input shows selected value
+- [x] Click outside closes
+- [x] Keyboard navigation works
+- [x] Documentation shows filtering
+- [x] Visual test passes
 

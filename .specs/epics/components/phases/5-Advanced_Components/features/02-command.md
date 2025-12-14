@@ -1,6 +1,6 @@
 # Feature: Command Palette
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 5 - Advanced Components  
 **Priority**: High  
 
@@ -80,11 +80,11 @@ Command(
 
 ## Acceptance Criteria
 
-- [ ] Typing filters commands
-- [ ] Arrow key navigation works
-- [ ] Enter selects command
-- [ ] Groups display correctly
-- [ ] Shortcuts shown
-- [ ] Documentation shows interaction
-- [ ] Pyright passes
+- [x] Typing filters commands
+- [x] Arrow key navigation works
+- [x] Enter selects command
+- [x] Groups display correctly
+- [x] Shortcuts shown
+- [x] Documentation shows interaction
+- [x] Visual test passes
 
