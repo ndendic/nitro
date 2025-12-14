@@ -709,7 +709,7 @@
       "Step 2: Verify search modal/command palette opens",
       "Step 3: Verify focus is on search input"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "search_ui",
@@ -720,7 +720,7 @@
       "Step 3: Verify results update after each keystroke",
       "Step 4: Verify results are relevant to query"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "search_ui",
@@ -731,7 +731,7 @@
       "Step 3: Verify excerpt with match context is shown",
       "Step 4: Verify matched terms are highlighted"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "search_ui",
@@ -742,7 +742,7 @@
       "Step 3: Verify selection moves through results",
       "Step 4: Press Enter to navigate to selected result"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "search_ui",
@@ -752,7 +752,7 @@
       "Step 2: Press Esc key",
       "Step 3: Verify search modal closes"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "content_integration",

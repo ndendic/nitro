@@ -1,6 +1,7 @@
 from nitro.infrastructure.html import *
 from nitro.infrastructure.html.components import *
 from datetime import datetime
+from .site_search import SiteSearch
 
 
 def Footer():
@@ -73,8 +74,14 @@ def Navbar():
                 LucideIcon('zap', cls="text-primary"),
                 Span("Nitro", cls="font-bold"),
                 href="/",
-                cls="flex items-center gap-1 mr-auto hover:opacity-80 transition-opacity",
+                cls="flex items-center gap-1 hover:opacity-80 transition-opacity",
             ),
+            # Site Search - centered with flex-grow
+            Div(
+                SiteSearch(),
+                cls="flex-1 flex justify-center mx-4",
+            ),
+            # Theme controls
             Div(
                 Select(
                     Optgroup(
@@ -90,7 +97,7 @@ def Navbar():
                 ),
                 Button(
                     LucideIcon('sun'),
-                    on_click="$darkMode = !$darkMode; $darkMode ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');", 
+                    on_click="$darkMode = !$darkMode; $darkMode ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');",
                     cls="btn"
                 ),
                 cls="flex gap-2"
