@@ -1,7 +1,7 @@
 # Feature: Alert Dialog Component
 
-**Status**: Pending  
-**Phase**: 2 - Interactive Overlays  
+**Status**: Completed
+**Phase**: 2 - Interactive Overlays
 **Priority**: Medium  
 
 ## Overview
@@ -62,11 +62,11 @@ AlertDialog(
 
 ## Acceptance Criteria
 
-- [ ] Dialog opens/closes correctly
-- [ ] Background is blocked
-- [ ] Focus trapped inside
-- [ ] Action and Cancel buttons work
-- [ ] Escape key closes
-- [ ] Documentation shows usage
+- [x] Dialog opens/closes correctly
+- [x] Background is blocked
+- [x] Focus trapped inside
+- [x] Action and Cancel buttons work
+- [x] Escape key closes
+- [x] Documentation shows usage
 - [ ] Pyright passes
 

@@ -51,3 +51,14 @@ from .popover import (
     PopoverContent,
     PopoverClose,
 )
+from .tooltip import Tooltip
+from .alert_dialog import (
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogAction,
+    AlertDialogCancel,
+)

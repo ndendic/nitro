@@ -49,6 +49,8 @@ def index():
                 Li(A("Dialog", href="/xtras/dialog", cls="color-blue-6 text-decoration-underline"), " - Modal dialogs"),
                 Li(A("Dropdown Menu", href="/xtras/dropdown", cls="color-blue-6 text-decoration-underline"), " - Accessible dropdown menu"),
                 Li(A("Popover", href="/xtras/popover", cls="color-blue-6 text-decoration-underline"), " - Positioned overlay container"),
+                Li(A("Tooltip", href="/xtras/tooltip", cls="color-blue-6 text-decoration-underline"), " - Pure CSS hover tooltip"),
+                Li(A("Alert Dialog", href="/xtras/alert-dialog", cls="color-blue-6 text-decoration-underline"), " - Confirmation modal dialog"),
             ),
         ),
 

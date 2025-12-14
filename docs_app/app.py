@@ -31,6 +31,8 @@ from pages.field import router as field_router
 from pages.input_group import router as input_group_router
 from pages.dropdown import router as dropdown_router
 from pages.popover import router as popover_router
+from pages.tooltip import router as tooltip_router
+from pages.alert_dialog import router as alert_dialog_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -63,6 +65,8 @@ app.include_router(field_router)
 app.include_router(input_group_router)
 app.include_router(dropdown_router)
 app.include_router(popover_router)
+app.include_router(tooltip_router)
+app.include_router(alert_dialog_router)
 
 
 @app.get("/cmds/{command}/{sender}")
