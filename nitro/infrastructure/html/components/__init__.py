@@ -82,3 +82,13 @@ from .breadcrumb import (
 )
 from .pagination import Pagination, PaginationContent
 from .avatar import Avatar, AvatarGroup
+from .table import (
+    Table,
+    TableHeader,
+    TableBody,
+    TableFooter,
+    TableRow,
+    TableHead,
+    TableCell,
+    TableCaption,
+)

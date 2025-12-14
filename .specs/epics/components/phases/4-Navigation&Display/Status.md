@@ -29,7 +29,7 @@ Breadcrumb, Pagination, Avatar, and Table components for navigation and data dis
 | 1 | [Breadcrumb](features/01-breadcrumb.md) | Breadcrumb navigation with separators | Completed |
 | 2 | [Pagination](features/02-pagination.md) | Page navigation with Datastar signal | Completed |
 | 3 | [Avatar](features/03-avatar.md) | Avatar with image and fallback initials | Completed |
-| 4 | [Table](features/04-table.md) | Table with Basecoat styling and sortable headers | Pending |
+| 4 | [Table](features/04-table.md) | Table with Basecoat styling and sortable headers | Completed |
 | 5 | [Documentation](features/05-documentation.md) | Documentation pages for all P4 components | Pending |
 
 ## Mandatory Testing Success Criteria
@@ -43,8 +43,8 @@ Breadcrumb, Pagination, Avatar, and Table components for navigation and data dis
 - [x] Breadcrumb navigation works
 - [x] Pagination changes page signal
 - [x] Avatar shows image or fallback
-- [ ] Table renders correctly
-- [ ] Sortable headers respond to clicks
+- [x] Table renders correctly
+- [x] Sortable headers respond to clicks
 - [ ] Documentation shows data-driven examples
 
 ## Dependencies
@@ -56,34 +56,32 @@ Breadcrumb, Pagination, Avatar, and Table components for navigation and data dis
 ## Handover notes for next developer
 
 ------------------------------------
-**Session completed: Phase 4 Feature 3 (Avatar)**
+**Session completed: Phase 4 Features 3-4 (Avatar and Table)**
 
 **What was done:**
 1. **Avatar Component** (`nitro/infrastructure/html/components/avatar.py`)
    - Avatar with image support and automatic fallback initials
    - AvatarGroup for displaying multiple avatars with overlap effect
    - 5 size variants: xs (24px), sm (32px), md (40px), lg (48px), xl (64px)
-   - Automatic initials extraction from alt text
    - Documentation at `/xtras/avatar` with 6 examples
-   - Proper ARIA attributes (role="img", aria-label)
 
-2. **Documentation Examples:**
-   - Basic usage with image
-   - Fallback initials (auto-generated from alt text)
-   - All size variants
-   - Fallback sizes
-   - Avatar group with overflow indicator (+N)
-   - Status badge overlay pattern
+2. **Table Component** (`nitro/infrastructure/html/components/table.py`)
+   - Full semantic table structure: Table, TableHeader, TableBody, TableFooter, TableRow, TableHead, TableCell, TableCaption
+   - Basecoat `.table` class for consistent styling
+   - Sortable column headers with visual indicators (chevrons)
+   - Row hover states and selection support
+   - Documentation at `/xtras/table` with 6 examples
+   - Examples include: basic table, status badges, action buttons, sortable columns, footer totals, captions
 
-**Phase 4 Progress: 3/5 features complete**
+**Phase 4 Progress: 4/5 features complete**
 - [x] Breadcrumb
 - [x] Pagination
 - [x] Avatar
-- [ ] Table
-- [ ] Documentation
+- [x] Table
+- [ ] Documentation (Feature 5 - may be redundant as docs already exist)
 
 **Next steps:**
-1. Implement Table component (Feature 4)
-2. Create documentation pages for all P4 components (Feature 5)
+1. Review Feature 5 (Documentation) - may already be satisfied as all components have documentation pages
+2. Complete Phase 4 and move to Phase 5 (Advanced Components)
 ------------------------------------
 Remove resolved and obsolete comments and leave relevant instructions between markers! <--DO NOT DELETE THIS SENTANCE
