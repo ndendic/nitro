@@ -42,14 +42,16 @@ CUSTOM_CSS = """
 
 # Shared headers for all documentation pages
 hdrs = (
+    # Inter font for typography
+    Link(rel="preconnect", href="https://fonts.googleapis.com"),
+    Link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin=""),
     Link(
         rel="stylesheet",
-        href="https://unpkg.com/open-props@1.7.16/open-props.min.css",
-        type="text/css",
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500;600&display=swap",
     ),
     Link(
         rel="stylesheet",
-        href="https://github.com/argyleink/open-props/blob/main/src/props.fonts.css",
+        href="https://unpkg.com/open-props@1.7.16/open-props.min.css",
         type="text/css",
     ),
     Style(CUSTOM_CSS),  # Custom animations

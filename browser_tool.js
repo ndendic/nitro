@@ -19,10 +19,10 @@ async function getBrowser() {
     return browser;
 }
 
-async function navigate(url, screenshotPath) {
+async function navigate(url, screenshotPath, width = 1280, height = 2000) {
     const browser = await getBrowser();
     const page = await browser.newPage();
-    await page.setViewport({ width: 1280, height: 2000 });
+    await page.setViewport({ width: parseInt(width), height: parseInt(height) });
 
     // Capture console errors
     page.on('console', msg => {
@@ -215,7 +215,7 @@ const args = process.argv.slice(3);
 
 switch (command) {
     case 'navigate':
-        navigate(args[0], args[1]).catch(console.error);
+        navigate(args[0], args[1], args[2] || 1280, args[3] || 2000).catch(console.error);
         break;
     case 'scrollCapture':
         scrollAndCapture(args[0], args[1], args[2]).catch(console.error);

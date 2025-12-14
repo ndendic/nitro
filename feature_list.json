@@ -852,7 +852,7 @@
       "Step 2: Inspect computed styles",
       "Step 3: Verify font-family includes Inter or Geist Sans"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "styling_visual",
@@ -883,7 +883,7 @@
       "Step 3: Verify text is readable",
       "Step 4: Verify interactive elements are accessible"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "styling_visual",
@@ -893,7 +893,7 @@
       "Step 2: Verify layout uses space efficiently",
       "Step 3: Verify navigation is accessible"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "category": "datastar_navigation",
