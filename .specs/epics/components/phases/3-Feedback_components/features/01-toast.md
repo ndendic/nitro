@@ -1,6 +1,6 @@
 # Feature: Toast System
 
-**Status**: Pending  
+**Status**: Completed  
 **Phase**: 3 - Feedback Components  
 **Priority**: High  
 
@@ -61,8 +61,8 @@ Toast(
 
 ## Documentation Page
 
-**File**: `nitro/docs_app/pages/components/toast.py`  
-**Route**: `/components/toast`
+**File**: `nitro/docs_app/pages/toast.py`
+**Route**: `/xtras/toast`
 
 ### Required Examples
 - Trigger toast button
@@ -72,11 +72,11 @@ Toast(
 
 ## Acceptance Criteria
 
-- [ ] Toast appears and auto-dismisses
-- [ ] Close button works
-- [ ] All variants styled correctly
-- [ ] Position options work
-- [ ] Toasts stack properly
-- [ ] Documentation has interactive trigger
-- [ ] Pyright passes
+- [x] Toast appears and auto-dismisses
+- [x] Close button works
+- [x] All variants styled correctly
+- [x] Position options work
+- [x] Toasts stack properly
+- [x] Documentation has interactive trigger
+- [x] Pyright passes
 

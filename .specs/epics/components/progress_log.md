@@ -67,8 +67,8 @@ Implement 29 remaining Basecoat UI components in the Nitro framework, replacing 
 
 ## Phase 3: Feedback Components
 
-**Status**: Pending  
-**Components**: 2 | **Docs**: 2 pages  
+**Status**: Active
+**Components**: 2 | **Docs**: 2 pages
 **Description**: Toast notifications and Progress indicators.
 **Details**: [Phase 3 Plan](phases/3-Feedback_components/Status.md)
 

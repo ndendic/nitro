@@ -54,6 +54,13 @@ def index():
             ),
         ),
 
+        Section("Feedback Components",
+            P("User feedback and notification components:"),
+            Ul(
+                Li(A("Toast", href="/xtras/toast", cls="color-blue-6 text-decoration-underline"), " - Toast notifications with variants"),
+            ),
+        ),
+
         Section("Utilities",
             P("Helper components and documentation:"),
             Ul(

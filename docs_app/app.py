@@ -33,6 +33,7 @@ from pages.dropdown import router as dropdown_router
 from pages.popover import router as popover_router
 from pages.tooltip import router as tooltip_router
 from pages.alert_dialog import router as alert_dialog_router
+from pages.toast import router as toast_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -67,6 +68,7 @@ app.include_router(dropdown_router)
 app.include_router(popover_router)
 app.include_router(tooltip_router)
 app.include_router(alert_dialog_router)
+app.include_router(toast_router)
 
 
 @app.get("/cmds/{command}/{sender}")
