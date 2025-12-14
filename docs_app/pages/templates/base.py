@@ -32,6 +32,14 @@ def get_pages():
             continue
     return all_pages
 
+# Custom CSS for animations not in Tailwind
+CUSTOM_CSS = """
+@keyframes progress-indeterminate {
+  0% { left: -40%; }
+  100% { left: 100%; }
+}
+"""
+
 # Shared headers for all documentation pages
 hdrs = (
     Link(
@@ -44,6 +52,7 @@ hdrs = (
         href="https://github.com/argyleink/open-props/blob/main/src/props.fonts.css",
         type="text/css",
     ),
+    Style(CUSTOM_CSS),  # Custom animations
     Script("""{"imports": {"datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"}}""", type='importmap'),
     Script(type='module', src='https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js'),
     Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-persist@latest/dist/index.js'),

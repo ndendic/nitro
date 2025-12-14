@@ -58,6 +58,7 @@ def index():
             P("User feedback and notification components:"),
             Ul(
                 Li(A("Toast", href="/xtras/toast", cls="color-blue-6 text-decoration-underline"), " - Toast notifications with variants"),
+                Li(A("Progress", href="/xtras/progress", cls="color-blue-6 text-decoration-underline"), " - Progress bar with determinate/indeterminate modes"),
             ),
         ),
 
