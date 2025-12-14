@@ -100,3 +100,15 @@ output.css
 .nitro/
 AGENTS.md
 autocode/
+
+# Database files
+*.db
+
+# uv lock file
+uv.lock
+
+# Screenshots (generated during testing)
+screenshots/
+
+# Temporary CSS files
+input.css
