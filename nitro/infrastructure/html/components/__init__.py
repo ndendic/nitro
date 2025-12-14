@@ -80,3 +80,4 @@ from .breadcrumb import (
     BreadcrumbSeparator,
     BreadcrumbEllipsis,
 )
+from .pagination import Pagination, PaginationContent

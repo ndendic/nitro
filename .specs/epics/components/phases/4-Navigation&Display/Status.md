@@ -27,7 +27,7 @@ Breadcrumb, Pagination, Avatar, and Table components for navigation and data dis
 | # | Feature | Description | Status |
 |---|---------|-------------|--------|
 | 1 | [Breadcrumb](features/01-breadcrumb.md) | Breadcrumb navigation with separators | Completed |
-| 2 | [Pagination](features/02-pagination.md) | Page navigation with Datastar signal | Pending |
+| 2 | [Pagination](features/02-pagination.md) | Page navigation with Datastar signal | Completed |
 | 3 | [Avatar](features/03-avatar.md) | Avatar with image and fallback initials | Pending |
 | 4 | [Table](features/04-table.md) | Table with Basecoat styling and sortable headers | Pending |
 | 5 | [Documentation](features/05-documentation.md) | Documentation pages for all P4 components | Pending |
@@ -41,7 +41,7 @@ Breadcrumb, Pagination, Avatar, and Table components for navigation and data dis
 
 ### Visual Verification using skill or MCP
 - [x] Breadcrumb navigation works
-- [ ] Pagination changes page signal
+- [x] Pagination changes page signal
 - [ ] Avatar shows image or fallback
 - [ ] Table renders correctly
 - [ ] Sortable headers respond to clicks
