@@ -154,7 +154,7 @@ def alert_dialog_docs():
         H1("Alert Dialog Component"),
         P(
             "A modal dialog component for important confirmations that requires user "
-            "acknowledgment. Uses native HTML <dialog> element with showModal() for "
+            "acknowledgment. Uses native HTML &lt;dialog&gt; element with showModal() for "
             "proper focus management and backdrop interaction."
         ),
         Section(
@@ -162,7 +162,7 @@ def alert_dialog_docs():
             P("Alert Dialog provides interrupt-style confirmations:"),
             Ul(
                 Li("Modal behavior - blocks interaction with background content"),
-                Li("Native HTML <dialog> - proper accessibility and focus management"),
+                Li("Native HTML &lt;dialog&gt; - proper accessibility and focus management"),
                 Li("Focus trap - keyboard navigation stays within the dialog"),
                 Li("Escape key closes - standard keyboard behavior"),
                 Li("Backdrop click closes - optional click-outside behavior"),
@@ -192,7 +192,7 @@ def alert_dialog_docs():
             "API Reference",
             CodeBlock(
                 """
-# AlertDialog - Modal container using native <dialog>
+# AlertDialog - Modal container using native dialog element
 def AlertDialog(
     *children,              # AlertDialogHeader, custom content, AlertDialogFooter
     id: str,                # Required - unique dialog identifier
@@ -272,7 +272,7 @@ def AlertDialogCancel(
         Section(
             "Accessibility",
             Ul(
-                Li("Uses native <dialog> element for proper semantics"),
+                Li("Uses native &lt;dialog&gt; element for proper semantics"),
                 Li("role='alertdialog' for screen readers"),
                 Li("aria-modal='true' indicates modal behavior"),
                 Li("aria-labelledby references the title"),

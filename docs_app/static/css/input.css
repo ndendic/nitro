@@ -1768,3 +1768,12 @@
     }
   }
 }
+/* Fix for dialog children having fixed position when dialog is closed */
+/* The Basecoat CSS sets .dialog > * { position: fixed } which breaks layout when dialog is not open */
+.dialog:not([open]) > * {
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  translate: none !important;
+  display: none;
+}
