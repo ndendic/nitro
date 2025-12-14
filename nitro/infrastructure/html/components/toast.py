@@ -4,8 +4,8 @@ A notification system with provider pattern. Supports variants, auto-dismiss,
 positioning, and stacking. Uses Datastar for state management and animations.
 """
 
-from typing import Any, Optional
-from rusty_tags import Div, H2, P, Span, HtmlString, Footer, Section
+from typing import Any, Optional, Union
+from rusty_tags import Div, H2, P, Span, HtmlString, TagBuilder, Footer, Section
 from rusty_tags.datastar import Signals, Signal
 from .button import Button
 from .icons import LucideIcon
@@ -96,7 +96,7 @@ def Toaster(
     position: str = "bottom-right",
     cls: str = "",
     **attrs: Any,
-) -> HtmlString:
+) -> Union[TagBuilder, HtmlString]:
     """Standalone toaster container for dynamic toast injection.
 
     Place this in your layout to receive dynamically created toasts.

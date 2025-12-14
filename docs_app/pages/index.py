@@ -62,6 +62,13 @@ def index():
             ),
         ),
 
+        Section("Navigation & Display",
+            P("Navigation and data display components:"),
+            Ul(
+                Li(A("Breadcrumb", href="/xtras/breadcrumb", cls="color-blue-6 text-decoration-underline"), " - Breadcrumb navigation with separators"),
+            ),
+        ),
+
         Section("Utilities",
             P("Helper components and documentation:"),
             Ul(

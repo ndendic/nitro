@@ -72,3 +72,11 @@ from .toast import (
     ToastClose,
 )
 from .progress import Progress
+
+# P4 Navigation & Display
+from .breadcrumb import (
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbSeparator,
+    BreadcrumbEllipsis,
+)
