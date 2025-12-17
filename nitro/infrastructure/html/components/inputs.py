@@ -1,5 +1,6 @@
 import rusty_tags as rt
 from typing import Literal
+from rusty_tags import Fragment
 
 
 def Input(
@@ -22,9 +23,9 @@ def Input(
     # The label parameter becomes the floating label, not the placeholder
     placeholder = ' '
     
-    return rt.Label(
-        rt.Span(label, cls='label'),
+    return rt.Div(
+        rt.Span(label, cls='label') if label else Fragment(),
         rt.Input(type=type, placeholder=placeholder, *args, **kwargs),
-        rt.Span(supporting_text, cls='supporting-text') if supporting_text else "",
+        rt.Span(supporting_text, cls='supporting-text') if supporting_text else Fragment(),
         cls='field',
     )

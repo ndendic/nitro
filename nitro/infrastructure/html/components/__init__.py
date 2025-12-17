@@ -34,7 +34,7 @@ from .switch import Switch
 from .select import Select, SelectOption, SelectOptGroup
 from .textarea import Textarea
 from .field import Field, Fieldset
-from .input_group import InputGroup, InputPrefix, InputSuffix
+from .input_group import InputGroup
 
 # P2 Interactive Overlays
 from .dropdown import (

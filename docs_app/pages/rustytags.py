@@ -2,7 +2,7 @@
 
 from .templates.base import *  # noqa: F403
 from fastapi.responses import HTMLResponse
-from nitro.infrastructure.html.datastar import Signal, Signals, if_, match, classes, collect, all as all_cond, any as any_cond, f
+from nitro.infrastructure.html.datastar import Signal, Signals, if_, match, classes, collect, all_ as all_cond, any_ as any_cond, f
 from fastapi import APIRouter
 router: APIRouter = APIRouter()
 

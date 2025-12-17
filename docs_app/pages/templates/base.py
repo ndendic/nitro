@@ -56,9 +56,11 @@ hdrs = (
     ),
     Style(CUSTOM_CSS),  # Custom animations
     Script("""{"imports": {"datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"}}""", type='importmap'),
-    Script(type='module', src='https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js'),
+    # Script(type='module', src='https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js'),
     Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-persist@latest/dist/index.js'),
+    Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-anchor@latest/dist/index.js'),
 
+    Script(src='/static/js/datastar.js', type='module'),
     Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.6/dist/js/basecoat.min.js', defer=''),
     Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.6/dist/js/sidebar.min.js', defer='')
 )
@@ -66,14 +68,14 @@ hdrs = (
 htmlkws = dict(lang="en", cls="bg-background text-foreground",data_theme="$theme")
 bodykws = dict(
     cls="bg-background text-foreground",
-    signals=Signals(message="", conn="",dark_mode=True,theme="claude"),
+    signals=Signals(message="", conn="",darkMode=True,theme="claude"),
 )
 ftrs = (
     CustomTag("datastar-inspector"),
     Div(
         cls="hidden",
-        data_persist="dark_mode, theme",
-        data_effect="$dark_mode ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark'); document.documentElement.setAttribute('data-theme', $theme);",
+        data_persist="darkMode, theme",
+        data_effect="$darkMode ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark'); document.documentElement.setAttribute('data-theme', $theme);",
     )
 )
 # Shared page template
@@ -99,8 +101,8 @@ def template(title: str):
                 Main(
                     Navbar(),
                     Div(
-                        func(*args, **kwargs),
-                        cls="px-8 lg:px-16 xl:px-32 my-16"
+                        Div(func(*args, **kwargs), id="content"),
+                        cls="px-8 lg:px-16 xl:px-32 my-16",
                     ),
                     Footer(),
                     cls="min-h-screen flex flex-col",

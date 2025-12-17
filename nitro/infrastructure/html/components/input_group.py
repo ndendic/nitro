@@ -1,23 +1,30 @@
-"""Input Group component - Input with prefix/suffix elements."""
+"""Input Group component - Input with left/right decorative elements."""
 
-from typing import Any
-from rusty_tags import Div, Span, HtmlString
+from typing import Any, Optional, Union
+from rusty_tags import Div, HtmlString
 from .utils import cn
 
 
 def InputGroup(
-    *children: Any,
+    input_element: HtmlString,
+    left: Optional[Union[str, HtmlString, Any]] = None,
+    right: Optional[Union[str, HtmlString, Any]] = None,
+    left_interactive: bool = False,
+    right_interactive: bool = False,
     cls: str = "",
     **attrs: Any,
 ) -> HtmlString:
-    """Container for input with prefix/suffix elements.
+    """Container for input with left/right decorative elements.
 
-    Use with InputPrefix and InputSuffix to add icons, text, or other
-    elements to the sides of an input. Uses Tailwind utility classes
-    for styling.
+    Uses BasecoatUI's absolute positioning pattern. Creates a relative container
+    with the input and optional absolutely-positioned left/right elements.
 
     Args:
-        *children: InputPrefix, Input, InputSuffix elements
+        input_element: The input element (should have cls="input" and appropriate padding)
+        left: Optional content for left side (text, icon, etc.)
+        right: Optional content for right side (text, icon, etc.)
+        left_interactive: If True, left element can be clicked (removes pointer-events-none)
+        right_interactive: If True, right element can be clicked (removes pointer-events-none)
         cls: Additional CSS classes
         **attrs: Additional HTML attributes
 
@@ -27,117 +34,69 @@ def InputGroup(
     Example:
         # Input with dollar prefix
         InputGroup(
-            InputPrefix("$"),
-            Input(type="number", id="price", placeholder="0.00"),
+            Input(type="number", id="price", placeholder="0.00", cls="input pl-9"),
+            left="$"
         )
 
         # Search input with icon
         InputGroup(
-            InputPrefix(LucideIcon("search")),
-            Input(type="text", id="search", placeholder="Search..."),
+            Input(type="text", id="search", placeholder="Search...", cls="input pl-9"),
+            left=LucideIcon("search", cls="w-4 h-4")
         )
 
         # Input with suffix
         InputGroup(
-            Input(type="text", id="website", placeholder="example"),
-            InputSuffix(".com"),
+            Input(type="text", id="website", placeholder="example", cls="input pr-16"),
+            right=".com"
         )
 
-        # Both prefix and suffix
+        # Both left and right
         InputGroup(
-            InputPrefix("https://"),
-            Input(type="text", id="url", placeholder="example.com"),
-            InputSuffix("/path"),
+            Input(type="text", id="url", placeholder="example.com", cls="input pl-20 pr-14"),
+            left="https://",
+            right="/path"
+        )
+
+        # Interactive right element
+        InputGroup(
+            Input(type="text", id="search", placeholder="Search...", cls="input pl-9 pr-20"),
+            left=LucideIcon("search", cls="w-4 h-4"),
+            right=Button("Search", cls="btn-sm"),
+            right_interactive=True
         )
     """
+    children = [input_element]
+
+    # Add left element if provided
+    if left is not None:
+        left_el = Div(
+            left,
+            cls=cn(
+                "absolute left-3 top-1/2 -translate-y-1/2",
+                "flex items-center justify-center",
+                "text-muted-foreground text-sm",
+                "[&>svg]:size-4",
+                "pointer-events-none" if not left_interactive else "",
+            ),
+        )
+        children.append(left_el)
+
+    # Add right element if provided
+    if right is not None:
+        right_el = Div(
+            right,
+            cls=cn(
+                "absolute right-3 top-1/2 -translate-y-1/2",
+                "flex items-center justify-center",
+                "text-muted-foreground text-sm",
+                "[&>svg]:size-4",
+                "pointer-events-none" if not right_interactive else "",
+            ),
+        )
+        children.append(right_el)
+
     return Div(
         *children,
-        cls=cn(
-            "input-group",
-            "flex items-stretch",
-            # Handle border radius on first/last children
-            "[&>*:first-child]:rounded-l-md [&>*:first-child]:rounded-r-none",
-            "[&>*:last-child]:rounded-r-md [&>*:last-child]:rounded-l-none",
-            "[&>*:not(:first-child):not(:last-child)]:rounded-none",
-            # Remove double borders between adjacent elements
-            "[&>*:not(:first-child)]:border-l-0",
-            # Make input fill available space
-            "[&>input]:flex-1 [&>input]:min-w-0",
-            cls,
-        ),
-        **attrs,
-    )
-
-
-def InputPrefix(
-    *children: Any,
-    cls: str = "",
-    **attrs: Any,
-) -> HtmlString:
-    """Prefix element for InputGroup.
-
-    Displays content (text, icon, etc.) before the input.
-
-    Args:
-        *children: Content to display in prefix (text, icons, etc.)
-        cls: Additional CSS classes
-        **attrs: Additional HTML attributes
-
-    Returns:
-        HtmlString: Rendered prefix element
-
-    Example:
-        InputPrefix("$")
-        InputPrefix(LucideIcon("mail"))
-        InputPrefix("https://")
-    """
-    return Span(
-        *children,
-        cls=cn(
-            "input-prefix",
-            "inline-flex items-center justify-center",
-            "px-3 py-1.5",
-            "border border-input bg-muted/50",
-            "text-muted-foreground text-sm",
-            "select-none",
-            cls,
-        ),
-        **attrs,
-    )
-
-
-def InputSuffix(
-    *children: Any,
-    cls: str = "",
-    **attrs: Any,
-) -> HtmlString:
-    """Suffix element for InputGroup.
-
-    Displays content (text, icon, etc.) after the input.
-
-    Args:
-        *children: Content to display in suffix (text, icons, etc.)
-        cls: Additional CSS classes
-        **attrs: Additional HTML attributes
-
-    Returns:
-        HtmlString: Rendered suffix element
-
-    Example:
-        InputSuffix(".00")
-        InputSuffix(".com")
-        InputSuffix(LucideIcon("eye"))
-    """
-    return Span(
-        *children,
-        cls=cn(
-            "input-suffix",
-            "inline-flex items-center justify-center",
-            "px-3 py-1.5",
-            "border border-input bg-muted/50",
-            "text-muted-foreground text-sm",
-            "select-none",
-            cls,
-        ),
+        cls=cn("input-group", "relative", cls),
         **attrs,
     )

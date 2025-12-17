@@ -3,7 +3,9 @@
 from .templates.base import *  # noqa: F403
 from fastapi.responses import HTMLResponse
 from fastapi import APIRouter
-
+from nitro.infrastructure.events import *
+from fastapi import Request
+from fastapi.responses import HTMLResponse
 from nitro.infrastructure.html.components import Button, ButtonGroup
 
 router: APIRouter = APIRouter()
@@ -66,11 +68,7 @@ def example_disabled():
         cls="flex flex-wrap gap-2"
     )
 
-
-@router.get("/xtras/button")
-@template(title="Button Component Documentation")
-def button_docs():
-    return Div(
+page = Div(
         H1("Button Component"),
         P(
             "A versatile button component with multiple variants and sizes. "
@@ -135,4 +133,18 @@ def ButtonGroup(
             ),
         ),
         BackLink(),
+        id="content"
     )
+@router.get("/xtras/button")
+@template(title="Button Component Documentation")
+def button_docs():
+    return page
+
+@router.get("/cmds/page.button/nikola")
+# @template(title="Button Component Documentation")
+def button_docs():
+    return HTMLResponse(page)
+
+@on("page.button")
+async def get_button(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.button")
