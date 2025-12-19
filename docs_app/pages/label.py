@@ -1,9 +1,9 @@
 """Label component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
-
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import Label
 
 router: APIRouter = APIRouter()
@@ -68,10 +68,7 @@ def example_form():
     )
 
 
-@router.get("/xtras/label")
-@template(title="Label Component Documentation")
-def label_docs():
-    return Div(
+page = Div(
         H1("Label Component"),
         P(
             "A text label associated with a form control, providing "
@@ -129,4 +126,14 @@ def Label(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/label")
+@template(title="Label Component Documentation")
+def label_page():
+    return page
+
+@on("page.label")
+async def get_label(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.label")

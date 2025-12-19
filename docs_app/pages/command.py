@@ -2,6 +2,8 @@
 
 from .templates.base import *  # noqa: F403
 from fastapi import APIRouter
+from fastapi.requests import Request
+from nitro.infrastructure.events import on, emit_elements
 
 from nitro.infrastructure.html.components import (
     Command,
@@ -150,7 +152,7 @@ def example_with_dialog():
             "Open Command Palette",
             variant="outline",
             id="cmd-dialog-trigger",
-            data_on_click="$cmd_dialog_open = true",
+            on_click="$cmd_dialog_open = true",
         ),
         Div(
             # Dialog simulation using existing dialog patterns
@@ -174,9 +176,9 @@ def example_with_dialog():
                 ),
                 cls="dialog",
                 id="cmd-dialog",
-                **{"data-attr-open": "$cmd_dialog_open"},
-                data_on_click__outside="$cmd_dialog_open = false",
-                data_on_keydown__escape="$cmd_dialog_open = false",
+                **{"data-attr:open": "$cmd_dialog_open"},
+                # on_click__outside="$cmd_dialog_open = false",
+                on_keydown="evt.key === 'Escape' && ($cmd_dialog_open = false)",
             ),
             signals=Signals(cmd_dialog_open=False),
         ),
@@ -207,10 +209,7 @@ def example_custom_icons():
     )
 
 
-@router.get("/xtras/command")
-@template(title="Command Palette Component Documentation")
-def command_docs():
-    return Div(
+page = Div(
         H1("Command Palette Component"),
         P(
             "A command palette component for quick actions and search. Supports grouping, "
@@ -332,4 +331,14 @@ def CommandEmpty(*children, cls: str = "", **attrs) -> HtmlString
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/command")
+@template(title="Command Palette Component Documentation")
+def command_page():
+    return page
+
+@on("page.command")
+async def get_command(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.command")

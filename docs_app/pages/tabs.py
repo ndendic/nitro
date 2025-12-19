@@ -1,7 +1,7 @@
 """Tabs component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from nitro.infrastructure.html.components import (
     Tabs,
     TabsList,
@@ -9,6 +9,7 @@ from nitro.infrastructure.html.components import (
     TabsContent,
 )
 from fastapi import APIRouter
+from nitro.infrastructure.events import on, emit_elements
 
 router: APIRouter = APIRouter()
 
@@ -45,10 +46,7 @@ def example_1():
     )
 
 
-@router.get("/xtras/tabs")
-@page(title="Tabs Component Documentation", wrap_in=HTMLResponse)
-def tabs_docs():
-    return Main(
+page = Main(
         H1("Tabs Component"),
         P(
             "The Tabs component is our first true anatomical pattern - it handles complex coordination between tab buttons, panels, ARIA relationships, and keyboard navigation."
@@ -112,4 +110,14 @@ cls: str = "",                 # Content panel classes
         ),
         BackLink(),
         signals=Signals(message=""),
+        id="content"
     )
+
+@router.get("/xtras/tabs")
+@template(title="Tabs Component Documentation")
+def tabs_page():
+    return page
+
+@on("page.tabs")
+async def get_tabs(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.tabs")

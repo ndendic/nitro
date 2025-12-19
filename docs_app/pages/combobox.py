@@ -2,6 +2,8 @@
 
 from .templates.base import *  # noqa: F403
 from fastapi import APIRouter
+from fastapi.requests import Request
+from nitro.infrastructure.events import on, emit_elements
 
 from nitro.infrastructure.html.components import (
     Combobox,
@@ -130,10 +132,7 @@ def example_long_list():
     )
 
 
-@router.get("/xtras/combobox")
-@template(title="Combobox Component Documentation")
-def combobox_docs():
-    return Div(
+page = Div(
         H1("Combobox Component"),
         P(
             "A searchable dropdown that combines an input field with a filterable list "
@@ -246,4 +245,14 @@ def ComboboxSeparator(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/combobox")
+@template(title="Combobox Component Documentation")
+def combobox_page():
+    return page
+
+@on("page.combobox")
+async def get_combobox(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.combobox")

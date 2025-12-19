@@ -1,10 +1,10 @@
 """Radio Group component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
 from nitro.infrastructure.html.datastar import Signal, Signals
-
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import Label
 from nitro.infrastructure.html.components.radio import RadioGroup, RadioItem
 
@@ -104,10 +104,7 @@ def example_in_field():
     )
 
 
-@router.get("/xtras/radio")
-@template(title="Radio Group Component Documentation")
-def radio_docs():
-    return Div(
+page = Div(
         H1("Radio Group Component"),
         P(
             "Radio group with compound component pattern. Uses Datastar two-way binding "
@@ -220,4 +217,14 @@ def RadioGroup(*children, bind, ...):
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/radio")
+@template(title="Radio Group Component Documentation")
+def radio_page():
+    return page
+
+@on("page.radio")
+async def get_radio(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.radio")

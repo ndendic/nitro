@@ -2,7 +2,8 @@
 
 from .templates.base import *  # noqa: F403
 from fastapi import APIRouter
-
+from fastapi.requests import Request
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import (
     ThemeSwitcher,
     ThemeSwitcherDropdown,
@@ -152,10 +153,7 @@ def example_persistence():
     )
 
 
-@router.get("/xtras/theme-switcher")
-@template(title="Theme Switcher Component Documentation")
-def theme_switcher_docs():
-    return Div(
+page = Div(
         H1("Theme Switcher Component"),
         P(
             "A theme toggle component for switching between light, dark, and system modes. "
@@ -275,4 +273,14 @@ def ThemeSelect(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/theme-switcher")
+@template(title="Theme Switcher Component Documentation")
+def theme_switcher_page():
+    return page
+
+@on("page.theme-switcher")
+async def get_theme_switcher(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.theme-switcher")

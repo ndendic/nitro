@@ -1,10 +1,10 @@
 """Pagination component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
 from rusty_tags.datastar import Signal, Signals
-
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import (
     Pagination,
     PaginationContent,
@@ -76,10 +76,7 @@ def example_minimal():
     )
 
 
-@router.get("/xtras/pagination")
-@template(title="Pagination Component Documentation")
-def pagination_docs():
-    return Div(
+page = Div(
         H1("Pagination Component"),
         P(
             "A navigation component for paginated content. Uses Datastar signals "
@@ -163,4 +160,14 @@ Pagination(total_pages=5, signal_name="products_page")
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/pagination")
+@template(title="Pagination Component Documentation")
+def pagination_page():
+    return page
+
+@on("page.pagination")
+async def get_pagination(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.pagination")

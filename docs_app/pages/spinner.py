@@ -1,9 +1,9 @@
 """Spinner component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
-
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import Spinner, Button
 
 router: APIRouter = APIRouter()
@@ -80,10 +80,7 @@ def example_with_button():
     )
 
 
-@router.get("/xtras/spinner")
-@template(title="Spinner Component Documentation")
-def spinner_docs():
-    return Div(
+page = Div(
         H1("Spinner Component"),
         P(
             "A loading indicator component using the Lucide loader-2 icon with "
@@ -142,4 +139,14 @@ def Spinner(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/spinner")
+@template(title="Spinner Component Documentation")
+def spinner_page():
+    return page
+
+@on("page.spinner")
+async def get_spinner(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.spinner")

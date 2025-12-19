@@ -78,7 +78,7 @@ def Command(
                 type="text",
                 placeholder=placeholder,
                 autocomplete="off",
-                data_bind=search_signal,
+                bind=search_signal,
                 id=f"{command_id}-input",
             ),
         ),
@@ -153,7 +153,7 @@ def CommandDialog(
     if trigger is not None:
         trigger_element = rt.Span(
             trigger,
-            data_on_click=f"${open_signal} = true",
+            on_click=f"${open_signal} = true",
         )
 
     dialog = rt.Dialog(
@@ -167,7 +167,7 @@ def CommandDialog(
                         type="text",
                         placeholder=placeholder,
                         autocomplete="off",
-                        data_bind=search_signal,
+                        bind=search_signal,
                         id=f"{command_id}-input",
                     ),
                 ),
@@ -184,9 +184,9 @@ def CommandDialog(
         cls=cn("command-dialog", cls),
         id=command_id,
         open=False,
-        **{"data-attr-open": f"${open_signal}"},
-        data_on_click__outside=f"${open_signal} = false",
-        data_on_keydown__escape=f"${open_signal} = false",
+        **{"data-attr:open": f"${open_signal}"},
+        # on_click__outside=f"${open_signal} = false",
+        on_keydown=f"evt.key === 'Escape' && (${open_signal} = false)",
         **attrs,
     )
 
@@ -306,14 +306,14 @@ def CommandItem(
         if disabled:
             item_attrs["aria_disabled"] = "true"
         elif on_select:
-            item_attrs["data_on_click"] = on_select
-            item_attrs["data_on_keydown__enter"] = on_select
+            item_attrs["on_click"] = on_select
+            item_attrs["on_keydown__enter"] = on_select
 
         # Filter visibility based on search
         escaped_text = display_text.lower().replace("'", "\\'")
         item_attrs["data_show"] = f"!${search_signal} || '{escaped_text}'.includes(${search_signal}.toLowerCase())"
         # Also set aria-hidden for CSS filtering
-        item_attrs["data-attr-aria-hidden"] = f"${search_signal} && !'{escaped_text}'.includes(${search_signal}.toLowerCase())"
+        item_attrs["data-attr:aria-hidden"] = f"${search_signal} && !'{escaped_text}'.includes(${search_signal}.toLowerCase())"
 
         item_attrs.update(attrs)
 

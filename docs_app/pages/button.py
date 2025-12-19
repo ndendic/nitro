@@ -1,11 +1,10 @@
 """Button component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
 from nitro.infrastructure.events import *
 from fastapi import Request
-from fastapi.responses import HTMLResponse
 from nitro.infrastructure.html.components import Button, ButtonGroup
 
 router: APIRouter = APIRouter()
@@ -74,7 +73,7 @@ page = Div(
             "A versatile button component with multiple variants and sizes. "
             "Uses semantic class names with data attributes for styling."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("The Button component follows Nitro conventions:"),
             Ul(
@@ -84,32 +83,32 @@ page = Div(
                 Li("**attrs pass-through for any HTML attribute"),
             ),
         ),
-        Section(
+        TitledSection(
             "Variants",
             P("Seven visual variants are available for different use cases:"),
             ComponentShowcase(example_variants),
         ),
-        Section(
+        TitledSection(
             "Sizes",
             P("Four sizes including an icon-only option:"),
             ComponentShowcase(example_sizes),
         ),
-        Section(
+        TitledSection(
             "With Icons",
             P("Buttons can include icons before or after text:"),
             ComponentShowcase(example_with_icons),
         ),
-        Section(
+        TitledSection(
             "Button Group",
             P("Group related buttons together:"),
             ComponentShowcase(example_button_group),
         ),
-        Section(
+        TitledSection(
             "Disabled State",
             P("Buttons can be disabled:"),
             ComponentShowcase(example_disabled),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -139,11 +138,6 @@ def ButtonGroup(
 @template(title="Button Component Documentation")
 def button_docs():
     return page
-
-@router.get("/cmds/page.button/nikola")
-# @template(title="Button Component Documentation")
-def button_docs():
-    return HTMLResponse(page)
 
 @on("page.button")
 async def get_button(sender, request: Request, signals: Signals):

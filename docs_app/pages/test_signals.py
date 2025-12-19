@@ -4,6 +4,7 @@ from fastapi import APIRouter
 from rusty_tags import Div, Button, Pre, Code, H1
 from nitro.infrastructure.html.datastar import Signals
 from pages.templates.base import template
+from nitro.infrastructure.events import on, emit_elements
 
 router = APIRouter()
 

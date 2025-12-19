@@ -1,10 +1,10 @@
 """Switch component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
-from nitro.infrastructure.html.datastar import Signal, Signals
-
+from nitro.infrastructure.html.datastar import Signals
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import Switch, Label
 
 router: APIRouter = APIRouter()
@@ -141,10 +141,7 @@ def example_without_label():
     )
 
 
-@router.get("/xtras/switch")
-@template(title="Switch Component Documentation")
-def switch_docs():
-    return Div(
+page = Div(
         H1("Switch Component"),
         P(
             "Toggle switch using native checkbox with role=\"switch\" for Basecoat styling. "
@@ -237,4 +234,14 @@ Switch("Dark mode", id="dark_mode", bind=settings.dark_mode)
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/switch")
+@template(title="Switch Component Documentation")
+def switch_page():
+    return page
+
+@on("page.switch")
+async def get_switch(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.switch")

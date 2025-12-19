@@ -6,7 +6,7 @@ All component documentation pages should import from this module.
 import inspect
 from fastapi.responses import HTMLResponse
 from nitro import *  # noqa: F403
-from nitro.infrastructure.html import Section as HTMLSection
+from nitro.infrastructure.html import Section as HTMLSection, H1 as HTMLH1
 from nitro.infrastructure.html import *
 from nitro.infrastructure.html.components import *
 from typing import Callable, ParamSpec, TypeVar
@@ -102,10 +102,12 @@ def template(title: str):
                     Navbar(),
                     Div(
                         Div(func(*args, **kwargs), id="content"),
-                        cls="px-8 lg:px-16 xl:px-32 my-16",
+                        cls="p-4 md:p-6 xl:p-12 max-w-4xl mx-auto",
                     ),
                     Footer(),
                     cls="min-h-screen flex flex-col",
+                    data_init="@get('/updates')",
+
                 ),
             )
         return wrapper
@@ -149,8 +151,13 @@ def ComponentShowcase(component: Callable):
                 get_code(component),
                 cls="language-python",
                 style="border: 1px solid; border-radius: 0.5rem;",
+                data_init="hljs.highlightAll()"
             ),
             id="tab2",
         ),
         default_tab="tab1",
+        cls="mt-4",
     )
+
+def H1(text: str, cls: str = "text-4xl font-bold mb-4", **kwargs):
+    return HTMLH1(text, cls=cls, **kwargs)

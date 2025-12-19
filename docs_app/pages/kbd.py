@@ -1,9 +1,9 @@
 """Kbd (Keyboard) component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
-
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import Kbd
 
 router: APIRouter = APIRouter()
@@ -130,10 +130,7 @@ def example_shortcuts_table():
     )
 
 
-@router.get("/xtras/kbd")
-@template(title="Kbd Component Documentation")
-def kbd_docs():
-    return Div(
+page = Div(
         H1("Kbd Component"),
         P(
             "Displays a keyboard key or shortcut in a visual representation "
@@ -194,4 +191,14 @@ def Kbd(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/kbd")
+@template(title="Kbd Component Documentation")
+def kbd_page():
+    return page
+
+@on("page.kbd")
+async def get_kbd(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.kbd")

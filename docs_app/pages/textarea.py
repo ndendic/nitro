@@ -1,10 +1,10 @@
 """Textarea component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
-from nitro.infrastructure.html.datastar import Signal, Signals
-
+from nitro.infrastructure.html.datastar import Signals
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import Label
 from nitro.infrastructure.html.components.textarea import Textarea
 
@@ -119,10 +119,7 @@ def example_disabled():
     )
 
 
-@router.get("/xtras/textarea")
-@template(title="Textarea Component Documentation")
-def textarea_docs():
-    return Div(
+page = Div(
         H1("Textarea Component"),
         P(
             "Textarea input with Datastar two-way binding. Uses Basecoat's context-based "
@@ -209,4 +206,14 @@ Div(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/textarea")
+@template(title="Textarea Component Documentation")
+def textarea_page():
+    return page
+
+@on("page.textarea")
+async def get_textarea(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.textarea")

@@ -1,9 +1,10 @@
 """Checkbox component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
-from nitro.infrastructure.html.datastar import Signal, Signals
+from nitro.infrastructure.html.datastar import Signals
+from nitro.infrastructure.events import on, emit_elements
 
 from nitro.infrastructure.html.components import Checkbox, Label
 
@@ -74,10 +75,7 @@ def example_without_label():
     )
 
 
-@router.get("/xtras/checkbox")
-@template(title="Checkbox Component Documentation")
-def checkbox_docs():
-    return Div(
+page = Div(
         H1("Checkbox Component"),
         P(
             "Checkbox input with Datastar two-way binding. Uses Basecoat's context-based "
@@ -147,4 +145,14 @@ Checkbox("Accept terms", id="terms", bind=form.accepted)
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/checkbox")
+@template(title="Checkbox Component Documentation")
+def checkbox_page():
+    return page
+
+@on("page.checkbox")
+async def get_checkbox(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.checkbox")

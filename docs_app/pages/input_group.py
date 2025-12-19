@@ -1,11 +1,11 @@
 """Input Group component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
 from fastapi import APIRouter
-from nitro.infrastructure.html.datastar import Signal, Signals
-
+from fastapi.requests import Request
+from nitro.infrastructure.html.datastar import Signals
 from nitro.infrastructure.html.components import InputGroup, LucideIcon, Field
+from nitro.infrastructure.events import on, emit_elements
 
 router: APIRouter = APIRouter()
 
@@ -154,10 +154,7 @@ def example_variations():
     )
 
 
-@router.get("/xtras/input-group")
-@template(title="Input Group Component Documentation")
-def input_group_docs():
-    return Div(
+page = Div(
         H1("Input Group Component"),
         P(
             "Container for input with prefix/suffix elements. Add icons, text, or other "
@@ -280,4 +277,14 @@ InputGroup(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/input-group")
+@template(title="Input Group Component Documentation")
+def input_group_page():
+    return page
+
+@on("page.input-group")
+async def get_input_group(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.input-group")

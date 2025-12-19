@@ -1,11 +1,12 @@
 """Accordion component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
 
 from nitro.infrastructure.html.components.monsterui.all import H2
 from nitro.infrastructure.html.components import Accordion, AccordionItem
+from nitro.infrastructure.events import on, emit_elements
 
 router: APIRouter = APIRouter()
 
@@ -77,11 +78,7 @@ def example_2():
         ),
     )
 
-
-@router.get("/xtras/accordion")
-@template(title="Accordion Component Documentation")
-def accordion_docs():
-    return Div(
+page = Div(
         H1("Accordion Component"),
         H2("Accordion Component documentation"),
         P(
@@ -154,4 +151,14 @@ def AccordionItemTrigger(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/accordion")
+@template(title="Accordion Component Documentation")
+def accordion_page():
+    return page
+
+@on("page.accordion")
+async def get_accordion(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.accordion")

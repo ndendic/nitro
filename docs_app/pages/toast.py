@@ -1,9 +1,9 @@
 """Toast component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
-
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import (
     Toast,
     Toaster,
@@ -210,10 +210,7 @@ Button(
     )
 
 
-@router.get("/xtras/toast")
-@template(title="Toast Component Documentation")
-def toast_docs():
-    return Div(
+page = Div(
         # Global toaster for the page (for potential dynamic toast injection)
         Toaster(position="bottom-right"),
         H1("Toast Component"),
@@ -327,4 +324,14 @@ def ToastClose(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/toast")
+@template(title="Toast Component Documentation")
+def toast_page():
+    return page
+
+@on("page.toast")
+async def get_toast(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.toast")

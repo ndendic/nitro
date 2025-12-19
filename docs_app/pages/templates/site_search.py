@@ -133,6 +133,7 @@ def SiteSearch():
                         autocomplete="off",
                     ),
                     cls="flex items-center gap-2 px-3 py-3 border-b",
+                    id="site-search-input",
                 ),
                 # Results container
                 Div(
@@ -144,6 +145,7 @@ def SiteSearch():
                     ),
                     cls="max-h-[400px] overflow-y-auto p-2",
                     id="search-results",
+                    data_anchor="site-search-input",
                 ),
                 cls="bg-popover rounded-lg shadow-lg border w-full max-w-lg",
             ),

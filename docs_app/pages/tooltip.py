@@ -1,11 +1,11 @@
 """Tooltip component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
 
 from nitro.infrastructure.html.components import Tooltip, Button
-
+from nitro.infrastructure.events import on, emit_elements
 router: APIRouter = APIRouter()
 
 
@@ -122,10 +122,7 @@ def example_with_text():
     )
 
 
-@router.get("/xtras/tooltip")
-@template(title="Tooltip Component Documentation")
-def tooltip_docs():
-    return Div(
+page = Div(
         H1("Tooltip Component"),
         P(
             "A simple tooltip that appears on hover. Uses pure CSS via Basecoat's "
@@ -198,4 +195,14 @@ def Tooltip(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/tooltip")
+@template(title="Tooltip Component Documentation")
+def tooltip_page():
+    return page
+
+@on("page.tooltip")
+async def get_tooltip(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.tooltip")

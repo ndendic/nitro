@@ -1,8 +1,10 @@
 """CodeBlock component documentation page"""
 
 from .templates.base import *
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
+from nitro.infrastructure.events import on, emit_elements
+
 router: APIRouter = APIRouter()
 
 
@@ -16,10 +18,7 @@ def example_2():
         code_cls="language-javascript"
     )
     
-@router.get("/xtras/codeblock")
-@template(title="CodeBlock Component Documentation")
-def codeblock_docs():
-    return Div(
+page = Div(
         H1("CodeBlock Component"),
         P("The CodeBlock component provides a semantic structure for displaying code with proper HTML markup and styling hooks."),
         
@@ -54,4 +53,14 @@ code_cls: str = "", # CSS classes for code element
 ) -> rt.HtmlString""", code_cls="language-python"),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/codeblock")
+@template(title="CodeBlock Component Documentation")
+def codeblock_page():
+    return page
+
+@on("page.codeblock")
+async def get_codeblock(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.codeblock")

@@ -26,6 +26,6 @@ def Input(
     return rt.Div(
         rt.Span(label, cls='label') if label else Fragment(),
         rt.Input(type=type, placeholder=placeholder, *args, **kwargs),
-        rt.Span(supporting_text, cls='supporting-text') if supporting_text else Fragment(),
+        rt.P(supporting_text, cls='supporting-text') if supporting_text else Fragment(),
         cls='field',
     )

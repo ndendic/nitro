@@ -6,51 +6,51 @@ from .base import get
 
 COMPONENT_PAGES = {
     "Foundation Components": [
-        {"title": "Button", "href": "/cmds/page.button/nikola", "icon": "square", "page": "page.button"},
-        {"title": "Card", "href": "/xtras/card", "icon": "credit-card"},
-        {"title": "Badge", "href": "/xtras/badge", "icon": "tag"},
-        {"title": "Alert", "href": "/xtras/alert", "icon": "alert-circle"},
-        {"title": "Label", "href": "/xtras/label", "icon": "type"},
-        {"title": "Kbd", "href": "/xtras/kbd", "icon": "keyboard"},
-        {"title": "Spinner", "href": "/xtras/spinner", "icon": "loader"},
-        {"title": "Skeleton", "href": "/xtras/skeleton", "icon": "layers"},
+        {"title": "Button", "href": "/cmds/page.button/nikola", "icon": "square"},
+        {"title": "Card", "href": "/cmds/page.card/nikola", "icon": "credit-card"},
+        {"title": "Badge", "href": "/cmds/page.badge/nikola", "icon": "tag"},
+        {"title": "Alert", "href": "/cmds/page.alert/nikola", "icon": "alert-circle"},
+        {"title": "Label", "href": "/cmds/page.label/nikola", "icon": "type"},
+        {"title": "Kbd", "href": "/cmds/page.kbd/nikola", "icon": "keyboard"},
+        {"title": "Spinner", "href": "/cmds/page.spinner/nikola", "icon": "loader"},
+        {"title": "Skeleton", "href": "/cmds/page.skeleton/nikola", "icon": "layers"},
     ],
     "Form Controls": [
-        {"title": "Field", "href": "/xtras/field", "icon": "form-input"},
-        {"title": "Input Group", "href": "/xtras/input-group", "icon": "text-cursor-input"},
-        {"title": "Checkbox", "href": "/xtras/checkbox", "icon": "check-square"},
-        {"title": "Radio Group", "href": "/xtras/radio", "icon": "circle-dot"},
-        {"title": "Switch", "href": "/xtras/switch", "icon": "toggle-right"},
-        {"title": "Select", "href": "/xtras/select", "icon": "chevron-down"},
-        {"title": "Textarea", "href": "/xtras/textarea", "icon": "align-left"},
+        {"title": "Field", "href": "/cmds/page.field/nikola", "icon": "form-input"},
+        {"title": "Input Group", "href": "/cmds/page.input-group/nikola", "icon": "text-cursor-input"},
+        {"title": "Checkbox", "href": "/cmds/page.checkbox/nikola", "icon": "check-square"},
+        {"title": "Radio Group", "href": "/cmds/page.radio/nikola", "icon": "circle-dot"},
+        {"title": "Switch", "href": "/cmds/page.switch/nikola", "icon": "toggle-right"},
+        {"title": "Select", "href": "/cmds/page.select/nikola", "icon": "chevron-down"},
+        {"title": "Textarea", "href": "/cmds/page.textarea/nikola", "icon": "align-left"},
     ],
     "Interactive Components": [
-        {"title": "Tabs", "href": "/xtras/tabs", "icon": "folder"},
-        {"title": "Accordion", "href": "/xtras/accordion", "icon": "chevrons-down"},
-        {"title": "Dialog", "href": "/xtras/dialog", "icon": "square-stack"},
-        {"title": "Dropdown Menu", "href": "/xtras/dropdown", "icon": "chevron-down"},
-        {"title": "Popover", "href": "/xtras/popover", "icon": "message-square"},
-        {"title": "Tooltip", "href": "/xtras/tooltip", "icon": "info"},
-        {"title": "Alert Dialog", "href": "/xtras/alert-dialog", "icon": "alert-triangle"},
+        {"title": "Tabs", "href": "/cmds/page.tabs/nikola", "icon": "folder"},
+        {"title": "Accordion", "href": "/cmds/page.accordion/nikola", "icon": "chevrons-down"},
+        {"title": "Dialog", "href": "/cmds/page.dialog/nikola", "icon": "square-stack"},
+        {"title": "Dropdown Menu", "href": "/cmds/page.dropdown/nikola", "icon": "chevron-down"},
+        {"title": "Popover", "href": "/cmds/page.popover/nikola", "icon": "message-square"},
+        {"title": "Tooltip", "href": "/cmds/page.tooltip/nikola", "icon": "info"},
+        {"title": "Alert Dialog", "href": "/cmds/page.alert-dialog/nikola", "icon": "alert-triangle"},
     ],
     "Feedback Components": [
-        {"title": "Toast", "href": "/xtras/toast", "icon": "bell"},
-        {"title": "Progress", "href": "/xtras/progress", "icon": "bar-chart-2"},
+        {"title": "Toast", "href": "/cmds/page.toast/nikola", "icon": "bell"},
+        {"title": "Progress", "href": "/cmds/page.progress/nikola", "icon": "bar-chart-2"},
     ],
     "Navigation & Display": [
-        {"title": "Breadcrumb", "href": "/xtras/breadcrumb", "icon": "navigation"},
-        {"title": "Pagination", "href": "/xtras/pagination", "icon": "list"},
-        {"title": "Avatar", "href": "/xtras/avatar", "icon": "user"},
-        {"title": "Table", "href": "/xtras/table", "icon": "table"},
+        {"title": "Breadcrumb", "href": "/cmds/page.breadcrumb/nikola", "icon": "navigation"},
+        {"title": "Pagination", "href": "/cmds/page.pagination/nikola", "icon": "list"},
+        {"title": "Avatar", "href": "/cmds/page.avatar/nikola", "icon": "user"},
+        {"title": "Table", "href": "/cmds/page.table/nikola", "icon": "table"},
     ],
     "Advanced Components": [
-        {"title": "Combobox", "href": "/xtras/combobox", "icon": "search"},
-        {"title": "Command", "href": "/xtras/command", "icon": "terminal"},
-        {"title": "Theme Switcher", "href": "/xtras/theme-switcher", "icon": "sun-moon"},
+        {"title": "Combobox", "href": "/cmds/page.combobox/nikola", "icon": "search"},
+        {"title": "Command", "href": "/cmds/page.command/nikola", "icon": "terminal"},
+        {"title": "Theme Switcher", "href": "/cmds/page.theme-switcher/nikola", "icon": "sun-moon"},
     ],
     "Utilities": [
-        {"title": "RustyTags Datastar SDK", "href": "/xtras/rustytags", "icon": "code"},
-        {"title": "CodeBlock", "href": "/xtras/codeblock", "icon": "file-code"},
+        {"title": "RustyTags Datastar SDK", "href": "/cmds/page.rustytags/nikola", "icon": "code"},
+        {"title": "CodeBlock", "href": "/cmds/page.codeblock/nikola", "icon": "file-code"},
     ],
 }
 
@@ -128,13 +128,14 @@ def Navbar():
             ),
             # Site Search - centered with flex-grow
             Div(
-                SiteSearch(),
+                # SiteSearch(),
                 cls="flex-1 flex justify-center mx-4",
             ),
             # Theme controls
             Div(
                 Select(
                     Optgroup(
+                        Option('Default', value='default'),
                         Option('Claude', value='claude'),
                         Option('Candy', value='candy'),
                         Option('Neo Brutalism', value='neo-brutal'),
@@ -206,10 +207,11 @@ def DocumentationSidebar(pages: list = []):
         )
     return sections
 
+
 def ComponentSidebar():
     # Build sidebar sections
     sections = []
-    for category, category_pages in sorted(COMPONENT_PAGES.items()):        
+    for category, category_pages in COMPONENT_PAGES.items():
         # Pages in category
         page_links = []
         for page in category_pages:

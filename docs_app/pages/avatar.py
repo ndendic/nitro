@@ -1,10 +1,11 @@
 """Avatar component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
 
 from nitro.infrastructure.html.components import Avatar, AvatarGroup
+from nitro.infrastructure.events import on, emit_elements
 
 router: APIRouter = APIRouter()
 
@@ -110,10 +111,7 @@ def example_with_badge():
     )
 
 
-@router.get("/xtras/avatar")
-@template(title="Avatar Component Documentation")
-def avatar_docs():
-    return Div(
+page = Div(
         H1("Avatar Component"),
         P(
             "Display user profile images with automatic fallback to initials "
@@ -200,4 +198,14 @@ def AvatarGroup(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/avatar")
+@template(title="Avatar Component Documentation")
+def avatar_page():
+    return page
+
+@on("page.avatar")
+async def get_avatar(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.avatar")

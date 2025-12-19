@@ -1,10 +1,11 @@
 """Badge component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
 
 from nitro.infrastructure.html.components import Badge
+from nitro.infrastructure.events import on, emit_elements
 
 router: APIRouter = APIRouter()
 
@@ -83,10 +84,7 @@ def example_counts():
     )
 
 
-@router.get("/xtras/badge")
-@template(title="Badge Component Documentation")
-def badge_docs():
-    return Div(
+page = Div(
         H1("Badge Component"),
         P(
             "A small visual indicator used to highlight status, categories, "
@@ -144,4 +142,14 @@ def Badge(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/badge")
+@template(title="Badge Component Documentation")
+def badge_page():
+    return page
+
+@on("page.badge")
+async def get_badge(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.badge")

@@ -1,7 +1,7 @@
 """Dialog component documentation page"""
 
 from .templates.base import *
-
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import (
     Dialog,
     DialogTrigger,
@@ -14,6 +14,8 @@ from nitro.infrastructure.html.components import (
 )
 from nitro.infrastructure.html.components import LucideIcon
 from fastapi import APIRouter
+from fastapi.requests import Request
+
 router: APIRouter = APIRouter()
 
 
@@ -172,10 +174,7 @@ def example_confirm_dialog() -> HtmlString:
     )
 
 
-@router.get("/xtras/dialog")
-@template(title="Dialog Component Documentation")
-def dialog_docs():
-    return Div(
+page = Div(
         H1("Dialog Component"),
         P("The Dialog component provides a simplified interface to the native HTML `dialog` element with Datastar integration."),
 
@@ -293,4 +292,14 @@ DialogClose(
         ),
 
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/dialog")
+@template(title="Dialog Component Documentation")
+def dialog_page():
+    return page
+
+@on("page.dialog")
+async def get_dialog(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.dialog")

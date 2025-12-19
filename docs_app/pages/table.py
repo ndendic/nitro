@@ -1,9 +1,9 @@
 """Table component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
-
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import (
     Table,
     TableHeader,
@@ -227,10 +227,7 @@ def example_with_caption():
     )
 
 
-@router.get("/xtras/table")
-@template(title="Table Component Documentation")
-def table_docs():
-    return Div(
+page = Div(
         H1("Table Component"),
         P(
             "A responsive table component with Basecoat styling, "
@@ -325,4 +322,14 @@ Table(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/table")
+@template(title="Table Component Documentation")
+def table_page():
+    return page
+
+@on("page.table")
+async def get_table(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.table")

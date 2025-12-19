@@ -1,13 +1,14 @@
 """Card component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
-
+from nitro.infrastructure.events import on, emit_elements
 from nitro.infrastructure.html.components import (
     Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter,
     Button
 )
+
 
 router: APIRouter = APIRouter()
 
@@ -100,10 +101,7 @@ def example_stats():
     )
 
 
-@router.get("/xtras/card")
-@template(title="Card Component Documentation")
-def card_docs():
-    return Div(
+page = Div(
         H1("Card Component"),
         P(
             "A flexible container that groups related content and actions. "
@@ -144,9 +142,8 @@ def card_docs():
         ),
         TitledSection(
             "API Reference",
-            CodeBlock(
-                """
-def Card(
+            CodeBlock(             
+"""def Card(
     *children,                              # Card content (typically Card* subcomponents)
     variant: str = "default",               # default, elevated, outline, ghost
     cls: str = "",                          # Additional CSS classes
@@ -157,10 +154,20 @@ def CardHeader(*children, cls="", **attrs) -> HtmlString
 def CardTitle(*children, cls="", **attrs) -> HtmlString
 def CardDescription(*children, cls="", **attrs) -> HtmlString
 def CardContent(*children, cls="", **attrs) -> HtmlString
-def CardFooter(*children, cls="", **attrs) -> HtmlString
-""",
+def CardFooter(*children, cls="", **attrs) -> HtmlString""",
                 code_cls="language-python",
             ),
         ),
         BackLink(),
+        id="content"
+
     )
+
+@router.get("/xtras/card")
+@template(title="Card Component Documentation")
+def card_docs():
+    return page
+
+@on("page.card")
+async def get_card(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.card")

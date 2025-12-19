@@ -1,9 +1,10 @@
 """Field component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
-from nitro.infrastructure.html.datastar import Signal, Signals
+from nitro.infrastructure.html.datastar import Signals
+from nitro.infrastructure.events import on, emit_elements
 
 from nitro.infrastructure.html.components import Field, Fieldset, Checkbox, Label
 
@@ -12,8 +13,10 @@ router: APIRouter = APIRouter()
 
 def example_basic():
     return Div(
-        Field(
-            Input(type="email", id="email", placeholder="you@example.com"),
+        Input(
+            type="email", 
+            id="email", 
+            placeholder="you@example.com",
             label="Email",
             label_for="email",
         ),
@@ -23,11 +26,11 @@ def example_basic():
 
 def example_with_description():
     return Div(
-        Field(
-            Input(type="password", id="password", placeholder="Enter password"),
+        Input(
+            type="password", id="password", placeholder="Enter password",
             label="Password",
             label_for="password",
-            description="Must be at least 8 characters with one number.",
+            supporting_text="Must be at least 8 characters with one number.",
         ),
         cls="max-w-sm"
     )
@@ -152,10 +155,7 @@ def example_complete_form():
     )
 
 
-@router.get("/xtras/field")
-@template(title="Field Component Documentation")
-def field_docs():
-    return Div(
+page = Div(
         H1("Field Component"),
         P(
             "Form field wrapper providing Basecoat context styling. All inputs inside Field "
@@ -283,4 +283,14 @@ Field(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/field")
+@template(title="Field Component Documentation")
+def field_page():
+    return page
+
+@on("page.field")
+async def get_field(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.field")

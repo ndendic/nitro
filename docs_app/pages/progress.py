@@ -1,9 +1,10 @@
 """Progress component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
 from rusty_tags.datastar import Signal, Signals
+from nitro.infrastructure.events import on, emit_elements
 
 from nitro.infrastructure.html.components import (
     Progress,
@@ -119,10 +120,7 @@ def example_with_label():
     )
 
 
-@router.get("/xtras/progress")
-@template(title="Progress Component Documentation")
-def progress_docs():
-    return Div(
+page = Div(
         H1("Progress Component"),
         P(
             "A progress bar indicates the completion status of a task. It can show "
@@ -197,4 +195,14 @@ Progress(value=25, max_value=50)      # Custom max value (shows 50%)
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/progress")
+@template(title="Progress Component Documentation")
+def progress_page():
+    return page
+
+@on("page.progress")
+async def get_progress(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.progress")

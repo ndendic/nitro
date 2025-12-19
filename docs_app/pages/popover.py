@@ -1,8 +1,9 @@
 """Popover component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
+from nitro.infrastructure.events import on, emit_elements
 
 from nitro.infrastructure.html.components import (
     Popover,
@@ -176,10 +177,7 @@ def example_rich_content():
     )
 
 
-@router.get("/xtras/popover")
-@template(title="Popover Component Documentation")
-def popover_docs():
-    return Div(
+page = Div(
         H1("Popover Component"),
         P(
             "A positioned overlay container for additional content. Uses Datastar signals "
@@ -267,4 +265,14 @@ def PopoverClose(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/popover")
+@template(title="Popover Component Documentation")
+def popover_page():
+    return page
+
+@on("page.popover")
+async def get_popover(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.popover")

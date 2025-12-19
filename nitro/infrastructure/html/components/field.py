@@ -106,14 +106,13 @@ def Field(
                 H3(label_content)
             )
 
+    # Add the form input children
+    field_content.extend(children)
     # Add description if provided (before input for better UX)
     if description:
         field_content.append(
             P(description)
         )
-
-    # Add the form input children
-    field_content.extend(children)
 
     # Add error message if provided
     if error:

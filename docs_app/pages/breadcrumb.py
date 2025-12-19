@@ -1,8 +1,9 @@
 """Breadcrumb component documentation page"""
 
 from .templates.base import *  # noqa: F403
-from fastapi.responses import HTMLResponse
+from fastapi.requests import Request
 from fastapi import APIRouter
+from nitro.infrastructure.events import on, emit_elements
 
 from nitro.infrastructure.html.components import (
     Breadcrumb,
@@ -93,10 +94,7 @@ def example_long_path():
     )
 
 
-@router.get("/xtras/breadcrumb")
-@template(title="Breadcrumb Component Documentation")
-def breadcrumb_docs():
-    return Div(
+page = Div(
         H1("Breadcrumb Component"),
         P(
             "A navigation component that helps users understand their location "
@@ -190,4 +188,14 @@ Breadcrumb(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/breadcrumb")
+@template(title="Breadcrumb Component Documentation")
+def breadcrumb_page():
+    return page
+
+@on("page.breadcrumb")
+async def get_breadcrumb(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.breadcrumb")

@@ -1,7 +1,9 @@
 """Alert Dialog component documentation page"""
 
+from nitro.infrastructure.events import emit_elements, on
 from .templates.base import *  # noqa: F403
 from fastapi import APIRouter
+from fastapi.requests import Request
 
 from nitro.infrastructure.html.components import (
     AlertDialog,
@@ -147,10 +149,7 @@ def example_custom_buttons():
     )
 
 
-@router.get("/xtras/alert-dialog")
-@template(title="Alert Dialog Component Documentation")
-def alert_dialog_docs():
-    return Div(
+page = Div(
         H1("Alert Dialog Component"),
         P(
             "A modal dialog component for important confirmations that requires user "
@@ -281,4 +280,14 @@ def AlertDialogCancel(
             ),
         ),
         BackLink(),
+        id="content"
     )
+
+@router.get("/xtras/alert-dialog")
+@template(title="Alert Dialog Component Documentation")
+def alert_dialog_page():
+    return page
+
+@on("page.alert-dialog")
+async def get_alert_dialog(sender, request: Request, signals: Signals):
+    yield emit_elements(page, topic="updates.page.alert-dialog")

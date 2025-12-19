@@ -150,7 +150,6 @@ def playground():
         Div(id="results"),
         Div(id="updates"),
         signals=state,
-        data_init=get("/updates"),
         data_persist="age,name",
     )
 
