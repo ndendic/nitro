@@ -4,7 +4,7 @@ from .templates.base import *
 from .templates.base import TitledSection as Section
 from .templates.base import template
 from fastapi import APIRouter
-from .templates.components import Sidebar, Navbar
+from .templates.components import Sidebar, Navbar, PicSumImg
 router: APIRouter = APIRouter()
 
 @router.get("/")

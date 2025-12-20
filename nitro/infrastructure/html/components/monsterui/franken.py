@@ -882,11 +882,13 @@ def DividerSplit(*c, cls="", line_cls="", text_cls=""):
     "Creates a simple horizontal line divider with configurable thickness and vertical spacing"
     cls, line_cls, text_cls = map(cn, (cls, line_cls, text_cls))
     return Div(
-        Div(cls="absolute inset-0 flex items-center " + line_cls)(
-            Span(cls="w-full border-t border-border")
+        Div(
+            Span(cls="w-full border-t border-border"),
+            cls="absolute inset-0 flex items-center " + line_cls
         ),
-        Div(cls="relative flex justify-center " + text_cls)(
-            Span(cls="bg-background px-2 ")(*c)
+        Div(
+            Span(*c,cls="bg-background px-2 "),
+            cls="relative flex justify-center " + text_cls
         ),
         cls="relative " + cls
     )
@@ -1022,7 +1024,7 @@ def Range(
     **kwargs,  # Additional args for Range tag
 ) -> HtmlString:  # Input(..., cls='uk-range', type='range')
     "A Range with default styling"
-    return CustomTag("Uk_input_range",
+    return CustomTag("Uk-input-range",
         *c,
         min=min,
         label=label,
@@ -1145,11 +1147,12 @@ def UkFormSection(
     title, description, *c, button_txt="Update", outer_margin=6, inner_margin=6
 ):
     "A form section with a title, description and optional button"
-    return Div(cls=f"space-y-{inner_margin} py-{outer_margin}")(
+    return Div(
         Div(H3(title), P(description, cls=TextPresets.muted_sm)),
         DividerSplit(),
         *c,
         Div(Button(button_txt, cls=ButtonT.primary)) if button_txt else None,
+        cls=f"space-y-{inner_margin} py-{outer_margin}"
     )
 
 
@@ -1168,7 +1171,7 @@ def GenericLabelInput(
     if not id and isinstance(label, str):
         id = label.lower()
     if isinstance(label, str) or label.tag != "label":
-        label = FormLabel(cls=cn(lbl_cls), fr=id)(label)
+        label = FormLabel(label,cls=cn(lbl_cls), fr=id)
     inp = input_fn(id=id, cls=cn(input_cls), **kwargs)
     if container:
         return container(label, inp, cls=cn(cls))
@@ -1256,7 +1259,7 @@ def LabelRadio(
 ) -> HtmlString:  # Div(cls='flex items-center space-x-2')(`FormLabel`, `Radio`)
     "A FormLabel and Radio pair that provides default spacing and links/names them based on id"
     if isinstance(label, str) or label.tag != "label":
-        label = FormLabel(cls=cn(lbl_cls), fr=id)(label)
+        label = FormLabel(label,cls=cn(lbl_cls), fr=id)
     inp = Radio(id=id, cls=cn(input_cls), **kwargs)
     if container:
         return container(inp, label, cls=cn(cls))
@@ -1277,7 +1280,7 @@ def LabelCheckboxX(
     if not id:
         id = fh.unqid()
     if isinstance(label, str) or label.tag != "label":
-        label = FormLabel(cls=cn(lbl_cls), fr=id)(label)
+        label = FormLabel(label,cls=cn(lbl_cls), fr=id)
     inp = CheckboxX(id=id, cls=cn(input_cls), **kwargs)
     if container:
         return container(inp, label, cls=cn(cls))
@@ -1342,7 +1345,7 @@ def Select(
     if id and not name:
         name = id
 
-    uk_select = CustomTag("Uk_select",
+    uk_select = CustomTag("Uk-select",
         fh.Select(
             *option,
             hidden=True,
@@ -1358,7 +1361,7 @@ def Select(
         **kwargs,
     )
 
-    return Div(cls=cls)(uk_select)
+    return Div(uk_select,cls=cls)
 
 
 # %% ../nbs/02_franken.ipynb
@@ -1381,7 +1384,7 @@ def LabelSelect(
     lbl_cls, inp_cls, cls = map(cn, (lbl_cls, inp_cls, cls))
     select_kwargs = ifnone(select_kwargs, {})
     if label:
-        lbl = FormLabel(cls=f"{lbl_cls}", fr=id)(label)
+        lbl = FormLabel(label,cls=f"{lbl_cls}", fr=id)
     select = Select(
         *option,
         inp_cls=inp_cls,
@@ -1392,7 +1395,7 @@ def LabelSelect(
         select_kwargs=select_kwargs,
         **kwargs,
     )
-    return Div(cls=cls)(lbl, select) if label else Div(cls=cls)(select)
+    return Div(lbl, select,cls=cls) if label else Div(select,cls=cls)
 
 
 # %% ../nbs/02_franken.ipynb
@@ -1635,15 +1638,14 @@ def DiceBearAvatar(
 ):  # Span with Avatar
     "Creates an Avatar using https://dicebear.com/"
     url = "https://api.dicebear.com/8.x/lorelei/svg?seed="
-    return Span(
-        cls=f"relative flex h-{h} w-{w} shrink-0 overflow-hidden rounded-full bg-secondary"
-    )(
+    return Span(    
         fh.Img(
             cls=f"aspect-square h-{h} w-{w}",
             alt="Avatar",
             loading="lazy",
             src=f"{url}{seed_name}",
-        )
+        ),
+        cls=f"relative flex h-{h} w-{w} shrink-0 overflow-hidden rounded-full bg-secondary"
     )
 
 
@@ -1724,12 +1726,13 @@ def Grid(
         cols_lg = cols_lg or min(n, cols_min + 2, cols_max)
         cols_xl = cols_xl or cols_max
     return Div(
+        *div,
         cls=cn(
             f"grid grid-cols-{cols_min} sm:grid-cols-{cols_sm} md:grid-cols-{cols_md} lg:grid-cols-{cols_lg} xl:grid-cols-{cols_xl}",
-            cn(cls),
+            cls,
         ),
         **kwargs,
-    )(*div)
+    )
 
 
 # %% ../nbs/02_franken.ipynb
@@ -1740,7 +1743,11 @@ def DivFullySpaced(
 ):  # Div with spaced components via flex classes
     "Creates a flex div with it's components having as much space between them as possible"
     cls = cn(cls)
-    return Div(cls=cn(FlexT.block, FlexT.between, FlexT.middle, cls), **kwargs)(*c)
+    return Div(
+        *c,
+        cls=cn(FlexT.block, FlexT.between, FlexT.middle, cls),
+        **kwargs,
+    )
 
 
 # %% ../nbs/02_franken.ipynb
@@ -1753,6 +1760,7 @@ def DivCentered(
     "Creates a flex div with it's components centered in it"
     cls = cn(cls)
     return Div(
+        *c,
         cls=cn(
             FlexT.block,
             (FlexT.column if vstack else FlexT.row),
@@ -1761,7 +1769,7 @@ def DivCentered(
             cls,
         ),
         **kwargs,
-    )(*c)
+    )
 
 
 # %% ../nbs/02_franken.ipynb
@@ -1772,7 +1780,11 @@ def DivLAligned(
 ) -> HtmlString:  # Div with components aligned to the left
     "Creates a flex div with it's components aligned to the left"
     cls = cn(cls)
-    return Div(cls=cn(FlexT.block, FlexT.left, FlexT.middle, cls), **kwargs)(*c)
+    return Div(
+        *c,
+        cls=cn(FlexT.block, FlexT.left, FlexT.middle, cls),
+        **kwargs,
+    )
 
 
 # %% ../nbs/02_franken.ipynb
@@ -1783,7 +1795,11 @@ def DivRAligned(
 ) -> HtmlString:  # Div with components aligned to the right
     "Creates a flex div with it's components aligned to the right"
     cls = cn(cls)
-    return Div(cls=cn(FlexT.block, FlexT.right, FlexT.middle, cls), **kwargs)(*c)
+    return Div(
+        *c,
+        cls=cn(FlexT.block, FlexT.right, FlexT.middle, cls),
+        **kwargs,
+    )
 
 
 # %% ../nbs/02_franken.ipynb
@@ -1794,7 +1810,11 @@ def DivVStacked(
 ) -> HtmlString:  # Div with components stacked vertically
     "Creates a flex div with it's components stacked vertically"
     cls = cn(cls)
-    return Div(cls=cn(FlexT.block, FlexT.column, FlexT.middle, cls), **kwargs)(*c)
+    return Div(
+        *c,
+        cls=cn(FlexT.block, FlexT.column, FlexT.middle, cls),
+        **kwargs,
+    )
 
 
 # %% ../nbs/02_franken.ipynb
@@ -1805,7 +1825,11 @@ def DivHStacked(
 ) -> HtmlString:  # Div with components stacked horizontally
     "Creates a flex div with it's components stacked horizontally"
     cls = cn(cls)
-    return Div(cls=cn(FlexT.block, FlexT.row, FlexT.middle, cls), **kwargs)(*c)
+    return Div(
+        *c,
+        cls=cn(FlexT.block, FlexT.row, FlexT.middle, cls),
+        **kwargs,
+    )
 
 
 # %% ../nbs/02_franken.ipynb
@@ -2022,14 +2046,16 @@ def DropDownNavContainer(
     **kwargs,  # Additional args for the nav
 ) -> HtmlString:  # DropDown nav container
     "A Nav that is part of a DropDown"
-    return Div(cls="uk-drop uk-dropdown", uk_dropdown=uk_dropdown)(
+    return Div(
         NavContainer(
             *li,
             cls=cn("uk-dropdown-nav", cn(cls)),
             uk_nav=uk_nav,
             parent=parent,
             **kwargs,
-        )
+        ),
+        cls="uk-drop uk-dropdown",
+        uk_dropdown=uk_dropdown,
     )
 
 
@@ -2042,7 +2068,11 @@ def TabContainer(
 ) -> HtmlString:  # Tab container
     "A TabContainer where children will be different tabs"
     cls = cn(cls)
-    return Ul(cls=cn(f"uk-tab{'-alt' if alt else ''}", cn(cls)), **kwargs)(*li)
+    return Ul(
+        *li,
+        cls=cn(f"uk-tab{'-alt' if alt else ''}", cn(cls)),
+        **kwargs,
+    )
 
 
 # %% ../nbs/02_franken.ipynb
@@ -2128,11 +2158,11 @@ def Card(
     )
     res = []
     if header:
-        res.append(CardHeader(cls=header_cls)(header))
-    res.append(CardBody(cls=body_cls)(*c))
+        res.append(CardHeader(header,cls=header_cls))
+    res.append(CardBody(*c,cls=body_cls))
     if footer:
-        res.append(CardFooter(cls=footer_cls)(footer))
-    return CardContainer(cls=cls, **kwargs)(*res)
+        res.append(CardFooter(footer,cls=footer_cls))
+    return CardContainer(*res,cls=cls, **kwargs)
 
 
 # %% ../nbs/02_franken.ipynb
@@ -2503,7 +2533,7 @@ def ApexChart(
 ) -> HtmlString:  # Div(Uk_chart(Script(...)))
     "Apex chart component"
     js = NotStr(f"<script type='application/json'>{json.dumps(opts)}</script>")
-    return Div(CustomTag("Uk_chart", js), cls=cn(cls), **kws)
+    return Div(CustomTag("Uk-chart", js), cls=cn(cls), **kws)
 
 
 # %% ../nbs/02_franken.ipynb
@@ -2536,9 +2566,11 @@ def ScrollSpy(
     "Standalone Scrollspy nav menu, mapping heading tags from target into link"
     js = spy_js % (target_sel, ",".join([f"h{i}" for i in headings]), nav_id)
     spy_argstr = f"closest: li;offset: {offset};scroll: {str(smooth_scroll).lower()}"
-    return Nav(id=nav_id, **kwargs)(
+    return Nav(
         Ul(cls="uk-nav uk-nav-default", data_uk_scrollspy_nav=spy_argstr),
         Script(Safe(js), type="module"),
+        id=nav_id,
+        **kwargs,
     )
 
 

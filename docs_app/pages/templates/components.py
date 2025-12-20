@@ -1,8 +1,11 @@
+import inspect
 from nitro.infrastructure.html import *
 from nitro.infrastructure.html.components import *
+from nitro.infrastructure.html import Section as HTMLSection, H1 as HTMLH1
 from datetime import datetime
 from .site_search import SiteSearch
 from .base import get
+from typing import Callable, ParamSpec, TypeVar
 
 COMPONENT_PAGES = {
     "Foundation Components": [
@@ -150,7 +153,7 @@ def Navbar():
                     LucideIcon('sun',  show="!$darkMode"),
                     LucideIcon('moon',  show="$darkMode"),
                     on_click="$darkMode = !$darkMode; $darkMode ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');",
-                    cls="btn"
+                    cls="btn-outline"
                 ),
                 cls="flex gap-2"
             ),
@@ -245,6 +248,7 @@ def ComponentSidebar():
         )
     return sections
 
+
 def Sidebar(pages: list = []):
     return Aside(
         Nav(
@@ -280,3 +284,70 @@ def Sidebar(pages: list = []):
         cls='sidebar'
     )
 
+def PicSumImg(
+    h: int = 200,  # Height in pixels
+    w: int = 200,  # Width in pixels
+    id: int = None,  # Optional specific image ID to use
+    grayscale: bool = False,  # Whether to return grayscale version
+    blur: int = None,  # Optional blur amount (1-10)
+    **kwargs,  # Additional args for Img tag
+) -> HtmlString:  # Img tag with picsum image
+    "Creates a placeholder image using https://picsum.photos/"
+    url = f"https://picsum.photos"
+    if id is not None:
+        url = f"{url}/id/{id}"
+    url = f"{url}/{w}/{h}"
+    if grayscale:
+        url = f"{url}?grayscale"
+    if blur is not None:
+        url = f"{url}{'?' if not grayscale else '&'}blur={max(1, min(10, blur))}"
+    return Img(src=url, loading="lazy", **kwargs)
+
+
+def TitledSection(title, *content, cls="fluid-flex bg-background"):
+    """Utility function for creating documentation sections"""
+    return HTMLSection(H2(title, cls="text-2xl font-bold my-4"), *content, cls=cls)
+
+
+def BackLink(href="/", text="← Back to Home"):
+    """Standard back navigation link"""
+    return Div(
+        A(text, href=href, cls="color-blue-6 text-decoration-underline"), cls="my-8"
+    )
+
+
+def get_code(component: Callable):
+    code = ""
+    for line in inspect.getsource(component).split("\n"):
+        if not line.strip().startswith("def"):
+            code += line[4:] + "\n"
+    code = code.replace("return ", "")
+    return code
+
+
+def ComponentShowcase(component: Callable):
+    return Tabs(
+        TabsList(
+            TabsTrigger("Preview", id="tab1"),
+            TabsTrigger("Code", id="tab2"),
+        ),
+        TabsContent(
+            component(),
+            id="tab1",
+            style="padding: 1rem; border: 1px solid; border-radius: 0.5rem;",
+        ),
+        TabsContent(
+            CodeBlock(
+                get_code(component),
+                cls="language-python",
+                style="border: 1px solid; border-radius: 0.5rem;",
+                data_init="hljs.highlightAll()"
+            ),
+            id="tab2",
+        ),
+        default_tab="tab1",
+        cls="mt-4",
+    )
+
+def H1(text: str, cls: str = "text-4xl font-bold mb-4", **kwargs):
+    return HTMLH1(text, cls=cls, **kwargs)

@@ -10,7 +10,7 @@ from nitro.infrastructure.html.datastar import Signals, get, ElementPatchMode
 from nitro.utils import AttrDict
 from nitro.infrastructure.events import on, emit_elements, emit_signals
 from nitro.infrastructure.html.components import LucideIcon
-
+from nitro.infrastructure.html.components.monsterui.all import LabelRange
 from .templates.base import *  # noqa: F403
 
 router: APIRouter = APIRouter()
@@ -74,7 +74,7 @@ class Person(Entity, table=True):
                             Td(
                                 Button(
                                     LucideIcon("trash-2"),
-                                    on_click=get(f"/cmds/deletePerson/{person.id}"),
+                                    on_click=f"@get('/cmds/deletePerson/{person.id}')",
                                     cls="btn-icon-destructive",
                                 ),
                                 cls="text-right",
@@ -101,7 +101,7 @@ class Person(Entity, table=True):
                 Input(type="number", bind=self.signals.age, cls="input"),
                 cls="grid gap-2",
             ),
-            Button("Add +", on_click=get("/cmds/newPerson/nikola"), cls="btn"),
+            Button("Add +", on_click="@get('/cmds/newPerson/nikola')", cls="btn-outline"),
             cls="card p-4 grid gap-6",
         )
 
@@ -118,19 +118,20 @@ def playground():
         Div(
             nik,
             nik.form(),
+            LabelRange(label="Age", value='25', min=18, max=100, step=1),
             Div(
                 Input(
                     type="text",
                     bind="search",
                     placeholder="Search...",
-                    on_keydown__debounce_400ms=f"{get('/cmds/search/nikola')}",
+                    on_keydown__debounce_400ms=f"@get('/cmds/search/nikola')",
                     cls="input",
                 ),
                 Input(
                     type="number",
                     bind="age",
                     placeholder="5",
-                    on_change=f"{get('/cmds/search/nikola')}",
+                    on_change="@get('/cmds/search/nikola')",
                     cls="input",
                 ),
                 cls="grid grid-cols-2 gap-2",
@@ -141,7 +142,7 @@ def playground():
                     type="text",
                     bind="message",
                     placeholder="Message with 2 second debounce...",
-                    on_keydown__debounce_2s=get("/cmds/message/nik"),
+                    on_keydown__debounce_2s="@get('/cmds/message/nik')",
                     cls="input",
                 ),
             ),
@@ -152,7 +153,6 @@ def playground():
         signals=state,
         data_persist="age,name",
     )
-
 
 @on("newPerson")
 async def new_person(sender, request: Request, signals: Signals):

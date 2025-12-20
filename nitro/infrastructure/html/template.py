@@ -100,11 +100,11 @@ def Page(
     if lucide:
         hdrs += (Script(src=HEADER_URLS["lucide"]),)
         ftrs += (Script("lucide.createIcons();"),)
-    # if monsterui:
-        # hdrs += (Link(rel="stylesheet", href=HEADER_URLS["franken_css"]),)
-        # hdrs += (Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/css/utilities.min.css"),)
-        # hdrs += (Script(src=HEADER_URLS["franken_js_core"], type="module"),)
-        # hdrs += (Script(src=HEADER_URLS["franken_icons"], type="module"),)
+    if monsterui:
+        hdrs += (Link(rel="stylesheet", href=HEADER_URLS["franken_css"]),)
+        hdrs += (Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/css/utilities.min.css"),)
+        hdrs += (Script(src=HEADER_URLS["franken_js_core"], type="module"),)
+        hdrs += (Script(src=HEADER_URLS["franken_icons"], type="module"),)
 
     tailwind_css = config.tailwind.css_output
     tw_configured = config.tailwind.css_output.exists()

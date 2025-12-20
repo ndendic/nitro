@@ -3,16 +3,14 @@ Shared utilities and configuration for component documentation pages.
 All component documentation pages should import from this module.
 """
 
-import inspect
 from fastapi.responses import HTMLResponse
 from nitro import *  # noqa: F403
-from nitro.infrastructure.html import Section as HTMLSection, H1 as HTMLH1
 from nitro.infrastructure.html import *
 from nitro.infrastructure.html.components import *
 from typing import Callable, ParamSpec, TypeVar
 from pathlib import Path
 from domain.page_model import DocPage
-from .components import Sidebar, Navbar, Footer
+from .components import Sidebar, Navbar, Footer, PicSumImg, H1, TitledSection, BackLink, ComponentShowcase
 from functools import wraps
 
 
@@ -56,14 +54,32 @@ hdrs = (
     ),
     Style(CUSTOM_CSS),  # Custom animations
     Script("""{"imports": {"datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"}}""", type='importmap'),
-    # Script(type='module', src='https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js'),
     Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-persist@latest/dist/index.js'),
+    Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-anchor@latest/dist/index.js'),
     Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-anchor@latest/dist/index.js'),
 
     Script(src='/static/js/datastar.js', type='module'),
     Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/basecoat.min.js', defer=''),
     Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/sidebar.min.js', defer=''),
-    Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/dropdown-menu.min.js', defer=''),
+    Script("""const datastar = JSON.parse(localStorage.getItem('datastar') || '{}');
+console.log('datastar values', datastar);
+const htmlElement = document.documentElement;
+if ("darkMode" in datastar) {
+  // Respect the value from localStorage if it exists
+  if (datastar.darkMode === true) {
+    htmlElement.classList.add('dark');
+  } else {
+    htmlElement.classList.remove('dark');
+  }
+} else {
+  // Fallback to system color scheme if darkMode not in localStorage
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    htmlElement.classList.add('dark');
+  } else {
+    htmlElement.classList.remove('dark');
+  }
+}
+htmlElement.setAttribute('data-theme', datastar.theme);"""),
 )
 # Shared HTML and body configuration
 htmlkws = dict(lang="en", cls="bg-background text-foreground",data_theme="$theme")
@@ -73,11 +89,7 @@ bodykws = dict(
 )
 ftrs = (
     CustomTag("datastar-inspector"),
-    Div(
-        cls="hidden",
-        data_persist="darkMode, theme",
-        data_effect="$darkMode ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark'); document.documentElement.setAttribute('data-theme', $theme);",
-    )
+    Div(data_persist="darkMode, theme")
 )
 # Shared page template
 page = create_template(
@@ -87,7 +99,7 @@ page = create_template(
     ftrs=ftrs,
     highlightjs=True,
     datastar=False,
-    monsterui=True,
+    monsterui=False,
     lucide=True,
 )
 
@@ -113,52 +125,3 @@ def template(title: str):
             )
         return wrapper
     return decorator
-
-
-def TitledSection(title, *content, cls="fluid-flex bg-background"):
-    """Utility function for creating documentation sections"""
-    return HTMLSection(H2(title, cls="text-2xl font-bold my-4"), *content, cls=cls)
-
-
-def BackLink(href="/", text="← Back to Home"):
-    """Standard back navigation link"""
-    return Div(
-        A(text, href=href, cls="color-blue-6 text-decoration-underline"), cls="my-8"
-    )
-
-
-def get_code(component: Callable):
-    code = ""
-    for line in inspect.getsource(component).split("\n"):
-        if not line.strip().startswith("def"):
-            code += line[4:] + "\n"
-    code = code.replace("return ", "")
-    return code
-
-
-def ComponentShowcase(component: Callable):
-    return Tabs(
-        TabsList(
-            TabsTrigger("Preview", id="tab1"),
-            TabsTrigger("Code", id="tab2"),
-        ),
-        TabsContent(
-            component(),
-            id="tab1",
-            style="padding: 1rem; border: 1px solid; border-radius: 0.5rem;",
-        ),
-        TabsContent(
-            CodeBlock(
-                get_code(component),
-                cls="language-python",
-                style="border: 1px solid; border-radius: 0.5rem;",
-                data_init="hljs.highlightAll()"
-            ),
-            id="tab2",
-        ),
-        default_tab="tab1",
-        cls="mt-4",
-    )
-
-def H1(text: str, cls: str = "text-4xl font-bold mb-4", **kwargs):
-    return HTMLH1(text, cls=cls, **kwargs)
