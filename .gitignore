@@ -112,3 +112,5 @@ screenshots/
 
 # Temporary CSS files
 input.css
+docs_app/migrations/*
+docs_app/alembic.ini
