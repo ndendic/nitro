@@ -102,7 +102,7 @@ def ThemeSwitcher(
             type="button",
             cls=cn(btn_cls, cls),
             aria_label="Toggle theme",
-            data_on_click=cycle_expression,
+            on_click=cycle_expression,
             data_tooltip=f"Theme: ${signal}",
             **attrs,
         ),
@@ -170,7 +170,7 @@ def ThemeSwitcherDropdown(
                 cls="btn-icon-ghost",
                 aria_label="Select theme",
                 aria_haspopup="menu",
-                data_on_click=f"${open_signal} = !${open_signal}",
+                on_click=f"${open_signal} = !${open_signal}",
                 **{"data-attr-aria-expanded": f"${open_signal}"},
             ),
             # Dropdown menu
@@ -181,7 +181,7 @@ def ThemeSwitcherDropdown(
                         "Light",
                         role="menuitem",
                         tabindex="0",
-                        data_on_click=f"${signal} = 'light'; ${open_signal} = false",
+                        on_click=f"${signal} = 'light'; ${open_signal} = false",
                         **{"data-attr-aria-selected": f"${signal} === 'light'"},
                     ),
                     rt.Div(
@@ -189,7 +189,7 @@ def ThemeSwitcherDropdown(
                         "Dark",
                         role="menuitem",
                         tabindex="0",
-                        data_on_click=f"${signal} = 'dark'; ${open_signal} = false",
+                        on_click=f"${signal} = 'dark'; ${open_signal} = false",
                         **{"data-attr-aria-selected": f"${signal} === 'dark'"},
                     ),
                     rt.Div(
@@ -197,7 +197,7 @@ def ThemeSwitcherDropdown(
                         "System",
                         role="menuitem",
                         tabindex="0",
-                        data_on_click=f"${signal} = 'system'; ${open_signal} = false",
+                        on_click=f"${signal} = 'system'; ${open_signal} = false",
                         **{"data-attr-aria-selected": f"${signal} === 'system'"},
                     ),
                     role="menu",
@@ -209,8 +209,8 @@ def ThemeSwitcherDropdown(
                 **{"data-attr-aria-hidden": f"!${open_signal}"},
             ),
             cls="dropdown-menu",
-            data_on_click__outside=f"${open_signal} = false",
-            data_on_keydown__escape=f"${open_signal} = false",
+            on_click__outside=f"${open_signal} = false",
+            on_keydown=f"evt.key === 'Escape' && (${open_signal} = false)",
         ),
         # Persistence element (hidden)
         rt.Div(
@@ -286,7 +286,7 @@ def ThemeSelect(
             *option_elements,
             cls=cn("select", cls),
             data_bind=signal,
-            data_on_change=f"document.documentElement.setAttribute('data-theme', ${signal});",
+            on_change=f"document.documentElement.setAttribute('data-theme', ${signal});",
             **attrs,
         ),
         # Persistence element (hidden)

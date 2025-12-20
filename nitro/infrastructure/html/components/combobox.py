@@ -106,9 +106,9 @@ def Combobox(
         role="combobox",
         aria_haspopup="listbox",
         aria_autocomplete="list",
-        **{"data-attr-aria-expanded": f"${open_signal}"},
+        **{"data-attr:aria-expanded": f"${open_signal}"},
         aria_controls=f"{combobox_id}-listbox",
-        data_on_click=f"${open_signal} = !${open_signal}",
+        on_click=f"${open_signal} = !${open_signal}",
     )
 
     return rt.Div(
@@ -138,7 +138,7 @@ def Combobox(
             data_align="start",
             data_side="bottom",
             aria_hidden="true",
-            **{"data-attr-aria-hidden": f"!${open_signal}"},
+            **{"data-attr:aria-hidden": f"!${open_signal}"},
         ),
         # Initialize signals
         signals=Signals(**{
@@ -150,9 +150,9 @@ def Combobox(
         cls=cn("select w-full", cls),
         id=combobox_id,
         # Close on click outside
-        data_on_click__outside=f"${open_signal} = false",
+        on_click__outside=f"${open_signal} = false",
         # Close on Escape
-        data_on_keydown__escape=f"${open_signal} = false",
+        on_keydown=f"evt.key === 'Escape' && (${open_signal} = false)",
         **attrs,
     )
 
@@ -222,9 +222,9 @@ def ComboboxItem(
             if bind_signal:
                 click_actions.append(f"${bind_signal} = '{value}'")
 
-            item_attrs["data_on_click"] = "; ".join(click_actions)
+            item_attrs["on_click"] = "; ".join(click_actions)
             # Keyboard support - Enter to select
-            item_attrs["data_on_keydown__enter"] = "; ".join(click_actions)
+            item_attrs["on_keydown"] = "evt.key === 'Enter' && (" + "; ".join(click_actions) + ")"
 
         # Filter visibility based on search - hide if search doesn't match
         # Escape single quotes in display text for JS
@@ -232,7 +232,7 @@ def ComboboxItem(
         item_attrs["data_show"] = f"!${search_signal} || '{escaped_text}'.includes(${search_signal}.toLowerCase())"
 
         # Add aria-selected based on value
-        item_attrs["data-attr-aria-selected"] = f"${value_signal} === '{value}'"
+        item_attrs["data-attr:aria-selected"] = f"${value_signal} === '{value}'"
 
         item_attrs.update(attrs)
 

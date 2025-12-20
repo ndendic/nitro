@@ -61,8 +61,9 @@ hdrs = (
     Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-anchor@latest/dist/index.js'),
 
     Script(src='/static/js/datastar.js', type='module'),
-    Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.6/dist/js/basecoat.min.js', defer=''),
-    Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.6/dist/js/sidebar.min.js', defer='')
+    Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/basecoat.min.js', defer=''),
+    Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/sidebar.min.js', defer=''),
+    Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/dropdown-menu.min.js', defer=''),
 )
 # Shared HTML and body configuration
 htmlkws = dict(lang="en", cls="bg-background text-foreground",data_theme="$theme")

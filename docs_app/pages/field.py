@@ -162,42 +162,42 @@ page = Div(
             "are automatically styled via Basecoat CSS. Supports labels, descriptions, error "
             "states, and horizontal/vertical orientation."
         ),
-        Section(
+        TitledSection(
             "Basic Field",
             P("A simple field with a label and input:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "With Description",
             P("Field with helper text below the label:"),
             ComponentShowcase(example_with_description),
         ),
-        Section(
+        TitledSection(
             "Error State",
             P("Field showing an error message with invalid styling:"),
             ComponentShowcase(example_with_error),
         ),
-        Section(
+        TitledSection(
             "Required Field",
             P("Field with required indicator:"),
             ComponentShowcase(example_required),
         ),
-        Section(
+        TitledSection(
             "Horizontal Orientation",
             P("Fields with horizontal layout, useful for checkboxes and toggles:"),
             ComponentShowcase(example_horizontal),
         ),
-        Section(
+        TitledSection(
             "Fieldset",
             P("Group related fields with Fieldset and legend:"),
             ComponentShowcase(example_fieldset),
         ),
-        Section(
+        TitledSection(
             "Complete Form Example",
             P("A realistic form using Field, Fieldset, and Datastar binding:"),
             ComponentShowcase(example_complete_form),
         ),
-        Section(
+        TitledSection(
             "API Reference - Field",
             CodeBlock(
                 """
@@ -216,7 +216,7 @@ def Field(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "API Reference - Fieldset",
             CodeBlock(
                 """
@@ -231,7 +231,7 @@ def Fieldset(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Basecoat CSS Structure",
             P("Field uses semantic HTML elements that Basecoat CSS targets:"),
             CodeBlock(
@@ -253,7 +253,7 @@ def Fieldset(
                 code_cls="language-html",
             ),
         ),
-        Section(
+        TitledSection(
             "Usage with Datastar",
             CodeBlock(
                 """

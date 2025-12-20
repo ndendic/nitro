@@ -113,6 +113,7 @@ def RadioItem(
             "value": value,
             "disabled": disabled if disabled else None,
             "data_bind": signal_name,
+            "cls": cn("input"),
         }
 
         # Merge additional attributes

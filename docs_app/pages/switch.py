@@ -147,37 +147,37 @@ page = Div(
             "Toggle switch using native checkbox with role=\"switch\" for Basecoat styling. "
             "Uses smooth CSS animations and supports Datastar two-way binding for reactive state management."
         ),
-        Section(
+        TitledSection(
             "Basic Switch",
             P("A simple toggle switch with integrated label:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "With Datastar Binding",
             P("Switches with two-way binding showing live state:"),
             ComponentShowcase(example_with_binding),
         ),
-        Section(
+        TitledSection(
             "Settings Panel Example",
             P("A realistic settings panel with multiple switches:"),
             ComponentShowcase(example_settings_panel),
         ),
-        Section(
+        TitledSection(
             "Disabled State",
             P("Switches can be disabled in both on and off states:"),
             ComponentShowcase(example_disabled),
         ),
-        Section(
+        TitledSection(
             "In Field Context",
             P("Inside a .field container for form layout with description text:"),
             ComponentShowcase(example_in_field),
         ),
-        Section(
+        TitledSection(
             "Without Integrated Label",
             P("Switch without children returns just the input, allowing custom label placement:"),
             ComponentShowcase(example_without_label),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -194,7 +194,7 @@ def Switch(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Key Differences from Checkbox",
             CodeBlock(
                 """
@@ -213,7 +213,7 @@ def Switch(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Datastar Binding",
             CodeBlock(
                 """

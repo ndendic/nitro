@@ -234,12 +234,13 @@ def ComponentSidebar():
                 Summary(
                     LucideIcon('book'),
                     category,
-                    aria_controls='submenu-content-1-3-content'
+                    aria_controls='submenu-content-1-3-content',
                 ),
                 Ul(
                     *page_links,
                     cls="mb-6 space-y-1"
-                )
+                ),
+                name="components",
             ),
         )
     return sections

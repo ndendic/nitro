@@ -81,6 +81,8 @@ def Checkbox(
     input_kwargs = {k: v for k, v in checkbox_attrs.items() if v is not None}
     if cls:
         input_kwargs["cls"] = cn(cls)
+    else:
+        input_kwargs["cls"] = cn("input")
 
     checkbox_input = HTMLInput(**input_kwargs)
 

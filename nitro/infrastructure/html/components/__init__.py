@@ -8,9 +8,9 @@ from .accordion import Accordion, AccordionItem
 from .dialog import (
     Dialog,
     DialogTrigger,
-    DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
     DialogBody,
     DialogFooter,
     DialogClose,

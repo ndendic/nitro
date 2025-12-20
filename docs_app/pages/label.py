@@ -19,8 +19,7 @@ def example_basic():
 
 def example_required():
     return Div(
-        Label("Password", html_for="password", required=True),
-        Span(" *", cls="text-red-500"),
+        Label("Password",Span(" *", cls="text-destructive"), html_for="password", required=True),
         Input(type="password", id="password", cls="input w-full"),
         cls="space-y-2"
     )
@@ -74,7 +73,7 @@ page = Div(
             "A text label associated with a form control, providing "
             "accessible naming for inputs."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("Labels are essential for form accessibility:"),
             Ul(
@@ -84,32 +83,32 @@ page = Div(
                 Li("Supports required and disabled visual states"),
             ),
         ),
-        Section(
+        TitledSection(
             "Basic Label",
             P("A simple label with an input:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "Required Field",
             P("Indicate required fields with the required prop:"),
             ComponentShowcase(example_required),
         ),
-        Section(
+        TitledSection(
             "Disabled State",
             P("Labels can indicate disabled fields:"),
             ComponentShowcase(example_disabled),
         ),
-        Section(
+        TitledSection(
             "With Icons",
             P("Labels can include icons:"),
             ComponentShowcase(example_with_icons),
         ),
-        Section(
+        TitledSection(
             "Form Example",
             P("Labels in a complete form:"),
             ComponentShowcase(example_form),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """

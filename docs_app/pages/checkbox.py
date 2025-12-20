@@ -82,32 +82,32 @@ page = Div(
             "styling inside Field. When placed inside a .field container, the checkbox is "
             "automatically styled via Basecoat CSS."
         ),
-        Section(
+        TitledSection(
             "Basic Checkbox",
             P("A simple checkbox with integrated label:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "With Datastar Binding",
             P("Checkboxes with two-way binding showing live state:"),
             ComponentShowcase(example_with_binding),
         ),
-        Section(
+        TitledSection(
             "Disabled State",
             P("Checkboxes can be disabled:"),
             ComponentShowcase(example_disabled),
         ),
-        Section(
+        TitledSection(
             "In Field Context",
             P("Inside a .field container for form layout with description text:"),
             ComponentShowcase(example_in_field),
         ),
-        Section(
+        TitledSection(
             "Without Integrated Label",
             P("Checkbox without children returns just the input, allowing custom label placement:"),
             ComponentShowcase(example_without_label),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -125,7 +125,7 @@ def Checkbox(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Datastar Binding",
             CodeBlock(
                 """

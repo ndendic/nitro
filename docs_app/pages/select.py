@@ -146,32 +146,32 @@ page = Div(
             "styling inside Field. When placed inside a .field container, the select is "
             "automatically styled via Basecoat CSS."
         ),
-        Section(
+        TitledSection(
             "Basic Select",
             P("A simple select dropdown with options:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "With Placeholder",
             P("A select with a placeholder option:"),
             ComponentShowcase(example_with_placeholder),
         ),
-        Section(
+        TitledSection(
             "With Datastar Binding",
             P("Select with two-way binding showing live selected value:"),
             ComponentShowcase(example_with_binding),
         ),
-        Section(
+        TitledSection(
             "With Option Groups",
             P("Organize options into logical groups using SelectOptGroup:"),
             ComponentShowcase(example_with_optgroup),
         ),
-        Section(
+        TitledSection(
             "Disabled States",
             P("Select and individual options can be disabled:"),
             ComponentShowcase(example_disabled),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -204,7 +204,7 @@ def SelectOptGroup(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Datastar Binding",
             CodeBlock(
                 """

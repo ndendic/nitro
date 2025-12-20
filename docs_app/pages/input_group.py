@@ -160,47 +160,47 @@ page = Div(
             "Container for input with prefix/suffix elements. Add icons, text, or other "
             "elements to the sides of an input using Tailwind utility classes."
         ),
-        Section(
+        TitledSection(
             "Prefix with Text",
             P("Add a text prefix to an input, like a currency symbol:"),
             ComponentShowcase(example_prefix_text),
         ),
-        Section(
+        TitledSection(
             "Suffix with Text",
             P("Add a text suffix to an input, like a domain extension:"),
             ComponentShowcase(example_suffix_text),
         ),
-        Section(
+        TitledSection(
             "Prefix with Icon",
             P("Add an icon as a prefix for visual context:"),
             ComponentShowcase(example_prefix_icon),
         ),
-        Section(
+        TitledSection(
             "Suffix with Icon",
             P("Add an icon as a suffix:"),
             ComponentShowcase(example_suffix_icon),
         ),
-        Section(
+        TitledSection(
             "Both Prefix and Suffix",
             P("Combine prefix and suffix for complex inputs like URLs:"),
             ComponentShowcase(example_both),
         ),
-        Section(
+        TitledSection(
             "With Datastar Binding",
             P("InputGroup works with Datastar for reactive forms:"),
             ComponentShowcase(example_with_datastar),
         ),
-        Section(
+        TitledSection(
             "With Field Wrapper",
             P("Use InputGroup inside Field for complete form layouts:"),
             ComponentShowcase(example_with_field),
         ),
-        Section(
+        TitledSection(
             "Common Variations",
             P("Examples of common input group patterns:"),
             ComponentShowcase(example_variations),
         ),
-        Section(
+        TitledSection(
             "API Reference - InputGroup",
             CodeBlock(
                 """
@@ -222,7 +222,7 @@ def InputGroup(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Important Notes",
             P("InputGroup uses BasecoatUI's absolute positioning pattern. Key points:"),
             CodeBlock(
@@ -257,7 +257,7 @@ InputGroup(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Styling Notes",
             CodeBlock(
                 """

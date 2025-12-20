@@ -136,7 +136,7 @@ page = Div(
             "Displays a keyboard key or shortcut in a visual representation "
             "similar to a physical key. Used to indicate keyboard shortcuts."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("The Kbd component:"),
             Ul(
@@ -146,37 +146,37 @@ page = Div(
                 Li("Supports special characters and symbols"),
             ),
         ),
-        Section(
+        TitledSection(
             "Basic Keys",
             P("Single keyboard keys:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "Sizes",
             P("Three sizes for different contexts:"),
             ComponentShowcase(example_sizes),
         ),
-        Section(
+        TitledSection(
             "Key Combinations",
             P("Show keyboard shortcuts with multiple keys:"),
             ComponentShowcase(example_combinations),
         ),
-        Section(
+        TitledSection(
             "Special Keys",
             P("Arrow keys and modifier symbols:"),
             ComponentShowcase(example_special_keys),
         ),
-        Section(
+        TitledSection(
             "Inline Usage",
             P("Keys work naturally inline with text:"),
             ComponentShowcase(example_in_context),
         ),
-        Section(
+        TitledSection(
             "Shortcuts Table",
             P("Document keyboard shortcuts in a table:"),
             ComponentShowcase(example_shortcuts_table),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """

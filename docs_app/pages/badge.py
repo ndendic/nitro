@@ -17,8 +17,6 @@ def example_variants():
         Badge("Secondary", variant="secondary"),
         Badge("Destructive", variant="destructive"),
         Badge("Outline", variant="outline"),
-        Badge("Success", variant="success"),
-        Badge("Warning", variant="warning"),
         cls="flex flex-wrap gap-2"
     )
 
@@ -34,10 +32,9 @@ def example_sizes():
 
 def example_with_icons():
     return Div(
-        Badge(LucideIcon("check", cls="size-3"), "Verified", variant="success"),
-        Badge(LucideIcon("alert-triangle", cls="size-3"), "Warning", variant="warning"),
         Badge(LucideIcon("x", cls="size-3"), "Error", variant="destructive"),
         Badge(LucideIcon("info", cls="size-3"), "Info", variant="primary"),
+        Badge(LucideIcon("check", cls="size-3"), "Verified", variant="outline"),
         cls="flex flex-wrap gap-2"
     )
 
@@ -46,12 +43,12 @@ def example_status_indicators():
     return Div(
         Div(
             Span("User Status: "),
-            Badge("Active", variant="success"),
+            Badge("Active", variant="default"),
             cls="flex items-center gap-2"
         ),
         Div(
             Span("Order Status: "),
-            Badge("Pending", variant="warning"),
+            Badge("Pending", variant="outline"),
             cls="flex items-center gap-2"
         ),
         Div(
@@ -77,7 +74,7 @@ def example_counts():
         ),
         Div(
             Span("Updates"),
-            Badge("New", variant="secondary", size="sm"),
+            Badge("New", variant="secondary", size="sm", cls="bg-blue-500 text-white dark:bg-blue-600"),
             cls="flex items-center gap-2"
         ),
         cls="space-y-2"
@@ -90,7 +87,7 @@ page = Div(
             "A small visual indicator used to highlight status, categories, "
             "or counts alongside other content."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("Badges are lightweight status indicators:"),
             Ul(
@@ -100,39 +97,39 @@ page = Div(
                 Li("Combine with icons for additional context"),
             ),
         ),
-        Section(
+        TitledSection(
             "Variants",
             P("Seven visual variants for different contexts:"),
             ComponentShowcase(example_variants),
         ),
-        Section(
-            "Sizes",
-            P("Three sizes available:"),
-            ComponentShowcase(example_sizes),
-        ),
-        Section(
+        # TitledSection(
+        #     "Sizes",
+        #     P("Three sizes available:"),
+        #     ComponentShowcase(example_sizes),
+        # ),
+        TitledSection(
             "With Icons",
             P("Badges can include icons for better visual communication:"),
             ComponentShowcase(example_with_icons),
         ),
-        Section(
+        TitledSection(
             "Status Indicators",
             P("Common pattern for showing status alongside text:"),
             ComponentShowcase(example_status_indicators),
         ),
-        Section(
+        TitledSection(
             "Count Badges",
             P("Show notification counts or 'new' indicators:"),
             ComponentShowcase(example_counts),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
 def Badge(
     *children,                              # Badge content (text, icons, etc.)
     variant: str = "default",               # default, primary, secondary,
-                                            # destructive, outline, success, warning
+                                            # destructive, outline
     size: str = "md",                       # sm, md, lg
     cls: str = "",                          # Additional CSS classes
     **attrs                                 # Additional HTML attributes

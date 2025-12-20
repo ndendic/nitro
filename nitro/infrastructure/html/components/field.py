@@ -1,7 +1,7 @@
 """Field component - Form field wrapper with label, description, and error states."""
 
 from typing import Any, Optional
-from rusty_tags import Div, HtmlString, H3, P
+from rusty_tags import Div, HtmlString, H3, P, Span
 from rusty_tags import Label as HTMLLabel
 from .utils import cn
 
@@ -87,15 +87,12 @@ def Field(
 
     # Add label if provided
     if label:
-        label_content = label
-        if required:
-            label_content = f"{label} *"
-
         if label_for:
             # Use a label element if we have a for attribute
             field_content.append(
                 HTMLLabel(
-                    label_content,
+                    label,
+                    Span("*",cls="text-destructive") if required else None,
                     for_=label_for,
                     cls="text-sm font-medium leading-snug",
                 )
@@ -103,7 +100,7 @@ def Field(
         else:
             # Use h3 for semantic structure (Basecoat styles h2/h3 in .field)
             field_content.append(
-                H3(label_content)
+                H3(label)
             )
 
     # Add the form input children

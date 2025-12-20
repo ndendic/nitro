@@ -126,32 +126,32 @@ page = Div(
             "styling inside Field. When placed inside a .field container, the textarea is "
             "automatically styled via Basecoat CSS."
         ),
-        Section(
+        TitledSection(
             "Basic Textarea",
             P("A simple textarea with placeholder:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "With Datastar Binding",
             P("Textarea with two-way binding showing real-time character count:"),
             ComponentShowcase(example_with_binding),
         ),
-        Section(
+        TitledSection(
             "Character Limit",
             P("Textarea with maxlength and character counter:"),
             ComponentShowcase(example_character_limit),
         ),
-        Section(
+        TitledSection(
             "Row Sizes",
             P("Control textarea height with the rows attribute:"),
             ComponentShowcase(example_row_sizes),
         ),
-        Section(
+        TitledSection(
             "Disabled and Read-only States",
             P("Textarea can be disabled or set to read-only:"),
             ComponentShowcase(example_disabled),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -174,7 +174,7 @@ def Textarea(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Character Counter Pattern",
             CodeBlock(
                 """

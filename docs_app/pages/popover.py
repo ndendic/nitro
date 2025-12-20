@@ -184,37 +184,37 @@ page = Div(
             "for state management and Basecoat CSS for styling. Supports various positions, "
             "alignments, and can contain any content including forms."
         ),
-        Section(
+        TitledSection(
             "Basic Popover",
             P("A simple popover with title and content:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "With Form Content",
             P("Popovers can contain interactive form elements:"),
             ComponentShowcase(example_with_form),
         ),
-        Section(
+        TitledSection(
             "Positioning",
             P("Control which side the popover appears on:"),
             ComponentShowcase(example_positioning),
         ),
-        Section(
+        TitledSection(
             "Alignment",
             P("Control horizontal/vertical alignment relative to the trigger:"),
             ComponentShowcase(example_alignment),
         ),
-        Section(
+        TitledSection(
             "With Close Button",
             P("Add a close button inside the popover:"),
             ComponentShowcase(example_with_close_button),
         ),
-        Section(
+        TitledSection(
             "Rich Content",
             P("Popovers can contain complex UI elements:"),
             ComponentShowcase(example_rich_content),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -253,7 +253,7 @@ def PopoverClose(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Key Behaviors",
             Ul(
                 Li("Opens on trigger click"),

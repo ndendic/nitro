@@ -307,7 +307,7 @@ def CommandItem(
             item_attrs["aria_disabled"] = "true"
         elif on_select:
             item_attrs["on_click"] = on_select
-            item_attrs["on_keydown__enter"] = on_select
+            item_attrs["on_keydown"] = "evt.key === 'Enter' && (" + on_select + ")"
 
         # Filter visibility based on search
         escaped_text = display_text.lower().replace("'", "\\'")

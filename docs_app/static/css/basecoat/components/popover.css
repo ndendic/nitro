@@ -3,7 +3,7 @@
   [data-popover] {
     @apply absolute bg-popover text-popover-foreground overflow-x-hidden overflow-y-auto rounded-md border shadow-md z-50 visible opacity-100 scale-100 min-w-full w-max transition-all;
 
-    &[aria-hidden='true'] {
+    &[aria-hidden] {
       @apply invisible opacity-0 scale-95;
       
       &:not([data-side]),

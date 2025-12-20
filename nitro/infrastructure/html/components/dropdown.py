@@ -144,7 +144,7 @@ def DropdownContent(
             aria_hidden="true",
             **{"data-attr:aria-hidden": f"!${signal_name}"},  # Dynamic update
             # Close on Escape key
-            on_keydown__escape=f"${signal_name} = false",
+            on_keydown=f"evt.key === 'Escape' && (${signal_name} = false)",
             **attrs,
         )
 

@@ -86,7 +86,7 @@ page = Div(
             "A loading indicator component using the Lucide loader-2 icon with "
             "Tailwind's animate-spin animation."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("The Spinner component provides visual feedback for loading states:"),
             Ul(
@@ -97,27 +97,27 @@ page = Div(
                 Li("Accessible with role='status' and aria-label"),
             ),
         ),
-        Section(
+        TitledSection(
             "Default Spinner",
             P("The default spinner with medium size:"),
             ComponentShowcase(example_default),
         ),
-        Section(
+        TitledSection(
             "Sizes",
             P("Three sizes are available for different use cases:"),
             ComponentShowcase(example_sizes),
         ),
-        Section(
+        TitledSection(
             "Colors",
             P("Use Tailwind text-* classes for different colors:"),
             ComponentShowcase(example_colors),
         ),
-        Section(
+        TitledSection(
             "With Buttons",
             P("Spinners work well inside disabled buttons for loading states:"),
             ComponentShowcase(example_with_button),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -130,7 +130,7 @@ def Spinner(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Accessibility",
             Ul(
                 Li("role='status' - Indicates a live region for updates"),

@@ -22,7 +22,7 @@ page = Div(
         H1("CodeBlock Component"),
         P("The CodeBlock component provides a semantic structure for displaying code with proper HTML markup and styling hooks."),
         
-        Section("Component Purpose",
+        TitledSection("Component Purpose",
             P("CodeBlock is an anatomical pattern that solves:"),
             Ul(
                 Li("🏗️ Consistent semantic HTML structure (Div > Pre > Code)"),
@@ -32,17 +32,17 @@ page = Div(
             ),
         ),
         
-        Section("Basic Usage",
+        TitledSection("Basic Usage",
             P("Simple code block without styling:"),
             ComponentShowcase(example_1),
         ),
         
-        Section("With Styling",
+        TitledSection("With Styling",
             P("CodeBlock with Open Props styling:"),
             ComponentShowcase(example_2),
         ),
         
-        Section("API Reference",
+        TitledSection("API Reference",
             P("CodeBlock component parameters:"),
             CodeBlock("""
 def CodeBlock(

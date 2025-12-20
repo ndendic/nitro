@@ -156,7 +156,7 @@ page = Div(
             "acknowledgment. Uses native HTML &lt;dialog&gt; element with showModal() for "
             "proper focus management and backdrop interaction."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("Alert Dialog provides interrupt-style confirmations:"),
             Ul(
@@ -167,27 +167,27 @@ page = Div(
                 Li("Backdrop click closes - optional click-outside behavior"),
             ),
         ),
-        Section(
+        TitledSection(
             "Basic Usage",
             P("A simple confirmation dialog with cancel and continue actions:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "Destructive Actions",
             P("Use destructive variant for dangerous actions like deletion:"),
             ComponentShowcase(example_destructive),
         ),
-        Section(
+        TitledSection(
             "With Form Content",
             P("Add custom content like confirmation inputs:"),
             ComponentShowcase(example_with_form),
         ),
-        Section(
+        TitledSection(
             "Custom Buttons",
             P("Customize button variants and text for different contexts:"),
             ComponentShowcase(example_custom_buttons),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -258,7 +258,7 @@ def AlertDialogCancel(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Key Behaviors",
             Ul(
                 Li("Opens with showModal() - proper modal behavior"),
@@ -268,7 +268,7 @@ def AlertDialogCancel(
                 Li("Action buttons close after executing their handler"),
             ),
         ),
-        Section(
+        TitledSection(
             "Accessibility",
             Ul(
                 Li("Uses native &lt;dialog&gt; element for proper semantics"),

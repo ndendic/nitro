@@ -111,7 +111,7 @@ page = Div(
             "A loading placeholder component using Tailwind's animate-pulse "
             "animation for a subtle pulsing effect."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("The Skeleton component provides content placeholders during loading:"),
             Ul(
@@ -122,42 +122,42 @@ page = Div(
                 Li("aria-hidden='true' since it's decorative content"),
             ),
         ),
-        Section(
+        TitledSection(
             "Text Line",
             P("A simple text line placeholder:"),
             ComponentShowcase(example_text),
         ),
-        Section(
+        TitledSection(
             "Avatar",
             P("A circular avatar placeholder:"),
             ComponentShowcase(example_avatar),
         ),
-        Section(
+        TitledSection(
             "Card",
             P("A card-sized placeholder:"),
             ComponentShowcase(example_card),
         ),
-        Section(
+        TitledSection(
             "Text Block",
             P("Multiple lines simulating a paragraph:"),
             ComponentShowcase(example_text_block),
         ),
-        Section(
+        TitledSection(
             "Profile Layout",
             P("Avatar with text placeholders:"),
             ComponentShowcase(example_profile),
         ),
-        Section(
+        TitledSection(
             "Card Layout",
             P("A full card skeleton with image and text:"),
             ComponentShowcase(example_card_layout),
         ),
-        Section(
+        TitledSection(
             "Table Rows",
             P("Table loading state with header and rows:"),
             ComponentShowcase(example_table_rows),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -172,7 +172,7 @@ def Skeleton(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Accessibility",
             Ul(
                 Li("aria-hidden='true' - Skeletons are decorative"),

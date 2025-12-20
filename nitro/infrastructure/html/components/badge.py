@@ -4,17 +4,15 @@ from .utils import cn, cva
 
 # Badge variant configuration using cva
 badge_variants = cva(
-    base="badge",
+    base="",
     config={
         "variants": {
             "variant": {
-                "default": "badge-default",
+                "default": "badge",
                 "primary": "badge-primary",
                 "secondary": "badge-secondary",
                 "destructive": "badge-destructive",
                 "outline": "badge-outline",
-                "success": "badge-success",
-                "warning": "badge-warning",
             },
             "size": {
                 "sm": "badge-sm",
@@ -27,7 +25,7 @@ badge_variants = cva(
 )
 
 
-BadgeVariant = Literal["default", "primary", "secondary", "destructive", "outline", "success", "warning"]
+BadgeVariant = Literal["default", "primary", "secondary", "destructive", "outline"]
 BadgeSize = Literal["sm", "md", "lg"]
 
 
@@ -51,8 +49,6 @@ def Badge(
             - "secondary": Less prominent
             - "destructive": Error/danger status
             - "outline": Border-only style
-            - "success": Success/positive status
-            - "warning": Warning status
         size: Badge size
             - "sm": Small badge
             - "md": Medium badge (default)
@@ -65,7 +61,7 @@ def Badge(
 
     Example:
         # Status badge
-        Badge("Active", variant="success")
+        Badge("Active", variant="outline")
 
         # Count badge
         Badge("99+", variant="destructive")

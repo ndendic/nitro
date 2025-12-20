@@ -128,7 +128,7 @@ page = Div(
             "A simple tooltip that appears on hover. Uses pure CSS via Basecoat's "
             "data-tooltip pattern - no JavaScript required."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("Tooltips are lightweight hover hints:"),
             Ul(
@@ -138,37 +138,37 @@ page = Div(
                 Li("Works on any element (buttons, icons, text, etc.)"),
             ),
         ),
-        Section(
+        TitledSection(
             "Basic Tooltip",
             P("Wrap any element with Tooltip and provide content:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "Positioning",
             P("Control which side the tooltip appears on:"),
             ComponentShowcase(example_positions),
         ),
-        Section(
+        TitledSection(
             "Alignment",
             P("Control horizontal/vertical alignment relative to the trigger:"),
             ComponentShowcase(example_alignment),
         ),
-        Section(
+        TitledSection(
             "With Icons",
             P("Tooltips work great with icon buttons:"),
             ComponentShowcase(example_with_icons),
         ),
-        Section(
+        TitledSection(
             "On Buttons",
             P("Add helpful hints to buttons:"),
             ComponentShowcase(example_on_buttons),
         ),
-        Section(
+        TitledSection(
             "Inline with Text",
             P("Use tooltips for inline definitions or explanations:"),
             ComponentShowcase(example_with_text),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -184,7 +184,7 @@ def Tooltip(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Key Features",
             Ul(
                 Li("Appears on hover with smooth animation"),

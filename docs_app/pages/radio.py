@@ -110,32 +110,32 @@ page = Div(
             "Radio group with compound component pattern. Uses Datastar two-way binding "
             "to track the selected value. Only one option can be selected at a time."
         ),
-        Section(
+        TitledSection(
             "Basic Radio Group",
             P("A vertical radio group with signal binding:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "Horizontal Orientation",
             P("Radio buttons can be arranged horizontally:"),
             ComponentShowcase(example_horizontal),
         ),
-        Section(
+        TitledSection(
             "Pre-selected Value",
             P("Set the initial value in your Signals:"),
             ComponentShowcase(example_preselected),
         ),
-        Section(
+        TitledSection(
             "Disabled Options",
             P("Individual radio options can be disabled:"),
             ComponentShowcase(example_disabled),
         ),
-        Section(
+        TitledSection(
             "In Field Context",
             P("Inside a .field container with label and description:"),
             ComponentShowcase(example_in_field),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             H3("RadioGroup", cls="font-semibold mb-2"),
             CodeBlock(
@@ -166,7 +166,7 @@ def RadioItem(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Usage Example",
             CodeBlock(
                 """
@@ -190,7 +190,7 @@ RadioGroup(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Compound Component Pattern",
             P(
                 "RadioGroup uses the closure pattern for compound components. "

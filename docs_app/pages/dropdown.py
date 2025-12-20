@@ -144,37 +144,37 @@ page = Div(
             "for state management and Basecoat CSS for styling. Supports icons, separators, "
             "disabled items, and different alignment options."
         ),
-        Section(
+        TitledSection(
             "Basic Dropdown",
             P("A simple dropdown menu with trigger and content:"),
             ComponentShowcase(example_basic),
         ),
-        Section(
+        TitledSection(
             "With Icons",
             P("Dropdown items can include icons using LucideIcon:"),
             ComponentShowcase(example_with_icons),
         ),
-        Section(
+        TitledSection(
             "With Separators and Labels",
             P("Group related items using separators and non-interactive labels:"),
             ComponentShowcase(example_with_separators),
         ),
-        Section(
+        TitledSection(
             "Alignment Options",
             P("Control horizontal alignment of the dropdown content:"),
             ComponentShowcase(example_alignment),
         ),
-        Section(
+        TitledSection(
             "Disabled Items",
             P("Items can be disabled to prevent interaction:"),
             ComponentShowcase(example_disabled_items),
         ),
-        Section(
+        TitledSection(
             "Click Handlers",
             P("Add click handlers to perform actions:"),
             ComponentShowcase(example_with_click_handlers),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
@@ -227,7 +227,7 @@ def DropdownLabel(
                 code_cls="language-python",
             ),
         ),
-        Section(
+        TitledSection(
             "Key Behaviors",
             Ul(
                 Li("Opens on trigger click"),

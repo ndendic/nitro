@@ -61,7 +61,7 @@ def Popover(
         cls=cn("popover", cls),
         id=popover_id,
         # Close on click outside - when clicking the wrapper itself (not children)
-        data_on_click__outside=f"${signal_name} = false",
+        on_click__outside=f"${signal_name} = false",
         **attrs,
     )
 
@@ -90,10 +90,10 @@ def PopoverTrigger(
         return rt.Span(
             *children,
             cls=cn("popover-trigger", cls),
-            data_on_click=f"${signal_name} = !${signal_name}",
+            on_click=f"${signal_name} = !${signal_name}",
             aria_haspopup="dialog",
             aria_expanded="false",  # Initial value
-            **{"data-attr-aria-expanded": f"${signal_name}"},  # Dynamic update
+            **{"data-attr:aria-expanded": f"${signal_name}"},  # Dynamic update
             **attrs,
         )
 
@@ -148,9 +148,9 @@ def PopoverContent(
             tabindex="-1",
             # Show/hide based on signal - initial value is hidden
             aria_hidden="true",
-            **{"data-attr-aria-hidden": f"!${signal_name}"},  # Dynamic update
+            **{"data-attr:aria-hidden": f"!${signal_name}"},  # Dynamic update
             # Close on Escape key
-            data_on_keydown__escape=f"${signal_name} = false",
+            on_keydown=f"evt.key === 'Escape' && (${signal_name} = false)",
             **attrs,
         )
 
@@ -193,7 +193,7 @@ def PopoverClose(
     return rt.Button(
         *children,
         cls=cn("popover-close", cls),
-        data_on_click=f"${signal_name} = false",
+        on_click=f"${signal_name} = false",
         aria_label="Close",
         type="button",
         **attrs,

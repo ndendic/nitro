@@ -84,7 +84,7 @@ page = Div(
         P(
             "The Accordion component uses native HTML details/summary elements with optional name-based grouping for accordion behavior."
         ),
-        Section(
+        TitledSection(
             "Design Philosophy",
             P("This component follows our 'less is more' principle:"),
             Ul(
@@ -95,7 +95,7 @@ page = Div(
                 Li("✨ Simple, clean API that's easy to understand"),
             ),
         ),
-        Section(
+        TitledSection(
             "Key Insight",
             P(
                 Strong(
@@ -104,17 +104,17 @@ page = Div(
                 " When multiple details elements share the same name, only one can be open at a time. This is native HTML functionality.",
             ),
         ),
-        Section(
+        TitledSection(
             "Basic Usage Demo - Multiple Open",
             P("Multiple items can be open simultaneously (default behavior):"),
             ComponentShowcase(example_1),
         ),
-        Section(
+        TitledSection(
             "Single Open Demo - Name Grouping",
             P("Using the name attribute, only one item can be open at a time:"),
             ComponentShowcase(example_2),
         ),
-        Section(
+        TitledSection(
             "API Reference",
             CodeBlock(
                 """
