@@ -30,67 +30,15 @@ def get_pages():
             continue
     return all_pages
 
-# Custom CSS for animations not in Tailwind
-CUSTOM_CSS = """
-@keyframes progress-indeterminate {
-  0% { left: -40%; }
-  100% { left: 100%; }
-}
-"""
 
 # Shared headers for all documentation pages
 hdrs = (
-    # Inter font for typography
-    Link(rel="preconnect", href="https://fonts.googleapis.com"),
-    Link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin=""),
-    Link(
-        rel="stylesheet",
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500;600&display=swap",
-    ),
-    Link(
-        rel="stylesheet",
-        href="https://unpkg.com/open-props@1.7.16/open-props.min.css",
-        type="text/css",
-    ),
-    Style(CUSTOM_CSS),  # Custom animations
-    Script("""{"imports": {"datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"}}""", type='importmap'),
-    Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-persist@latest/dist/index.js'),
-    Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-anchor@latest/dist/index.js'),
-    Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-anchor@latest/dist/index.js'),
-
     Script(src='/static/js/datastar.js', type='module'),
-    Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/basecoat.min.js', defer=''),
-    Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/sidebar.min.js', defer=''),
-    Script("""const datastar = JSON.parse(localStorage.getItem('datastar') || '{}');
-console.log('datastar values', datastar);
-const htmlElement = document.documentElement;
-if ("darkMode" in datastar) {
-  // Respect the value from localStorage if it exists
-  if (datastar.darkMode === true) {
-    htmlElement.classList.add('dark');
-  } else {
-    htmlElement.classList.remove('dark');
-  }
-} else {
-  // Fallback to system color scheme if darkMode not in localStorage
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    htmlElement.classList.add('dark');
-  } else {
-    htmlElement.classList.remove('dark');
-  }
-}
-htmlElement.setAttribute('data-theme', datastar.theme);"""),
 )
 # Shared HTML and body configuration
-htmlkws = dict(lang="en", cls="bg-background text-foreground",data_theme="$theme")
-bodykws = dict(
-    cls="bg-background text-foreground",
-    signals=Signals(message="", conn="",darkMode=True,theme="claude"),
-)
-ftrs = (
-    CustomTag("datastar-inspector"),
-    Div(data_persist="darkMode, theme")
-)
+htmlkws = dict(lang="en") # , cls="bg-background text-foreground",data_theme="$theme"
+bodykws = dict()
+ftrs = (CustomTag("datastar-inspector"),)
 # Shared page template
 page = create_template(
     hdrs=hdrs,
@@ -98,8 +46,6 @@ page = create_template(
     bodykw=bodykws,
     ftrs=ftrs,
     highlightjs=True,
-    datastar=False,
-    monsterui=False,
     lucide=True,
 )
 

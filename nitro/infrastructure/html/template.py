@@ -8,8 +8,10 @@ to provide better separation of concerns in the Nitro framework.
 from asyncio import iscoroutine, iscoroutinefunction
 from typing import Optional, Callable, ParamSpec, TypeVar
 from functools import partial, wraps
-from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link
+from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link, Div
+from rusty_tags.datastar import Signals
 from nitro.config import NitroConfig
+from nitro.infrastructure.html.components.utils import cn
 
 P = ParamSpec("P")
 R = TypeVar("R")
@@ -34,6 +36,35 @@ HEADER_URLS = {
     "highlight_copy_css": "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.css",
 }
 
+def add_nitro_components(hdrs: tuple, htmlkw: dict, bodykw: dict, ftrs: tuple):
+    hdrs += (
+        Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/basecoat.min.js', defer=''),
+        Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/sidebar.min.js', defer=''),
+        Script("""const datastar = JSON.parse(localStorage.getItem('datastar') || '{}');
+    console.log('datastar values', datastar);
+    const htmlElement = document.documentElement;
+    if ("darkMode" in datastar) {
+    // Respect the value from localStorage if it exists
+    if (datastar.darkMode === true) {
+        htmlElement.classList.add('dark');
+    } else {
+        htmlElement.classList.remove('dark');
+    }
+    } else {
+    // Fallback to system color scheme if darkMode not in localStorage
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        htmlElement.classList.add('dark');
+    } else {
+        htmlElement.classList.remove('dark');
+    }
+    }
+    htmlElement.setAttribute('data-theme', datastar.theme);""")
+    )
+    bodykw["signals"] = Signals(message="", conn="",darkMode=True,theme="claude")
+    htmlkw["data_theme"] = "$theme"
+    htmlkw["cls"] = cn("bg-background text-foreground") if htmlkw.get("cls") is None else cn(htmlkw.get("cls"), "bg-background text-foreground")
+    ftrs += (Div(data_persist="darkMode, theme"),)
+    return hdrs, htmlkw, bodykw, ftrs
 
 def add_highlightjs(hdrs: tuple, ftrs: tuple):
     hdrs += (  # pyright: ignore[reportOperatorIssue]
@@ -81,6 +112,7 @@ def Page(
     bodykw: dict | None = None,
     datastar: bool = True,
     ds_version: str = "1.0.0-RC.6",
+    nitro_components: bool = True,
     monsterui: bool = False,
     tailwind4: bool = False,
     lucide: bool = False,
@@ -92,6 +124,8 @@ def Page(
     ftrs = ftrs if ftrs is not None else ()
     htmlkw = htmlkw if htmlkw is not None else {}
     bodykw = bodykw if bodykw is not None else {}
+    tailwind_css = config.tailwind.css_output
+    tw_configured = tailwind_css.exists()
 
     if tailwind4:
         hdrs += (Script(src=HEADER_URLS["tailwind4"]),)
@@ -105,24 +139,20 @@ def Page(
         hdrs += (Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/css/utilities.min.css"),)
         hdrs += (Script(src=HEADER_URLS["franken_js_core"], type="module"),)
         hdrs += (Script(src=HEADER_URLS["franken_icons"], type="module"),)
-
-    tailwind_css = config.tailwind.css_output
-    tw_configured = config.tailwind.css_output.exists()
+    if datastar:
+        hdrs = (   
+        Script(f"""{{"imports": {{"datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@{ds_version}/bundles/datastar.js"}}}}""", type='importmap'),
+        Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-persist@latest/dist/index.js'),
+        Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-anchor@latest/dist/index.js')) + hdrs
+    if tw_configured:
+        hdrs += (Link(rel="stylesheet", href=f"/{tailwind_css}", type="text/css"),)
+    if nitro_components:
+        hdrs, htmlkw, bodykw, ftrs = add_nitro_components(hdrs,htmlkw, bodykw, ftrs)
 
     return Html(
         Head(
             Title(title),
-            
             *hdrs if hdrs else (),
-            Script(
-                src=f"https://cdn.jsdelivr.net/gh/starfederation/datastar@{ds_version}/bundles/datastar.js",
-                type="module",
-            )
-            if datastar
-            else Fragment(),
-            Link(rel="stylesheet", href=f"/{tailwind_css}", type="text/css")
-            if tw_configured
-            else Fragment(),
         ),
         Body(
             *content,
@@ -141,6 +171,7 @@ def create_template(
     bodykw: Optional[dict] = None,
     datastar: bool = True,
     ds_version: str = "1.0.0-RC.6",
+    nitro_components: bool = True,
     monsterui: bool = False,
     lucide: bool = True,
     highlightjs: bool = False,
@@ -159,6 +190,7 @@ def create_template(
         bodykw=bodykw,
         datastar=datastar,
         ds_version=ds_version,
+        nitro_components=nitro_components,
         monsterui=monsterui,
         lucide=lucide,
         highlightjs=highlightjs,
@@ -195,6 +227,7 @@ def page_template(
     bodykw: Optional[dict] = None,
     datastar: bool = True,
     ds_version: str = "1.0.0-RC.6",
+    nitro_components: bool = True,
     monsterui: bool = False,
     tailwind4: bool = False,
     lucide: bool = False,
@@ -214,6 +247,7 @@ def page_template(
         title=page_title,
         datastar=datastar,
         ds_version=ds_version,
+        nitro_components=nitro_components,
         monsterui=monsterui,
         lucide=lucide,
         tailwind4=tailwind4,
