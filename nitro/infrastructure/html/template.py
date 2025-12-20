@@ -41,7 +41,6 @@ def add_nitro_components(hdrs: tuple, htmlkw: dict, bodykw: dict, ftrs: tuple):
         Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/basecoat.min.js', defer=''),
         Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/sidebar.min.js', defer=''),
         Script("""const datastar = JSON.parse(localStorage.getItem('datastar') || '{}');
-    console.log('datastar values', datastar);
     const htmlElement = document.documentElement;
     if ("darkMode" in datastar) {
     // Respect the value from localStorage if it exists
@@ -60,10 +59,9 @@ def add_nitro_components(hdrs: tuple, htmlkw: dict, bodykw: dict, ftrs: tuple):
     }
     htmlElement.setAttribute('data-theme', datastar.theme);""")
     )
-    bodykw["signals"] = Signals(message="", conn="",darkMode=True,theme="claude")
     htmlkw["data_theme"] = "$theme"
     htmlkw["cls"] = cn("bg-background text-foreground") if htmlkw.get("cls") is None else cn(htmlkw.get("cls"), "bg-background text-foreground")
-    ftrs += (Div(data_persist="darkMode, theme"),)
+    ftrs += (Div(Div(data_persist="darkMode, theme"),signals=Signals(darkMode=True,theme="claude")),)
     return hdrs, htmlkw, bodykw, ftrs
 
 def add_highlightjs(hdrs: tuple, ftrs: tuple):

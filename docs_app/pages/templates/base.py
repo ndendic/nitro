@@ -37,7 +37,7 @@ hdrs = (
 )
 # Shared HTML and body configuration
 htmlkws = dict(lang="en") # , cls="bg-background text-foreground",data_theme="$theme"
-bodykws = dict()
+bodykws = dict(signals=Signals(message="", conn=""))
 ftrs = (CustomTag("datastar-inspector"),)
 # Shared page template
 page = create_template(
