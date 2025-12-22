@@ -80,6 +80,7 @@ def Command(
                 autocomplete="off",
                 bind=search_signal,
                 id=f"{command_id}-input",
+                autofocus=True,
             ),
         ),
         # Menu items
@@ -169,6 +170,7 @@ def CommandDialog(
                         autocomplete="off",
                         bind=search_signal,
                         id=f"{command_id}-input",
+                        autofocus=True,
                     ),
                 ),
                 # Menu items

@@ -1,6 +1,7 @@
 """Avatar component documentation page"""
 
 from .templates.base import *  # noqa: F403
+from .templates.components import DiceBearAvatar
 from fastapi.requests import Request
 from fastapi import APIRouter
 
@@ -14,7 +15,7 @@ def example_basic():
     """Basic avatar with image."""
     return Div(
         Avatar(
-            src="https://api.dicebear.com/7.x/avataaars/svg?seed=John",
+            src="https://github.com/ndendic.png",
             alt="John Doe",
             size="md",
         ),
@@ -94,17 +95,17 @@ def example_with_badge():
     return Div(
         Div(
             Avatar(src="https://api.dicebear.com/7.x/avataaars/svg?seed=Online", alt="Online User", size="lg"),
-            Span(cls="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-background"),
+            Span(cls="absolute right-0 bottom-0 -translate-y-1/2 size-3 bg-green-500 rounded-full ring-2 ring-background"),
             cls="relative inline-block",
         ),
         Div(
             Avatar(src="https://api.dicebear.com/7.x/avataaars/svg?seed=Busy", alt="Busy User", size="lg"),
-            Span(cls="absolute bottom-0 right-0 size-3 bg-yellow-500 rounded-full ring-2 ring-background"),
+            Span(cls="absolute right-0 bottom-0 -translate-y-1/2 size-3 bg-yellow-500 rounded-full ring-2 ring-background"),
             cls="relative inline-block",
         ),
         Div(
             Avatar(src="https://api.dicebear.com/7.x/avataaars/svg?seed=Offline", alt="Offline User", size="lg"),
-            Span(cls="absolute bottom-0 right-0 size-3 bg-gray-400 rounded-full ring-2 ring-background"),
+            Span(cls="absolute right-0 bottom-0 -translate-y-1/2 size-3 bg-gray-400 rounded-full ring-2 ring-background"),
             cls="relative inline-block",
         ),
         cls="flex items-center gap-6",

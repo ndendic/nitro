@@ -21,13 +21,13 @@ avatar_variants = cva(
     }
 )
 
-# Size classes for inline styling (width/height)
-SIZE_CLASSES = {
-    "xs": "size-6 text-xs",      # 24px
-    "sm": "size-8 text-sm",      # 32px
-    "md": "size-10 text-base",   # 40px
-    "lg": "size-12 text-lg",     # 48px
-    "xl": "size-16 text-xl",     # 64px
+
+SIZE_PIXELS = {
+    "xs": 24,
+    "sm": 32,
+    "md": 40,
+    "lg": 48,
+    "xl": 64,
 }
 
 AvatarSize = Literal["xs", "sm", "md", "lg", "xl"]
@@ -92,7 +92,7 @@ def Avatar(
         # Just initials
         Avatar(alt="Alice", size="xl")  # Shows "AL"
     """
-    size_cls = SIZE_CLASSES.get(size, SIZE_CLASSES["md"])
+    size_px = SIZE_PIXELS.get(size, SIZE_PIXELS["md"])
 
     # Determine fallback text
     initials = fallback if fallback else _get_initials(alt)
@@ -103,7 +103,6 @@ def Avatar(
         "rounded-full overflow-hidden",
         "bg-muted text-muted-foreground font-medium",
         "select-none shrink-0",
-        size_cls,
         cls,
     )
 
@@ -114,11 +113,13 @@ def Avatar(
                 src=src,
                 alt=alt,
                 cls="aspect-square size-full object-cover",
+                style=f"width: {size_px}px; height: {size_px}px;",
             ),
             # Hidden fallback (would need JS to show on error)
             Span(
                 initials,
-                cls="absolute inset-0 flex items-center justify-center opacity-0",
+                cls="hidden absolute inset-0 flex items-center justify-center opacity-0",
+                style=f"width: {size_px}px; height: {size_px}px;",
                 aria_hidden="true",
             ) if initials else "",
             cls=base_cls,
@@ -128,7 +129,8 @@ def Avatar(
     else:
         # No image - show fallback initials
         return Div(
-            Span(initials) if initials else "",
+            initials, 
+            style=f"width: {size_px}px; height: {size_px}px;" if initials else "display: none;",
             cls=base_cls,
             data_size=size,
             role="img",

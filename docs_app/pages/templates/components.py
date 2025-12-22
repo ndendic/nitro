@@ -153,7 +153,7 @@ def Navbar():
                     LucideIcon('sun',  show="!$darkMode"),
                     LucideIcon('moon',  show="$darkMode"),
                     on_click="$darkMode = !$darkMode; $darkMode ? document.documentElement.classList.add('dark') : document.documentElement.classList.remove('dark');",
-                    cls="btn-outline"
+                    variant="outline"
                 ),
                 cls="flex gap-2"
             ),
@@ -303,6 +303,23 @@ def PicSumImg(
         url = f"{url}{'?' if not grayscale else '&'}blur={max(1, min(10, blur))}"
     return Img(src=url, loading="lazy", **kwargs)
 
+def DiceBearAvatar(
+    seed_name: str,  # Seed name (ie 'Isaac Flath')
+    h: int = 24,  # Height
+    w: int = 24,  # Width
+):  # Span with Avatar
+    "Creates an Avatar using https://dicebear.com/"
+    url = "https://api.dicebear.com/8.x/lorelei/svg?seed="
+    return Span(    
+        Img(
+            cls="aspect-square",
+            alt="Avatar",
+            loading="lazy",
+            src=f"{url}{seed_name}",
+            style=f"width: {w}px; height: {h}px;",
+        ),
+        cls="relative flex shrink-0 overflow-hidden rounded-full bg-secondary"
+    )
 
 def TitledSection(title, *content, cls="fluid-flex bg-background"):
     """Utility function for creating documentation sections"""
