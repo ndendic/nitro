@@ -19,7 +19,7 @@ def test_signals():
             Button(
                 "Increment",
                 **{"data-on:click": "$counter = ($counter || 0) + 1"},
-                cls="btn btn-primary mb-4"
+                cls="btn-primary mb-4"
             ),
             Pre(
                 Code(

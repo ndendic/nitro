@@ -132,7 +132,7 @@ def example_div_centered():
         Div("First", cls="bg-primary text-primary-foreground px-4 py-2 rounded-md"),
         Div("Second", cls="bg-primary text-primary-foreground px-4 py-2 rounded-md"),
         Div("Third", cls="bg-primary text-primary-foreground px-4 py-2 rounded-md"),
-        cls="h-48 border-2 border-dashed border-primary rounded-md",
+        cls="h-48 border-2 border-dashed border-primary rounded-md gap-2",
     )
 
 
@@ -142,7 +142,7 @@ def example_div_centered_horizontal():
         Div("B", cls="bg-secondary px-4 py-2 rounded-md"),
         Div("C", cls="bg-secondary px-4 py-2 rounded-md"),
         vstack=False,
-        cls="h-24 border-2 border-dashed border-primary rounded-md",
+        cls="h-24 border-2 border-dashed border-primary rounded-md gap-2",
     )
 
 
@@ -154,7 +154,7 @@ def example_div_aligned():
                 Div("A", cls="bg-primary text-primary-foreground px-3 py-1 rounded"),
                 Div("B", cls="bg-primary text-primary-foreground px-3 py-1 rounded"),
                 Div("C", cls="bg-primary text-primary-foreground px-3 py-1 rounded"),
-                cls="border-2 border-dashed border-primary rounded-md p-2",
+                cls="border-2 border-dashed border-primary rounded-md p-2 gap-2",
             ),
         ),
         Div(
@@ -163,7 +163,7 @@ def example_div_aligned():
                 Div("A", cls="bg-primary text-primary-foreground px-3 py-1 rounded"),
                 Div("B", cls="bg-primary text-primary-foreground px-3 py-1 rounded"),
                 Div("C", cls="bg-primary text-primary-foreground px-3 py-1 rounded"),
-                cls="border-2 border-dashed border-primary rounded-md p-2",
+                cls="border-2 border-dashed border-primary rounded-md p-2 gap-2",
             ),
         ),
         cls="space-y-4"
@@ -178,7 +178,7 @@ def example_div_stacked():
                 Div("Top", cls="bg-primary text-primary-foreground px-4 py-2 rounded-md"),
                 Div("Middle", cls="bg-primary text-primary-foreground px-4 py-2 rounded-md"),
                 Div("Bottom", cls="bg-primary text-primary-foreground px-4 py-2 rounded-md"),
-                cls="border-2 border-dashed border-primary rounded-md p-4",
+                cls="border-2 border-dashed border-primary rounded-md p-4 gap-2",
             ),
         ),
         Div(
@@ -187,7 +187,7 @@ def example_div_stacked():
                 Div("Left", cls="bg-primary text-primary-foreground px-4 py-2 rounded-md"),
                 Div("Center", cls="bg-primary text-primary-foreground px-4 py-2 rounded-md"),
                 Div("Right", cls="bg-primary text-primary-foreground px-4 py-2 rounded-md"),
-                cls="border-2 border-dashed border-primary rounded-md p-4",
+                cls="border-2 border-dashed border-primary rounded-md p-4 gap-2",
             ),
         ),
         cls="grid grid-cols-2 gap-4"
@@ -204,7 +204,7 @@ def example_flex_types():
                     Div("A", cls="bg-secondary px-2 py-1 rounded"),
                     Div("B", cls="bg-secondary px-2 py-1 rounded"),
                     Div("C", cls="bg-secondary px-2 py-1 rounded"),
-                    cls=f"{FlexT.block} {FlexT.between} {FlexT.middle} h-12 border rounded p-2",
+                    cls=cn(FlexT.block, FlexT.between, FlexT.middle, "h-12 border rounded p-2"),
                 ),
             ),
             Div(
@@ -212,7 +212,7 @@ def example_flex_types():
                 Div(
                     Div("1", cls="bg-secondary px-2 py-1 rounded"),
                     Div("2", cls="bg-secondary px-2 py-1 rounded"),
-                    cls=f"{FlexT.block} {FlexT.column} {FlexT.center} border rounded p-2",
+                    cls=cn(FlexT.block, FlexT.column, FlexT.center, "border rounded p-2 gap-2"),
                 ),
             ),
             cls="grid grid-cols-2 gap-4"

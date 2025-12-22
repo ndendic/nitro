@@ -40,7 +40,7 @@ class TextT(VEnum):
     )
     # Text Color
     muted, primary, secondary = (
-        "text-gray-500 dark:text-gray-200",
+        "text-muted",
         "text-primary",
         "text-secondary",
     )
@@ -77,47 +77,47 @@ class TextPresets(VEnum):
 
 def H1(
     *c: str | HtmlString,  # Contents of H1 tag (often text)
-    cls: Enum | str = "h1",  # Classes in addition to H1 styling
+    cls: Enum | str = "",  # Classes in addition to H1 styling
     **kwargs,  # Additional args for H1 tag
 ) -> HtmlString:  # H1(..., cls='h1')
     "H1 with styling and appropriate size"
-    return rt.H1(*c, cls=cls, **kwargs)
+    return rt.H1(*c, cls=cn("h1 mb-4",cls), **kwargs)
 
 
 def H2(
     *c: str | HtmlString,  # Contents of H2 tag (often text)
-    cls: Enum | str = "h2",  # Classes in addition to H2 styling
+    cls: Enum | str = "",  # Classes in addition to H2 styling
     **kwargs,  # Additional args for H2 tag
 ) -> HtmlString:  # H2(..., cls='h2')
     "H2 with styling and appropriate size"
-    return rt.H2(*c, cls=cls, **kwargs)
+    return rt.H2(*c, cls=cn("h2",cls), **kwargs)
 
 
 def H3(
     *c: HtmlString | str,  # Contents of H3 tag (often text)
-    cls: Enum | str = "h3",  # Classes in addition to H3 styling
+    cls: Enum | str = "",  # Classes in addition to H3 styling
     **kwargs,  # Additional args for H3 tag
 ) -> HtmlString:  # H3(..., cls='h3')
     "H3 with styling and appropriate size"
-    return rt.H3(*c, cls=cls, **kwargs)
+    return rt.H3(*c, cls=cn("h3",cls), **kwargs)
 
 
 def H4(
     *c: HtmlString | str,  # Contents of H4 tag (often text)
-    cls: Enum | str = "h4",  # Classes in addition to H4 styling
+    cls: Enum | str = "",  # Classes in addition to H4 styling
     **kwargs,  # Additional args for H4 tag
 ) -> HtmlString:  # H4(..., cls='h4')
     "H4 with styling and appropriate size"
-    return rt.H4(*c, cls=cls, **kwargs)
+    return rt.H4(*c, cls=cn("h4",cls), **kwargs)
 
 
 def H5(
     *c: HtmlString | str,  # Contents of H5 tag (often text)
-    cls: Enum | str = "h5",  # Classes in addition to H5 styling
+    cls: Enum | str = "",  # Classes in addition to H5 styling
     **kwargs,  # Additional args for H5 tag
 ) -> HtmlString:  # H5(..., cls='text-lg font-semibold')
     "H5 with styling and appropriate size"
-    return rt.H5(*c, cls=cls, **kwargs)
+    return rt.H5(*c, cls=cn("h5",cls), **kwargs)
 
 
 def H6(

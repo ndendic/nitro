@@ -61,7 +61,7 @@ def template(title: str):
                     Navbar(),
                     Div(
                         Div(func(*args, **kwargs), id="content"),
-                        cls="p-4 md:p-6 xl:p-12 max-w-4xl mx-auto",
+                        cls="p-4 md:p-6 xl:p-12 max-w-4xl",
                     ),
                     Footer(),
                     cls="min-h-screen flex flex-col",

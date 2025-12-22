@@ -67,7 +67,7 @@ def code_playground():
                     Button(
                         "▶ Run Code",
                         **{"data-on:click": "$$get('/playground/execute?code=' + encodeURIComponent($code))"},
-                        cls="btn btn-primary",
+                        cls="btn-primary",
                         id="run-button"
                     ),
                     Button(

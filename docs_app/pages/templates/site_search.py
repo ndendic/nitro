@@ -114,7 +114,7 @@ def SiteSearch():
                 Kbd("K", cls="text-xs"),
                 cls="hidden md:flex gap-0.5 ml-4",
             ),
-            cls="btn btn-outline flex items-center gap-1 w-auto md:w-[200px] justify-start text-muted-foreground",
+            cls="btn-outline flex items-center gap-1 w-auto md:w-[200px] justify-start text-muted-foreground",
             id="site-search-trigger",
             onclick=f"document.getElementById('{dialog_id}').showModal(); setTimeout(() => document.getElementById('{input_id}').focus(), 50);",
         ),

@@ -48,6 +48,7 @@ from pages.command import router as command_router
 from pages.theme_switcher import router as theme_switcher_router
 from pages.typography import router as typography_router
 from pages.layouts import router as layouts_router
+from pages.sidebar import router as sidebar_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -94,6 +95,7 @@ app.include_router(command_router)
 app.include_router(theme_switcher_router)
 app.include_router(typography_router)
 app.include_router(layouts_router)
+app.include_router(sidebar_router)
 app.include_router(errors_router)
 
 

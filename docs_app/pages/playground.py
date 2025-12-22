@@ -100,7 +100,7 @@ class Person(Entity, table=True):
                 Input(type="number", bind=self.signals.age, cls="input"),
                 cls="grid gap-2",
             ),
-            Button("Add +", on_click="@get('/cmds/newPerson/nikola')", cls="btn-outline"),
+            Button("Add +", on_click="@get('/cmds/newPerson/nikola')", variant="outline"),
             cls="card p-4 grid gap-6",
         )
 

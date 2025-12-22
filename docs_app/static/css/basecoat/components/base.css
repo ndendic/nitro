@@ -314,7 +314,7 @@
 
     .container {
 		display: var(--container-display, flow-root);
-		box-sizing: var(--container-box-sizing, content-box);
+		box-sizing: var(--container-box-sizing, border-box);
 		max-width: var(--container-max-width, 1200px);
 		margin-left: var(--container-margin-x, auto);
 		margin-right: var(--container-margin-x, auto);

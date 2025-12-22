@@ -15,148 +15,6 @@ from .icons import LucideIcon
 _combobox_ids = count(1)
 
 
-def Combobox(
-    *children: Any,
-    id: Optional[str] = None,
-    placeholder: str = "Search...",
-    empty_text: str = "No results found",
-    bind: Any = None,
-    cls: str = "",
-    **attrs: Any,
-) -> rt.HtmlString:
-    """Combobox container with search input and filterable dropdown.
-
-    Uses Datastar signals for:
-    - open state (whether dropdown is visible)
-    - search query (filter text)
-    - selected value (current selection)
-    - display text (shown in trigger button)
-
-    The filtering is done client-side using Datastar data_show expressions.
-    Uses Basecoat's .select CSS classes for consistent styling with other form elements.
-
-    Args:
-        *children: ComboboxItem elements
-        id: Unique identifier (auto-generated if not provided)
-        placeholder: Placeholder text for search input
-        empty_text: Text to show when no items match the search
-        bind: Optional Datastar Signal for two-way binding of selected value
-        cls: Additional CSS classes
-        **attrs: Additional HTML attributes
-
-    Returns:
-        Complete combobox structure with signal coordination
-
-    Example:
-        Combobox(
-            ComboboxItem("Apple", value="apple"),
-            ComboboxItem("Banana", value="banana"),
-            ComboboxItem("Orange", value="orange"),
-            id="fruits",
-            placeholder="Select a fruit...",
-        )
-
-        # With Datastar binding
-        form = Signals(fruit="")
-        Combobox(
-            ComboboxItem("Apple", value="apple"),
-            ComboboxItem("Banana", value="banana"),
-            id="fruits",
-            bind=form.fruit,
-        )
-    """
-    combobox_id = id or f"combobox_{next(_combobox_ids)}"
-    signal_prefix = combobox_id.replace("-", "_")
-    open_signal = f"{signal_prefix}_open"
-    search_signal = f"{signal_prefix}_search"
-    value_signal = f"{signal_prefix}_value"
-    display_signal = f"{signal_prefix}_display"
-
-    # Handle external binding
-    bind_signal = None
-    if bind is not None:
-        if hasattr(bind, 'to_js'):
-            bind_signal = bind.to_js().lstrip('$')
-        elif isinstance(bind, str):
-            bind_signal = bind.lstrip('$')
-
-    # Process children - pass context to closures
-    processed_children = []
-    for child in children:
-        if callable(child):
-            processed_children.append(child(combobox_id, signal_prefix, bind_signal))
-        else:
-            processed_children.append(child)
-
-    # Build the trigger button that shows current selection
-    trigger_button = rt.Button(
-        rt.Span(
-            placeholder,
-            cls="truncate text-muted-foreground",
-            data_show=f"!${display_signal}",
-        ),
-        rt.Span(
-            cls="truncate",
-            data_show=f"${display_signal}",
-            data_text=f"${display_signal}",
-        ),
-        LucideIcon("chevrons-up-down", cls="ml-auto size-4 shrink-0 opacity-50"),
-        type="button",
-        cls="btn btn-outline w-full justify-between font-normal",
-        role="combobox",
-        aria_haspopup="listbox",
-        aria_autocomplete="list",
-        **{"data-attr:aria-expanded": f"${open_signal}"},
-        aria_controls=f"{combobox_id}-listbox",
-        on_click=f"${open_signal} = !${open_signal}",
-    )
-
-    return rt.Div(
-        trigger_button,
-        # Dropdown with search and options
-        rt.Div(
-            # Search header
-            rt.Header(
-                LucideIcon("search"),
-                rt.Input(
-                    type="text",
-                    placeholder=placeholder,
-                    autocomplete="off",
-                    data_bind=search_signal,
-                    role="combobox",
-                    id=f"{combobox_id}-input",
-                ),
-            ),
-            # Options list
-            rt.Div(
-                *processed_children,
-                role="listbox",
-                id=f"{combobox_id}-listbox",
-                data_empty=empty_text,
-            ),
-            data_popover="",
-            data_align="start",
-            data_side="bottom",
-            aria_hidden="true",
-            **{"data-attr:aria-hidden": f"!${open_signal}"},
-        ),
-        # Initialize signals
-        signals=Signals(**{
-            open_signal: False,
-            search_signal: "",
-            value_signal: "",
-            display_signal: "",
-        }),
-        cls=cn("select w-full", cls),
-        id=combobox_id,
-        # Close on click outside
-        on_click__outside=f"${open_signal} = false",
-        # Close on Escape
-        on_keydown=f"evt.key === 'Escape' && (${open_signal} = false)",
-        **attrs,
-    )
-
-
 def ComboboxItem(
     *children: Any,
     value: str,
@@ -224,7 +82,7 @@ def ComboboxItem(
 
             item_attrs["on_click"] = "; ".join(click_actions)
             # Keyboard support - Enter to select
-            item_attrs["on_keydown"] = "evt.key === 'Enter' && (" + "; ".join(click_actions) + ")"
+            item_attrs["on_keydown"] = "evt.key === 'Enter' && (" + ", ".join(click_actions) + ")"
 
         # Filter visibility based on search - hide if search doesn't match
         # Escape single quotes in display text for JS
@@ -320,5 +178,148 @@ def ComboboxSeparator(
     return rt.Hr(
         role="separator",
         cls=cn(cls),
+        **attrs,
+    )
+
+
+def Combobox(
+    *children: Any,
+    id: Optional[str] = None,
+    placeholder: str = "Search...",
+    empty_text: str = "No results found",
+    bind: Any = None,
+    cls: str = "",
+    **attrs: Any,
+) -> rt.HtmlString:
+    """Combobox container with search input and filterable dropdown.
+
+    Uses Datastar signals for:
+    - open state (whether dropdown is visible)
+    - search query (filter text)
+    - selected value (current selection)
+    - display text (shown in trigger button)
+
+    The filtering is done client-side using Datastar data_show expressions.
+    Uses Basecoat's .select CSS classes for consistent styling with other form elements.
+
+    Args:
+        *children: ComboboxItem elements
+        id: Unique identifier (auto-generated if not provided)
+        placeholder: Placeholder text for search input
+        empty_text: Text to show when no items match the search
+        bind: Optional Datastar Signal for two-way binding of selected value
+        cls: Additional CSS classes
+        **attrs: Additional HTML attributes
+
+    Returns:
+        Complete combobox structure with signal coordination
+
+    Example:
+        Combobox(
+            ComboboxItem("Apple", value="apple"),
+            ComboboxItem("Banana", value="banana"),
+            ComboboxItem("Orange", value="orange"),
+            id="fruits",
+            placeholder="Select a fruit...",
+        )
+
+        # With Datastar binding
+        form = Signals(fruit="")
+        Combobox(
+            ComboboxItem("Apple", value="apple"),
+            ComboboxItem("Banana", value="banana"),
+            id="fruits",
+            bind=form.fruit,
+        )
+    """
+    combobox_id = id or f"combobox_{next(_combobox_ids)}"
+    signal_prefix = combobox_id.replace("-", "_")
+    open_signal = f"{signal_prefix}_open"
+    search_signal = f"{signal_prefix}_search"
+    value_signal = f"{signal_prefix}_value"
+    display_signal = f"{signal_prefix}_display"
+
+    # Handle external binding
+    bind_signal = None
+    if bind is not None:
+        if hasattr(bind, 'to_js'):
+            bind_signal = bind.to_js().lstrip('$')
+        elif isinstance(bind, str):
+            bind_signal = bind.lstrip('$')
+
+    # Process children - pass context to closures
+    processed_children = []
+    for child in children:
+        if callable(child):
+            processed_children.append(child(combobox_id, signal_prefix, bind_signal))
+        else:
+            processed_children.append(child)
+
+    # Build the trigger button that shows current selection
+    trigger_button = rt.Button(
+        rt.Span(
+            placeholder,
+            cls="truncate text-muted-foreground",
+            data_show=f"!${display_signal}",
+        ),
+        rt.Span(
+            cls="truncate",
+            data_show=f"${display_signal}",
+            data_text=f"${display_signal}",
+        ),
+        LucideIcon("chevrons-up-down", cls="ml-auto size-4 shrink-0 opacity-50"),
+        type="button",
+        cls="btn-outline w-full justify-between font-normal",
+        role="combobox",
+        aria_haspopup="listbox",
+        aria_autocomplete="list",
+        **{"data-attr:aria-expanded": f"${open_signal}"},
+        aria_controls=f"{combobox_id}-listbox",
+        on_click=f"${open_signal} = !${open_signal}",
+    )
+
+    return rt.Div(
+        trigger_button,
+        # Dropdown with search and options
+        rt.Div(
+            # Search header
+            rt.Header(
+                LucideIcon("search"),
+                rt.Input(
+                    type="text",
+                    placeholder=placeholder,
+                    autocomplete="off",
+                    data_bind=search_signal,
+                    role="combobox",
+                    id=f"{combobox_id}-input",
+                    autofocus=True,
+                ),
+            ),
+            # Options list
+            rt.Div(
+                *processed_children,
+                role="listbox",
+                id=f"{combobox_id}-listbox",
+                data_empty=empty_text,
+            ),
+            data_popover="",
+            data_align="start",
+            data_side="bottom",
+            aria_hidden="true",
+            **{"data-attr:aria-hidden": f"!${open_signal}"},
+        ),
+        # Initialize signals
+        signals=Signals(**{
+            open_signal: False,
+            search_signal: "",
+            value_signal: "",
+            display_signal: "",
+        }),
+        cls=cn("select w-full", cls),
+        id=combobox_id,
+        # Close on click outside
+        on_click__outside=f"${open_signal} = false",
+        # Close on Escape
+        on_keydown=f"evt.key === 'Escape' && (${open_signal} = false)",
         **attrs,
     )

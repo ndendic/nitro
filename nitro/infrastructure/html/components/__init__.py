@@ -113,5 +113,22 @@ from .theme_switcher import (
     ThemeSwitcherDropdown,
     ThemeSelect,
 )
+
+# P6 Layout Components
+from .sidebar import (
+    Sidebar,
+    SidebarHeader,
+    SidebarContent,
+    SidebarFooter,
+    SidebarNav,
+    SidebarGroup,
+    SidebarGroupLabel,
+    SidebarItem,
+    SidebarCollapsible,
+    SidebarSeparator,
+    SidebarToggle,
+    create_nav_item,
+)
+
 from .base import *
 from .base_layouts import *

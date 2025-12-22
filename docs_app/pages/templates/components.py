@@ -55,6 +55,9 @@ COMPONENT_PAGES = {
         {"title": "Command", "href": "/cmds/page.command/nikola", "icon": "terminal"},
         {"title": "Theme Switcher", "href": "/cmds/page.theme-switcher/nikola", "icon": "sun-moon"},
     ],
+    "Layout Components": [
+        {"title": "Sidebar", "href": "/cmds/page.sidebar/nikola", "icon": "panel-left"},
+    ],
     "Utilities": [
         {"title": "RustyTags Datastar SDK", "href": "/cmds/page.rustytags/nikola", "icon": "code"},
         {"title": "CodeBlock", "href": "/cmds/page.codeblock/nikola", "icon": "file-code"},
@@ -143,6 +146,8 @@ def Navbar():
                 Select(
                     Optgroup(
                         Option('Default', value='default'),
+                        Option('Nitro', value='nitro'),
+                        Option('Gruvbox', value='gruvbox'),
                         Option('Claude', value='claude'),
                         Option('Candy', value='candy'),
                         Option('Neo Brutalism', value='neo-brutal'),
