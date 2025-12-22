@@ -19,7 +19,7 @@ def example_basic():
     return Div(
         Div(
             P("25%", cls="text-sm text-muted-foreground mb-2"),
-            Progress(value=25),
+            Progress(value=25, cls="h-2 bg-primary/20 relative w-full overflow-hidden rounded-full"),
             cls="mb-4",
         ),
         Div(

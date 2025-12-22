@@ -1,6 +1,7 @@
 @import "./base/base.css";
 
 /* Components */
+@import "./components/base.css";
 @import "./components/alert.css";
 @import "./components/badge.css";
 @import "./components/button.css";
@@ -14,6 +15,7 @@
 @import "./components/field.css";
 @import "./components/kbd.css";
 @import "./components/popover.css";
+@import "./components/progress.css";
 @import "./components/sidebar.css";
 @import "./components/table.css";
 @import "./components/tabs.css";

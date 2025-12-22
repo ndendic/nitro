@@ -65,7 +65,7 @@ def Progress(
 
     # Container classes (track)
     container_cls = cn(
-        "bg-primary/20 relative w-full overflow-hidden rounded-full",
+        "progress",
         height_cls,
         cls,
     )
@@ -73,13 +73,13 @@ def Progress(
     # Calculate width for determinate mode
     if indeterminate:
         # Indeterminate mode: animated bar using inline keyframe animation
-        indicator_cls = "bg-primary h-full absolute"
+        indicator_cls = "progress-indicator"
         # Use inline style for animation since custom Tailwind classes may not be available
         indicator_style = "width: 40%; animation: progress-indeterminate 1.5s ease-in-out infinite; left: -40%;"
         aria_valuenow = None
     elif isinstance(value, Signal):
         # Reactive mode with Datastar signal
-        indicator_cls = "bg-primary h-full flex-1 transition-all duration-300"
+        indicator_cls = "progress-indicator"
         # Use text binding for dynamic width
         indicator_style = None
         width_expr = f"width: ${{{value._name}}}%"
@@ -88,9 +88,10 @@ def Progress(
     else:
         # Static determinate mode
         percentage = min(100, max(0, (value or 0) / max_value * 100))
-        indicator_cls = "bg-primary h-full flex-1 transition-all duration-300"
+        indicator_cls = "progress-indicator"
         indicator_style = f"width: {percentage}%;"
         aria_valuenow = value
+
 
     # Build indicator element
     indicator_attrs = {"cls": indicator_cls}
@@ -115,11 +116,13 @@ def Progress(
                 data_style=f"'width: ' + ${value._name} + '%'",
             ),
             cls=container_cls,
+            data_size=size,
             **container_attrs,
         )
     else:
         return Div(
             Div(**indicator_attrs),
             cls=container_cls,
+            data_size=size,
             **container_attrs,
         )

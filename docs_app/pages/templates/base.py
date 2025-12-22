@@ -10,7 +10,7 @@ from nitro.infrastructure.html.components import *
 from typing import Callable, ParamSpec, TypeVar
 from pathlib import Path
 from domain.page_model import DocPage
-from .components import Sidebar, Navbar, Footer, PicSumImg, H1, TitledSection, BackLink, ComponentShowcase
+from .components import Sidebar, Navbar, Footer, PicSumImg, TitledSection, BackLink, ComponentShowcase
 from functools import wraps
 
 
@@ -33,7 +33,7 @@ def get_pages():
 
 # Shared headers for all documentation pages
 hdrs = (
-    Script(src='/static/js/datastar.js', type='module'),
+    # Script(src='/static/js/datastar.js', type='module'),
 )
 # Shared HTML and body configuration
 htmlkws = dict(lang="en") # , cls="bg-background text-foreground",data_theme="$theme"

@@ -1,9 +1,15 @@
 from typing import Any
-from enum import Enum
-
 import rusty_tags as rt
 from .utils import cn
 
+
+def CodeSpan(
+    *c,  # Contents of CodeSpan tag (inline text code snippets)
+    cls="",  # Classes in addition to CodeSpan styling
+    **kwargs,  # Additional args for CodeSpan tag
+) -> rt.HtmlString:  # Code(..., cls='codespan')
+    "A CodeSpan with Styling"
+    return rt.Code(*c, cls=cn("codespan", cn(cls)), **kwargs)
 
 def CodeBlock(
     *content: str,  # Contents of Code tag (often text)

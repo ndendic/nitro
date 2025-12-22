@@ -8,6 +8,10 @@ from .base import get
 from typing import Callable, ParamSpec, TypeVar
 
 COMPONENT_PAGES = {
+    "Base Components": [
+        {"title": "Typography", "href": "/cmds/page.typography/nikola", "icon": "type"},
+        {"title": "Layouts", "href": "/cmds/page.layouts/nikola", "icon": "layout"},
+    ],
     "Foundation Components": [
         {"title": "Button", "href": "/cmds/page.button/nikola", "icon": "square"},
         {"title": "Card", "href": "/cmds/page.card/nikola", "icon": "credit-card"},
@@ -256,13 +260,8 @@ def Sidebar(pages: list = []):
                 Div(
                     H3('Getting started', id='group-label-content-1'),
                     Ul(
-                        Li(
-                            A(
-                                LucideIcon('terminal'),
-                                Span('Playground'),
-                                href='/playground',
-                            )
-                        ),
+                        Li(A(LucideIcon('terminal'), Span('Playground'),href='/playground',)),
+                        Li(A(LucideIcon('terminal'), Span('Components playground'),href='/playground_components',)),
 
                         Li(
                             *DocumentationSidebar(pages)
@@ -365,6 +364,3 @@ def ComponentShowcase(component: Callable):
         default_tab="tab1",
         cls="mt-4",
     )
-
-def H1(text: str, cls: str = "text-4xl font-bold mb-4", **kwargs):
-    return HTMLH1(text, cls=cls, **kwargs)

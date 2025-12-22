@@ -227,7 +227,7 @@ def Toast(
                 variant="default",
                 size="sm",
                 data_toast_action="",
-                on_click=f"{action_onclick}; this.closest('.toast').setAttribute('aria-hidden', 'true')" if action_onclick else "this.closest('.toast').setAttribute('aria-hidden', 'true')",
+                on_click=f"{action_onclick}; el.closest('.toast').setAttribute('aria-hidden', 'true')" if action_onclick else "el.closest('.toast').setAttribute('aria-hidden', 'true')",
             )
         )
 
@@ -238,7 +238,7 @@ def Toast(
                 variant="outline",
                 size="sm",
                 data_toast_cancel="",
-                on_click="this.closest('.toast').setAttribute('aria-hidden', 'true')",
+                on_click="el.closest('.toast').setAttribute('aria-hidden', 'true')",
             )
         )
 
@@ -259,6 +259,7 @@ def Toast(
         Div(
             *content_elements,
             cls="toast-content",
+            data_ref=id,
         ),
         id=id,
         cls=cn("toast", cls),

@@ -10,7 +10,6 @@ from nitro.infrastructure.html.datastar import Signals, get, ElementPatchMode
 from nitro.utils import AttrDict
 from nitro.infrastructure.events import on, emit_elements, emit_signals
 from nitro.infrastructure.html.components import LucideIcon
-from nitro.infrastructure.html.components.monsterui.all import LabelRange
 from .templates.base import *  # noqa: F403
 
 router: APIRouter = APIRouter()
@@ -118,7 +117,6 @@ def playground():
         Div(
             nik,
             nik.form(),
-            LabelRange(label="Age", value='25', min=18, max=100, step=1),
             Div(
                 Input(
                     type="text",

@@ -11,31 +11,67 @@ button_variants = cva(
                 "default": "btn",
                 "primary": "btn-primary",
                 "secondary": "btn-secondary",
-                "ghost": "btn-ghost",
-                "destructive": "btn-destructive",
                 "outline": "btn-outline",
+                "ghost": "btn-ghost",
                 "link": "btn-link",
+                "destructive": "btn-destructive",
+                "sm": "btn-sm",
+                "sm-primary": "btn-sm-primary",
+                "sm-secondary": "btn-sm-secondary",
+                "sm-outline": "btn-sm-outline",
+                "sm-ghost": "btn-sm-ghost",
+                "sm-link": "btn-sm-link",
+                "sm-destructive": "btn-sm-destructive",
+                "lg": "btn-lg",
+                "lg-primary": "btn-lg-primary",
+                "lg-secondary": "btn-lg-secondary",
+                "lg-outline": "btn-lg-outline",
+                "lg-ghost": "btn-lg-ghost",
+                "lg-link": "btn-lg-link",
+                "lg-destructive": "btn-lg-destructive",
+                "icon": "btn-icon",
+                "icon-primary": "btn-icon-primary",
+                "icon-secondary": "btn-icon-secondary",
+                "icon-outline": "btn-icon-outline",
+                "icon-ghost": "btn-icon-ghost",
+                "icon-link": "btn-icon-link",
+                "icon-destructive": "btn-icon-destructive",
+                "sm-icon": "btn-sm-icon",
+                "sm-icon-primary": "btn-sm-icon-primary",
+                "sm-icon-secondary": "btn-sm-icon-secondary",
+                "sm-icon-outline": "btn-sm-icon-outline",
+                "sm-icon-ghost": "btn-sm-icon-ghost",
+                "sm-icon-link": "btn-sm-icon-link",
+                "sm-icon-destructive": "btn-sm-icon-destructive",
+                "lg-icon": "btn-lg-icon",
+                "lg-icon-primary": "btn-lg-icon-primary",
+                "lg-icon-secondary": "btn-lg-icon-secondary",
+                "lg-icon-outline": "btn-lg-icon-outline",
+                "lg-icon-ghost": "btn-lg-icon-ghost",
+                "lg-icon-link": "btn-lg-icon-link",
+                "lg-icon-destructive": "btn-lg-icon-destructive",
             },
             "size": {
+                "default": "",
                 "sm": "btn-sm",
                 "md": "btn-md",
                 "lg": "btn-lg",
                 "icon": "btn-icon",
             },
         },
-        "defaultVariants": {"variant": "default", "size": "md"},
+        "defaultVariants": {"variant": "default", "size": "default"},
     }
 )
 
 
-ButtonVariant = Literal["default", "primary", "secondary", "ghost", "destructive", "outline", "link"]
-ButtonSize = Literal["sm", "md", "lg", "icon"]
+ButtonVariant = Literal["default", "primary", "secondary", "ghost", "destructive", "outline", "link", "sm", "sm-primary", "sm-secondary", "sm-outline", "sm-ghost", "sm-link", "sm-destructive", "lg", "lg-primary", "lg-secondary", "lg-outline", "lg-ghost", "lg-link", "lg-destructive", "icon", "icon-primary", "icon-secondary", "icon-outline", "icon-ghost", "icon-link", "icon-destructive", "sm-icon", "sm-icon-primary", "sm-icon-secondary", "sm-icon-outline", "sm-icon-ghost", "sm-icon-link", "sm-icon-destructive", "lg-icon", "lg-icon-primary", "lg-icon-secondary", "lg-icon-outline", "lg-icon-ghost", "lg-icon-link", "lg-icon-destructive"]
+ButtonSize = Literal["default", "sm", "md", "lg", "icon"]
 
 
 def Button(
     *children: Any,
     variant: ButtonVariant = "default",
-    size: ButtonSize = "md",
+    size: ButtonSize = "default",
     disabled: bool = False,
     cls: str = "",
     **attrs: Any,
@@ -56,6 +92,7 @@ def Button(
             - "outline": Border-only style
             - "link": Appears as a link
         size: Button size
+            - "default": Default size (no prefix)
             - "sm": Small button
             - "md": Medium button (default)
             - "lg": Large button
@@ -86,7 +123,7 @@ def Button(
     return HTMLButton(
         *children,
         disabled=disabled,
-        cls=cn(button_variants(variant=variant, size=size), cls),
+        cls=cn(button_variants(variant=variant), cls),
         data_variant=variant,
         data_size=size,
         **attrs,

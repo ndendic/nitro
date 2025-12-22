@@ -20,6 +20,7 @@ from pages.index import router as index_router
 from pages.kbd import router as kbd_router
 from pages.label import router as label_router
 from pages.playground import router as playground_router
+from pages.playground_components import router as playground_components_router
 from pages.rustytags import router as rustytags_router
 from pages.tabs import router as tabs_router
 from pages.test_signals import router as test_signals_router
@@ -45,6 +46,8 @@ from pages.table import router as table_router
 from pages.combobox import router as combobox_router
 from pages.command import router as command_router
 from pages.theme_switcher import router as theme_switcher_router
+from pages.typography import router as typography_router
+from pages.layouts import router as layouts_router
 
 app: FastAPI = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -63,6 +66,7 @@ app.include_router(dialog_router)
 app.include_router(kbd_router)
 app.include_router(label_router)
 app.include_router(playground_router)
+app.include_router(playground_components_router)
 app.include_router(rustytags_router)
 app.include_router(tabs_router)
 app.include_router(test_signals_router)
@@ -88,6 +92,8 @@ app.include_router(table_router)
 app.include_router(combobox_router)
 app.include_router(command_router)
 app.include_router(theme_switcher_router)
+app.include_router(typography_router)
+app.include_router(layouts_router)
 app.include_router(errors_router)
 
 

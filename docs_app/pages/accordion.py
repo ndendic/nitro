@@ -4,7 +4,7 @@ from .templates.base import *  # noqa: F403
 from fastapi.requests import Request
 from fastapi import APIRouter
 
-from nitro.infrastructure.html.components.monsterui.all import H2
+from nitro.infrastructure.html.components import H2
 from nitro.infrastructure.html.components import Accordion, AccordionItem
 from nitro.infrastructure.events import on, emit_elements
 
