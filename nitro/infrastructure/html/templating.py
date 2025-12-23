@@ -5,9 +5,9 @@ This module provides enhanced templating functionality moved from the core utils
 to provide better separation of concerns in the Nitro framework.
 """
 
-from asyncio import iscoroutine, iscoroutinefunction
+from asyncio import iscoroutinefunction
 from typing import Optional, Callable, ParamSpec, TypeVar
-from functools import partial, wraps
+from functools import wraps
 from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link, Div
 from rusty_tags.datastar import Signals
 from nitro.config import NitroConfig
@@ -17,6 +17,38 @@ P = ParamSpec("P")
 R = TypeVar("R")
 
 config = NitroConfig()
+
+def template(func):
+    func_is_async = iscoroutinefunction(func)
+    
+    def make_wrapper(inner, *args, **kwargs):
+        inner_is_async = iscoroutinefunction(inner)
+        
+        if func_is_async or inner_is_async:
+            @wraps(inner)
+            async def wrapped(*inner_args, **inner_kwargs):
+                content = await inner(*inner_args, **inner_kwargs) if inner_is_async else inner(*inner_args, **inner_kwargs)
+                return await func(content, *args, **kwargs) if func_is_async else func(content, *args, **kwargs)
+            return wrapped
+        else:
+            @wraps(inner)
+            def wrapped(*inner_args, **inner_kwargs):
+                content = inner(*inner_args, **inner_kwargs)
+                return func(content, *args, **kwargs)
+            return wrapped
+    
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        if not args:
+            return lambda inner: make_wrapper(inner, **kwargs)
+        
+        if len(args) == 1 and callable(args[0]) and not kwargs:
+            return make_wrapper(args[0])
+        
+        return func(*args, **kwargs)
+    
+    return decorator
+
 
 HEADER_URLS = {
     # Lucide icons
@@ -161,64 +193,8 @@ def Page(
     )
 
 
-def create_template(
-    page_title: str = "MyPage",
-    hdrs: Optional[tuple] = None,
-    ftrs: Optional[tuple] = None,
-    htmlkw: Optional[dict] = None,
-    bodykw: Optional[dict] = None,
-    datastar: bool = True,
-    ds_version: str = "1.0.0-RC.6",
-    nitro_components: bool = True,
-    monsterui: bool = False,
-    lucide: bool = True,
-    highlightjs: bool = False,
-    tailwind4: bool = False,
-):
-    """Create a decorator that wraps content in a Page layout.
-
-    Returns a decorator function that can be used to wrap view functions.
-    The decorator will take the function's output and wrap it in the Page layout.
-    """
-    page_func = partial(
-        Page,
-        hdrs=hdrs,
-        ftrs=ftrs,
-        htmlkw=htmlkw,
-        bodykw=bodykw,
-        datastar=datastar,
-        ds_version=ds_version,
-        nitro_components=nitro_components,
-        monsterui=monsterui,
-        lucide=lucide,
-        highlightjs=highlightjs,
-        tailwind4=tailwind4,
-    )
-
-    def page(title: str | None = None, wrap_in: Callable | None = None):
-        def decorator(func: Callable[P, R]) -> Callable[P, R]:
-            @wraps(func)
-            async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
-                if iscoroutinefunction(func):
-                    result = await func(*args, **kwargs)
-                else:
-                    result = func(*args, **kwargs)
-                if wrap_in:
-                    return wrap_in(
-                        page_func(result, title=title if title else page_title)
-                    )
-                else:
-                    return page_func(result, title=title if title else page_title)
-
-            return wrapper
-
-        return decorator
-
-    return page
-
-
 def page_template(
-    page_title: str = "MyPage",
+    page_title: str = "Nitro",
     hdrs: Optional[tuple] = None,
     ftrs: Optional[tuple] = None,
     htmlkw: Optional[dict] = None,
@@ -231,24 +207,50 @@ def page_template(
     lucide: bool = False,
     highlightjs: bool = False,
 ):
-    """Create a decorator that wraps content in a Page layout.
+    """Create a page template that can be used as both a decorator and a direct call.
 
-    Returns a decorator function that can be used to wrap view functions.
-    The decorator will take the function's output and wrap it in the Page layout.
+    Returns a template function that supports three usage patterns:
+
+    1. Direct call:
+        template = page_template("My App")
+        html = template(Div("content"), title="Home")
+
+    2. Decorator without args:
+        @template
+        def index():
+            return Div("Home")
+
+    3. Decorator with args:
+        @template(title="About", wrap_in=HTMLResponse)
+        def about():
+            return Div("About")
     """
-    template = partial(
-        Page,
-        hdrs=hdrs,
-        ftrs=ftrs,
-        htmlkw=htmlkw,
-        bodykw=bodykw,
-        title=page_title,
-        datastar=datastar,
-        ds_version=ds_version,
-        nitro_components=nitro_components,
-        monsterui=monsterui,
-        lucide=lucide,
-        tailwind4=tailwind4,
-        highlightjs=highlightjs,
-    )
-    return template
+    @template
+    def page(
+        *content,
+        title: str | None = None,
+        wrap_in: Callable | None = None,
+    ):
+        result = Page(
+            *content,
+            title=title if title else page_title,
+            hdrs=hdrs,
+            ftrs=ftrs,
+            htmlkw=htmlkw,
+            bodykw=bodykw,
+            datastar=datastar,
+            ds_version=ds_version,
+            nitro_components=nitro_components,
+            monsterui=monsterui,
+            lucide=lucide,
+            highlightjs=highlightjs,
+            tailwind4=tailwind4,
+        )
+        if wrap_in:
+            return wrap_in(result)
+        return result
+
+    return page
+
+# legacy function for backwards compatibility
+create_template = page_template

@@ -6,6 +6,7 @@ All component documentation pages should import from this module.
 from fastapi.responses import HTMLResponse
 from nitro import *  # noqa: F403
 from nitro.infrastructure.html import *
+from nitro.infrastructure.html import template as templ
 from nitro.infrastructure.html.components import *
 from typing import Callable, ParamSpec, TypeVar
 from pathlib import Path
@@ -39,8 +40,9 @@ hdrs = (
 htmlkws = dict(lang="en") # , cls="bg-background text-foreground",data_theme="$theme"
 bodykws = dict(signals=Signals(message="", conn=""))
 ftrs = (CustomTag("datastar-inspector"),)
+
 # Shared page template
-page = create_template(
+page = page_template(
     hdrs=hdrs,
     htmlkw=htmlkws,
     bodykw=bodykws,
@@ -49,25 +51,25 @@ page = create_template(
     lucide=True,
 )
 
-
-def template(title: str):
-    def decorator(func: Callable[_P, _R]) -> Callable[_P, _R]:
-        @page(title=title, wrap_in=HTMLResponse)
-        @wraps(func)
-        def wrapper(*args: _P.args, **kwargs: _P.kwargs) -> _R:
-            return Fragment(
-                Sidebar(get_pages()),
-                Main(
-                    Navbar(),
-                    Div(
-                        Div(func(*args, **kwargs), id="content"),
-                        cls="p-4 md:p-6 xl:p-12 max-w-4xl",
-                    ),
-                    Footer(),
-                    cls="min-h-screen flex flex-col",
-                    data_init="@get('/updates')",
-
+@templ
+def template(content, title: str):
+    return page(
+        Fragment(
+            Sidebar(get_pages()),
+            Main(
+                Navbar(),
+                Div(
+                    Div(content, id="content"),
+                    # cls="p-4 md:p-6 xl:p-12 max-w-4xl",
+                    cls="pt-4 md:p-6 xl:p-12 container",
                 ),
-            )
-        return wrapper
-    return decorator
+                Footer(),
+                cls="min-h-screen flex flex-col",
+                data_init="@get('/updates')",
+
+            ),
+        ), 
+        title=title,
+        wrap_in=HTMLResponse
+    )
+

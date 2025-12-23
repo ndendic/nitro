@@ -20,7 +20,7 @@ router: APIRouter = APIRouter()
 def example_basic():
     """Basic pagination with 10 pages."""
     return Div(
-        Pagination(total_pages=10, current_page=1),
+        Pagination(total=10, current_page=1),
         cls="py-4",
     )
 
@@ -47,7 +47,7 @@ def example_with_content():
             ),
             cls="mb-4",
         ),
-        Pagination(total_pages=5, current_page=1, signal_name="page"),
+        Pagination(total=5, current_page=1, signal_name="page"),
         signals=Signals(page=1),
     )
 
@@ -55,7 +55,7 @@ def example_with_content():
 def example_many_pages():
     """Pagination with many pages (shows ellipsis)."""
     return Div(
-        Pagination(total_pages=20, current_page=10),
+        Pagination(total=20, current_page=10),
         cls="py-4",
     )
 
@@ -63,7 +63,7 @@ def example_many_pages():
 def example_with_first_last():
     """Pagination with first/last buttons."""
     return Div(
-        Pagination(total_pages=15, current_page=8, show_first_last=True),
+        Pagination(total=15, current_page=8, show_first_last=True),
         cls="py-4",
     )
 
@@ -71,7 +71,7 @@ def example_with_first_last():
 def example_minimal():
     """Minimal pagination without prev/next text."""
     return Div(
-        Pagination(total_pages=5, current_page=1, show_prev_next=True, siblings=0),
+        Pagination(total=5, current_page=1, show_prev_next=True, siblings=0),
         cls="py-4",
     )
 
@@ -123,7 +123,7 @@ page = Div(
             CodeBlock(
                 """
 def Pagination(
-    total_pages: int,                   # Total number of pages
+    total: int,                   # Total number of pages
     signal: Signal = None,              # Datastar Signal object (optional)
     signal_name: str = "page",          # Name for auto-created signal
     current_page: int = 1,              # Initial current page (1-indexed)
@@ -142,9 +142,9 @@ def PaginationContent(
 ) -> HtmlString
 
 # Usage examples
-Pagination(total_pages=10)
-Pagination(total_pages=20, show_first_last=True)
-Pagination(total_pages=5, signal_name="products_page")
+Pagination(total=10)
+Pagination(total=20, show_first_last=True)
+Pagination(total=5, signal_name="products_page")
 """,
                 code_cls="language-python",
             ),

@@ -12,7 +12,7 @@ from .utils import cn
 
 
 def Pagination(
-    total_pages: int,
+    total: int,
     signal: Optional[Signal] = None,
     signal_name: str = "page",
     current_page: int = 1,
@@ -28,7 +28,7 @@ def Pagination(
     and optional first/last buttons. Uses Datastar signals for reactive page state.
 
     Args:
-        total_pages: Total number of pages
+        total: Total number of pages
         signal: Datastar Signal object for page state (optional)
         signal_name: Name for auto-created signal if signal not provided
         current_page: Initial current page number (1-indexed)
@@ -43,14 +43,14 @@ def Pagination(
 
     Example:
         # Basic pagination
-        Pagination(total_pages=10)
+        Pagination(total=10)
 
         # With custom signal
         page_signal = Signal("page", 1)
-        Pagination(total_pages=10, signal=page_signal)
+        Pagination(total=10, signal=page_signal)
 
         # With first/last buttons
-        Pagination(total_pages=20, show_first_last=True)
+        Pagination(total=20, show_first_last=True)
     """
     # Create or use provided signal
     if signal is None:
@@ -123,7 +123,7 @@ def Pagination(
 
         return pages
 
-    page_range = get_page_range(current_page, total_pages, siblings)
+    page_range = get_page_range(current_page, total, siblings)
 
     # Add page number items
     for page in page_range:
@@ -174,9 +174,9 @@ def Pagination(
                     LucideIcon("chevron-right", cls="size-4"),
                     cls="btn-ghost",
                     href="#",
-                    on_click=f"$event.preventDefault(); if (${signal_name} < {total_pages}) ${signal_name}++",
+                    on_click=f"$event.preventDefault(); if (${signal_name} < {total}) ${signal_name}++",
                     aria_label="Go to next page",
-                    data_attr_aria_disabled=f"${signal_name} === {total_pages}",
+                    data_attr_aria_disabled=f"${signal_name} === {total}",
                 ),
             )
         )
@@ -190,13 +190,13 @@ def Pagination(
                     cls=cn(
                         "btn-icon-ghost",
                         "opacity-50 pointer-events-none"
-                        if current_page == total_pages
+                        if current_page == total
                         else "",
                     ),
                     href="#",
-                    on_click=f"$event.preventDefault(); ${signal_name} = {total_pages}",
+                    on_click=f"$event.preventDefault(); ${signal_name} = {total}",
                     aria_label="Go to last page",
-                    data_attr_aria_disabled=f"${signal_name} === {total_pages}",
+                    data_attr_aria_disabled=f"${signal_name} === {total}",
                 ),
             )
         )

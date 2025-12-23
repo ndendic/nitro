@@ -272,6 +272,7 @@ def ToastTrigger(
     *children: Any,
     toast_id: Optional[str] = None,
     variant: str = "default",
+    button_variant: str = "default",
     title: str = "",
     description: str = "",
     duration: int = 5000,
@@ -287,6 +288,7 @@ def ToastTrigger(
         *children: Button content
         toast_id: ID of existing toast to show (optional)
         variant: Toast variant for new toasts
+        button_variant: Button variant for the trigger button
         title: Toast title for new toasts
         description: Toast description for new toasts
         duration: Auto-dismiss duration for new toasts
@@ -325,6 +327,7 @@ def ToastTrigger(
 
     return Button(
         *children,
+        variant=button_variant,
         cls=cls,
         on_click=onclick,
         **attrs,

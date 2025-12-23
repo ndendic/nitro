@@ -78,7 +78,7 @@ Text, Image, ForeignObject
 
 **Page Templates:**
 ```python
-from nitro.utils import Page, create_template
+from nitro.utils import Page, page_template
 
 # Complete HTML documents
 page = Page(
@@ -90,7 +90,7 @@ page = Page(
 )
 
 # Reusable templates with decorators
-@create_template("My App", datastar=True)
+@page_template("My App", datastar=True)
 def my_view():
     return Div("Page content")
 ```
@@ -604,10 +604,10 @@ env | grep NITRO_TAILWIND
 ```python
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from nitro.utils import create_template
+from nitro.utils import page_template
 
 app = FastAPI()
-page = create_template("My API", datastar=True)
+page = page_template("My API", datastar=True)
 
 @app.get("/")
 @page(wrap_in=HTMLResponse)

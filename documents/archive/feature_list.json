@@ -745,9 +745,9 @@
   },
   {
     "category": "templating",
-    "description": "create_template decorator returns Page wrapper",
+    "description": "page_template decorator returns Page wrapper",
     "steps": [
-      "Step 1: Define view function with @create_template(title='Test')",
+      "Step 1: Define view function with @page_template(title='Test')",
       "Step 2: Call view function",
       "Step 3: Verify it returns Page instance with correct title",
       "Step 4: Verify function return value is wrapped in Page"

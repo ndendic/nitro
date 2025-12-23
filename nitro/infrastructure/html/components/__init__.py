@@ -35,6 +35,8 @@ from .select import Select, SelectOption, SelectOptGroup
 from .textarea import Textarea
 from .field import Field, Fieldset
 from .input_group import InputGroup
+from .calendar import Calendar
+from .datepicker import DatePicker, DateRangePicker
 
 # P2 Interactive Overlays
 from .dropdown import (

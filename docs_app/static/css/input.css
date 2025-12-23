@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @import "./basecoat/components/base.css";
+@import "./basecoat/components/calendar.css";
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
@@ -1146,7 +1147,7 @@
 /* Card */
 @layer components {
   .card {
-    @apply bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm;
+    @apply bg-card text-card-foreground flex flex-col h-fit gap-6 rounded-xl border py-6 shadow-sm;
 
     > header {
       @apply @container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6;
@@ -1164,6 +1165,9 @@
     }
     > footer {
       @apply flex items-center px-6 [.border-t]:pt-6;
+    }
+    > .card-content {
+      @apply px-6;
     }
   }
 }
@@ -1395,7 +1399,7 @@
           @apply bg-accent text-accent-foreground;
         }
       }
-      [role='menu'] [role='heading'] {
+      [role='menu'], [role='heading'] {
         @apply flex px-2 py-1.5 text-sm font-medium;
       }
       [role='separator'] {
@@ -1407,6 +1411,12 @@
       [role='menuitemcheckbox'],
       [role='menuitemradio'] {
         @apply hover:bg-accent hover:text-accent-foreground;
+      }
+      [role='menu'], [role='heading'] {
+        @apply flex px-2 py-1.5 text-sm font-medium;
+      }
+      [role='separator'] {
+        @apply border-border -mx-1 my-1;
       }
     }
   }
@@ -1513,7 +1523,7 @@
 /* Popover */
 @layer components {
   [data-popover] {
-    @apply absolute bg-popover text-popover-foreground overflow-x-hidden overflow-y-auto rounded-md border shadow-md z-50 visible opacity-100 scale-100 min-w-full w-max transition-all;
+    @apply absolute bg-popover text-popover-foreground overflow-x-hidden overflow-y-auto rounded-md border shadow-md z-50 visible opacity-100 scale-100 w-max transition-all;
 
     &[aria-hidden] {
       @apply invisible opacity-0 scale-95;
@@ -1578,6 +1588,9 @@
 
     [data-popover] {
       @apply p-4;
+    }
+    [data-popover]:has(.calendar) {
+      @apply p-0;
     }
   } 
 }

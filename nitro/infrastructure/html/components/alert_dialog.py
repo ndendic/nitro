@@ -11,6 +11,7 @@ from rusty_tags import Dialog as NativeDialog
 from rusty_tags.datastar import Signals
 from .button import Button
 from .utils import cn
+from .button import ButtonVariant
 
 
 def AlertDialog(
@@ -206,9 +207,8 @@ def AlertDialogFooter(
 
 def AlertDialogAction(
     *children: Any,
-    dialog_id: str,
+    variant: ButtonVariant = "default",
     on_click: str = "",
-    variant: str = "default",
     cls: str = "",
     **attrs: Any,
 ) -> HtmlString:
@@ -219,7 +219,7 @@ def AlertDialogAction(
 
     Args:
         *children: Button content
-        dialog_id: ID of the alert dialog
+        variant: Button variant
         on_click: Additional action to perform on click
         variant: Button variant (default, destructive, etc.)
         cls: Additional CSS classes
@@ -229,10 +229,10 @@ def AlertDialogAction(
         Button element for the action
 
     Example:
-        AlertDialogAction("Delete", dialog_id="confirm-delete", variant="destructive")
+        AlertDialogAction("Delete", variant="destructive")
     """
     # Combine user action with dialog close
-    close_action = f"document.getElementById('{dialog_id}').close()"
+    close_action = "el.closest('dialog').close()"
     combined_action = f"{on_click}; {close_action}" if on_click else close_action
 
     return Button(
@@ -246,8 +246,8 @@ def AlertDialogAction(
 
 def AlertDialogCancel(
     *children: Any,
-    dialog_id: str,
     cls: str = "",
+    variant: ButtonVariant = "outline",
     **attrs: Any,
 ) -> HtmlString:
     """Cancel button for alert dialog.
@@ -257,7 +257,7 @@ def AlertDialogCancel(
 
     Args:
         *children: Button content (defaults to "Cancel" if empty)
-        dialog_id: ID of the alert dialog
+        variant: Button variant
         cls: Additional CSS classes
         **attrs: Additional button attributes
 
@@ -265,14 +265,14 @@ def AlertDialogCancel(
         Button element for cancel action
 
     Example:
-        AlertDialogCancel("Never mind", dialog_id="confirm-delete")
+        AlertDialogCancel("Never mind", variant="outline")
     """
     content = children if children else ("Cancel",)
 
     return Button(
         *content,
-        variant="outline",
+        variant=variant,
         cls=cls,
-        on_click=f"document.getElementById('{dialog_id}').close()",
+        onclick="this.closest('dialog').close()",
         **attrs,
     )

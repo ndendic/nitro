@@ -108,7 +108,7 @@
       </events>
       <html_generation>
         - `Page` component with Datastar/Tailwind/Lucide/Highlight.js support
-        - `create_template` decorator for view functions
+        - `page_template` decorator for view functions
         - `Datastar` SDK integration (`Signals`, `ServerSentEvents`)
       </html_generation>
     </infrastructure_layer>
@@ -142,7 +142,7 @@
 
     <templating_api>
       - `Page(*content, **config)`: Renders full HTML page
-      - `create_template(title, ...)`: Decorator for views
+      - `page_template(title, ...)`: Decorator for views
       - Imports from `rusty_tags` (Div, Span, H1, etc.)
     </templating_api>
   </api_surface>

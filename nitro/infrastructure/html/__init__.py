@@ -1,6 +1,6 @@
 from rusty_tags.core import HtmlString
 from rusty_tags.utils import show, AttrDict, when, unless
-from .template import Page, create_template, page_template
+from .templating import Page, create_template, page_template, template
 
 """
 RustyTags - High-performance HTML generation library
@@ -93,7 +93,7 @@ __all__ = [
     "CustomTag",
 
     # Core utilities
-    "Page", "show", "create_template", "page_template", "AttrDict", "when", "unless",
+    "Page", "show", "create_template", "page_template", "template", "AttrDict", "when", "unless",
 
     # Datastar utilities
     "DS", "signals", "Signals", "reactive_class", "attribute_generator", "SSE", "ElementPatchMode", "EventType",

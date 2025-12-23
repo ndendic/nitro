@@ -156,7 +156,7 @@ def CardContent(
             )
         )
     """
-    return Section(
+    return Div(
         *children,
         cls=cn("card-content", cls),
         **attrs,

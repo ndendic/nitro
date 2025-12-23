@@ -67,5 +67,8 @@
     [data-popover] {
       @apply p-4;
     }
+    [data-popover]:has(.calendar) {
+      @apply p-0;
+    }
   } 
 }

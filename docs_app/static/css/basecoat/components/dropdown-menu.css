@@ -20,7 +20,7 @@
           @apply bg-accent text-accent-foreground;
         }
       }
-      [role='menu'] [role='heading'] {
+      [role='menu'], [role='heading'] {
         @apply flex px-2 py-1.5 text-sm font-medium;
       }
       [role='separator'] {
@@ -32,6 +32,12 @@
       [role='menuitemcheckbox'],
       [role='menuitemradio'] {
         @apply hover:bg-accent hover:text-accent-foreground;
+      }
+      [role='menu'], [role='heading'] {
+        @apply flex px-2 py-1.5 text-sm font-medium;
+      }
+      [role='separator'] {
+        @apply border-border -mx-1 my-1;
       }
     }
   }

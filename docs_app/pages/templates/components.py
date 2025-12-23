@@ -30,6 +30,7 @@ COMPONENT_PAGES = {
         {"title": "Switch", "href": "/cmds/page.switch/nikola", "icon": "toggle-right"},
         {"title": "Select", "href": "/cmds/page.select/nikola", "icon": "chevron-down"},
         {"title": "Textarea", "href": "/cmds/page.textarea/nikola", "icon": "align-left"},
+        {"title": "DatePicker", "href": "/cmds/page.datepicker/nikola", "icon": "calendar"},
     ],
     "Interactive Components": [
         {"title": "Tabs", "href": "/cmds/page.tabs/nikola", "icon": "folder"},

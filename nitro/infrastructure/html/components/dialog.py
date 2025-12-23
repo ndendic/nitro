@@ -228,7 +228,7 @@ def DialogFooter(
 
 def DialogClose(
     *children: Any,
-    dialog_id: str,
+    variant: ButtonVariant = "outline",
     cls: str = "",
     **attrs: Any,
 ) -> HtmlString:
@@ -240,6 +240,7 @@ def DialogClose(
     Args:
         *children: Button content
         dialog_id: ID of the dialog (kept for backward compatibility)
+        variant: Button variant
         cls: Additional CSS classes
         **attrs: Additional button attributes
 
@@ -254,4 +255,4 @@ def DialogClose(
     button_attrs["onclick"] = "this.closest('dialog').close()"
     button_attrs["cls"] = cls
 
-    return Button(*children, variant="ghost", **button_attrs)
+    return Button(*children, variant=variant, **button_attrs)

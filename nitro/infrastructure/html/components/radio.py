@@ -7,7 +7,7 @@ from .utils import cn
 
 def RadioGroup(
     *children: Any,
-    bind: Any,
+    bind: Any = "radio_group",
     orientation: str = "vertical",
     cls: str = "",
     **attrs: Any,
