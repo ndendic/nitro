@@ -78,8 +78,9 @@ def Calendar(
         elif isinstance(bind, str):
             signal_name = bind.lstrip('$')
 
-    # Generate unique prefix for calendar signals
-    cal_id = id or f"cal_{signal_name or 'default'}"
+    # Generate unique prefix for calendar signals (replace hyphens with underscores for valid signal names)
+    raw_cal_id = id or f"cal_{signal_name or 'default'}"
+    cal_id = raw_cal_id.replace('-', '_')
     month_signal = f"{cal_id}_month"
     year_signal = f"{cal_id}_year"
 
@@ -90,7 +91,7 @@ def Calendar(
     nav_buttons = []
     if show_navigation:
         # Previous month button
-        prev_click = f"$({month_signal}) === 1 ? ($({month_signal}) = 12, $({year_signal})--) : $({month_signal})--"
+        prev_click = f"${month_signal} === 1 ? (${month_signal} = 12, ${year_signal}--) : ${month_signal}--"
         nav_buttons.append(
             Button(
                 rt.Svg(
@@ -108,7 +109,7 @@ def Calendar(
             )
         )
         # Next month button
-        next_click = f"$({month_signal}) === 12 ? ($({month_signal}) = 1, $({year_signal})++) : $({month_signal})++"
+        next_click = f"${month_signal} === 12 ? (${month_signal} = 1, ${year_signal}++) : ${month_signal}++"
         nav_buttons.append(
             Button(
                 rt.Svg(
@@ -303,9 +304,9 @@ def _create_day_button(
     if signal_name and not is_disabled:
         click_action = f"${signal_name} = '{date_str}'"
         if popover_id:
-            # Also close the popover
-            popover_signal = f"{popover_id}_open"
-            click_action = f"${signal_name} = '{date_str}'; $({popover_signal}) = false"
+            # Also close the popover - use same naming convention as Popover component
+            popover_signal = f"{popover_id.replace('-', '_')}_open"
+            click_action = f"${signal_name} = '{date_str}'; ${popover_signal} = false"
         attrs["on_click"] = click_action
 
     return rt.Button(

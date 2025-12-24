@@ -1,12 +1,11 @@
-"""DatePicker and Calendar component documentation page"""
+"""DatePicker component documentation page"""
 
 from .templates.base import *  # noqa: F403
 from fastapi.requests import Request
 from fastapi import APIRouter
 from nitro.infrastructure.html.datastar import Signals
 from nitro.infrastructure.events import on, emit_elements
-
-from nitro.infrastructure.html.components import DatePicker, DateRangePicker, Calendar
+from nitro.infrastructure.html.components import DatePicker, DateRangePicker
 
 router: APIRouter = APIRouter()
 
@@ -76,18 +75,18 @@ def example_datepicker_constraints():
     )
 
 
-def example_datepicker_disabled_dates():
-    sigs = Signals(available_date="")
+def example_datepicker_format():
+    sigs = Signals(formatted_date="")
     return Div(
-        P("Weekends (21st, 22nd, 28th, 29th) are disabled:", cls="text-sm text-muted-foreground mb-2"),
+        P("Custom date format (mm/dd/yyyy):", cls="text-sm text-muted-foreground mb-2"),
         DatePicker(
-            id="available",
-            bind=sigs.available_date,
-            placeholder="Select available date",
-            disabled_dates=["2025-12-21", "2025-12-22", "2025-12-28", "2025-12-29"],
+            id="formatted",
+            bind=sigs.formatted_date,
+            placeholder="MM/DD/YYYY",
+            format="mm/dd/yyyy",
         ),
         Div(
-            P("Selected: ", Span(data_text="$available_date || 'None'")),
+            P("Selected: ", Span(data_text="$formatted_date || 'None'")),
             cls="mt-4 p-4 bg-muted rounded text-sm"
         ),
         signals=sigs,
@@ -113,7 +112,8 @@ def example_daterangepicker():
             id="date-range",
             bind_start=sigs.start_date,
             bind_end=sigs.end_date,
-            placeholder="Select date range",
+            start_placeholder="Check-in",
+            end_placeholder="Check-out",
         ),
         Div(
             P("Start: ", Span(data_text="$start_date || 'None'")),
@@ -121,54 +121,45 @@ def example_daterangepicker():
             cls="mt-4 p-4 bg-muted rounded text-sm"
         ),
         signals=sigs,
-        cls="w-[400px]"
+        cls="w-full max-w-md"
     )
 
 
-def example_calendar_standalone():
-    sigs = Signals(cal_date="")
+def example_daterangepicker_constrained():
+    sigs = Signals(range_start="", range_end="")
     return Div(
-        Calendar(
-            id="standalone-cal",
-            bind=sigs.cal_date,
+        P("Booking dates in Q1 2025:", cls="text-sm text-muted-foreground mb-2"),
+        DateRangePicker(
+            id="booking-range",
+            bind_start=sigs.range_start,
+            bind_end=sigs.range_end,
+            start_placeholder="Start date",
+            end_placeholder="End date",
+            min_date="2025-01-01",
+            max_date="2025-03-31",
         ),
         Div(
-            P("Selected: ", Span(data_text="$cal_date || 'None'")),
+            P("Range: ", Span(data_text="($range_start || '...') + ' to ' + ($range_end || '...')")),
             cls="mt-4 p-4 bg-muted rounded text-sm"
         ),
         signals=sigs,
-    )
-
-
-def example_calendar_with_value():
-    sigs = Signals(preset_date="2025-12-15")
-    return Div(
-        Calendar(
-            id="preset-cal",
-            bind=sigs.preset_date,
-            value="2025-12-15",
-        ),
-        Div(
-            P("Selected: ", Span(data_text="$preset_date")),
-            cls="mt-4 p-4 bg-muted rounded text-sm"
-        ),
-        signals=sigs,
+        cls="w-full max-w-md"
     )
 
 
 page = Div(
-    H1("DatePicker & Calendar Components"),
+    H1("DatePicker"),
     P(
-        "Date selection components using Calendar in a Popover. The DatePicker provides "
-        "a button trigger that opens a calendar for date selection, while Calendar can "
-        "be used standalone for inline date picking."
+        "Date selection components using vanillajs-datepicker. Provides a simple, "
+        "accessible date picker with calendar dropdown, min/max constraints, and "
+        "Datastar two-way binding support."
     ),
 
     # DatePicker Section
     H2("DatePicker", cls="text-3xl font-bold mt-8 mb-4"),
     P(
-        "A complete date picker that shows a calendar in a popover when clicked. "
-        "Supports Datastar two-way binding, min/max constraints, and disabled dates.",
+        "A simple date picker input with a calendar dropdown. Click the input to open "
+        "the calendar and select a date. The picker closes automatically after selection.",
         cls="text-muted-foreground mb-6"
     ),
 
@@ -193,21 +184,22 @@ page = Div(
         ComponentShowcase(example_datepicker_constraints),
     ),
     TitledSection(
-        "Disabled Dates",
-        P("Specific dates can be disabled:"),
-        ComponentShowcase(example_datepicker_disabled_dates),
+        "Custom Format",
+        P("Use a different date format for display:"),
+        ComponentShowcase(example_datepicker_format),
     ),
     TitledSection(
         "Disabled State",
-        P("The entire date picker can be disabled:"),
+        P("The date picker can be disabled:"),
         ComponentShowcase(example_datepicker_disabled),
     ),
 
     # DateRangePicker Section
     H2("DateRangePicker", cls="text-3xl font-bold mt-8 mb-4"),
     P(
-        "For selecting a date range with start and end dates. Shows two calendars "
-        "side by side with automatic constraint handling.",
+        "For selecting a date range with start and end dates. The two inputs are "
+        "linked - the end date picker automatically constrains to dates after the "
+        "selected start date.",
         cls="text-muted-foreground mb-6"
     ),
 
@@ -216,24 +208,10 @@ page = Div(
         P("Select a start and end date:"),
         ComponentShowcase(example_daterangepicker),
     ),
-
-    # Calendar Section
-    H2("Calendar (Standalone)", cls="text-3xl font-bold mt-8 mb-4"),
-    P(
-        "The Calendar component can be used directly for inline date selection "
-        "without the popover wrapper.",
-        cls="text-muted-foreground mb-6"
-    ),
-
     TitledSection(
-        "Standalone Calendar",
-        P("Calendar displayed inline:"),
-        ComponentShowcase(example_calendar_standalone),
-    ),
-    TitledSection(
-        "Calendar with Pre-selected Date",
-        P("Calendar with an initial value:"),
-        ComponentShowcase(example_calendar_with_value),
+        "Constrained Range",
+        P("Date range with min/max constraints:"),
+        ComponentShowcase(example_daterangepicker_constrained),
     ),
 
     # API Reference
@@ -245,11 +223,12 @@ def DatePicker(
     *,
     id: str = None,              # Unique identifier
     bind: Signal | str = None,   # Datastar signal for selected date
-    value: str = None,           # Initial date (YYYY-MM-DD format)
-    placeholder: str = "Pick a date",  # Text when no date selected
+    value: str = "",             # Initial date (YYYY-MM-DD format)
+    placeholder: str = "Select date",
+    format: str = "yyyy-mm-dd",  # Display format
     min_date: str = None,        # Minimum selectable date (YYYY-MM-DD)
     max_date: str = None,        # Maximum selectable date (YYYY-MM-DD)
-    disabled_dates: list = None, # List of disabled dates (YYYY-MM-DD)
+    autohide: bool = True,       # Hide picker on selection
     disabled: bool = False,      # Whether picker is disabled
     cls: str = "",               # Additional CSS classes
     **attrs                      # Additional HTML attributes
@@ -264,37 +243,20 @@ def DatePicker(
             """
 def DateRangePicker(
     *,
-    id: str = None,               # Unique identifier
+    id: str = None,               # Unique identifier prefix
     bind_start: Signal | str = None,  # Signal for start date
     bind_end: Signal | str = None,    # Signal for end date
-    start_value: str = None,      # Initial start date (YYYY-MM-DD)
-    end_value: str = None,        # Initial end date (YYYY-MM-DD)
-    placeholder: str = "Pick a date range",  # Text when no dates
+    start_value: str = "",        # Initial start date (YYYY-MM-DD)
+    end_value: str = "",          # Initial end date (YYYY-MM-DD)
+    start_placeholder: str = "Start date",
+    end_placeholder: str = "End date",
+    format: str = "yyyy-mm-dd",   # Display format
     min_date: str = None,         # Minimum selectable date
     max_date: str = None,         # Maximum selectable date
-    disabled_dates: list = None,  # List of disabled dates
+    autohide: bool = True,        # Hide picker on selection
     disabled: bool = False,       # Whether picker is disabled
     cls: str = "",                # Additional CSS classes
     **attrs                       # Additional HTML attributes
-) -> HtmlString
-""",
-            code_cls="language-python",
-        ),
-    ),
-    TitledSection(
-        "Calendar API Reference",
-        CodeBlock(
-            """
-def Calendar(
-    *,
-    id: str = None,              # Unique identifier
-    bind: Signal | str = None,   # Datastar signal for selected date
-    value: str = None,           # Initial date (YYYY-MM-DD format)
-    min_date: str = None,        # Minimum selectable date
-    max_date: str = None,        # Maximum selectable date
-    disabled_dates: list = None, # List of disabled dates
-    cls: str = "",               # Additional CSS classes
-    **attrs                      # Additional HTML attributes
 ) -> HtmlString
 """,
             code_cls="language-python",
@@ -305,7 +267,7 @@ def Calendar(
         CodeBlock(
             """
 from nitro.infrastructure.html.datastar import Signals
-from nitro.infrastructure.html.components import DatePicker, Calendar
+from nitro.infrastructure.html.components import DatePicker, DateRangePicker
 
 # Create signals
 sigs = Signals(selected_date="", start="", end="")
@@ -319,37 +281,39 @@ DatePicker(
     max_date="2025-12-31",
 )
 
+# With custom format
+DatePicker(
+    bind=sigs.selected_date,
+    format="mm/dd/yyyy",
+    placeholder="MM/DD/YYYY",
+)
+
 # Date Range Picker
 DateRangePicker(
     bind_start=sigs.start,
     bind_end=sigs.end,
-    placeholder="Select travel dates",
-)
-
-# Standalone Calendar (inline)
-Calendar(
-    bind=sigs.selected_date,
-    value="2025-12-23",
+    start_placeholder="Check-in",
+    end_placeholder="Check-out",
 )
 """,
             code_cls="language-python",
         ),
     ),
 
-    # Known Issues Section
+    # Implementation Notes
     TitledSection(
-        "Known Limitations",
+        "Implementation Notes",
         Alert(
-            AlertTitle("Current Limitations"),
+            AlertTitle("Dependencies"),
             AlertDescription(
                 Ul(
-                    Li("Calendar does not have month/year navigation - it shows a static month based on the initial value or current date"),
-                    Li("The popover does not close automatically after selecting a date"),
-                    Li("The display text in the trigger button doesn't update reactively when the signal changes"),
+                    Li("Uses vanillajs-datepicker library (loaded via CDN)"),
+                    Li("Styled with BaseCoat CSS variables for shadcn theme compatibility"),
+                    Li("Supports Datastar two-way binding via the bind parameter"),
                     cls="list-disc list-inside space-y-1"
                 )
             ),
-            variant="warning",
+            variant="info",
         ),
         cls="mt-8",
     ),

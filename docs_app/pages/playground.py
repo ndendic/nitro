@@ -114,7 +114,21 @@ def playground():
     state = Signals(btn_open=False, anchor_open=False, name="")
     return Div(
         H1("Playground", style="animation: var(--animation-fade-in) forwards;"),
-        Div(
+        Div(            
+            Div(
+                Div(
+                    LucideIcon("calendar"),
+                    cls='absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none'
+                ),
+                # Input(datepicker='', id='default-datepicker', type='text', placeholder='Select date'),
+                Input(
+                    id='default-datepicker', 
+                    type='text', 
+                    placeholder='Select date',
+                    data_init="new Datepicker(el, {autohide: true});"
+                ),
+                cls='relative max-w-sm'
+            ),
             nik,
             nik.form(),
             Div(

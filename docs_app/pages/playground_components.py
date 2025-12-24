@@ -480,7 +480,7 @@ def playground_components():
                             Avatar(src="https://api.dicebear.com/8.x/lorelei/svg?seed=John", alt="John"),
                             Avatar(src="https://api.dicebear.com/8.x/lorelei/svg?seed=Jane", alt="Jane"),
                             Avatar(src="https://api.dicebear.com/8.x/lorelei/svg?seed=Bob", alt="Bob"),
-                            Avatar("+3", alt="More"),
+                            Avatar(fallback="+3", alt="More"),
                         ),
                         Span("Due in 5 days", cls="text-sm text-muted-foreground ml-auto"),
                         cls="items-center"

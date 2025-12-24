@@ -114,14 +114,7 @@ def Avatar(
                 alt=alt,
                 cls="aspect-square size-full object-cover",
                 style=f"width: {size_px}px; height: {size_px}px;",
-            ),
-            # Hidden fallback (would need JS to show on error)
-            Span(
-                initials,
-                cls="hidden absolute inset-0 flex items-center justify-center opacity-0",
-                style=f"width: {size_px}px; height: {size_px}px;",
-                aria_hidden="true",
-            ) if initials else "",
+            ),    
             cls=base_cls,
             data_size=size,
             **attrs,
