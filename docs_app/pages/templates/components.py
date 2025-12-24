@@ -235,7 +235,7 @@ def ComponentSidebar():
                         Span(page['title']),
                         # href=page['href'],
                         # href="#",
-                        on_click=f"@get('{page['href']}')",
+                        on_click__viewtransition=f"@get('{page['href']}')",
                     ),
                     cls="mb-1"
                 )
