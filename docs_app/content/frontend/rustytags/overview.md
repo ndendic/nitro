@@ -1,3 +1,9 @@
+---
+title: RustyTags Overview
+category: Frontend
+order: 1
+---
+
 # RustyTags Overview
 
 RustyTags is the high-performance HTML generation engine that powers Nitro's frontend capabilities. Built with a Rust core and Python interface via PyO3, RustyTags delivers 3-10x faster HTML generation compared to pure Python implementations while maintaining a clean, Pythonic API.

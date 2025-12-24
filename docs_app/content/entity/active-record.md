@@ -1,3 +1,9 @@
+---
+title: Active Record Patterns
+category: Entity
+order: 2
+---
+
 # Active Record Patterns
 
 The Active Record pattern combines data and behavior in a single object. Nitro entities provide rich persistence methods that eliminate boilerplate and let you focus on business logic.

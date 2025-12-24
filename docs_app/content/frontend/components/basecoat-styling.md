@@ -1,3 +1,9 @@
+---
+title: Basecoat Styling
+category: Frontend
+order: 10
+---
+
 # Basecoat CSS Styling System
 
 Basecoat is Nitro's component styling system built on CSS variables, data attributes, and semantic class names. It provides a consistent, themeable foundation for all UI components.

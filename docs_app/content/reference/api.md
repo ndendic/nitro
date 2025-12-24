@@ -1,3 +1,9 @@
+---
+title: API Reference
+category: Reference
+order: 1
+---
+
 # API Reference
 
 Quick reference for Nitro Framework APIs. See linked documentation for detailed usage and examples.

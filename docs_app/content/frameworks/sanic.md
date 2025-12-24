@@ -1,3 +1,9 @@
+---
+title: Sanic
+category: Frameworks
+order: 7
+---
+
 # Sanic Integration
 
 > **Status: Experimental**

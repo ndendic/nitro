@@ -1,3 +1,9 @@
+---
+title: Starlette
+category: Frameworks
+order: 5
+---
+
 # Starlette Integration
 
 Nitro provides SSE (Server-Sent Events) helpers for Starlette applications, enabling real-time updates with Datastar. Unlike FastAPI/Flask/FastHTML, Starlette integration focuses on event streaming rather than auto-routing (routes are typically defined manually in Starlette).

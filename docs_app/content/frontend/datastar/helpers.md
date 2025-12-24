@@ -1,3 +1,9 @@
+---
+title: Datastar Helpers
+category: Frontend
+order: 7
+---
+
 # Datastar Helpers
 
 This document covers the comprehensive suite of helper functions in Nitro's Datastar integration. These helpers generate JavaScript expressions from Python code, making it easy to build reactive UIs without writing raw JavaScript.

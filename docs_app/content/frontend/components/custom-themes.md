@@ -1,3 +1,9 @@
+---
+title: Custom Themes
+category: Frontend
+order: 11
+---
+
 # Custom Themes
 
 Nitro's theming system is built on CSS variables, making it easy to create custom color schemes, support dark mode, and switch between themes at runtime.

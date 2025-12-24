@@ -1,3 +1,9 @@
+---
+title: Django
+category: Frameworks
+order: 6
+---
+
 # Django Integration
 
 > **Status: Planned**

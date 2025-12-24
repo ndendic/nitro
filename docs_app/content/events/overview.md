@@ -1,3 +1,9 @@
+---
+title: Event-Driven Architecture
+category: Events
+order: 1
+---
+
 # Event-Driven Architecture
 
 Nitro's event system decouples business logic from side effects, enabling clean, testable code that's easy to extend without modification.

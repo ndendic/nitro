@@ -1,3 +1,9 @@
+---
+title: RustyTags Usage
+category: Frontend
+order: 2
+---
+
 # RustyTags Usage
 
 This guide covers practical usage patterns for RustyTags, including tag nesting, the Page component, class handling, and attribute management.

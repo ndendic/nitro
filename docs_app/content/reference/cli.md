@@ -1,3 +1,9 @@
+---
+title: CLI Reference
+category: Reference
+order: 2
+---
+
 # CLI Reference
 
 The Nitro CLI provides commands for managing Tailwind CSS integration and database migrations. All commands use the `nitro` executable.

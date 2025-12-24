@@ -1,3 +1,9 @@
+---
+title: Datastar Expressions
+category: Frontend
+order: 6
+---
+
 # Expressions
 
 The `Expr` system is the foundation of Datastar's Python API, enabling you to build complex JavaScript expressions using Python syntax with operator overloading.

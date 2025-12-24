@@ -1,3 +1,9 @@
+---
+title: Datastar Attributes
+category: Frontend
+order: 5
+---
+
 # Datastar Attributes
 
 Datastar uses special `data-*` attributes to bind reactive behavior to HTML elements. Nitro provides Pythonic keyword arguments that generate these attributes automatically.

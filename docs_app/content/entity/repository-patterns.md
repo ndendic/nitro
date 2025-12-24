@@ -1,3 +1,9 @@
+---
+title: Repository Patterns
+category: Entity
+order: 3
+---
+
 # Repository Patterns
 
 The Repository pattern separates persistence logic from business logic. Nitro provides two built-in repositories: `SQLModelRepository` for database persistence and `MemoryRepository` for in-memory storage.

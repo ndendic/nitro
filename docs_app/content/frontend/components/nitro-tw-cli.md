@@ -1,3 +1,9 @@
+---
+title: Tailwind CSS CLI
+category: Frontend
+order: 12
+---
+
 # Nitro Tailwind CSS CLI
 
 Nitro includes a built-in CLI for working with Tailwind CSS without requiring Node.js. It downloads and manages the standalone Tailwind binary and provides convenient commands for development and production builds.

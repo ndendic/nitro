@@ -1,3 +1,9 @@
+---
+title: Datastar Signals
+category: Frontend
+order: 4
+---
+
 # Signals
 
 Signals are the foundation of Datastar's reactive state management. In Nitro, we provide Python classes that generate JavaScript signal references and manage reactive state.

@@ -1,3 +1,9 @@
+---
+title: Datastar Philosophy
+category: Frontend
+order: 3
+---
+
 # Datastar Philosophy
 
 Datastar is a reactive JavaScript library that brings signal-based state management to HTML. In Nitro, we provide a powerful Python API that generates Datastar-compatible JavaScript, allowing you to write reactive frontends using Python syntax.

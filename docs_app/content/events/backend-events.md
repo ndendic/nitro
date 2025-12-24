@@ -1,3 +1,9 @@
+---
+title: Backend Events API
+category: Events
+order: 2
+---
+
 # Backend Events API
 
 Complete reference for Nitro's event system including event creation, handler registration, emission, and advanced features like priorities and conditions.

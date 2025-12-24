@@ -1,3 +1,9 @@
+---
+title: Welcome
+category: Home
+order: 0
+---
+
 # Nitro Framework Documentation
 
 Nitro is a Python web framework that treats business logic as first-class citizens, providing rich domain entities with hybrid persistence, framework-agnostic design, and progressive complexity.

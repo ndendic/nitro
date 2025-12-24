@@ -1,3 +1,9 @@
+---
+title: Quickstart
+category: Getting Started
+order: 2
+---
+
 # Quickstart: Build a Todo App
 
 Build a complete Todo application with Nitro Framework in 5 minutes.

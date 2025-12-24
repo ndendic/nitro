@@ -1,3 +1,9 @@
+---
+title: Entity Overview
+category: Entity
+order: 1
+---
+
 # Entity Overview
 
 Entities are the core abstraction in Nitro Framework. They combine data validation, business logic, and persistence in a single, cohesive class.

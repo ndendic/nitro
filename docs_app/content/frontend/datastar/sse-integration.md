@@ -1,3 +1,9 @@
+---
+title: SSE Integration
+category: Frontend
+order: 8
+---
+
 # Datastar SSE Integration
 
 This document covers Server-Sent Events (SSE) integration with Datastar for real-time server-to-client updates. SSE enables your backend to push HTML fragments, signal updates, script execution, and navigation commands to connected clients.

@@ -1,3 +1,9 @@
+---
+title: FastHTML
+category: Frameworks
+order: 3
+---
+
 # FastHTML Integration
 
 Nitro integrates seamlessly with FastHTML, providing auto-routing for entity methods alongside FastHTML's traditional routing. This is ideal for building reactive, HTML-first applications with RustyTags and Datastar.

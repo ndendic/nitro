@@ -1,3 +1,9 @@
+---
+title: Component Library
+category: Frontend
+order: 9
+---
+
 # Component Library Overview
 
 Nitro provides a comprehensive library of 40+ production-ready components that follow a consistent philosophy: **convention over configuration with escape hatches**. Components look great immediately but remain fully customizable.

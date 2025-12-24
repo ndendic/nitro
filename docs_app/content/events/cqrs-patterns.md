@@ -1,3 +1,9 @@
+---
+title: CQRS Patterns
+category: Events
+order: 3
+---
+
 # Real-Time Communication with Client
 
 The Client class enables real-time communication between backend and frontend using Server-Sent Events (SSE) and topic-based subscriptions.

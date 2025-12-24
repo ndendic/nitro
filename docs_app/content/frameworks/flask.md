@@ -1,3 +1,9 @@
+---
+title: Flask
+category: Frameworks
+order: 4
+---
+
 # Flask Integration
 
 Nitro provides comprehensive Flask support with automatic route registration, both sync and async method support, and JSON response handling.

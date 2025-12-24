@@ -1,3 +1,9 @@
+---
+title: Installation
+category: Getting Started
+order: 1
+---
+
 # Installation
 
 Get started with Nitro Framework in under a minute.

@@ -1,3 +1,9 @@
+---
+title: Framework Overview
+category: Frameworks
+order: 1
+---
+
 # Framework Integration Overview
 
 Nitro is **framework-agnostic by design**. Your entity logic, business rules, and domain models are completely independent of the web framework you choose. This means you can:

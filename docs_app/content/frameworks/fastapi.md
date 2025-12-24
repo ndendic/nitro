@@ -1,3 +1,9 @@
+---
+title: FastAPI
+category: Frameworks
+order: 2
+---
+
 # FastAPI Integration
 
 Nitro provides first-class FastAPI support with automatic route registration, OpenAPI documentation generation, and full async/await support.
