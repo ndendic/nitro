@@ -12,6 +12,7 @@
 @import "./components/command.css";
 @import "./components/dialog.css";
 @import "./components/dropdown-menu.css";
+@import "./components/dropzone.css";
 @import "./components/field.css";
 @import "./components/kbd.css";
 @import "./components/popover.css";

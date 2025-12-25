@@ -12,8 +12,7 @@ router: APIRouter = APIRouter()
 
 def example_variants():
     return Div(
-        Button("Default"),
-        Button("Primary", variant="primary"),
+        Button("Primary/Default", variant="primary", on_keys_enter="console.log('Primary/Default')"),
         Button("Secondary", variant="secondary"),
         Button("Ghost", variant="ghost"),
         Button("Destructive", variant="destructive"),
@@ -25,10 +24,10 @@ def example_variants():
 
 def example_sizes():
     return Div(
-        Button("Small", size="sm"),
-        Button("Medium", size="md"),
-        Button("Large", size="lg"),
-        Button(LucideIcon("plus"), size="icon"),
+        Button("Small", variant="sm"),
+        Button("Default"),
+        Button("Large", variant="lg"),
+        Button(LucideIcon("plus")," Icon", variant="icon"),
         cls="flex flex-wrap items-center gap-2"
     )
 

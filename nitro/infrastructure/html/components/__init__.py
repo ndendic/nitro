@@ -37,6 +37,7 @@ from .field import Field, Fieldset
 from .input_group import InputGroup
 from .calendar import Calendar
 from .datepicker import DatePicker, DateRangePicker
+from .dropzone import Dropzone, DropzoneItem, DropzoneList
 
 # P2 Interactive Overlays
 from .dropdown import (

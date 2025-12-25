@@ -443,6 +443,7 @@ def playground_components():
                                     DropdownItem(LucideIcon("pencil"), "Edit"),
                                     DropdownSeparator(),
                                     DropdownItem(LucideIcon("trash"), "Delete", cls="text-destructive"),
+                                    align="end",
                                 ),
                             ),
                             cls="flex items-center justify-between"

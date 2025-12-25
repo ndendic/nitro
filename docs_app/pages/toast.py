@@ -26,7 +26,7 @@ def example_basic():
             ),
             cls="toaster",
             data_align="end",
-            style="position: relative; bottom: auto; right: auto;",  # Override fixed positioning for demo
+            style="position: relative; bottom: auto; right: auto;",
         ),
         Button(
             "Show Toast",

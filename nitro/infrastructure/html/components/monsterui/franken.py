@@ -488,7 +488,7 @@ def Upload(
     cls="",  # Classes in addition to Upload styling
     multiple=False,  # Whether to allow multiple file selection
     accept=None,  # File types to accept (e.g. 'image/*')
-    button_cls=ButtonT.default,  # Classes for the button
+    button_cls="btn",  # Classes for the button
     id=None,  # ID for the file input
     name=None,  # Name for the file input
     **kwargs,  # Additional args for the outer div

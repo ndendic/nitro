@@ -1,0 +1,97 @@
+/* Dropzone */
+@layer components {
+  /* Base dropzone container */
+  .dropzone {
+    @apply relative flex flex-col items-center justify-center w-full min-h-32;
+    @apply border-2 border-dashed border-muted-foreground/25 rounded-lg;
+    @apply transition-colors cursor-pointer select-none;
+    @apply hover:bg-accent/30 hover:border-muted-foreground/50;
+    @apply focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px];
+
+    /* Hide the actual file input */
+    input[type="file"] {
+      @apply sr-only;
+    }
+
+    /* Disabled state */
+    &[data-disabled] {
+      @apply opacity-50 pointer-events-none cursor-not-allowed;
+    }
+
+    /* Invalid/error state */
+    &[data-invalid] {
+      @apply border-destructive;
+      @apply aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40;
+    }
+  }
+
+  /* Content wrapper */
+  .dropzone-content {
+    @apply flex flex-col items-center justify-center gap-2 p-6 text-center;
+  }
+
+  /* Upload icon */
+  .dropzone-icon {
+    @apply size-10 text-muted-foreground;
+  }
+
+  /* Main text */
+  .dropzone-text {
+    @apply text-sm font-medium text-foreground;
+  }
+
+  /* Hint text (file types, size limits) */
+  .dropzone-hint {
+    @apply text-xs text-muted-foreground;
+  }
+
+  /* File list container */
+  .dropzone-list {
+    @apply flex flex-col gap-2 w-full mt-4;
+  }
+
+  /* Individual file item */
+  .dropzone-item {
+    @apply flex items-center justify-between gap-4 p-3;
+    @apply border rounded-lg bg-background;
+
+    /* Dark mode adjustment */
+    @apply dark:bg-input/30 dark:border-input;
+  }
+
+  /* File info section */
+  .dropzone-item-info {
+    @apply flex items-center gap-3 min-w-0 flex-1;
+
+    /* Icon */
+    > svg:first-child {
+      @apply size-5 text-muted-foreground shrink-0;
+    }
+
+    /* Text container */
+    > div {
+      @apply min-w-0 flex-1;
+    }
+
+    /* Filename */
+    .dropzone-item-name {
+      @apply text-sm font-medium truncate;
+    }
+
+    /* File size */
+    .dropzone-item-size {
+      @apply text-xs text-muted-foreground;
+    }
+  }
+
+  /* Remove button */
+  .dropzone-item-remove {
+    @apply size-8 rounded-full flex items-center justify-center shrink-0;
+    @apply text-muted-foreground hover:text-destructive hover:bg-destructive/10;
+    @apply transition-colors cursor-pointer;
+
+    svg {
+      @apply size-4;
+    }
+  }
+}

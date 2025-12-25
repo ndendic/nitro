@@ -35,7 +35,7 @@ def get_pages():
 # Shared headers for all documentation pages
 hdrs = (
     Script(src='https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js', type='module'),
-    Script(type='module', src='https://cdn.jsdelivr.net/npm/@mbolli/datastar-attribute-on-keys@1/dist/index.js')
+    Script(type='module', src='https://cdn.jsdelivr.net/npm/@mbolli/datastar-attribute-on-keys@1/dist/index.js'),
 )
 # Shared HTML and body configuration
 htmlkws = dict(lang="en") # , cls="bg-background text-foreground",data_theme="$theme"
