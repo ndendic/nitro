@@ -1,5 +1,6 @@
 """Tabs component documentation page"""
 
+import pathlib
 from typing import List, Optional
 from uuid import uuid4
 
@@ -11,6 +12,12 @@ from nitro.utils import AttrDict
 from nitro.infrastructure.events import on, emit_elements, emit_signals
 from nitro.infrastructure.html.components import LucideIcon
 from .templates.base import *  # noqa: F403
+
+from mistletoe.html_renderer import HTMLRenderer
+from mistletoe.span_token import Image
+import mistletoe
+from functools import partial
+from lxml import html, etree
 
 router: APIRouter = APIRouter()
 
@@ -108,27 +115,121 @@ class Person(Entity, table=True):
 nik = Person(id="1", name="John Doe", age=25)
 
 
+
+
+
+
+
+nitro_class_map = {
+    "h1": "h1",
+    "h2": "h2",
+    "h3": "h3",
+    "h4": "h4",
+    # Body text and links
+    "p": "text-lg leading-relaxed mb-6",
+    "a": "link text-primary hover:text-primary-focus underline",
+    # Lists with proper spacing
+    "ul": "list list-bullet space-y-2 mb-6 ml-6 text-lg",
+    "ol": "list list-decimal space-y-2 mb-6 ml-6 text-lg",
+    "li": "leading-relaxed",
+    # Code and quotes
+    "pre": "bg-base-200 rounded-lg p-4 mb-6",
+    "code": "codespan px-1",
+    "pre code": "codespan px-1 block overflow-x-auto",
+    "blockquote": "blockquote pl-4 border-l-4 border-primary italic mb-6",
+    # Tables
+    "table": "table table-divider table-hover table-small w-full mb-6",
+    "th": "!text-left p-2 font-semibold",
+    "td": "p-2",
+    # Other elements
+    "hr": "divider-icon my-8",
+    "img": "max-w-full h-auto rounded-lg mb-6",
+}
+
+
+def apply_classes(
+    html_str: str,  # Html string
+    class_map=None,  # Class map
+    class_map_mods=None,  # Class map that will modify the class map map (for small changes to base map)
+) -> str:  # Html string with classes applied
+    "Apply classes to html string"
+    if not html_str:
+        return html_str
+    # Handles "Unicode strings with encoding declaration are not supported":
+    if html_str[:100].lstrip().startswith("<?xml"):
+        html_str = html_str.split("?>", 1)[1].strip()
+    class_map = class_map or nitro_class_map
+    if class_map_mods:
+        class_map = {**class_map, **class_map_mods}
+    try:
+        html_str = html.fragment_fromstring(html_str, create_parent=True)
+        for selector, classes in class_map.items():
+            # Handle descendant selectors (e.g., 'pre code')
+            xpath = "//" + "/descendant::".join(selector.split())
+            for element in html_str.xpath(xpath):
+                existing_class = element.get("class", "")
+                new_class = f"{existing_class} {classes}".strip()
+                element.set("class", new_class)
+        return "".join(
+            etree.tostring(c, encoding="unicode", method="html") for c in html_str
+        )
+    except (etree.ParserError, ValueError):
+        return html_str
+
+
+class NitroRenderer(HTMLRenderer):
+    "Custom renderer for Nitro UI that handles image paths"
+
+    def __init__(self, *args, img_dir=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.img_dir = img_dir
+
+    def render_image(self, token):
+        "Modify image paths if they're relative and self.img_dir is specified"
+        template = '<img src="{}" alt="{}"{} class="max-w-full h-auto rounded-lg mb-6">'
+        title = f' title="{token.title}"' if hasattr(token, "title") else ""
+        src = token.src
+        if self.img_dir and not src.startswith(
+            ("http://", "https://", "/", "attachment:", "blob:", "data:")
+        ):
+            src = f"{pathlib.Path(self.img_dir)}/{src}"
+        return template.format(
+            src, token.children[0].content if token.children else "", title
+        )
+
+
+def render_md(
+    md_content: str,  # Markdown content
+    class_map=None,  # Class map
+    class_map_mods=None,  # Additional class map
+    img_dir: str = None,  # Directory containing images
+    renderer=NitroRenderer,  # custom renderer
+) -> HtmlString:  # Rendered markdown
+    "Renders markdown using mistletoe and lxml with custom image handling"
+    if md_content == "":
+        return md_content
+    html_content = mistletoe.markdown(md_content, partial(renderer, img_dir=img_dir))
+    return apply_classes(html_content, class_map, class_map_mods)
+
+
+
+
+
+
+
+
 @router.get("/playground")
 @template(title="Playground")
 def playground():
     state = Signals(btn_open=False, anchor_open=False, name="")
     return Div(
         H1("Playground", style="animation: var(--animation-fade-in) forwards;"),
-        Div(            
-            Div(
-                Div(
-                    LucideIcon("calendar"),
-                    cls='absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none'
-                ),
-                # Input(datepicker='', id='default-datepicker', type='text', placeholder='Select date'),
-                Input(
-                    id='default-datepicker', 
-                    type='text', 
-                    placeholder='Select date',
-                    data_init="new Datepicker(el, {autohide: true});"
-                ),
-                cls='relative max-w-sm'
-            ),
+        Div(
+#             render_md(
+# """
+# # Hello World
+# This is a test of the markdown **renderer**. It supports **bold**, *italic*, and [links](https://www.google.com).
+# """),
             nik,
             nik.form(),
             Div(

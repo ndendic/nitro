@@ -36,8 +36,8 @@ def Accordion(
 def AccordionItemTrigger(
     title,
     icon="chevron-down",
-    cls="flex flex-1 items-start justify-between gap-4 py-4 text-left text-sm font-medium hover:underline",
-    icon_cls="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200 group-open:rotate-180",
+    cls="",
+    icon_cls="",
     **attrs: Any,
 ) -> rt.HtmlString:
     return rt.H2(

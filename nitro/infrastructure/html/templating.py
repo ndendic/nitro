@@ -72,17 +72,17 @@ def add_nitro_components(hdrs: tuple, htmlkw: dict, bodykw: dict, ftrs: tuple):
     hdrs += (
         Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/basecoat.min.js', defer=''),
         Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/sidebar.min.js', defer=''),
+        Script(type='module', src='https://cdn.jsdelivr.net/npm/@mbolli/datastar-attribute-on-keys@1/dist/index.js'),
+        Script(src='https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js', type='module'),
         Script("""const datastar = JSON.parse(localStorage.getItem('datastar') || '{}');
     const htmlElement = document.documentElement;
     if ("darkMode" in datastar) {
-    // Respect the value from localStorage if it exists
     if (datastar.darkMode === true) {
         htmlElement.classList.add('dark');
     } else {
         htmlElement.classList.remove('dark');
     }
     } else {
-    // Fallback to system color scheme if darkMode not in localStorage
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         htmlElement.classList.add('dark');
     } else {
@@ -93,7 +93,7 @@ def add_nitro_components(hdrs: tuple, htmlkw: dict, bodykw: dict, ftrs: tuple):
     )
     htmlkw["data_theme"] = "$theme"
     htmlkw["cls"] = cn("bg-background text-foreground") if htmlkw.get("cls") is None else cn(htmlkw.get("cls"), "bg-background text-foreground")
-    ftrs += (Div(Div(data_persist="darkMode, theme"),**{"data-signals__ifmissing:darkMode": "true", "data-signals__ifmissing:theme": "'claude'"}),)
+    ftrs += (Div(Div(data_persist="darkMode, theme"),**{"data-signals:darkMode__ifmissing": "true", "data-signals:theme__ifmissing": "'claude'"}),)
     return hdrs, htmlkw, bodykw, ftrs
 
 def add_highlightjs(hdrs: tuple, ftrs: tuple):

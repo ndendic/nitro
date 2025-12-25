@@ -14,7 +14,7 @@ from rusty_tags.core import (  # noqa: E402
     TagBuilder,
 
     # Fragment and utilities
-    Fragment,
+    Fragment, Safe,
 
     # HTML tags
     A, Aside, B, Body, Br, Button, Code, Div, Em, Form,
@@ -61,7 +61,7 @@ __all__ = [
     "HtmlString", "TagBuilder",
 
     # Fragment and utilities
-    "Fragment",
+    "Fragment", "Safe",
     
     # HTML tags - organized alphabetically
     "A", "Aside", "B", "Body", "Br", "Button", "Code", "Div", "Em", "Form",

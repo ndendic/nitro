@@ -101,13 +101,13 @@ def PricingCard(name, price, period, features, popular=False, cta="Get Started")
                     Span(feature, cls="text-sm"),
                     cls="flex items-center gap-2"
                 ) for feature in features],
-                cls="space-y-3"
+                cls="space-y-3 h-full"
             ),
         ),
         CardFooter(
             Button(cta, variant="primary" if popular else "outline", cls="w-full"),
         ),
-        cls=f"relative {'border-primary shadow-lg' if popular else ''}"
+        cls=f"relative h-full {'border-primary shadow-lg' if popular else ''}"
     )
 
 
@@ -237,7 +237,7 @@ def playground_components():
                         CardContent(
                             Div(
                                 Div(
-                                    H4("Recent Activity", cls="font-medium mb-4"),
+                                    H4("Recent Activity", cls="font-medium pb-4"),
                                     ActivityItem("git-commit", "New commit pushed", "Updated authentication flow", "2m ago", "primary"),
                                     ActivityItem("check-circle", "Build succeeded", "Production deployment complete", "15m ago", "success"),
                                     ActivityItem("alert-triangle", "Warning detected", "High memory usage on server-2", "1h ago", "warning"),
@@ -613,26 +613,30 @@ def playground_components():
             Accordion(
                 AccordionItem(
                     "What is Nitro Framework?",
-                    P("Nitro is a modern Python web framework that lets you build beautiful, reactive web applications entirely in Python. It combines the power of Rust-based HTML generation with a comprehensive component library.", cls="text-muted-foreground"),
+                    P("Nitro is a modern Python web framework that lets you build beautiful, reactive web applications entirely in Python. It combines the power of Rust-based HTML generation with a comprehensive component library.", cls="text-muted-foreground pb-4"),
                     id="faq-1",
                     open=True,
+                    name="faq",
                 ),
                 AccordionItem(
                     "Do I need to know JavaScript?",
-                    P("No! Nitro is designed to be JavaScript-free. All interactivity is handled through Datastar signals and Python code. You write Python, and Nitro handles the rest.", cls="text-muted-foreground"),
+                    P("No! Nitro is designed to be JavaScript-free. All interactivity is handled through Datastar signals and Python code. You write Python, and Nitro handles the rest.", cls="text-muted-foreground pb-4"),
                     id="faq-2",
+                    name="faq",
                 ),
                 AccordionItem(
                     "Is Nitro production-ready?",
-                    P("Nitro is actively developed and used in production applications. The component library follows accessibility best practices and is thoroughly tested across modern browsers.", cls="text-muted-foreground"),
+                    P("Nitro is actively developed and used in production applications. The component library follows accessibility best practices and is thoroughly tested across modern browsers.", cls="text-muted-foreground pb-4"),
                     id="faq-3",
+                    name="faq",
                 ),
                 AccordionItem(
                     "How does theming work?",
-                    P("Nitro uses CSS custom properties (variables) for theming. You can easily create custom themes by overriding the color tokens in your CSS. Dark mode is built-in and works automatically.", cls="text-muted-foreground"),
+                    P("Nitro uses CSS custom properties (variables) for theming. You can easily create custom themes by overriding the color tokens in your CSS. Dark mode is built-in and works automatically.", cls="text-muted-foreground pb-4"),
                     id="faq-4",
+                    name="faq",
                 ),
-                cls="max-w-2xl"
+                cls="max-w-2xl",
             ),
             cls="py-12 border-t"
         ),
@@ -954,7 +958,7 @@ def playground_components():
         # ========== NAVIGATION ==========
         Section(
             H2("Navigation Components", cls="text-xl font-semibold mb-6"),
-            Div(
+            Grid(
                 Div(
                     H4("Breadcrumbs", cls="font-medium mb-3"),
                     Breadcrumb(
@@ -990,7 +994,8 @@ def playground_components():
                         cls="space-y-2 p-4 bg-muted rounded-lg max-w-xs"
                     ),
                 ),
-                cls="grid md:grid-cols-3 gap-8"
+                cols_max=3,
+                cls="gap-8"
             ),
             cls="py-12 border-t"
         ),

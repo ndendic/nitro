@@ -20,8 +20,8 @@ from .templates.base import hdrs, htmlkws, bodykws, ftrs, template
 router = APIRouter()
 
 
-@router.get("/documentation/{slug}", response_class=HTMLResponse)
-@template(title="Nitro Documentation")
+@router.get("/documentation/{slug}")
+# @template(title="Nitro Documentation")
 def view_doc(slug: str):
     """Display a documentation page by slug"""
 
@@ -70,7 +70,7 @@ def view_doc(slug: str):
         headers = doc_page.extract_headers()
 
         # Create the page with sidebar layout
-        return Div(
+        return HTMLResponse(Div(
                 # Breadcrumbs
                 Breadcrumbs(breadcrumb_segments, doc_page.title),
 
@@ -87,8 +87,9 @@ def view_doc(slug: str):
 
                     cls="flex gap-8"
                 ),
-                cls="flex-1 transition-all"
-            )
+                cls="flex-1 transition-all",
+                id="content",
+            ))
 
             
     except Exception as e:
