@@ -40,9 +40,9 @@ class TextT(VEnum):
     )
     # Text Color
     muted, primary, secondary = (
-        "text-muted",
-        "text-primary",
-        "text-secondary",
+        "text-muted-foreground",
+        "text-primary-foreground",
+        "text-secondary-foreground",
     )
     success, warning, error, info = (
         "text-success",

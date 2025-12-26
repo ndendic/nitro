@@ -100,31 +100,29 @@ def add_highlightjs(hdrs: tuple, ftrs: tuple):
     hdrs += (  # pyright: ignore[reportOperatorIssue]
         Script(src=HEADER_URLS["highlight_js"]),
         Script(src=HEADER_URLS["highlight_python"]),
-        Link(
-            rel="stylesheet", href=HEADER_URLS["highlight_light_css"], id="hljs-light"
-        ),
-        Link(rel="stylesheet", href=HEADER_URLS["highlight_dark_css"], id="hljs-dark"),
+        # Link(rel="stylesheet", href=HEADER_URLS["highlight_light_css"], id="hljs-light"),
+        # Link(rel="stylesheet", href=HEADER_URLS["highlight_dark_css"], id="hljs-dark"),
         Script(src=HEADER_URLS["highlight_copy"]),
         Link(rel="stylesheet", href=HEADER_URLS["highlight_copy_css"]),
         Script(
             """
-                    hljs.addPlugin(new CopyButtonPlugin());
-                    hljs.configure({
-                        cssSelector: 'pre code',
-                        languages: ['python'],
-                        ignoreUnescapedHTML: true
-                    });
-                    function updateTheme() {
-                        const isDark = document.documentElement.classList.contains('dark');
-                        document.getElementById('hljs-dark').disabled = !isDark;
-                        document.getElementById('hljs-light').disabled = isDark;
-                    }
-                    new MutationObserver(mutations =>
-                        mutations.forEach(m => m.target.tagName === 'HTML' &&
-                            m.attributeName === 'class' && updateTheme())
-                    ).observe(document.documentElement, { attributes: true });
-                    updateTheme();
-                    hljs.highlightAll();
+            hljs.addPlugin(new CopyButtonPlugin());
+            hljs.configure({
+                cssSelector: 'pre code',
+                languages: ['python'],
+                ignoreUnescapedHTML: true
+            });
+            function updateTheme() {
+                const isDark = document.documentElement.classList.contains('dark');
+                document.getElementById('hljs-dark').disabled = !isDark;
+                document.getElementById('hljs-light').disabled = isDark;
+            }
+            new MutationObserver(mutations =>
+                mutations.forEach(m => m.target.tagName === 'HTML' &&
+                    m.attributeName === 'class' && updateTheme())
+            ).observe(document.documentElement, { attributes: true });
+            updateTheme();
+            hljs.highlightAll();
                 """,
             type="module",
         ),

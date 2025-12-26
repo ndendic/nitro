@@ -1,5 +1,10 @@
 @import "./base/base.css";
 
+/* Basecoat Base CSS */
+@import "./base/base.css";
+
+/* Basecoat Themes CSS */
+@import "./themes.css";
 /* Components */
 @import "./components/base.css";
 @import "./components/alert.css";
@@ -13,6 +18,8 @@
 @import "./components/dialog.css";
 @import "./components/dropdown-menu.css";
 @import "./components/dropzone.css";
+@import "./components/date.css";
+@import "./components/dropzone.css";
 @import "./components/field.css";
 @import "./components/kbd.css";
 @import "./components/popover.css";
@@ -22,3 +29,4 @@
 @import "./components/tabs.css";
 @import "./components/toast.css";
 @import "./components/tooltip.css";
+@import "./components/hljs.css";

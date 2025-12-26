@@ -21,7 +21,7 @@
       @apply flex items-center px-6 [.border-t]:pt-6;
     }
     > .card-content {
-      @apply px-6;
+      @apply px-6 h-full;
     }
   }
 }

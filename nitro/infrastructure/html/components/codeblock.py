@@ -15,6 +15,7 @@ def CodeBlock(
     *content: str,  # Contents of Code tag (often text)
     cls: str = "",  # Classes for the outer container
     code_cls: str = "",  # Classes for the code tag
+    pre_cls: str = "",  # Classes for the pre tag
     **kwargs: Any  # Additional args for Code tag
 ) -> rt.HtmlString:
     """
@@ -39,7 +40,8 @@ def CodeBlock(
     """
     return rt.Div(
         rt.Pre(
-            rt.Code(*content, cls=cn(code_cls), **kwargs)
+            rt.Code(*content, cls=cn(code_cls), **kwargs),
+            pre_cls=cn(pre_cls),
         ),
         cls=cn(cls)
     )
