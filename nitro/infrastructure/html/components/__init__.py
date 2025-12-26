@@ -84,7 +84,7 @@ from .breadcrumb import (
     BreadcrumbEllipsis,
 )
 from .pagination import Pagination, PaginationContent
-from .avatar import Avatar, AvatarGroup
+from .avatar import Avatar, AvatarGroup, DiceBearAvatar
 from .table import (
     Table,
     TableHeader,
@@ -135,3 +135,4 @@ from .sidebar import (
 
 from .base import *
 from .base_layouts import *
+from .charts import ApexChart, ChartT

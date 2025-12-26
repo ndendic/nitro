@@ -430,3 +430,24 @@ def Output(
         cls=cn("font-mono bg-secondary px-2 py-1 rounded", cn(cls)),
         **kwargs,
     )
+
+
+    
+def PicSumImg(
+    h: int = 200,  # Height in pixels
+    w: int = 200,  # Width in pixels
+    id: int = None,  # Optional specific image ID to use
+    grayscale: bool = False,  # Whether to return grayscale version
+    blur: int = None,  # Optional blur amount (1-10)
+    **kwargs,  # Additional args for Img tag
+) -> HtmlString:  # Img tag with picsum image
+    "Creates a placeholder image using https://picsum.photos/"
+    url = f"https://picsum.photos"
+    if id is not None:
+        url = f"{url}/id/{id}"
+    url = f"{url}/{w}/{h}"
+    if grayscale:
+        url = f"{url}?grayscale"
+    if blur is not None:
+        url = f"{url}{'?' if not grayscale else '&'}blur={max(1, min(10, blur))}"
+    return rt.Img(src=url, loading="lazy", **kwargs)

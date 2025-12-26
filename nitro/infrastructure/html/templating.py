@@ -58,7 +58,7 @@ HEADER_URLS = {
     # FrankenUI
     "franken_css": "https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/css/core.min.css",
     "franken_js_core": "https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/js/core.iife.js",
-    "franken_icons": "https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/js/icon.iife.js",
+    "franken_chart": "https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/js/chart.iife.js",
     # Highlight.js
     "highlight_js": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js",
     "highlight_python": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/python.min.js",
@@ -143,6 +143,7 @@ def Page(
     datastar: bool = True,
     ds_version: str = "1.0.0-RC.6",
     nitro_components: bool = True,
+    franken_chart: bool = False,
     monsterui: bool = False,
     tailwind4: bool = False,
     lucide: bool = False,
@@ -168,12 +169,16 @@ def Page(
         hdrs += (Link(rel="stylesheet", href=HEADER_URLS["franken_css"]),)
         hdrs += (Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/css/utilities.min.css"),)
         hdrs += (Script(src=HEADER_URLS["franken_js_core"], type="module"),)
-        hdrs += (Script(src=HEADER_URLS["franken_icons"], type="module"),)
+    if franken_chart:
+        hdrs += (Script(src=HEADER_URLS["franken_js_core"], type="module"),) if not monsterui else ()
+        hdrs += (Script(src=HEADER_URLS["franken_chart"], type="module"),)
     if datastar:
         hdrs = (   
         Script(f"""{{"imports": {{"datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@{ds_version}/bundles/datastar.js"}}}}""", type='importmap'),
         Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-persist@latest/dist/index.js'),
-        Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-anchor@latest/dist/index.js')) + hdrs
+        Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-anchor@latest/dist/index.js'),
+        Script(type='module', src='https://cdn.jsdelivr.net/npm/@mbolli/datastar-attribute-on-keys@1/dist/index.js'),
+        ) + hdrs
     if tw_configured:
         hdrs += (Link(rel="stylesheet", href=f"/{tailwind_css}", type="text/css"),)
     if nitro_components:

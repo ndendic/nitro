@@ -111,6 +111,6 @@ uv.lock
 screenshots/
 
 # Temporary CSS files
-input.css
-docs_app/migrations/*
-docs_app/alembic.ini
+# input.css
+nitro-docs/migrations/*
+nitro-docs/alembic.ini

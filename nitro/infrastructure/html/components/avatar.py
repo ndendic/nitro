@@ -187,3 +187,22 @@ def AvatarGroup(
         aria_label="Avatar group",
         **attrs,
     )
+
+
+def DiceBearAvatar(
+    seed_name: str,  # Seed name (ie 'Isaac Flath')
+    h: int = 24,  # Height
+    w: int = 24,  # Width
+):  # Span with Avatar
+    "Creates an Avatar using https://dicebear.com/"
+    url = "https://api.dicebear.com/8.x/lorelei/svg?seed="
+    return Span(    
+        Img(
+            cls="aspect-square",
+            alt="Avatar",
+            loading="lazy",
+            src=f"{url}{seed_name}",
+            style=f"width: {w}px; height: {h}px;",
+        ),
+        cls="relative flex shrink-0 overflow-hidden rounded-full bg-secondary"
+    )
