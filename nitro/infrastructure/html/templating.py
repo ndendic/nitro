@@ -93,7 +93,7 @@ def add_nitro_components(hdrs: tuple, htmlkw: dict, bodykw: dict, ftrs: tuple):
     )
     htmlkw["data_theme"] = "$theme"
     htmlkw["cls"] = cn("bg-background text-foreground") if htmlkw.get("cls") is None else cn(htmlkw.get("cls"), "bg-background text-foreground")
-    ftrs += (Div(Div(data_persist="darkMode, theme"),**{"data-signals:darkMode__ifmissing": "true", "data-signals:theme__ifmissing": "'claude'"}),)
+    ftrs += (Div(Div(data_persist="darkMode, theme"),**{"data-signals:darkMode__ifmissing": "true", "data-signals:theme__ifmissing": "'nitro'"}),)
     return hdrs, htmlkw, bodykw, ftrs
 
 def add_highlightjs(hdrs: tuple, ftrs: tuple):
