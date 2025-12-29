@@ -2,7 +2,7 @@
 Nitro Templates - Advanced templating system for web applications.
 
 This module provides enhanced templating functionality moved from the core utils
-to provide better separation of concerns in the Nitro framework.
+to provide better separation of concerns in the Nitro.
 """
 
 from asyncio import iscoroutinefunction
@@ -17,6 +17,21 @@ P = ParamSpec("P")
 R = TypeVar("R")
 
 config = NitroConfig()
+
+HEADER_URLS = {
+    # Lucide icons
+    "lucide": "https://unpkg.com/lucide@latest",
+    # Tailwind 4
+    "tailwind4": "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4",
+    # FrankenUI
+    "franken_js_core": "https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/js/core.iife.js",
+    "franken_chart": "https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/js/chart.iife.js",
+    # Highlight.js
+    "highlight_js": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js",
+    "highlight_python": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/python.min.js",
+    "highlight_copy": "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.js",
+    "highlight_copy_css": "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.css",
+}
 
 def template(func):
     func_is_async = iscoroutinefunction(func)
@@ -49,30 +64,9 @@ def template(func):
     
     return decorator
 
-
-HEADER_URLS = {
-    # Lucide icons
-    "lucide": "https://unpkg.com/lucide@latest",
-    # Tailwind 4
-    "tailwind4": "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4",
-    # FrankenUI
-    "franken_css": "https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/css/core.min.css",
-    "franken_js_core": "https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/js/core.iife.js",
-    "franken_chart": "https://cdn.jsdelivr.net/npm/franken-ui@2.0.0/dist/js/chart.iife.js",
-    # Highlight.js
-    "highlight_js": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js",
-    "highlight_python": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/languages/python.min.js",
-    "highlight_light_css": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-light.css",
-    "highlight_dark_css": "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.css",
-    "highlight_copy": "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.js",
-    "highlight_copy_css": "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.css",
-}
-
 def add_nitro_components(hdrs: tuple, htmlkw: dict, bodykw: dict, ftrs: tuple):
     hdrs += (
         Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/basecoat.min.js', defer=''),
-        Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/sidebar.min.js', defer=''),
-        Script(type='module', src='https://cdn.jsdelivr.net/npm/@mbolli/datastar-attribute-on-keys@1/dist/index.js'),
         Script(src='https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js', type='module'),
         Script("""const datastar = JSON.parse(localStorage.getItem('datastar') || '{}');
     const htmlElement = document.documentElement;
@@ -100,8 +94,6 @@ def add_highlightjs(hdrs: tuple, ftrs: tuple):
     hdrs += (  # pyright: ignore[reportOperatorIssue]
         Script(src=HEADER_URLS["highlight_js"]),
         Script(src=HEADER_URLS["highlight_python"]),
-        # Link(rel="stylesheet", href=HEADER_URLS["highlight_light_css"], id="hljs-light"),
-        # Link(rel="stylesheet", href=HEADER_URLS["highlight_dark_css"], id="hljs-dark"),
         Script(src=HEADER_URLS["highlight_copy"]),
         Link(rel="stylesheet", href=HEADER_URLS["highlight_copy_css"]),
         Script(
@@ -141,8 +133,7 @@ def Page(
     datastar: bool = True,
     ds_version: str = "1.0.0-RC.6",
     nitro_components: bool = True,
-    franken_chart: bool = False,
-    monsterui: bool = False,
+    charts: bool = False,
     tailwind4: bool = False,
     lucide: bool = False,
     highlightjs: bool = False,
@@ -163,18 +154,18 @@ def Page(
     if lucide:
         hdrs += (Script(src=HEADER_URLS["lucide"]),)
         ftrs += (Script("lucide.createIcons();"),)
-    if monsterui:
-        hdrs += (Link(rel="stylesheet", href=HEADER_URLS["franken_css"]),)
-        hdrs += (Link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/franken-ui@2.1.1/dist/css/utilities.min.css"),)
+    if charts:
         hdrs += (Script(src=HEADER_URLS["franken_js_core"], type="module"),)
-    if franken_chart:
-        hdrs += (Script(src=HEADER_URLS["franken_js_core"], type="module"),) if not monsterui else ()
         hdrs += (Script(src=HEADER_URLS["franken_chart"], type="module"),)
     if datastar:
         hdrs = (   
         Script(f"""{{"imports": {{"datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@{ds_version}/bundles/datastar.js"}}}}""", type='importmap'),
         Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-persist@latest/dist/index.js'),
         Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-anchor@latest/dist/index.js'),
+        Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-resize@latest/dist/index.js'),
+        Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-scroll@latest/dist/index.js'),
+        Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-split@latest/dist/index.js'),
+        Script(type='module', src='https://cdn.jsdelivr.net/gh/ndendic/data-drag@latest/dist/index.js'),
         Script(type='module', src='https://cdn.jsdelivr.net/npm/@mbolli/datastar-attribute-on-keys@1/dist/index.js'),
         ) + hdrs
     if tw_configured:
@@ -205,7 +196,7 @@ def page_template(
     datastar: bool = True,
     ds_version: str = "1.0.0-RC.6",
     nitro_components: bool = True,
-    monsterui: bool = False,
+    charts: bool = False,
     tailwind4: bool = False,
     lucide: bool = False,
     highlightjs: bool = False,
@@ -244,7 +235,7 @@ def page_template(
             datastar=datastar,
             ds_version=ds_version,
             nitro_components=nitro_components,
-            monsterui=monsterui,
+            charts=charts,
             lucide=lucide,
             highlightjs=highlightjs,
             tailwind4=tailwind4,

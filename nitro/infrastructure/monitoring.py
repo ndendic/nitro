@@ -1,5 +1,5 @@
 """
-Monitoring infrastructure for Nitro Framework.
+Monitoring infrastructure for Nitro.
 
 Provides logging, statistics collection, and metrics for:
 - Entity operations
@@ -20,7 +20,7 @@ from threading import Lock
 
 def configure_nitro_logging(level: int = logging.INFO) -> logging.Logger:
     """
-    Configure logging for Nitro framework.
+    Configure logging for Nitro.
 
     Args:
         level: Logging level (logging.DEBUG, INFO, WARNING, ERROR)

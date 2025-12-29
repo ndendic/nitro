@@ -1,7 +1,7 @@
 # Re-export everything from rusty-tags core
 __version__ = "0.1.0"
 
-# Import framework-specific components
+# Import Nitro-specific components
 from nitro.utils import show, AttrDict, uniq
 from nitro.infrastructure.events.events import *  # noqa: F403
 from nitro.infrastructure.events.client import Client
@@ -13,7 +13,7 @@ from nitro.domain.entities.base_entity import Entity
 from nitro.infrastructure.routing import action, get, post, put, delete, ActionMetadata
 
 __author__ = "Nikola Dendic"
-__description__ = "Booster add-on for your favourite web-framework. Built on rusty-tags core."
+__description__ = "Abstraction layers for Python web development."
 
 __all__ = [
     # Core

@@ -1,5 +1,5 @@
 """
-Counter App Example - Demonstrates Nitro Framework Features
+Counter App Example - Demonstrates Nitro Features
 
 This example demonstrates:
 1. Entity with persistence

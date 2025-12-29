@@ -1,5 +1,5 @@
 """
-Custom Routes Demo - Nitro Framework
+Custom Routes Demo - Nitro
 
 Demonstrates all custom routing features:
 1. Custom entity names with __route_name__
@@ -582,7 +582,7 @@ async def home():
             <!-- Footer -->
             <footer class="text-center text-gray-600 mt-12 pt-8 border-t border-gray-200">
                 <p class="mb-2">
-                    <strong>Nitro Framework</strong> - Custom Routing Demo
+                    <strong>Nitro</strong> - Custom Routing Demo
                 </p>
                 <p class="text-sm">
                     View source:

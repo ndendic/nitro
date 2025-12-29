@@ -22,7 +22,7 @@
       & + * {
         @apply relative md:ml-(--sidebar-width);
       }
-      &[aria-hidden=true] {
+      &[aria-hidden] {
         nav {
           @apply -translate-x-full;
         }
@@ -38,7 +38,7 @@
       & + * {
         @apply relative md:mr-(--sidebar-width);
       }
-      &[aria-hidden=true] {
+      &[aria-hidden] {
         nav {
           @apply translate-x-full;
         }

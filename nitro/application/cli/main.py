@@ -9,7 +9,7 @@ from .tailwind_commands.init import init_command
 from .database_commands.cli import app as db_app
 app = typer.Typer(
     name="nitro",
-    help="Python-first web framework with Tailwind CSS integration",
+    help="Python-first set of abstraction layers for Python web development",
     rich_markup_mode="rich",
     add_completion=False,
 )
@@ -31,7 +31,7 @@ def main(
         is_eager=True,
     ),
 ) -> None:
-    """Python-first web framework with Tailwind CSS integration."""
+    """Python-first set of abstraction layers for Python web development."""
 
 
 # Tailwind commands group

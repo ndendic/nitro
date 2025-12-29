@@ -123,13 +123,20 @@ from .sidebar import (
     SidebarHeader,
     SidebarContent,
     SidebarFooter,
+    SidebarToggle,
+    # New navigation components
+    SidebarMenu,
+    SidebarSectionTitle,
+    SidebarLink,
+    SidebarItem,
+    SidebarSubmenu,
+    SidebarDivider,
+    # Legacy components (kept for backward compatibility)
     SidebarNav,
     SidebarGroup,
     SidebarGroupLabel,
-    SidebarItem,
     SidebarCollapsible,
     SidebarSeparator,
-    SidebarToggle,
     create_nav_item,
 )
 

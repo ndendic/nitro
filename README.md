@@ -2,11 +2,17 @@
 
 ⚠️ **Early Beta** - This library is in active development and APIs may change.
 
-A booster add-on for your favourite web-framework. Built on rusty-tags core. Nitro provides a web development toolkit with intelligent templating, reactive component support, event system, framework integrations, and a powerful Tailwind CSS CLI.
+**Nitro is a collection of abstraction layers for Python web development.** It is not a framework - it's a toolkit that works with your favorite web frameworks (FastAPI, Flask, FastHTML, Django, etc.).
 
-## What Nitro Does
+Built on rusty-tags core, Nitro provides intelligent templating, reactive component support, event system, and a powerful Tailwind CSS CLI.
 
-Nitro provides a comprehensive web development framework with:
+## Three Core Abstraction Layers
+
+1. **Active Record** - Entity-centric persistence with rich domain models
+2. **Front-end UI Design** - High-performance HTML generation, reactive components, templating
+3. **Event Routing** - Domain events with Blinker, decoupled side effects
+
+## What Nitro Provides
 
 - **🏷️ Complete HTML5/SVG Tags**: All standard HTML5 and SVG elements powered by rusty-tags core
 - **⚡ High Performance**: 3-10x faster than pure Python through Rust-optimized HTML generation
@@ -14,22 +20,22 @@ Nitro provides a comprehensive web development framework with:
 - **🔄 Reactive Components**: Built-in Datastar integration for modern web applications
 - **🏗️ FastHTML-Style API**: Familiar syntax with callable chaining support
 - **🧠 Intelligent Processing**: Automatic attribute handling and smart type conversion
-- **🎯 Tailwind CSS CLI**: Framework-agnostic CLI for Tailwind CSS integration and build management
-- **📦 Framework Ready**: Works with FastAPI, Flask, Django, and other Python web frameworks
+- **🎯 Tailwind CSS CLI**: CLI for Tailwind CSS integration and build management
+- **📦 Works Everywhere**: Integrates with FastAPI, Flask, Django, FastHTML, and any Python web framework
 
 ## Architecture
 
 Nitro is built on top of the `rusty-tags` core package:
 
 - **`rusty-tags`** (core): High-performance HTML generation library with Rust backend
-- **`nitro`** (framework): Full-stack web development toolkit with advanced features
+- **`nitro`** (abstraction layers): Collection of tools for web development - Active Record, UI Design, Event Routing
 
 ## Quick Start
 
 ### Installation
 
 ```bash
-# Install Nitro framework (includes rusty-tags as dependency)
+# Install Nitro (includes rusty-tags as dependency)
 pip install nitro-boost
 
 # For development - clone and install
@@ -86,7 +92,7 @@ page = Page(
     P("Content here"),
     title="Page Title",
     hdrs=(Meta(charset="utf-8"), Link(rel="stylesheet", href="/app.css")),
-    datastar=True  # Auto-include reactive framework
+    datastar=True  # Auto-include Datastar reactive library
 )
 
 # Reusable templates with decorators
@@ -200,7 +206,7 @@ Div(MyComponent())
 
 ## 🚀 Auto-Routing System (Phase 2)
 
-Nitro's auto-routing system dramatically reduces boilerplate by automatically generating RESTful routes from entity methods. This feature is framework-agnostic and works with FastAPI, Flask, and FastHTML.
+Nitro's auto-routing system dramatically reduces boilerplate by automatically generating RESTful routes from entity methods. Works with FastAPI, Flask, FastHTML, and other Python web frameworks.
 
 ### Quick Example
 
@@ -315,8 +321,8 @@ configure_nitro(app, entities=[CounterV2], prefix="/api/v2")
 - **🎯 Zero Boilerplate**: Define business logic once, routes generated automatically
 - **🔄 Type Safety**: Parameter extraction from type hints with Pydantic validation
 - **🎨 Custom Naming**: Full control over entity names and action paths
-- **📦 Multi-Framework**: Works with FastAPI, Flask, and FastHTML
-- **🔌 Plug & Play**: One-line configuration per framework
+- **📦 Works With Any Framework**: Integrates with FastAPI, Flask, FastHTML, and more
+- **🔌 Plug & Play**: One-line configuration per web framework
 - **📚 OpenAPI**: Automatic Swagger/ReDoc documentation (FastAPI)
 - **🎭 Versioning**: API prefixes for versioning support
 
@@ -343,7 +349,7 @@ Then visit `http://localhost:8095/` for interactive documentation and examples.
 
 ## ⚡ Tailwind CSS CLI
 
-Nitro includes a powerful, framework-agnostic CLI for Tailwind CSS integration that works with any Python web framework.
+Nitro includes a powerful CLI for Tailwind CSS integration that works with any Python web framework.
 
 ### Quick Start
 
@@ -360,7 +366,7 @@ nitro tw build
 
 ### Features
 
-- **🚀 Framework Agnostic**: Works with FastAPI, Django, Flask, FastHTML, Sanic, and any Python framework
+- **🚀 Works Everywhere**: Integrates with FastAPI, Django, Flask, FastHTML, Sanic, and any Python web framework
 - **📦 Standalone Binary**: Downloads and manages Tailwind CSS standalone CLI automatically
 - **⚙️ Smart Configuration**: Auto-detects project structure with environment variable overrides
 - **👀 File Watching**: Development mode with automatic CSS rebuilding
@@ -474,7 +480,7 @@ NITRO_TAILWIND_CSS_OUTPUT="dev/styles.css"
 NITRO_TAILWIND_CSS_OUTPUT="dist/production.css"
 ```
 
-### Framework Examples
+### Integration Examples
 
 #### FastAPI
 
@@ -559,7 +565,7 @@ NITRO_TAILWIND_CONTENT_PATHS='[
 
 ### Integration with Development Servers
 
-The Tailwind CLI runs independently of your web framework, making it perfect for development workflows:
+The Tailwind CLI runs independently of your web application, making it perfect for development workflows:
 
 ```bash
 # Terminal 1: Start your web server
@@ -597,7 +603,7 @@ python -c "from nitro.config import get_nitro_config; print(get_nitro_config().t
 env | grep NITRO_TAILWIND
 ```
 
-## Framework Integration
+## Web Framework Integration Examples
 
 ### FastAPI
 

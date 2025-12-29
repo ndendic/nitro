@@ -1,5 +1,5 @@
 """
-Nitro Framework Adapters - Integration with web frameworks
+Nitro Adapters - Integration with web frameworks
 
 This module provides framework-specific adapters for auto-routing:
 - FastAPI adapter

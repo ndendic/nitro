@@ -78,8 +78,8 @@ async def startup():
         # Create posts
         post1 = Post(
             id="post1",
-            title="Getting Started with Nitro Framework",
-            content="Nitro is a powerful framework for building Python web applications...",
+            title="Getting Started with Nitro",
+            content="Nitro is a set of abstraction layers for building Python web applications...",
             author_id="alice"
         )
         post2 = Post(

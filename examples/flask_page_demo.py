@@ -83,21 +83,22 @@ def about():
             H1("About", class_="text-4xl font-bold text-green-600 mb-4"),
 
             P(
-                "Nitro is a full-stack Python web framework that treats business logic as first-class citizens.",
+                "Nitro is a set of abstraction layers for building Python web applications.",
                 class_="text-lg mb-4"
             ),
 
             P(
-                "It works on top of any Python web framework (Flask, FastAPI, Django, etc.) and provides:",
+                "It works on top of any Python web framework (Flask, FastAPI, Django, etc.) and provides the following features:",
                 class_="text-lg mb-4"
             ),
 
             Ul(
-                Li("Rich domain entities with active record pattern"),
+                Li("Rich domain entities with Active Record pattern"),
                 Li("Hybrid persistence (SQL, Memory, Redis, etc.)"),
-                Li("Event-driven architecture"),
+                Li("Event-driven architecture with Blinker"),
                 Li("High-performance HTML generation with RustyTags"),
                 Li("Reactive UI with Datastar SDK"),
+                Li("Tailwind CSS CLI for building modern web interfaces"),
                 class_="list-disc list-inside space-y-2 mb-6"
             ),
 
