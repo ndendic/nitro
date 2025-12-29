@@ -1,21 +1,10 @@
 import rusty_tags as rt
 from typing import Literal
+from rusty_tags import Fragment
 
-# input[type="date"],
-#                 input[type="datetime-local"],
-#                 input[type="email"],
-#                 input[type="month"],
-#                 input[type="number"],
-#                 input[type="password"],
-#                 input[type="search"],
-#                 input[type="tel"],
-#                 input[type="text"],
-#                 input[type="time"],
-#                 input[type="url"],
-#                 input[type="week"]
 
 def Input(
-        label, 
+        label:str = '', 
         type:Literal['date', 'datetime-local', 'email', 'month', 'number', 'password', 'search', 'tel', 'text', 'time', 'url', 'week'] = 'text', 
         placeholder:str = '', 
         supporting_text:str = '', 
@@ -34,9 +23,9 @@ def Input(
     # The label parameter becomes the floating label, not the placeholder
     placeholder = ' '
     
-    return rt.Label(
-        rt.Span(label, cls='label'),
+    return rt.Div(
+        rt.Span(label, cls='label') if label else Fragment(),
         rt.Input(type=type, placeholder=placeholder, *args, **kwargs),
-        rt.Span(supporting_text, cls='supporting-text') if supporting_text else "",
+        rt.P(supporting_text, cls='supporting-text') if supporting_text else Fragment(),
         cls='field',
     )

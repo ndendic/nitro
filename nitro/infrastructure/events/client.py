@@ -2,7 +2,7 @@ import asyncio
 import uuid
 from typing import Any, Dict
 
-from .events import event, ANY
+from .events import event, ANY, filter_signals
 
 SENTINEL = object()
 client_event = event("client_lifecycle")
@@ -44,8 +44,9 @@ class Client:
 
     def subscribe(self, topic: str, senders: list[str] | Any = ANY):
         """Subscribe to a topic with optional sender filtering"""
-        sig = event(topic)
-        senders_set = set(senders) if senders is not ANY else ANY
+        sigs = filter_signals(topic)
+        if not sigs: sigs = {topic: event(topic)}
+        senders_set = set[str](senders) if senders is not ANY else ANY
         
         # Receiver function for this subscription
         # async def topic_receiver(sender, result: Any):
@@ -55,12 +56,13 @@ class Client:
                     self.queue.put_nowait(result)
         
         # Connect directly to the blinker signal
-        sig.connect(topic_receiver, weak=False)
-        self.subscriptions[topic] = {
-            'senders': senders_set,
-            'receiver': topic_receiver,
-            'signal': sig
-        }
+        for tpc, sig in sigs.items():
+            sig.connect(topic_receiver, weak=False)
+            self.subscriptions[tpc] = {
+                'senders': senders_set,
+                'receiver': topic_receiver,
+                'signal': sig
+            }
 
     def unsubscribe(self, topic: str):
         """Unsubscribe from a topic"""

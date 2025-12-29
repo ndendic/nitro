@@ -1,0 +1,356 @@
+/* Date */
+@layer components {
+    /**
+ * Shadcn-themed CSS for vanillajs-datepicker / flowbite-datepicker
+ * Maps to shadcn CSS variables (--background, --foreground, --primary, etc.)
+ * 
+ * Usage: Include this CSS after the default datepicker CSS, or use standalone.
+ * Requires shadcn CSS variables to be defined in :root
+ */
+
+  .datepicker {
+	width: min-content;
+  }
+  
+  .datepicker:not(.active) {
+	display: none;
+  }
+  
+  .datepicker-dropdown {
+	padding-top: 4px;
+	position: absolute;
+	z-index: 50;
+	max-width: min-content;
+  }
+  
+  .datepicker-dropdown.datepicker-orient-top {
+	padding-bottom: 4px;
+	padding-top: 0;
+  }
+  
+  /* Main picker container - maps to popover */
+  .datepicker-picker {
+	background-color: var(--popover);
+	color: var(--popover-foreground);
+	border: 1px solid var(--border);
+	border-radius: var(--radius, 0.5rem);
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+  
+  .datepicker-dropdown .datepicker-picker {
+	box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+  
+  .datepicker-main {
+	flex: auto;
+	padding: 0.75rem;
+  }
+  
+  /* Title bar */
+  .datepicker-title {
+	background-color: var(--muted);
+	border-bottom: 1px solid var(--border);
+	font-weight: 500;
+	padding: 0.5rem 0.75rem;
+	text-align: center;
+	font-size: 0.875rem;
+  }
+  
+  /* Controls container */
+  .datepicker-controls {
+	display: flex;
+	gap: 0.25rem;
+  }
+  
+  .datepicker-header .datepicker-controls {
+	padding: 0.25rem 0.25rem 0.5rem;
+  }
+  
+  /* Buttons - maps to shadcn button ghost/outline */
+  .datepicker-controls .button {
+	align-items: center;
+	background-color: transparent;
+	border: none;
+	border-radius: calc(var(--radius, 0.5rem) - 2px);
+	color: var(--foreground);
+	cursor: pointer;
+	display: inline-flex;
+	font-size: 0.875rem;
+	font-weight: 500;
+	height: 2rem;
+	justify-content: center;
+	line-height: 1;
+	margin: 0;
+	padding: 0 0.5rem;
+	position: relative;
+	text-align: center;
+	vertical-align: top;
+	white-space: nowrap;
+	transition: background-color 0.15s, color 0.15s;
+  }
+  
+  .datepicker-controls .button:active,
+  .datepicker-controls .button:focus {
+	outline: none;
+  }
+  
+  .datepicker-controls .button:hover {
+	background-color: var(--accent);
+	color: var(--accent-foreground);
+  }
+  
+  .datepicker-controls .button:focus-visible {
+	outline: 2px solid var(--ring);
+	outline-offset: 2px;
+  }
+  
+  .datepicker-controls .button:active {
+	background-color: var(--accent);
+  }
+  
+  .datepicker-controls .button[disabled] {
+	cursor: not-allowed;
+	opacity: 0.5;
+  }
+  
+  /* Header buttons */
+  .datepicker-header .datepicker-controls .button {
+	font-weight: 500;
+  }
+  
+  /* Footer buttons */
+  .datepicker-footer .datepicker-controls .button {
+	background-color: var(--secondary);
+	color: var(--secondary-foreground);
+	border-radius: calc(var(--radius, 0.5rem) - 2px);
+	flex: auto;
+	font-size: 0.75rem;
+	margin: 0.25rem;
+	padding: 0.5rem 1rem;
+  }
+  
+  .datepicker-footer .datepicker-controls .button:hover {
+	background-color: var(--secondary) / 0.8;
+  };
+  
+  /* View switch (month/year display) */
+  .datepicker-controls .view-switch {
+	flex: auto;
+  }
+  
+  /* Prev/Next buttons */
+  .datepicker-controls .next-button,
+  .datepicker-controls .prev-button {
+	flex: 0 0 14.2857142857%;
+	padding-left: 0.25rem;
+	padding-right: 0.25rem;
+  }
+  
+  .datepicker-controls .next-button.disabled,
+  .datepicker-controls .prev-button.disabled {
+	visibility: hidden;
+  }
+  
+  /* Grid layout */
+  .datepicker-grid,
+  .datepicker-view {
+	display: flex;
+  }
+  
+  .datepicker-view {
+	align-items: stretch;
+	width: 16rem;
+  }
+  
+  .datepicker-grid {
+	flex: auto;
+	flex-wrap: wrap;
+  }
+  
+  /* Days container */
+  .datepicker .days {
+	display: flex;
+	flex: auto;
+	flex-direction: column;
+  }
+  
+  .datepicker .days-of-week {
+	display: flex;
+  }
+  
+  /* Week numbers */
+  .datepicker .week-numbers {
+	display: flex;
+	flex: 0 0 9.6774193548%;
+	flex-direction: column;
+  }
+  
+  .datepicker .weeks {
+	align-items: stretch;
+	display: flex;
+	flex: auto;
+	flex-direction: column;
+  }
+  
+  /* Base span styles */
+  .datepicker span {
+	-webkit-touch-callout: none;
+	align-items: center;
+	border-radius: calc(var(--radius, 0.5rem) - 2px);
+	cursor: default;
+	display: flex;
+	justify-content: center;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+  }
+  
+  /* Day of week headers */
+  .datepicker .dow {
+	font-size: 0.75rem;
+	font-weight: 500;
+	height: 2rem;
+	color: var(--muted-foreground);
+  }
+  
+  /* Week numbers */
+  .datepicker .week {
+	color: var(--muted-foreground);
+	flex: auto;
+	font-size: 0.75rem;
+  }
+  
+  /* Day cells */
+  .datepicker .days .dow,
+  .datepicker-cell {
+	flex-basis: 14.2857142857%;
+  }
+  
+  .datepicker-cell {
+	height: 2.25rem;
+	font-size: 0.875rem;
+  }
+  
+  /* Month/Year cells */
+  .datepicker-cell:not(.day) {
+	flex-basis: 25%;
+	height: 4rem;
+  }
+  
+  /* Hover state */
+  .datepicker-cell:not(.disabled):hover {
+	background-color: var(--accent);
+	color: var(--accent-foreground);
+	cursor: pointer;
+  }
+  
+  /* Focused state (keyboard navigation) */
+  .datepicker-cell.focused:not(.selected) {
+	background-color: var(--accent);
+	color: var(--accent-foreground);
+  }
+  
+  /* Selected state - maps to primary */
+  .datepicker-cell.selected,
+  .datepicker-cell.selected:hover {
+	background-color: var(--primary);
+	color: var(--primary-foreground);
+	font-weight: 500;
+  }
+  
+  /* Disabled state */
+  .datepicker-cell.disabled {
+	color: var(--muted-foreground);
+	opacity: 0.5;
+  }
+  
+  /* Previous/Next month days */
+  .datepicker-cell.next:not(.disabled),
+  .datepicker-cell.prev:not(.disabled) {
+	color: var(--muted-foreground);
+  }
+  
+  .datepicker-cell.next.selected,
+  .datepicker-cell.prev.selected {
+	color: var(--primary-foreground);
+  }
+  
+  /* Highlighted dates */
+  .datepicker-cell.highlighted:not(.selected):not(.range):not(.today) {
+	background-color: var(--muted);
+	border-radius: 0;
+  }
+  
+  .datepicker-cell.highlighted:not(.selected):not(.range):not(.today):not(.disabled):hover {
+	background-color: var(--accent);
+  }
+  
+  .datepicker-cell.highlighted:not(.selected):not(.range):not(.today).focused {
+	background-color: var(--accent);
+  }
+  
+  /* Today indicator - uses a ring instead of solid background */
+  .datepicker-cell.today:not(.selected) {
+	background-color: var(--accent);
+	color: var(--accent-foreground);
+	font-weight: 500;
+  }
+  
+  .datepicker-cell.today:not(.selected):not(.disabled) {
+	color: var(--accent-foreground);
+  }
+  
+  .datepicker-cell.today.focused:not(.selected) {
+	background-color: var(--accent);
+  }
+  
+  /* Range selection */
+  .datepicker-cell.range-end:not(.selected),
+  .datepicker-cell.range-start:not(.selected) {
+	background-color: var(--primary);
+	color: var(--primary-foreground);
+  }
+  
+  .datepicker-cell.range-end.focused:not(.selected),
+  .datepicker-cell.range-start.focused:not(.selected) {
+	background-color: var(--primary) / 0.9;
+  }
+  
+  .datepicker-cell.range-start:not(.range-end) {
+	border-radius: calc(var(--radius, 0.5rem) - 2px) 0 0 calc(var(--radius, 0.5rem) - 2px);
+  }
+  
+  .datepicker-cell.range-end:not(.range-start) {
+	border-radius: 0 calc(var(--radius, 0.5rem) - 2px) calc(var(--radius, 0.5rem) - 2px) 0;
+  }
+  
+  .datepicker-cell.range {
+	background-color: var(--accent);
+	border-radius: 0;
+  }
+  
+  .datepicker-cell.range:not(.disabled):not(.focused):not(.today):hover {
+	background-color: var(--accent) / 0.8;
+  }
+  
+  .datepicker-cell.range.disabled {
+	color: var(--muted-foreground);
+  }
+  
+  .datepicker-cell.range.focused {
+	background-color: var(--accent);
+  }
+  
+  /* Input field states */
+  .datepicker-input.in-edit {
+	border-color: var(--ring);
+  }
+  
+  .datepicker-input.in-edit:active,
+  .datepicker-input.in-edit:focus {
+	box-shadow: 0 0 0 2px var(--ring) / 0.2;
+	outline: none;
+  }
+}

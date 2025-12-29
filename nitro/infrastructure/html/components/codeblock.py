@@ -1,14 +1,21 @@
 from typing import Any
-from enum import Enum
-
 import rusty_tags as rt
 from .utils import cn
 
+
+def CodeSpan(
+    *c,  # Contents of CodeSpan tag (inline text code snippets)
+    cls="",  # Classes in addition to CodeSpan styling
+    **kwargs,  # Additional args for CodeSpan tag
+) -> rt.HtmlString:  # Code(..., cls='codespan')
+    "A CodeSpan with Styling"
+    return rt.Code(*c, cls=cn("codespan", cn(cls)), **kwargs)
 
 def CodeBlock(
     *content: str,  # Contents of Code tag (often text)
     cls: str = "",  # Classes for the outer container
     code_cls: str = "",  # Classes for the code tag
+    pre_cls: str = "",  # Classes for the pre tag
     **kwargs: Any  # Additional args for Code tag
 ) -> rt.HtmlString:
     """
@@ -33,7 +40,8 @@ def CodeBlock(
     """
     return rt.Div(
         rt.Pre(
-            rt.Code(*content, cls=cn(code_cls), **kwargs)
+            rt.Code(*content, cls=cn(code_cls), **kwargs),
+            pre_cls=cn(pre_cls),
         ),
         cls=cn(cls)
     )

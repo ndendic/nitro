@@ -16,9 +16,9 @@ def emit_to_topic(topic: str | list[str] | Any, sender: str | Any = ANY, *args, 
     else:
         emit(topic, sender, *args, **kwargs)
 
-def sse_elements(
+def emit_elements(
         elements: str | _HtmlProvider,
-        selector: str,
+        selector: str | None = None,
         mode: ElementPatchMode = ElementPatchMode.REPLACE,
         use_view_transition: bool | None = None,
         event_id: str | None = None,
@@ -27,7 +27,7 @@ def sse_elements(
         sender: str | Any = ANY):
     
     result = SSE.patch_elements(elements,
-        selector=selector,
+        selector=selector if selector else None,
         mode=mode,
         # use_view_transitions=use_view_transition, TODO there is a bug in datastar_py here
         event_id=event_id,
@@ -52,7 +52,7 @@ def remove_elements(
         emit_to_topic(topic, sender, result=result)
         return result
 
-def sse_signals(
+def emit_signals(
         signals: dict | str,
         *,
         event_id: str | None = None,
@@ -94,9 +94,9 @@ def redirect(
     return result
 
 __all__ = [
-    'sse_elements',
+    'emit_elements',
     'remove_elements',
-    'sse_signals',
+    'emit_signals',
     'execute_script',
     'redirect',
     'datastar_response',

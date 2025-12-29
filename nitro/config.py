@@ -36,7 +36,7 @@ class NitroConfig(BaseSettings):
 
     project_root: Path = Field(default_factory=Path.cwd, description="Project root directory")
     tailwind: TailwindConfig = Field(default_factory=TailwindConfig, description="Tailwind CSS configuration")
-
+    db_url: str = Field(default="sqlite:///nitro.db", description="Database URL")
     @computed_field
     @property
     def css_input_absolute(self) -> Path:

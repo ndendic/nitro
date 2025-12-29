@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 import typer
@@ -5,8 +6,10 @@ from rich.progress import track
 
 from nitro.config import NitroConfig, get_nitro_config
 from nitro.application.tailwind_builder.binary import TailwindBinaryManager
-from nitro.application.templates.css_input import generate_css_input
 from nitro.application.cli.utils import confirm, console, error, info, success
+
+# Path to the CSS templates folder
+CSS_TEMPLATES_DIR = Path(__file__).parent.parent.parent / "templates" / "css"
 
 
 def validate_tailwind_project(config: NitroConfig, force: bool = False) -> None:
@@ -17,6 +20,7 @@ def validate_tailwind_project(config: NitroConfig, force: bool = False) -> None:
     files_to_check = [
         (config.css_input_absolute, "CSS input file"),
         (config.css_output_absolute, "CSS output file"),
+        (config.css_input_absolute.parent / "basecoat", "BaseCoat components folder"),
     ]
 
     # Also check for common Tailwind config files
@@ -62,14 +66,27 @@ def setup_css_directories(config: NitroConfig, verbose: bool = False) -> None:
                 )
 
 
-def create_css_input(config: NitroConfig, verbose: bool = False) -> None:
-    """Create Tailwind CSS input file."""
-    input_path = config.css_input_absolute
-    # Ensure parent directory exists (defensive programming)
-    input_path.parent.mkdir(parents=True, exist_ok=True)
-    input_path.write_text(generate_css_input(config))
-    if verbose:
-        console.print(f"[green]Created:[/green] {input_path.relative_to(config.project_root)}")
+def copy_css_folder(config: NitroConfig, verbose: bool = False) -> None:
+    """Copy the CSS templates folder to the project."""
+    # Destination is the parent directory of the css_input file
+    dest_dir = config.css_input_absolute.parent
+
+    # Ensure destination exists
+    dest_dir.mkdir(parents=True, exist_ok=True)
+
+    # Copy each item from the CSS templates directory
+    for item in CSS_TEMPLATES_DIR.iterdir():
+        dest_path = dest_dir / item.name
+        if item.is_dir():
+            if dest_path.exists():
+                shutil.rmtree(dest_path)
+            shutil.copytree(item, dest_path)
+            if verbose:
+                console.print(f"[green]Copied:[/green] {dest_path.relative_to(config.project_root)}/")
+        else:
+            shutil.copy2(item, dest_path)
+            if verbose:
+                console.print(f"[green]Copied:[/green] {dest_path.relative_to(config.project_root)}")
 
 
 def download_tailwind_binary(verbose: bool = False) -> Path:
@@ -144,7 +161,7 @@ def init_command(
         steps = [
             ("Creating CSS directories", lambda: setup_css_directories(config, verbose)),
             ("Downloading Tailwind binary", lambda: download_tailwind_binary(verbose)),
-            (f"Creating CSS input file at {config.tailwind.css_input}", lambda: create_css_input(config, verbose)),
+            (f"Copying CSS templates to {config.css_input_absolute.parent.relative_to(config.project_root)}", lambda: copy_css_folder(config, verbose)),
             ("Updating .gitignore", lambda: create_gitignore_entries(config, verbose)),
         ]
 
@@ -161,6 +178,7 @@ def init_command(
         console.print("  1. Run [blue]nitro tw dev[/blue] to start development")
         console.print("  2. Run [blue]nitro tw build[/blue] for production CSS")
         console.print(f"  3. Edit [blue]{config.tailwind.css_input}[/blue] to customize your styles")
+        console.print(f"  4. BaseCoat components available in [blue]{config.css_input_absolute.parent.relative_to(config.project_root)}/basecoat/[/blue]")
 
     except Exception as e:
         error(f"Initialization failed: {e}")

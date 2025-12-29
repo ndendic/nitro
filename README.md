@@ -2,11 +2,17 @@
 
 ⚠️ **Early Beta** - This library is in active development and APIs may change.
 
-A booster add-on for your favourite web-framework. Built on rusty-tags core. Nitro provides a web development toolkit with intelligent templating, reactive component support, event system, framework integrations, and a powerful Tailwind CSS CLI.
+**Nitro is a collection of abstraction layers for Python web development.** It is not a framework - it's a toolkit that works with your favorite web frameworks (FastAPI, Flask, FastHTML, Django, etc.).
 
-## What Nitro Does
+Built on rusty-tags core, Nitro provides intelligent templating, reactive component support, event system, and a powerful Tailwind CSS CLI.
 
-Nitro provides a comprehensive web development framework with:
+## Three Core Abstraction Layers
+
+1. **Active Record** - Entity-centric persistence with rich domain models
+2. **Front-end UI Design** - High-performance HTML generation, reactive components, templating
+3. **Event Routing** - Domain events with Blinker, decoupled side effects
+
+## What Nitro Provides
 
 - **🏷️ Complete HTML5/SVG Tags**: All standard HTML5 and SVG elements powered by rusty-tags core
 - **⚡ High Performance**: 3-10x faster than pure Python through Rust-optimized HTML generation
@@ -14,22 +20,22 @@ Nitro provides a comprehensive web development framework with:
 - **🔄 Reactive Components**: Built-in Datastar integration for modern web applications
 - **🏗️ FastHTML-Style API**: Familiar syntax with callable chaining support
 - **🧠 Intelligent Processing**: Automatic attribute handling and smart type conversion
-- **🎯 Tailwind CSS CLI**: Framework-agnostic CLI for Tailwind CSS integration and build management
-- **📦 Framework Ready**: Works with FastAPI, Flask, Django, and other Python web frameworks
+- **🎯 Tailwind CSS CLI**: CLI for Tailwind CSS integration and build management
+- **📦 Works Everywhere**: Integrates with FastAPI, Flask, Django, FastHTML, and any Python web framework
 
 ## Architecture
 
 Nitro is built on top of the `rusty-tags` core package:
 
 - **`rusty-tags`** (core): High-performance HTML generation library with Rust backend
-- **`nitro`** (framework): Full-stack web development toolkit with advanced features
+- **`nitro`** (abstraction layers): Collection of tools for web development - Active Record, UI Design, Event Routing
 
 ## Quick Start
 
 ### Installation
 
 ```bash
-# Install Nitro framework (includes rusty-tags as dependency)
+# Install Nitro (includes rusty-tags as dependency)
 pip install nitro-boost
 
 # For development - clone and install
@@ -78,7 +84,7 @@ Text, Image, ForeignObject
 
 **Page Templates:**
 ```python
-from nitro.utils import Page, create_template
+from nitro.utils import Page, page_template
 
 # Complete HTML documents
 page = Page(
@@ -86,11 +92,11 @@ page = Page(
     P("Content here"),
     title="Page Title",
     hdrs=(Meta(charset="utf-8"), Link(rel="stylesheet", href="/app.css")),
-    datastar=True  # Auto-include reactive framework
+    datastar=True  # Auto-include Datastar reactive library
 )
 
 # Reusable templates with decorators
-@create_template("My App", datastar=True)
+@page_template("My App", datastar=True)
 def my_view():
     return Div("Page content")
 ```
@@ -198,9 +204,152 @@ class MyComponent:
 Div(MyComponent())
 ```
 
+## 🚀 Auto-Routing System (Phase 2)
+
+Nitro's auto-routing system dramatically reduces boilerplate by automatically generating RESTful routes from entity methods. Works with FastAPI, Flask, FastHTML, and other Python web frameworks.
+
+### Quick Example
+
+```python
+from nitro.domain.entities.base_entity import Entity
+from nitro.infrastructure.routing import action
+from fastapi import FastAPI
+from nitro.adapters.fastapi import configure_nitro
+
+# Define entity with actions
+class Counter(Entity, table=True):
+    count: int = 0
+
+    @action()  # Automatically routed!
+    def increment(self, amount: int = 1) -> dict:
+        self.count += amount
+        self.save()
+        return {"count": self.count}
+
+    @action()
+    def reset(self) -> dict:
+        self.count = 0
+        self.save()
+        return {"count": 0}
+
+# Configure app (one line!)
+app = FastAPI()
+configure_nitro(app, entities=[Counter])
+
+# Routes automatically generated:
+# POST /counter/{id}/increment?amount=5
+# POST /counter/{id}/reset
+```
+
+**Before Auto-Routing:** 190 lines of boilerplate route handlers
+**After Auto-Routing:** < 50 lines of pure business logic
+
+### Custom Route Naming
+
+Control your API design with custom entity names and action paths:
+
+#### Custom Entity Names
+
+Use `__route_name__` for plural forms or custom naming:
+
+```python
+class User(Entity):
+    __route_name__ = "users"  # Plural form
+
+    username: str = ""
+
+    @action()
+    def activate(self):
+        self.is_active = True
+        self.save()
+        return {"status": "activated"}
+
+# Generated URL: POST /users/{id}/activate (not /user/{id}/activate)
+```
+
+#### Custom Action Paths
+
+Use `@action(path="...")` for cleaner URLs:
+
+```python
+class BlogPost(Entity):
+    __route_name__ = "posts"
+
+    title: str = ""
+    is_published: bool = False
+
+    @action(path="/publish")  # Custom path
+    def make_public(self):
+        self.is_published = True
+        self.save()
+        return {"status": "published"}
+
+# Generated URL: POST /posts/{id}/publish (not /posts/{id}/make_public)
+```
+
+#### Combined Customization
+
+```python
+class BlogPost(Entity):
+    __route_name__ = "posts"     # Custom entity name
+
+    @action(path="/publish")     # Custom action path
+    def make_public(self):
+        ...
+
+# Generated URL: POST /posts/{id}/publish
+```
+
+### API Versioning with Prefixes
+
+Support multiple API versions simultaneously:
+
+```python
+# V1 API - Simple counter
+configure_nitro(app, entities=[CounterV1], prefix="/api/v1")
+
+# V2 API - Enhanced counter with new features
+configure_nitro(app, entities=[CounterV2], prefix="/api/v2")
+
+# Both versions coexist:
+# POST /api/v1/counter/{id}/increment
+# POST /api/v2/counter/{id}/increment
+```
+
+### Features
+
+- **🎯 Zero Boilerplate**: Define business logic once, routes generated automatically
+- **🔄 Type Safety**: Parameter extraction from type hints with Pydantic validation
+- **🎨 Custom Naming**: Full control over entity names and action paths
+- **📦 Works With Any Framework**: Integrates with FastAPI, Flask, FastHTML, and more
+- **🔌 Plug & Play**: One-line configuration per web framework
+- **📚 OpenAPI**: Automatic Swagger/ReDoc documentation (FastAPI)
+- **🎭 Versioning**: API prefixes for versioning support
+
+### Try It
+
+Run the interactive demo:
+
+```bash
+# Custom routing demo
+uvicorn examples.custom_routes_demo:app --port 8095
+
+# API versioning demo
+uvicorn examples.versioned_api_demo:app --port 8090
+```
+
+Then visit `http://localhost:8095/` for interactive documentation and examples.
+
+### Learn More
+
+- **📖 [Custom Route Naming Guide](docs/custom_route_naming.md)**: Complete guide with examples
+- **📖 [Route Prefixes Guide](docs/route_prefixes_guide.md)**: API versioning strategies
+- **🎯 [Phase 2 Design](PHASE_2_AUTO_ROUTING_DESIGN.md)**: Technical architecture
+- **💡 [Examples](examples/)**: Working demo applications
+
 ## ⚡ Tailwind CSS CLI
 
-Nitro includes a powerful, framework-agnostic CLI for Tailwind CSS integration that works with any Python web framework.
+Nitro includes a powerful CLI for Tailwind CSS integration that works with any Python web framework.
 
 ### Quick Start
 
@@ -217,7 +366,7 @@ nitro tw build
 
 ### Features
 
-- **🚀 Framework Agnostic**: Works with FastAPI, Django, Flask, FastHTML, Sanic, and any Python framework
+- **🚀 Works Everywhere**: Integrates with FastAPI, Django, Flask, FastHTML, Sanic, and any Python web framework
 - **📦 Standalone Binary**: Downloads and manages Tailwind CSS standalone CLI automatically
 - **⚙️ Smart Configuration**: Auto-detects project structure with environment variable overrides
 - **👀 File Watching**: Development mode with automatic CSS rebuilding
@@ -331,7 +480,7 @@ NITRO_TAILWIND_CSS_OUTPUT="dev/styles.css"
 NITRO_TAILWIND_CSS_OUTPUT="dist/production.css"
 ```
 
-### Framework Examples
+### Integration Examples
 
 #### FastAPI
 
@@ -416,7 +565,7 @@ NITRO_TAILWIND_CONTENT_PATHS='[
 
 ### Integration with Development Servers
 
-The Tailwind CLI runs independently of your web framework, making it perfect for development workflows:
+The Tailwind CLI runs independently of your web application, making it perfect for development workflows:
 
 ```bash
 # Terminal 1: Start your web server
@@ -454,17 +603,17 @@ python -c "from nitro.config import get_nitro_config; print(get_nitro_config().t
 env | grep NITRO_TAILWIND
 ```
 
-## Framework Integration
+## Web Framework Integration Examples
 
 ### FastAPI
 
 ```python
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from nitro.utils import create_template
+from nitro.utils import page_template
 
 app = FastAPI()
-page = create_template("My API", datastar=True)
+page = page_template("My API", datastar=True)
 
 @app.get("/")
 @page(wrap_in=HTMLResponse)
@@ -500,6 +649,43 @@ content = Div(H1("Notebook Content"), style="color: blue;")
 show(content)  # Renders directly in Jupyter cells
 ```
 
+## Documentation
+
+Comprehensive documentation is available:
+
+- **📖 [Tutorial](docs/TUTORIAL.md)**: Build a Todo app in 5 minutes
+- **📚 [API Reference](docs/API_REFERENCE.md)**: Complete API documentation
+- **🔄 [Migration Guide](examples/migration_from_starmodel.md)**: Migrate from StarModel
+- **📝 [Changelog](CHANGELOG.md)**: Version history and breaking changes
+- **💡 [Examples](examples/)**: Complete working applications
+
+### Quick Start
+
+```bash
+# Install
+pip install nitro-boost
+
+# Follow 5-minute tutorial
+# See docs/TUTORIAL.md
+```
+
+### Development Requirements
+
+For development and building from source:
+- **Python 3.10+**: Core runtime
+- **Rust toolchain**: Required for building RustyTags (HTML generation core)
+  - Install Rust: https://rustup.rs/
+  - Verify: `rustc --version`
+- **Maturin**: Python-Rust build tool
+  - Install: `pip install maturin`
+
+```bash
+# Clone and build
+git clone <repository>
+cd nitro
+pip install -e .
+```
+
 ## License
 
 MIT License - See LICENSE file for details.
@@ -512,4 +698,4 @@ Contributions welcome! Please check the repository for contributing guidelines a
 
 - **Repository**: https://github.com/ndendic/Nitro
 - **Issues**: https://github.com/ndendic/Nitro/issues
-- **Examples**: See `lab/` directory for complete applications
+- **Examples**: See `examples/` directory for complete applications

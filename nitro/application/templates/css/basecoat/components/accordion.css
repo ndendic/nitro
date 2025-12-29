@@ -1,0 +1,26 @@
+/* Accordion / Collapsible */
+@layer components {
+  details {
+    &::details-content {
+      block-size: 0;
+      @apply block opacity-0 transition-discrete transition-all;
+    }
+    &[open]::details-content {
+      block-size: auto;
+      block-size: calc-size(auto, size);
+      @apply opacity-100;
+    }
+    summary {
+      @apply inline-flex items-center cursor-pointer;
+      h2 {
+        @apply flex flex-1 items-start justify-between gap-4 py-4 text-left text-sm font-medium hover:underline;
+        svg {
+          @apply text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200 group-open:rotate-180;
+        }
+      }
+    }
+  }
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+}

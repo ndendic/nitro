@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.claude/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+
+# Git
+.git/
+.gitignore
+
+# Database files (don't include in image)
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment files (use secrets management)
+.env
+.env.*
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Session files
+session*.txt
+*.sesskey
+
+# Logs
+logs/
+*.log

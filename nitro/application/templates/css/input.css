@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Basecoat Base CSS */
+@import "./basecoat/base/base.css";
+
+/* Basecoat Themes CSS */
+@import "./basecoat/themes.css";
+
+/* Basecoat Components CSS */
+@import "./basecoat/components/base.css";
+@import "./basecoat/components/alert.css";
+@import "./basecoat/components/badge.css";
+@import "./basecoat/components/button.css";
+@import "./basecoat/components/button-group.css";
+@import "./basecoat/components/card.css";
+@import "./basecoat/components/form.css";
+@import "./basecoat/components/accordion.css";
+@import "./basecoat/components/command.css";
+@import "./basecoat/components/dialog.css";
+@import "./basecoat/components/dropdown-menu.css";
+@import "./basecoat/components/dropzone.css";
+@import "./basecoat/components/date.css";
+@import "./basecoat/components/dropzone.css";
+@import "./basecoat/components/field.css";
+@import "./basecoat/components/kbd.css";
+@import "./basecoat/components/popover.css";
+@import "./basecoat/components/progress.css";
+@import "./basecoat/components/sidebar.css";
+@import "./basecoat/components/table.css";
+@import "./basecoat/components/tabs.css";
+@import "./basecoat/components/toast.css";
+@import "./basecoat/components/tooltip.css";

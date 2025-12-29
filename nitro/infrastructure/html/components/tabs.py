@@ -12,27 +12,27 @@ def Tabs(
     default_tab: str,
     signal: Optional[str] = None,
     cls: str = "",
-    **attrs: Any
+    **attrs: Any,
 ) -> rt.HtmlString:
     """
     Tabs anatomical pattern component using function closures for clean composition.
-    
+
     This component handles complex coordination between:
-    - Tab triggers with proper ARIA attributes  
+    - Tab triggers with proper ARIA attributes
     - Tab content panels with associations
     - State management via Datastar signals
     - Accessibility and keyboard navigation
-    
+
     Args:
         *children: TabsList and TabsContent function components
         default_tab: ID of initially active tab
         signal: Signal name for tab state (auto-generated if not provided)
         cls: CSS classes for root container
         **attrs: Additional HTML attributes
-        
+
     Returns:
         Complete tabs structure with proper coordination
-        
+
     Example:
         Tabs(
             TabsList(
@@ -46,61 +46,50 @@ def Tabs(
     """
     if not signal:
         signal = f"tabs_{next(_tab_ids)}"
-    
+
     # Process children by calling them with the signal context
     processed_children = [
-        child(signal, default_tab) if callable(child) else child
-        for child in children
+        child(signal, default_tab) if callable(child) else child for child in children
     ]
-    
+
     return rt.Div(
         *processed_children,
         signals=Signals(**{signal: default_tab}),
-        cls=cn("tabs-container", cls),
-        **attrs
+        cls=cn("tabs", cls),
+        **attrs,
     )
 
 
-def TabsList(
-    *children,
-    cls: str = "",
-    **attrs: Any
-):
+def TabsList(*children, cls: str = "", **attrs: Any):
     """
     Container for tab trigger buttons with proper tablist role.
-    
+
     Args:
         *children: TabsTrigger components
         cls: CSS classes for the tab list
         **attrs: Additional HTML attributes
     """
+
     def create_list(signal: str, default_tab: str):
         # Process child triggers with signal context
         processed_children = [
             child(signal, default_tab) if callable(child) else child
             for child in children
         ]
-        
+
         return rt.Div(
-            *processed_children,
-            role="tablist",
-            cls=cn("tabs-list", cls),
-            **attrs
+            *processed_children, role="tablist", cls=cn("tabs-list", cls), **attrs
         )
-    
+
     return create_list
 
 
 def TabsTrigger(
-    *children,
-    id: str,
-    disabled: bool = False,
-    cls: str = "",
-    **attrs: Any
+    *children, id: str, disabled: bool = False, cls: str = "", **attrs: Any
 ):
     """
     Individual tab trigger button with proper ARIA attributes.
-    
+
     Args:
         *children: Button content (text, icons, etc.)
         id: Unique tab identifier
@@ -108,9 +97,10 @@ def TabsTrigger(
         cls: CSS classes for the trigger
         **attrs: Additional HTML attributes
     """
+
     def create_trigger(signal: str, default_tab: str):
         is_active = default_tab == id
-        
+
         return rt.Button(
             *children,
             id=id,
@@ -122,31 +112,28 @@ def TabsTrigger(
                 "aria-selected": "true" if is_active else f"${signal} === '{id}'",
                 "aria-controls": f"panel-{id}",
                 "tabindex": "0" if is_active else "-1",
-                "data-attr-aria-selected": f"${signal} === '{id}'",
-                "data-attr-tabindex": f"${signal} === '{id}' ? '0' : '-1'",
+                "data-attr:aria-selected": f"${signal} === '{id}'",
+                "data-class:selected": f"${signal} === '{id}'",
+                "data-attr:tabindex": f"${signal} === '{id}' ? '0' : '-1'",
             },
             cls=cn("tabs-trigger", cls),
-            **attrs
+            **attrs,
         )
-    
+
     return create_trigger
 
 
-def TabsContent(
-    *children,
-    id: str,
-    cls: str = "",
-    **attrs: Any
-):
+def TabsContent(*children, id: str, cls: str = "", **attrs: Any):
     """
     Tab content panel that shows/hides based on active tab.
-    
+
     Args:
         *children: Panel content
         id: Tab identifier (matches TabsTrigger id)
         cls: CSS classes for the content panel
         **attrs: Additional HTML attributes
     """
+
     def create_content(signal: str, default_tab: str):
         return rt.Div(
             *children,
@@ -158,7 +145,7 @@ def TabsContent(
                 "aria-labelledby": id,
             },
             cls=cn("tabs-content", cls),
-            **attrs
+            **attrs,
         )
-    
+
     return create_content

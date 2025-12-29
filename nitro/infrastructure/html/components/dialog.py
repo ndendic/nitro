@@ -1,101 +1,65 @@
+"""Dialog component following Basecoat UI patterns.
+
+A modal dialog component using native HTML <dialog> element with proper
+accessibility attributes and keyboard support.
+"""
+
 from typing import Any, Optional
-from rusty_tags import *
-from rusty_tags.datastar import Signals
-
-# Import the native dialog element (capital D is the HTML dialog element)
-from rusty_tags import Dialog as native_dialog
-
-default_style = Style("""
-.dialog {
-    top: 0;
-    bottom: 0;
-    opacity: 0;
-    transition: all;
-    transition-behavior: allow-discrete;
-
-    &:is([open],:popover-open) {
-      opacity: 100;
-
-      &::backdrop {
-        opacity: 100;
-      }
-      > article {
-        scale: 100;
-      }
-
-      @starting-style {
-        opacity: 0;
-
-        &::backdrop {
-          opacity: 0;
-        }
-        > article {
-          scale: 95;
-        }
-      }
-    }
-    &::backdrop {
-      opacity: 0;
-      transition: all;
-      transition-behavior: allow-discrete;
-    }
-  }
-};
-""")
+from rusty_tags import Div, Header, Footer, H2, HtmlString, P
+from rusty_tags import Dialog as NativeDialog
+from .utils import cn
+from .button import Button, ButtonVariant
 
 def Dialog(
     *children: Any,
-    id: Optional[str] = None,
-    default_open: bool = False,
-    modal: bool = True,
-    close_on_escape: bool = True,
-    close_on_backdrop: bool = True,
+    id: str,
     cls: str = "",
     **attrs: Any,
 ) -> HtmlString:
-    """Simplified dialog component using standard HTML <dialog> element.
-    
+    """Dialog container using native HTML <dialog> element.
+
+    Creates a modal dialog following Basecoat UI patterns with proper
+    accessibility attributes and backdrop interaction.
+
     Args:
-        *children: Dialog content elements
-        id: Dialog ID (generates signal `$<id>_open`)
-        default_open: Whether dialog starts open
-        modal: Whether to use showModal() vs show()
-        close_on_escape: Whether ESC key closes dialog
-        close_on_backdrop: Whether clicking backdrop closes dialog
-        cls: CSS classes for dialog element
-        **attrs: Additional attributes for dialog element
+        *children: DialogHeader, DialogBody, DialogFooter components
+        id: Unique identifier for the dialog (required)
+        cls: Additional CSS classes
+        **attrs: Additional HTML attributes
+
+    Returns:
+        Complete dialog structure
+
+    Example:
+        Dialog(
+            DialogHeader(
+                DialogTitle("Edit Profile", id="profile-title"),
+                DialogDescription("Make changes to your profile.", id="profile-desc"),
+                DialogClose(dialog_id="profile-dialog"),
+            ),
+            DialogBody(
+                # Form fields here
+            ),
+            DialogFooter(
+                Button("Cancel", on_click="this.closest('dialog').close()"),
+                Button("Save", variant="primary"),
+            ),
+            id="profile-dialog",
+        )
     """
-    if not id:
-        raise ValueError("Dialog requires an 'id' parameter")
-    
-    # Convert kebab-case to snake_case for signal name
-    signal_name = f"{id.replace('-', '_')}_open"
-    
-    dialog_attrs = dict(attrs)
-    dialog_attrs["id"] = id
-    dialog_attrs["cls"] = cls
-    dialog_attrs["aria-modal"] = "true" if modal else "false"
-    
-    # Basic dialog attributes
-    if default_open:
-        dialog_attrs["open"] = ""
-    
-    # Handle escape key
-    if not close_on_escape:
-        dialog_attrs["data_on_keydown"] = (
-            "if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); }"
-        )
-    
-    # Handle backdrop clicks
-    if not close_on_backdrop:
-        dialog_attrs["data_on_click"] = (
-            "if (event.target === event.currentTarget) event.preventDefault()"
-        )
-    
-    return native_dialog(
-        *children,
-        signals=Signals(**{signal_name: default_open}),
-        **dialog_attrs,
+    return NativeDialog(
+        Div(
+            *children,
+            role="document",
+        ),
+        id=id,
+        cls=cn("dialog w-full sm:max-w-[425px] max-h-[612px]", cls),
+        aria_modal="true",
+        aria_labelledby=f"{id}-title",
+        aria_describedby=f"{id}-description",
+        # Close on backdrop click (clicking the dialog element itself, not content)
+        onclick="if (event.target === this) this.close()",
+        **attrs,
     )
 
 
@@ -103,45 +67,34 @@ def DialogTrigger(
     *children: Any,
     dialog_id: str,
     cls: str = "",
+    variant: ButtonVariant = "outline",
     **attrs: Any,
 ) -> HtmlString:
-    """Button that opens a dialog using basic JavaScript API.
-    
+    """Button that opens a dialog.
+
+    Uses showModal() to open the dialog in modal mode with backdrop
+    and focus trapping following Basecoat UI patterns.
+
     Args:
         *children: Button content
         dialog_id: ID of the dialog to open
-        cls: CSS classes
+        cls: Additional CSS classes
         **attrs: Additional button attributes
+
+    Returns:
+        Button element that triggers the dialog
+
+    Example:
+        DialogTrigger("Open Dialog", dialog_id="my-dialog")
     """
     button_attrs = dict(attrs)
-    button_attrs["cls"] = cls
     button_attrs["type"] = button_attrs.get("type", "button")
-    button_attrs["aria-haspopup"] = "dialog"
-    button_attrs["aria-controls"] = dialog_id
-    
-    # Use basic JavaScript to open dialog
-    button_attrs["on_click"] = f"document.getElementById('{dialog_id}').showModal()"
-    
-    return Button(*children, **button_attrs)
+    button_attrs["aria_haspopup"] = "dialog"
+    button_attrs["aria_controls"] = dialog_id
+    button_attrs["onclick"] = f"document.getElementById('{dialog_id}').showModal()"
+    button_attrs["cls"] = cls
 
-
-def DialogContent(
-    *children: Any,
-    cls: str = "",
-    **attrs: Any,
-) -> HtmlString:
-    """Content wrapper for dialog body.
-    
-    Args:
-        *children: Content elements
-        cls: CSS classes
-        **attrs: Additional attributes
-    """
-    content_attrs = dict(attrs)
-    content_attrs["cls"] = cls
-    content_attrs["role"] = "document"
-    
-    return Div(*children, **content_attrs)
+    return Button(*children, variant=variant, **button_attrs)
 
 
 def DialogHeader(
@@ -150,34 +103,78 @@ def DialogHeader(
     **attrs: Any,
 ) -> HtmlString:
     """Header section for dialog.
-    
+
+    Contains the title and optional description following Basecoat UI patterns.
+
     Args:
-        *children: Header content
-        cls: CSS classes
-        **attrs: Additional attributes
+        *children: DialogTitle and optional DialogDescription
+        cls: Additional CSS classes
+        **attrs: Additional HTML attributes
+
+    Returns:
+        Header element for the dialog
     """
-    header_attrs = dict(attrs)
-    header_attrs["cls"] = cls
-    
-    return Header(*children, **header_attrs)
+    return Header(
+        *children,
+        cls=cn(cls),
+        **attrs,
+    )
 
 
 def DialogTitle(
     *children: Any,
+    id: Optional[str] = None,
     cls: str = "",
     **attrs: Any,
 ) -> HtmlString:
     """Title element for dialog.
-    
+
+    Should be placed inside DialogHeader. The id is used for
+    aria-labelledby reference following Basecoat UI patterns.
+
     Args:
         *children: Title content
-        cls: CSS classes
-        **attrs: Additional attributes
+        id: Element ID (should match pattern: {dialog_id}-title)
+        cls: Additional CSS classes
+        **attrs: Additional HTML attributes
+
+    Returns:
+        H2 element for the dialog title
     """
-    title_attrs = dict(attrs)
-    title_attrs["cls"] = cls
-    
-    return H2(*children, **title_attrs)
+    return H2(
+        *children,
+        id=id,
+        cls=cn(cls),
+        **attrs,
+    )
+
+
+def DialogDescription(
+    *children: Any,
+    id: Optional[str] = None,
+    cls: str = "",
+    **attrs: Any,
+) -> HtmlString:
+    """Description text for dialog.
+
+    Should be placed inside DialogHeader. Provides additional
+    context for the dialog following Basecoat UI patterns.
+
+    Args:
+        *children: Description content
+        id: Element ID (should match pattern: {dialog_id}-description)
+        cls: Additional CSS classes
+        **attrs: Additional HTML attributes
+
+    Returns:
+        Div element for the dialog description
+    """
+    return P(
+        *children,
+        id=id,
+        cls=cn(cls),
+        **attrs,
+    )
 
 
 def DialogBody(
@@ -186,16 +183,23 @@ def DialogBody(
     **attrs: Any,
 ) -> HtmlString:
     """Body section for dialog content.
-    
+
+    Main content area with automatic scrolling for overflow following
+    Basecoat UI patterns. Use overflow-y-auto for scrollable content.
+
     Args:
         *children: Body content
-        cls: CSS classes
-        **attrs: Additional attributes
+        cls: Additional CSS classes (consider 'overflow-y-auto scrollbar')
+        **attrs: Additional HTML attributes
+
+    Returns:
+        Div element for the dialog body
     """
-    body_attrs = dict(attrs)
-    body_attrs["cls"] = cls
-    
-    return Div(*children, **body_attrs)
+    return Div(
+        *children,
+        cls=cn(cls),
+        **attrs,
+    )
 
 
 def DialogFooter(
@@ -204,37 +208,51 @@ def DialogFooter(
     **attrs: Any,
 ) -> HtmlString:
     """Footer section for dialog actions.
-    
+
+    Contains action buttons following Basecoat UI patterns.
+
     Args:
-        *children: Footer content
-        cls: CSS classes
-        **attrs: Additional attributes
+        *children: Action buttons
+        cls: Additional CSS classes
+        **attrs: Additional HTML attributes
+
+    Returns:
+        Footer element for the dialog
     """
-    footer_attrs = dict(attrs)
-    footer_attrs["cls"] = cls
-    
-    return Footer(*children, **footer_attrs)
+    return Footer(
+        *children,
+        cls=cn(cls),
+        **attrs,
+    )
 
 
 def DialogClose(
     *children: Any,
-    dialog_id: str,
+    variant: ButtonVariant = "outline",
     cls: str = "",
     **attrs: Any,
 ) -> HtmlString:
-    """Button that closes a dialog using basic JavaScript API.
-    
+    """Button that closes a dialog.
+
+    Uses this.closest('dialog').close() following Basecoat UI patterns
+    for more flexible dialog closing without needing to know the dialog ID.
+
     Args:
         *children: Button content
-        dialog_id: ID of the dialog to close
-        cls: CSS classes
+        dialog_id: ID of the dialog (kept for backward compatibility)
+        variant: Button variant
+        cls: Additional CSS classes
         **attrs: Additional button attributes
+
+    Returns:
+        Button element for closing the dialog
+
+    Example:
+        DialogClose("×", dialog_id="my-dialog", aria_label="Close dialog")
     """
     button_attrs = dict(attrs)
-    button_attrs["cls"] = cls
     button_attrs["type"] = button_attrs.get("type", "button")
-    
-    # Use basic JavaScript to close dialog
-    button_attrs["on_click"] = f"document.getElementById('{dialog_id}').close()"
-    
-    return Button(*children, **button_attrs)
+    button_attrs["onclick"] = "this.closest('dialog').close()"
+    button_attrs["cls"] = cls
+
+    return Button(*children, variant=variant, **button_attrs)
