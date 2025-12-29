@@ -137,6 +137,8 @@ def Page(
     tailwind4: bool = False,
     lucide: bool = False,
     highlightjs: bool = False,
+    favicon: str | None = None,
+    favicon_dark: str | None = None,
 ) -> HtmlString:
     """Base page layout with common HTML structure."""
     # initialize empty tuple if None
@@ -173,6 +175,11 @@ def Page(
     if nitro_components:
         hdrs, htmlkw, bodykw, ftrs = add_nitro_components(hdrs,htmlkw, bodykw, ftrs)
 
+    if favicon:
+        hdrs += (Link(rel="icon", href=favicon),)
+    if favicon_dark:
+        hdrs += (Link(rel="icon", href=favicon_dark, media="(prefers-color-scheme: dark)"),)
+
     return Html(
         Head(
             Title(title),
@@ -200,6 +207,8 @@ def page_template(
     tailwind4: bool = False,
     lucide: bool = False,
     highlightjs: bool = False,
+    favicon: str | None = None,
+    favicon_dark: str | None = None,
 ):
     """Create a page template that can be used as both a decorator and a direct call.
 
@@ -239,6 +248,8 @@ def page_template(
             lucide=lucide,
             highlightjs=highlightjs,
             tailwind4=tailwind4,
+            favicon=favicon,
+            favicon_dark=favicon_dark,
         )
         if wrap_in:
             return wrap_in(result)
