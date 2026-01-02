@@ -21,6 +21,16 @@ TOAST_ICONS = {
     "info": "info",
 }
 
+# Position to data attributes mapping (literal)
+POSITION_MAP = {
+    "top-left": {"side": "top", "align": "start"},
+    "top-center": {"side": "top", "align": "center"},
+    "top-right": {"side": "top", "align": "end"},
+    "bottom-left": {"side": "bottom", "align": "start"},
+    "bottom-center": {"side": "bottom", "align": "center"},
+    "bottom-right": {"side": "bottom", "align": "end"},
+}
+
 
 def ToastProvider(
     *children: Any,
@@ -51,22 +61,8 @@ def ToastProvider(
             position="bottom-right",
         )
     """
-    # Map position to data-align attribute
-    align_map = {
-        "top-left": "start",
-        "top-center": "center",
-        "top-right": "end",
-        "bottom-left": "start",
-        "bottom-center": "center",
-        "bottom-right": "end",
-    }
-
-    # Determine if position is top or bottom
-    is_top = position.startswith("top")
-    align = align_map.get(position, "end")
-
-    # Position classes for the toaster
-    position_cls = "top-0" if is_top else "bottom-0"
+    # Get position attributes from literal map
+    pos_attrs = POSITION_MAP.get(position, {"side": "bottom", "align": "end"})
 
     # Separate toasts from other children
     toasts = []
@@ -80,8 +76,9 @@ def ToastProvider(
     toaster = Div(
         *toasts,
         id="toaster",
-        cls=cn("toaster", position_cls, cls),
-        data_align=align,
+        cls=cn("toaster", cls),
+        data_side=pos_attrs["side"],
+        data_align=pos_attrs["align"],
         **attrs,
     )
 
@@ -93,29 +90,35 @@ def ToastProvider(
 
 
 def Toaster(
+    *children: Any,
     position: str = "bottom-right",
     cls: str = "",
     **attrs: Any,
 ) -> Union[TagBuilder, HtmlString]:
-    """Standalone toaster container for dynamic toast injection.
+    """Standalone toaster container for toast notifications.
 
-    Place this in your layout to receive dynamically created toasts.
-    Toasts can be added via HTMX or JavaScript events.
+    Place this in your layout to receive toasts. Can contain Toast children
+    directly or receive dynamically created toasts via HTMX or JavaScript events.
 
     Args:
+        *children: Toast components to display
         position: Toast position - top-left, top-center, top-right,
                   bottom-left, bottom-center, bottom-right
         cls: Additional CSS classes
         **attrs: Additional HTML attributes
 
     Returns:
-        Empty toaster container ready to receive toasts
+        Toaster container with optional toast children
 
     Example:
-        # In your base layout
-        Toaster(position="bottom-right")
+        # With pre-defined toasts
+        Toaster(
+            Toast(id="my-toast", title="Hello!", variant="success"),
+            position="bottom-right",
+        )
 
-        # Add toast via HTMX
+        # Empty container for dynamic injection via HTMX
+        Toaster(position="top-right")
         Button(
             "Show Toast",
             hx_get="/toast/success",
@@ -123,24 +126,15 @@ def Toaster(
             hx_swap="beforeend",
         )
     """
-    # Map position to data-align attribute
-    align_map = {
-        "top-left": "start",
-        "top-center": "center",
-        "top-right": "end",
-        "bottom-left": "start",
-        "bottom-center": "center",
-        "bottom-right": "end",
-    }
-
-    is_top = position.startswith("top")
-    align = align_map.get(position, "end")
-    position_cls = "top-0" if is_top else "bottom-0"
+    # Get position attributes from literal map
+    pos_attrs = POSITION_MAP.get(position, {"side": "bottom", "align": "end"})
 
     return Div(
+        *children,
         id="toaster",
-        cls=cn("toaster", position_cls, cls),
-        data_align=align,
+        cls=cn("toaster", cls),
+        data_side=pos_attrs["side"],
+        data_align=pos_attrs["align"],
         **attrs,
     )
 
@@ -227,7 +221,7 @@ def Toast(
                 variant="default",
                 size="sm",
                 data_toast_action="",
-                on_click=f"{action_onclick}; el.closest('.toast').setAttribute('aria-hidden', 'true')" if action_onclick else "el.closest('.toast').setAttribute('aria-hidden', 'true')",
+                on_click=f"{action_onclick}; ${signal_name} = false" if action_onclick else f"${signal_name} = false",
             )
         )
 
@@ -238,7 +232,7 @@ def Toast(
                 variant="outline",
                 size="sm",
                 data_toast_cancel="",
-                on_click="el.closest('.toast').setAttribute('aria-hidden', 'true')",
+                on_click=f"${signal_name} = false",
             )
         )
 
@@ -249,11 +243,11 @@ def Toast(
     toast_attrs = dict(attrs)
     toast_attrs["role"] = "status"
     toast_attrs["aria_atomic"] = "true"
-    toast_attrs["aria_hidden"] = "false" if visible else "true"
     toast_attrs["data_category"] = variant
 
     if duration > 0:
         toast_attrs["data_duration"] = str(duration)
+        toast_attrs["data_effect"] = f"${signal_name}? setTimeout(() => ${signal_name} = false, {duration}) : null"
 
     return Div(
         Div(
@@ -264,6 +258,7 @@ def Toast(
         id=id,
         cls=cn("toast", cls),
         signals=Signals(**{signal_name: visible}),
+        attr_aria_hidden=f"!${signal_name}",
         **toast_attrs,
     )
 
@@ -311,10 +306,11 @@ def ToastTrigger(
         )
     """
     if toast_id:
-        # Show existing toast
-        onclick = f"document.getElementById('{toast_id}').setAttribute('aria-hidden', 'false')"
+        # Show existing toast by setting its signal to true
+        signal_name = f"{toast_id.replace('-', '_')}_visible"
+        on_click = f"${signal_name} = true"
     else:
-        # Dispatch new toast event
+        # Dispatch new toast event for dynamic toasts
         event_detail = {
             "category": variant,
             "title": title,
@@ -323,13 +319,13 @@ def ToastTrigger(
         }
         # Create JavaScript object literal
         js_obj = str(event_detail).replace("'", '"')
-        onclick = f"document.dispatchEvent(new CustomEvent('basecoat:toast', {{detail: {js_obj}}}));"
+        on_click = f"document.dispatchEvent(new CustomEvent('basecoat:toast', {{detail: {js_obj}}}));"
 
     return Button(
         *children,
         variant=button_variant,
         cls=cls,
-        on_click=onclick,
+        on_click=on_click,
         **attrs,
     )
 
@@ -355,12 +351,13 @@ def ToastClose(
         ToastClose("Got it!", toast_id="notification-toast")
     """
     content = children if children else ("Dismiss",)
+    signal_name = f"{toast_id.replace('-', '_')}_visible"
 
     return Button(
         *content,
         variant="outline",
         size="sm",
         cls=cls,
-        on_click=f"document.getElementById('{toast_id}').setAttribute('aria-hidden', 'true')",
+        on_click=f"${signal_name} = false",
         **attrs,
     )

@@ -8,7 +8,7 @@ to provide better separation of concerns in the Nitro.
 from asyncio import iscoroutinefunction
 from typing import Optional, Callable, ParamSpec, TypeVar
 from functools import wraps
-from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link, Div
+from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link, Div, Meta
 from rusty_tags.datastar import Signals
 from nitro.config import NitroConfig
 from nitro.infrastructure.html.components.utils import cn
@@ -32,37 +32,6 @@ HEADER_URLS = {
     "highlight_copy": "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.js",
     "highlight_copy_css": "https://cdn.jsdelivr.net/gh/arronhunt/highlightjs-copy/dist/highlightjs-copy.min.css",
 }
-
-def template(func):
-    func_is_async = iscoroutinefunction(func)
-    
-    def make_wrapper(inner, *args, **kwargs):
-        inner_is_async = iscoroutinefunction(inner)
-        
-        if func_is_async or inner_is_async:
-            @wraps(inner)
-            async def wrapped(*inner_args, **inner_kwargs):
-                content = await inner(*inner_args, **inner_kwargs) if inner_is_async else inner(*inner_args, **inner_kwargs)
-                return await func(content, *args, **kwargs) if func_is_async else func(content, *args, **kwargs)
-            return wrapped
-        else:
-            @wraps(inner)
-            def wrapped(*inner_args, **inner_kwargs):
-                content = inner(*inner_args, **inner_kwargs)
-                return func(content, *args, **kwargs)
-            return wrapped
-    
-    @wraps(func)
-    def decorator(*args, **kwargs):
-        if not args:
-            return lambda inner: make_wrapper(inner, **kwargs)
-        
-        if len(args) == 1 and callable(args[0]) and not kwargs:
-            return make_wrapper(args[0])
-        
-        return func(*args, **kwargs)
-    
-    return decorator
 
 def add_nitro_components(hdrs: tuple, htmlkw: dict, bodykw: dict, ftrs: tuple):
     hdrs += (
@@ -182,6 +151,8 @@ def Page(
 
     return Html(
         Head(
+            Meta(charset="utf-8"),
+            Meta(name="viewport", content="width=device-width, initial-scale=1"),
             Title(title),
             *hdrs if hdrs else (),
         ),
@@ -193,6 +164,36 @@ def Page(
         **htmlkw if htmlkw else {},
     )
 
+def template(func):
+    func_is_async = iscoroutinefunction(func)
+    
+    def make_wrapper(inner, *args, **kwargs):
+        inner_is_async = iscoroutinefunction(inner)
+        
+        if func_is_async or inner_is_async:
+            @wraps(inner)
+            async def wrapped(*inner_args, **inner_kwargs):
+                content = await inner(*inner_args, **inner_kwargs) if inner_is_async else inner(*inner_args, **inner_kwargs)
+                return await func(content, *args, **kwargs) if func_is_async else func(content, *args, **kwargs)
+            return wrapped
+        else:
+            @wraps(inner)
+            def wrapped(*inner_args, **inner_kwargs):
+                content = inner(*inner_args, **inner_kwargs)
+                return func(content, *args, **kwargs)
+            return wrapped
+    
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        if not args:
+            return lambda inner: make_wrapper(inner, **kwargs)
+        
+        if len(args) == 1 and callable(args[0]) and not kwargs:
+            return make_wrapper(args[0])
+        
+        return func(*args, **kwargs)
+    
+    return decorator
 
 def page_template(
     page_title: str = "Nitro",

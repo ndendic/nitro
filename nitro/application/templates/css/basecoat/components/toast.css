@@ -1,20 +1,41 @@
 /* Toasts */
 @layer components {
   .toaster {
-    @apply fixed bottom-0 p-4 pointer-events-none z-50 w-full sm:max-w-90 flex flex-col-reverse;
+    @apply fixed wrap-break-word p-4 pointer-events-none z-50 w-full sm:max-w-90 flex;
 
+    /* Vertical positioning via data-side */
+    &:not([data-side]),
+    &[data-side='bottom'] {
+      @apply fixed bottom-0 flex-col-reverse;
+    }
+    &[data-side='top'] {
+      @apply fixed top-0 flex-col;
+    }
+
+    /* Horizontal positioning via data-align */
     &:not([data-align]),
     &[data-align='end'] {
-      @apply right-0;
+      @apply fixed right-0;
     }
     &[data-align='start'] {
-      @apply left-0;
+      @apply fixed left-0;
     }
     &[data-align='center'] {
-      @apply left-1/2 -translate-x-1/2;
+      @apply fixed left-1/2 -translate-x-1/2;
     }
+    /* Bottom toasts animate up */
+    &:not([data-side]) .toast,
+    &[data-side='bottom'] .toast {
+      @apply animate-[toast-up_0.3s_ease-in-out];
+    }
+
+    /* Top toasts animate down */
+    &[data-side='top'] .toast {
+      @apply animate-[toast-down_0.3s_ease-in-out];
+    }
+
     .toast {
-      @apply pointer-events-auto w-full mt-4 animate-[toast-up_0.3s_ease-in-out] grid  grid-rows-[1fr] transition-[grid-template-rows,opacity,margin] duration-300 ease-in-out;
+      @apply pointer-events-auto w-full mt-4 grid grid-rows-[1fr] transition-discrete transition-[grid-template-rows,opacity,margin,display] duration-300 ease-in-out;
       
       .toast-content {
         @apply text-popover-foreground text-[13px] bg-popover border shadow-lg rounded-lg overflow-hidden flex gap-2.5 p-3 items-center;
@@ -39,8 +60,8 @@
           }
         }
       }
-      &[aria-hidden='true'] {
-        @apply grid-rows-[0fr] opacity-0 m-0 border-0 p-0 overflow-hidden;
+      &[aria-hidden] {
+        @apply grid-rows-[0fr] hidden opacity-0 m-0 border-0 p-0 overflow-hidden;
 
         .toast-content {
           @apply border-0;
@@ -53,5 +74,11 @@
   from {
     opacity: 0;
     transform: translateY(100%);
+  }
+}
+@keyframes toast-down {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
   }
 }
