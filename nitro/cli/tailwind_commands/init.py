@@ -9,7 +9,7 @@ from nitro.cli.tailwind_builder.binary import TailwindBinaryManager
 from nitro.cli.utils import confirm, console, error, info, success
 
 # Path to the CSS templates folder
-CSS_TEMPLATES_DIR = Path(__file__).parent.parent.parent / "templates" / "css"
+CSS_TEMPLATES_DIR = Path(__file__).parent.parent / "templates" / "css"
 
 
 def validate_tailwind_project(config: NitroConfig, force: bool = False) -> None:
