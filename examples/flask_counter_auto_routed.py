@@ -22,7 +22,7 @@ sys.path.insert(0, str(nitro_path))
 from flask import Flask
 from nitro import Entity, action
 from nitro.adapters.flask import configure_nitro
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.domain.repository.sql import SQLModelRepository
 
 
 class Counter(Entity, table=True):

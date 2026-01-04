@@ -11,7 +11,7 @@ from functools import wraps
 from rusty_tags import Html, Head, Title, Body, HtmlString, Script, Fragment, Link, Div, Meta
 from rusty_tags.datastar import Signals
 from nitro.config import NitroConfig
-from nitro.infrastructure.html.components.utils import cn
+from nitro.html.components.utils import cn
 
 P = ParamSpec("P")
 R = TypeVar("R")

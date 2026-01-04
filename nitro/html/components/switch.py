@@ -37,7 +37,7 @@ def Switch(
         Switch("Enable notifications", id="notifications")
 
         # With Datastar binding
-        from nitro.infrastructure.html.datastar import Signal, Signals
+        from nitro.html.datastar import Signal, Signals
         settings = Signals(notifications=True, dark_mode=False)
         Switch("Enable notifications", id="notifications", bind=settings.notifications)
         Switch("Dark mode", id="dark", bind=settings.dark_mode)

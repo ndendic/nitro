@@ -12,8 +12,8 @@ from sqlmodel import SQLModel, Field
 import sqlalchemy as sa
 from pydantic import ConfigDict
 
-from nitro.infrastructure.repository.sql import SQLModelRepository
-from nitro.infrastructure.html.datastar import Signals
+from nitro.domain.repository.sql import SQLModelRepository
+from nitro.html.datastar import Signals
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)

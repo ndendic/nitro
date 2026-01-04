@@ -21,9 +21,9 @@ if str(nitro_path) not in sys.path:
 
 from flask import Flask, request, redirect, url_for, jsonify
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.domain.repository.sql import SQLModelRepository
 from rusty_tags import Div, H1, H2, P, Form, Input, Button, Ul, Li, Span, Br, A
-from nitro.infrastructure.html import Page
+from nitro.html import Page
 
 
 # Define Todo Entity

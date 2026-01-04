@@ -51,7 +51,7 @@ def DatePicker(
         DatePicker input with calendar dropdown
 
     Example:
-        from nitro.infrastructure.html.datastar import Signals
+        from nitro.html.datastar import Signals
 
         sigs = Signals(selected_date="2025-12-23")
 
@@ -144,7 +144,7 @@ def DateRangePicker(
         DateRangePicker with linked start and end date inputs
 
     Example:
-        from nitro.infrastructure.html.datastar import Signals
+        from nitro.html.datastar import Signals
 
         sigs = Signals(start_date="", end_date="")
 

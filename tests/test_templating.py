@@ -8,7 +8,7 @@ Datastar integration, and Signal operations.
 import pytest
 from rusty_tags import H1, Div, Button, HtmlString
 from rusty_tags.datastar import Signals
-from nitro.infrastructure.html.template import Page, create_template
+from nitro.html.templating import Page, create_template
 
 
 class TestPageRendering:

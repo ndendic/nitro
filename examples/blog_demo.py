@@ -15,7 +15,7 @@ from typing import List, Optional
 from fastapi import FastAPI, HTTPException
 from sqlmodel import Field, Relationship
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.domain.repository.sql import SQLModelRepository
 
 
 # Define entities with relationships

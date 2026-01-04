@@ -18,7 +18,7 @@ No manual route handlers needed!
 from fastapi import FastAPI
 from nitro import Entity, action
 from nitro.adapters.fastapi import configure_nitro
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.domain.repository.sql import SQLModelRepository
 
 
 # ============================================================================
