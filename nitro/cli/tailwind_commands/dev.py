@@ -8,9 +8,9 @@ import typer
 from rich.panel import Panel
 
 from nitro.config import get_nitro_config
-from nitro.application.tailwind_builder.binary import TailwindBinaryManager
-from nitro.application.templates.css_input import generate_css_input
-from nitro.application.cli.utils import console, error, success
+from nitro.cli.tailwind_builder.binary import TailwindBinaryManager
+from nitro.cli.templates.css_input import generate_css_input
+from nitro.cli.utils import console, error, success
 
 
 def ensure_css_input(config) -> Path:

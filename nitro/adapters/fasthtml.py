@@ -35,7 +35,7 @@ import asyncio
 
 from starlette.responses import JSONResponse
 
-from ..infrastructure.routing import NitroDispatcher, ActionMetadata
+from ..routing import NitroDispatcher, ActionMetadata
 from ..domain.entities.base_entity import Entity
 
 

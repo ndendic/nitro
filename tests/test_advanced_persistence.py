@@ -11,7 +11,7 @@ import os
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 from sqlmodel import SQLModel, Field, create_engine, Session
-from nitro.infrastructure.repository.base import EntityRepositoryInterface
+from nitro.domain.repository.base import EntityRepositoryInterface
 from nitro.domain.entities.base_entity import Entity
 
 
@@ -272,7 +272,7 @@ class TestReadReplicas:
         Note: This test verifies that pool configuration can be passed.
         Actual replica testing would require real PostgreSQL setup.
         """
-        from nitro.infrastructure.repository.sql import SQLModelRepository
+        from nitro.domain.repository.sql import SQLModelRepository
 
         # Reset singleton
         SQLModelRepository._instance = None
@@ -346,7 +346,7 @@ class TestConnectionPooling:
 
     def test_pool_configuration_parameters(self):
         """Test that pool configuration parameters are accepted."""
-        from nitro.infrastructure.repository.sql import SQLModelRepository
+        from nitro.domain.repository.sql import SQLModelRepository
 
         # Reset singleton
         SQLModelRepository._instance = None

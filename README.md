@@ -212,7 +212,7 @@ Nitro's auto-routing system dramatically reduces boilerplate by automatically ge
 
 ```python
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.routing import action
+from nitro.routing import action
 from fastapi import FastAPI
 from nitro.adapters.fastapi import configure_nitro
 

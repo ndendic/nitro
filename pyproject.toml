@@ -1,6 +1,6 @@
 [project]
 name = "nitro-boost"
-version = "0.2.3"
+version = "0.2.4"
 description = "Add your description here"
 readme = "README.md"
 authors = [
@@ -8,16 +8,19 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = [
+    "alembic>=1.17.2",
     "blinker>=1.9.0",
+    "mako>=1.3.10",
     "pydantic>=2.11.9",
     "pydantic-settings>=2.11.0",
     "requests>=2.32.5",
     "rusty-tags>=0.6.3",
+    "sqlmodel>=0.0.31",
     "typer>=0.19.2",
 ]
 
 [project.scripts]
-nitro = "nitro.application.cli.main:app"
+nitro = "nitro.cli.main:app"
 
 [build-system]
 requires = ["hatchling"]

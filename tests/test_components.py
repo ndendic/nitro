@@ -11,19 +11,19 @@ Tests cover:
 """
 
 import pytest
-from nitro.infrastructure.html.components.dialog import (
+from nitro.html.components.dialog import (
     Dialog, DialogTrigger, DialogContent, DialogHeader,
     DialogTitle, DialogBody, DialogFooter, DialogClose
 )
-from nitro.infrastructure.html.components.codeblock import CodeBlock
-from nitro.infrastructure.html.components.accordion import (
+from nitro.html.components.codeblock import CodeBlock
+from nitro.html.components.accordion import (
     Accordion, AccordionItem, AccordionItemTrigger
 )
-from nitro.infrastructure.html.components.tabs import (
+from nitro.html.components.tabs import (
     Tabs, TabsList, TabsTrigger, TabsContent
 )
-from nitro.infrastructure.html.components.inputs import Input
-from nitro.infrastructure.html.components.icons import LucideIcon
+from nitro.html.components.inputs import Input
+from nitro.html.components.icons import LucideIcon
 
 
 class TestDialog:

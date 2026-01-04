@@ -3,8 +3,8 @@
 from pathlib import Path
 import typer
 
-from nitro.application.cli.utils import console, success, error, info
-from nitro.application.templates import generate_boost_base, generate_env_example
+from nitro.cli.utils import console, success, error, info
+from nitro.cli.templates import generate_boost_base, generate_env_example
 
 
 def validate_boost_project(root: Path, force: bool = False) -> None:

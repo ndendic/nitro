@@ -32,7 +32,7 @@ def RadioGroup(
         HtmlString: Rendered radio group container
 
     Example:
-        from nitro.infrastructure.html.datastar import Signals
+        from nitro.html.datastar import Signals
 
         form = Signals(size="md")
 

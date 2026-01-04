@@ -22,9 +22,9 @@ if str(nitro_path) not in sys.path:
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.memory import MemoryRepository
+from nitro.domain.repository.memory import MemoryRepository
 from rusty_tags import Main, H1, Div, Button, Span, Form, Input
-from nitro.infrastructure.html import Page
+from nitro.html import Page
 
 # MIGRATION STEP 1: State → Entity
 # MIGRATION STEP 2: Add model_config for repository

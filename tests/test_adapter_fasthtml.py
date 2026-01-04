@@ -17,7 +17,7 @@ import json
 
 from nitro import Entity, action
 from nitro.adapters.fasthtml import configure_nitro, FastHTMLDispatcher
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.domain.repository.sql import SQLModelRepository
 
 
 # ============================================================================

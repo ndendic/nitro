@@ -19,9 +19,9 @@ if str(nitro_path) not in sys.path:
     sys.path.insert(0, str(nitro_path))
 
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.memory import MemoryRepository
-from nitro.infrastructure.events import on, emit
-from nitro.infrastructure.monitoring import (
+from nitro.domain.repository.memory import MemoryRepository
+from nitro.events import on, emit
+from nitro.monitoring import (
     configure_nitro_logging,
     log_entity_operation,
     repository_monitor,

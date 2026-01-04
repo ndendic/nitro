@@ -39,7 +39,7 @@ def Checkbox(
         Checkbox("Accept terms", id="terms")
 
         # With Datastar binding
-        from nitro.infrastructure.html.datastar import Signal, Signals
+        from nitro.html.datastar import Signal, Signals
         form = Signals(accepted=False)
         Checkbox("I agree", id="agree", bind=form.accepted)
 

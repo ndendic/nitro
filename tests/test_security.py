@@ -4,7 +4,7 @@ Tests for security features (SQL injection prevention, validation)
 import pytest
 from sqlmodel import Field
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.domain.repository.sql import SQLModelRepository
 
 
 class SecurityTestUser(Entity, table=True):

@@ -18,10 +18,10 @@ from starlette.middleware import Middleware
 from starlette.middleware.cors import CORSMiddleware
 
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.events.events import event, on, emit, emit_async
-from nitro.infrastructure.html import Page
+from nitro.events.events import event, on, emit, emit_async
+from nitro.html import Page
 from rusty_tags import Div, H1, H2, P, Button, Br
-from nitro.infrastructure.html.datastar import Signals
+from nitro.html.datastar import Signals
 
 
 # Define Counter Entity
@@ -162,7 +162,7 @@ async def status_endpoint(request):
 # Startup/Shutdown
 async def startup():
     """Initialize database tables."""
-    from nitro.infrastructure.repository.sql import SQLModelRepository
+    from nitro.domain.repository.sql import SQLModelRepository
 
     # Initialize database
     repo = SQLModelRepository()

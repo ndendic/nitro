@@ -5,8 +5,8 @@ import typer
 from rich.progress import track
 
 from nitro.config import NitroConfig, get_nitro_config
-from nitro.application.tailwind_builder.binary import TailwindBinaryManager
-from nitro.application.cli.utils import confirm, console, error, info, success
+from nitro.cli.tailwind_builder.binary import TailwindBinaryManager
+from nitro.cli.utils import confirm, console, error, info, success
 
 # Path to the CSS templates folder
 CSS_TEMPLATES_DIR = Path(__file__).parent.parent.parent / "templates" / "css"

@@ -10,8 +10,8 @@ import pytest
 from typing import Optional
 from sqlmodel import SQLModel, Field
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.memory import MemoryRepository
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.domain.repository.memory import MemoryRepository
+from nitro.domain.repository.sql import SQLModelRepository
 
 
 # =============================================================================

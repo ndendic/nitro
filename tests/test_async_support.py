@@ -12,8 +12,8 @@ from typing import Optional
 import pytest
 
 from sqlmodel import SQLModel, Field
-from nitro.infrastructure.repository.memory import MemoryRepository
-from nitro.infrastructure.events.events import emit_async, event, on, default_namespace
+from nitro.domain.repository.memory import MemoryRepository
+from nitro.events.events import emit_async, event, on, default_namespace
 
 
 class AsyncUser(SQLModel, table=False):

@@ -29,7 +29,7 @@ def configure_nitro_logging(level: int = logging.INFO) -> logging.Logger:
         Configured logger instance
 
     Example:
-        >>> from nitro.infrastructure.monitoring import configure_nitro_logging
+        >>> from nitro.monitoring import configure_nitro_logging
         >>> import logging
         >>> logger = configure_nitro_logging(logging.DEBUG)
         >>> logger.info("Nitro initialized")

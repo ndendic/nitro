@@ -12,7 +12,7 @@ Tests cover:
 import pytest
 import time
 from sqlmodel import SQLModel, Field
-from nitro.infrastructure.repository.memory import MemoryRepository
+from nitro.domain.repository.memory import MemoryRepository
 
 
 # Test entity for memory persistence
