@@ -69,9 +69,8 @@ def boost_command(
         console.print("\n[green]Project initialized![/green]")
         console.print("\n[bold]Next steps:[/bold]")
         console.print("  1. Edit [blue].env.example[/blue] and save as [blue].env[/blue]")
-        console.print("  2. Create your [blue]static/[/blue] directory structure")
-        console.print("  3. Run [blue]nitro tw init[/blue] to initialize Tailwind CSS")
-        console.print("  4. Edit [blue]base.py[/blue] to configure [blue]wrap_in[/blue] for your framework")
+        console.print("  2. Run [blue]nitro tw init[/blue] to initialize Tailwind CSS")
+        console.print("  3. Edit [blue]base.py[/blue] to configure [blue]wrap_in[/blue] for your framework")
         console.print("\n[dim]Tip: Check the comments in base.py for framework-specific examples[/dim]")
 
     except typer.Exit:

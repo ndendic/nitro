@@ -60,15 +60,6 @@ class NitroConfig(BaseSettings):
         return path if path.is_absolute() else self.project_root / path
 
 
-def detect_css_paths(root: Path) -> tuple[Path, Path]:
-    """Detect appropriate CSS input and output paths based on project structure."""
-    if (root / "static").exists():
-        return Path("static/css/input.css"), Path("static/css/output.css")
-    if (root / "assets").exists():
-        return Path("assets/input.css"), Path("assets/output.css")
-    return Path("input.css"), Path("output.css")
-
-
 def get_nitro_config(project_root: Optional[Path] = None) -> NitroConfig:
     """Get Nitro configuration with auto-detection and environment override support."""
     root = project_root or Path.cwd()
@@ -103,17 +94,10 @@ def get_nitro_config(project_root: Optional[Path] = None) -> NitroConfig:
             extra="ignore"
         )
 
-    # Create Tailwind config first to check if env vars are present
+    # Create Tailwind config - uses env vars if set, otherwise defaults
+    # Note: We always use the configured paths (default: static/css/).
+    # The init command will create directories if they don't exist.
     tailwind_config = LocalTailwindConfig()
-
-    # If no environment variables were loaded, set detected defaults
-    if tailwind_config.css_input == Path("static/css/input.css") and tailwind_config.css_output == Path("static/css/output.css"):
-        # Use auto-detected paths only if env vars not set
-        css_input, css_output = detect_css_paths(root)
-        tailwind_config = LocalTailwindConfig(
-            css_input=css_input,
-            css_output=css_output
-        )
 
     # Create main config
     config = LocalNitroConfig(
