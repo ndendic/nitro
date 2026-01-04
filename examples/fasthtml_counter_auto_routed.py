@@ -22,9 +22,9 @@ sys.path.insert(0, str(nitro_path))
 from fasthtml.common import *
 from nitro import Entity, action
 from nitro.adapters.fasthtml import configure_nitro
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.domain.repository.sql import SQLModelRepository
 from rusty_tags import Div, H1, H2, P, Button, Span, Br, Pre
-from nitro.infrastructure.html import Page
+from nitro.html import Page
 
 
 class Counter(Entity, table=True):

@@ -4,9 +4,9 @@ import threading
 import pytest
 
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.events.events import on, emit
-from nitro.infrastructure.html.template import Page
-from nitro.infrastructure.repository.memory import MemoryRepository
+from nitro.events.events import on, emit
+from nitro.html.templating import Page
+from nitro.domain.repository.memory import MemoryRepository
 from rusty_tags import Div, H1, P
 
 

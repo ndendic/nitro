@@ -5,8 +5,8 @@ from pydantic import ValidationError
 from sqlalchemy.exc import OperationalError
 
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.events.events import on, emit
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.events.events import on, emit
+from nitro.domain.repository.sql import SQLModelRepository
 
 
 class ErrorTestUser(Entity, table=True):
@@ -74,7 +74,7 @@ class TestRepositoryConnectionErrors:
 
     def test_invalid_database_url_raises_operational_error(self):
         """Test that invalid database URL raises OperationalError."""
-        from nitro.infrastructure.repository.sql import SQLModelRepository
+        from nitro.domain.repository.sql import SQLModelRepository
 
         # Create repository with invalid database URL
         class BadDBEntity(Entity, table=True):
@@ -132,7 +132,7 @@ class TestEventHandlerExceptions:
             emit("test.exception.event", sender=self)
 
         # Clean up
-        from nitro.infrastructure.events.events import event
+        from nitro.events.events import event
         event("test.exception.event").disconnect(handler_that_raises)
         event("test.exception.event").disconnect(handler_that_succeeds)
 
@@ -153,7 +153,7 @@ class TestEventHandlerExceptions:
         async def run_test():
             # emit_async runs handlers in parallel with asyncio.gather
             # gather returns results, doesn't raise by default
-            from nitro.infrastructure.events.events import emit_async
+            from nitro.events.events import emit_async
             result = await emit_async("test.async.exception", sender=None)
             # Result contains exception objects from failed handlers
             # but doesn't raise them (this is the parallel execution behavior)
@@ -162,7 +162,7 @@ class TestEventHandlerExceptions:
         asyncio.run(run_test())
 
         # Clean up
-        from nitro.infrastructure.events.events import event
+        from nitro.events.events import event
         event("test.async.exception").disconnect(async_handler_raises)
         event("test.async.exception").disconnect(async_handler_succeeds)
 
@@ -185,7 +185,7 @@ class TestEventHandlerExceptions:
             emit("test.logged.exception", sender=self)
 
         # Clean up
-        from nitro.infrastructure.events.events import event
+        from nitro.events.events import event
         event("test.logged.exception").disconnect(handler_logs_error)
 
 

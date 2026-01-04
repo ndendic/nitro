@@ -7,7 +7,7 @@ Edit this file to customize your page layout and add routes.
 """
 
 from nitro import *
-from nitro.infrastructure.html import template as templ
+from nitro.html import template as templ
 
 # Page template configuration
 # Add more options as needed: highlightjs=True, charts=True, datastar=True

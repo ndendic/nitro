@@ -24,8 +24,8 @@ if str(nitro_path) not in sys.path:
 from fastapi import FastAPI, BackgroundTasks, HTTPException
 from pydantic import BaseModel
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.sql import SQLModelRepository
-from nitro.infrastructure.events import on, emit_async
+from nitro.domain.repository.sql import SQLModelRepository
+from nitro.events import on, emit_async
 
 # ============================================================================
 # DOMAIN ENTITIES

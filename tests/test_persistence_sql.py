@@ -13,7 +13,7 @@ from uuid import UUID, uuid4
 from typing import Optional
 
 from sqlmodel import Field, SQLModel
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.domain.repository.sql import SQLModelRepository
 
 
 # Test models

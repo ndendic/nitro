@@ -22,7 +22,7 @@ from datetime import datetime
 
 # Import Nitro components
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.routing import action, get, post
+from nitro.routing import action, get, post
 from nitro.adapters.fastapi import configure_nitro
 
 

@@ -23,9 +23,9 @@ if str(nitro_path) not in sys.path:
 
 from fastapi import FastAPI, BackgroundTasks, HTTPException
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.sql import SQLModelRepository
-from nitro.infrastructure.repository.memory import MemoryRepository
-from nitro.infrastructure.events import on, emit_async
+from nitro.domain.repository.sql import SQLModelRepository
+from nitro.domain.repository.memory import MemoryRepository
+from nitro.events import on, emit_async
 
 # Define Todo Entity - works as both request/response model
 class Todo(Entity, table=True):

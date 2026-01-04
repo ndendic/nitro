@@ -2,8 +2,8 @@
 
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from nitro.infrastructure.html import page_template
-from nitro.infrastructure.html.components import (
+from nitro.html import page_template
+from nitro.html.components import (
     DatePicker,
     DateRangePicker,
     Calendar,
@@ -13,8 +13,8 @@ from nitro.infrastructure.html.components import (
     CardContent,
     Field,
 )
-from nitro.infrastructure.html.datastar import Signals
-from nitro.infrastructure.html import Div, H1, P, Pre, Code, Link, Script, Style
+from nitro.html.datastar import Signals
+from nitro.html import Div, H1, P, Pre, Code, Link, Script, Style
 
 # Calendar component CSS (normally loaded from basecoat components)
 CALENDAR_CSS = """

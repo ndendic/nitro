@@ -45,7 +45,7 @@ def Select(
         )
 
         # With Datastar binding
-        from nitro.infrastructure.html.datastar import Signal, Signals
+        from nitro.html.datastar import Signal, Signals
         form = Signals(size="md")
         Select(
             SelectOption("Small", value="sm"),

@@ -14,8 +14,8 @@ Then visit: http://localhost:8001
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, JSONResponse
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.events.events import on, emit_async
-from nitro.infrastructure.html import Page
+from nitro.events.events import on, emit_async
+from nitro.html import Page
 from rusty_tags import Div, H1, H2, P, Button, Span
 from sqlmodel import Field
 
@@ -27,7 +27,7 @@ class Counter(Entity, table=True):
     count: int = Field(default=0)
 
     model_config = {
-        "repository_class": "nitro.infrastructure.repository.sql.SQLModelRepository"
+        "repository_class": "nitro.domain.repository.sql.SQLModelRepository"
     }
 
     async def increment(self) -> None:
@@ -75,7 +75,7 @@ app = FastAPI(title="Counter Demo")
 @app.on_event("startup")
 async def startup():
     """Initialize database."""
-    from nitro.infrastructure.repository.sql import SQLModelRepository
+    from nitro.domain.repository.sql import SQLModelRepository
     repo = SQLModelRepository()
     repo.init_db()
     print("✓ Database initialized")

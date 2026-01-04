@@ -126,7 +126,7 @@ class Counter(State):
 
 # Nitro
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.memory import MemoryRepository
+from nitro.domain.repository.memory import MemoryRepository
 
 class Counter(Entity, table=True):
     count: int = 0

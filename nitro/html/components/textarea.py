@@ -50,7 +50,7 @@ def Textarea(
         Textarea(id="message", placeholder="Enter your message...")
 
         # With Datastar binding
-        from nitro.infrastructure.html.datastar import Signal, Signals
+        from nitro.html.datastar import Signal, Signals
         form = Signals(bio="")
         Textarea(
             id="bio",

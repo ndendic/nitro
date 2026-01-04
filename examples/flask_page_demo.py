@@ -21,7 +21,7 @@ if str(nitro_path) not in sys.path:
 
 from flask import Flask
 from rusty_tags import Div, H1, H2, P, Button, Ul, Li, A, Br
-from nitro.infrastructure.html import Page
+from nitro.html import Page
 
 
 # Initialize Flask app

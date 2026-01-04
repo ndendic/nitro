@@ -34,7 +34,7 @@ from flask import Flask, request, jsonify
 from inspect import signature, iscoroutinefunction
 import asyncio
 
-from ..infrastructure.routing import NitroDispatcher, ActionMetadata
+from ..routing import NitroDispatcher, ActionMetadata
 from ..domain.entities.base_entity import Entity
 
 

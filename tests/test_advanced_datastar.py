@@ -10,9 +10,9 @@ Tests for:
 import pytest
 import asyncio
 from rusty_tags.datastar import Signals, SSE
-from nitro.infrastructure.events.client import Client
-from nitro.infrastructure.events.starlette import emit_signals, emit_elements, datastar_response
-from nitro.infrastructure.events.events import emit
+from nitro.events.client import Client
+from nitro.events.starlette import emit_signals, emit_elements, datastar_response
+from nitro.events.events import emit
 
 
 class TestDatastarSSEStreaming:

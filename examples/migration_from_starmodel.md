@@ -51,7 +51,7 @@ states_rt.to_app(app)
 ```python
 # Nitro version
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.memory import MemoryRepository
+from nitro.domain.repository.memory import MemoryRepository
 from fasthtml.common import *
 
 class Counter(Entity, table=True):
@@ -97,8 +97,8 @@ from starmodel import *
 
 # Nitro
 from nitro.domain.entities.base_entity import Entity
-from nitro.infrastructure.repository.memory import MemoryRepository
-from nitro.infrastructure.repository.sql import SQLModelRepository
+from nitro.domain.repository.memory import MemoryRepository
+from nitro.domain.repository.sql import SQLModelRepository
 ```
 
 ### 2. Class Definition
