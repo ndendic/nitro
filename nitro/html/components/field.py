@@ -92,7 +92,7 @@ def Field(
             field_content.append(
                 HTMLLabel(
                     label,
-                    Span("*",cls="text-destructive") if required else None,
+                    Span("*",cls="text-destructive ml-1") if required else None,
                     for_=label_for,
                     cls="text-sm font-medium leading-snug",
                 )

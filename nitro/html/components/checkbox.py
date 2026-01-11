@@ -9,6 +9,7 @@ def Checkbox(
     *children: Any,
     id: str,
     bind: Any = None,
+    label: str = "",
     checked: bool = False,
     disabled: bool = False,
     required: bool = False,
@@ -89,10 +90,10 @@ def Checkbox(
     # If no children (label text), return just the checkbox
     if not children:
         return checkbox_input
-
+    
     # If there are children, wrap in a label for accessibility
     return HTMLLabel(
-        checkbox_input,
+        checkbox_input,        
         Span(*children, cls="ml-2"),
         html_for=id,
         cls="inline-flex items-center cursor-pointer",

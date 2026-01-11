@@ -8,12 +8,14 @@ to avoid metaclass conflicts with SQLModel.
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, ClassVar, Union
 
+from nitro.utils import AttrDict
 from sqlmodel import SQLModel, Field
 import sqlalchemy as sa
 from pydantic import ConfigDict
 
 from nitro.domain.repository.sql import SQLModelRepository
 from nitro.html.datastar import Signals
+from nitro.html.components.model_views.fields import get_model_fields
 
 def utc_now() -> datetime:
     return datetime.now(timezone.utc)
@@ -125,3 +127,21 @@ class Entity(SQLModel):
     @property
     def signals(self) -> Signals:
         return Signals(**self.model_dump())
+
+    @classmethod
+    def fields_meta(
+        cls, 
+        exclude: Optional[List[str]] = None,
+        include_computed: bool = False
+    ) -> AttrDict[str, Dict[str, Any]]:
+        """Get the metadata for all fields in the entity.
+
+        Args:
+            cls: BaseModel class
+            exclude: Field names to exclude
+            include_computed: Include @computed_field properties
+
+        Returns:
+            AttrDict of field names to field metadata
+        """
+        return get_model_fields(cls, exclude=exclude, include_computed=include_computed)
