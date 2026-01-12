@@ -2,6 +2,7 @@
 
 from typing import Any, Optional
 from rusty_tags import Input as HTMLInput, HtmlString, Label as HTMLLabel, Span
+from .label import Label
 from .utils import cn
 
 
@@ -88,13 +89,14 @@ def Checkbox(
     checkbox_input = HTMLInput(**input_kwargs)
 
     # If no children (label text), return just the checkbox
-    if not children:
+    if not children and not label:
         return checkbox_input
     
     # If there are children, wrap in a label for accessibility
     return HTMLLabel(
         checkbox_input,        
         Span(*children, cls="ml-2"),
+        Label(label, html_for=id) if label else None,
         html_for=id,
         cls="inline-flex items-center cursor-pointer",
         **{"data_disabled": "true"} if disabled else {},

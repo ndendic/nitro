@@ -35,7 +35,6 @@ HEADER_URLS = {
 
 def add_nitro_components(hdrs: tuple, htmlkw: dict, bodykw: dict, ftrs: tuple):
     hdrs += (
-        Script(src='https://cdn.jsdelivr.net/npm/basecoat-css@0.3.7/dist/js/basecoat.min.js', defer=''),
         Script(src='https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js', type='module'),
         Script("""const datastar = JSON.parse(localStorage.getItem('datastar') || '{}');
     const htmlElement = document.documentElement;
