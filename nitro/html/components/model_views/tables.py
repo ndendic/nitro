@@ -22,6 +22,7 @@ from nitro.html.components import (
     DropdownTrigger,
     DropdownContent,
     DropdownItem,
+    LucideIcon,
 )
 from .fields import get_model_fields
 
@@ -259,26 +260,30 @@ def ModelTable(
             if on_edit:
                 edit_action = on_edit.replace('{id}', str(entity.id))
                 action_buttons.append(
-                    Button("Edit", variant="outline", size="sm", on_click=edit_action)
+                    DropdownItem(LucideIcon("edit"), "Edit", on_click=edit_action)
                 )
             else:
                 action_buttons.append(
-                    Button("Edit", variant="outline", size="sm")
+                    DropdownItem(LucideIcon("edit"), "Edit")
                 )
 
             if on_delete:
                 delete_action = on_delete.replace('{id}', str(entity.id))
                 action_buttons.append(
-                    Button("Delete", variant="destructive", size="sm", on_click=delete_action)
+                    DropdownItem(LucideIcon("trash"), "Delete", on_click=delete_action)
                 )
             else:
                 action_buttons.append(
-                    Button("Delete", variant="destructive", size="sm")
+                    DropdownItem(LucideIcon("trash"), "Delete")
                 )
 
             cells.append(
                 TableCell(
-                    Div(*action_buttons, cls="flex justify-end gap-2")
+                    DropdownMenu(
+                        DropdownTrigger(Button(LucideIcon("more-vertical"), variant="sm-icon-ghost")),
+                        DropdownContent(*action_buttons, align="start", side="left"),
+                    ),
+                    cls="text-right",
                 )
             )
 

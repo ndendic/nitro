@@ -11,11 +11,13 @@ def CodeSpan(
     "A CodeSpan with Styling"
     return rt.Code(*c, cls=cn("codespan", cn(cls)), **kwargs)
 
+DEFAULT_PRE_CLS = "grid text-sm overflow-auto rounded-xl scrollbar"
+
 def CodeBlock(
     *content: str,  # Contents of Code tag (often text)
     cls: str = "",  # Classes for the outer container
     code_cls: str = "",  # Classes for the code tag
-    pre_cls: str = "",  # Classes for the pre tag
+    pre_cls: str | None = None,  # Classes for the pre tag (None = use defaults)
     **kwargs: Any  # Additional args for Code tag
 ) -> rt.HtmlString:
     """
@@ -28,6 +30,7 @@ def CodeBlock(
         *content: Text content to display in the code block
         cls: CSS classes for the outer container div
         code_cls: CSS classes for the inner code element
+        pre_cls: CSS classes for the pre element (None uses defaults with rounded corners)
         **kwargs: Additional HTML attributes for the code element
     
     Returns:
@@ -38,10 +41,13 @@ def CodeBlock(
                  cls="border rounded p-4", 
                  code_cls="language-python")
     """
+    # Use default pre_cls if not specified
+    effective_pre_cls = DEFAULT_PRE_CLS if pre_cls is None else pre_cls
+    
     return rt.Div(
         rt.Pre(
             rt.Code(*content, cls=cn(code_cls), **kwargs),
-            pre_cls=cn(pre_cls),
+            cls=cn(effective_pre_cls),
         ),
         cls=cn(cls)
     )

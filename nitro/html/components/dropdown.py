@@ -59,8 +59,8 @@ def DropdownMenu(
         signals=Signals(**{signal_name: False}),
         cls=cn("dropdown-menu", cls),
         id=dropdown_id,
-        # Close on click outside - when clicking the wrapper itself (not children)
-        on_click__outside=f"${signal_name} = false",
+        # Close on click outside - TEMPORARILY DISABLED for debugging morph issues
+        # on_click__outside=f"${signal_name} = false",
         **attrs,
     )
 
