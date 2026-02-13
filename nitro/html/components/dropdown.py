@@ -60,7 +60,7 @@ def DropdownMenu(
         cls=cn("dropdown-menu", cls),
         id=dropdown_id,
         # Close on click outside - TEMPORARILY DISABLED for debugging morph issues
-        # on_click__outside=f"${signal_name} = false",
+        on_click__outside=f"${signal_name} = false",
         **attrs,
     )
 
