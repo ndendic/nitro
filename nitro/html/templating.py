@@ -140,9 +140,12 @@ def Page(
         ) + hdrs
     if tw_configured:
         hdrs += (Link(rel="stylesheet", href=f"/{tailwind_css}", type="text/css"),)
+        print(f"NITRO: Tailwind css configured and found at: {tailwind_css}")
+    else:
+        print(f"NITRO: Tailwind css not configured or not found at: {tailwind_css}")
+
     if nitro_components:
         hdrs, htmlkw, bodykw, ftrs = add_nitro_components(hdrs,htmlkw, bodykw, ftrs)
-
     if favicon:
         hdrs += (Link(rel="icon", href=favicon),)
     if favicon_dark:
