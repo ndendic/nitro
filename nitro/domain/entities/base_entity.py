@@ -34,8 +34,13 @@ class Entity(SQLModel):
         json_encoders={datetime: lambda dt: dt.isoformat()},
     )
 
-
     id: str = Field(primary_key=True)
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        # Defer import to avoid circular dependency
+        from nitro.routing.registration import register_entity_actions
+        register_entity_actions(cls)
 
     @classmethod
     def repository(cls) -> SQLModelRepository:

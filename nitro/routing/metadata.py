@@ -129,6 +129,9 @@ def extract_parameters(func: Callable) -> dict:
                 "notify": {"annotation": bool, "default": False}
             }
     """
+    # Unwrap classmethod/staticmethod descriptors
+    if isinstance(func, (classmethod, staticmethod)):
+        func = func.__func__
     sig = signature(func)
     params = {}
 

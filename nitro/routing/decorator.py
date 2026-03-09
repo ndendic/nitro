@@ -81,9 +81,11 @@ def action(
     happens in Entity.__init_subclass__.
     """
     def decorator(func):
-        is_async = inspect.iscoroutinefunction(func)
-        parameters = extract_parameters(func)
-        is_entity_method = _has_self_or_cls(func)
+        # Unwrap classmethod/staticmethod for inspection
+        raw_func = func.__func__ if isinstance(func, (classmethod, staticmethod)) else func
+        is_async = inspect.iscoroutinefunction(raw_func)
+        parameters = extract_parameters(raw_func)
+        is_entity_method = _has_self_or_cls(raw_func)
 
         # Build event name only for standalone functions
         if is_entity_method:
@@ -100,18 +102,21 @@ def action(
             description=description,
             tags=tags or [],
             response_model=response_model,
-            function_name=func.__name__,
+            function_name=raw_func.__name__,
             entity_class_name="",
             event_name=event_name,
             is_async=is_async,
             parameters=parameters,
         )
 
-        set_action_metadata(func, metadata)
+        set_action_metadata(raw_func, metadata)
+        # Also stamp on wrapper (classmethod/staticmethod) so registration can find it
+        if func is not raw_func:
+            set_action_metadata(func, metadata)
 
         # Register event handler for standalone functions immediately
         if not is_entity_method:
-            _register_standalone_handler(func, metadata)
+            _register_standalone_handler(raw_func, metadata)
 
         return func
 
