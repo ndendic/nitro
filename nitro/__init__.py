@@ -10,7 +10,7 @@ from nitro.html.datastar import *  # noqa: F403
 
 # Phase 2: Auto-routing exports
 from nitro.domain.entities.base_entity import Entity
-from nitro.routing import action, get, post, put, delete, ActionMetadata
+from nitro.routing import action, get, post, put, delete, ActionMetadata, NotFoundError
 
 __author__ = "Nikola Dendic"
 __description__ = "Abstraction layers for Python web development."

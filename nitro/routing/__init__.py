@@ -1,38 +1,27 @@
 """
-Nitro Routing Infrastructure - Auto-routing for Entity Actions
+Nitro Event-Driven Routing System.
 
-This module provides the @action decorator and dispatcher system for
-automatically generating HTTP routes from entity methods.
-
-Phase 2.1: Auto-Magic Routing System
+Decorators register Blinker event handlers. The action() helper
+generates Datastar action strings. Framework adapters provide
+catch-all endpoints.
 """
-
-from .decorator import action, ActionMetadata, get, post, put, delete
-from .metadata import get_action_metadata, has_action_metadata
-from .discovery import (
-    discover_entity_subclasses,
-    discover_action_methods,
-    discover_all_routes,
-    validate_action_uniqueness,
-)
-from .dispatcher import NitroDispatcher
+from .decorator import action as action_decorator, get, post, put, delete
+from .metadata import ActionMetadata, get_action_metadata, has_action_metadata
+from .actions import ActionRef, parse_action
+from .action_helper import action
+from .registration import register_entity_actions, NotFoundError
 
 __all__ = [
     # Decorators
+    "get", "post", "put", "delete",
+    # action() helper (frontend string generator)
     "action",
-    "get",
-    "post",
-    "put",
-    "delete",
     # Metadata
-    "ActionMetadata",
-    "get_action_metadata",
-    "has_action_metadata",
-    # Discovery
-    "discover_entity_subclasses",
-    "discover_action_methods",
-    "discover_all_routes",
-    "validate_action_uniqueness",
-    # Dispatcher
-    "NitroDispatcher",
+    "ActionMetadata", "get_action_metadata", "has_action_metadata",
+    # Action parsing
+    "ActionRef", "parse_action",
+    # Registration (used by Entity.__init_subclass__)
+    "register_entity_actions",
+    # Errors
+    "NotFoundError",
 ]
