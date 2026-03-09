@@ -3,7 +3,7 @@ The action() helper — generates Datastar action strings from Python function r
 
 Usage:
     action(counter.increment, amount=5)
-    -> "@post('/post/Counter:abc123.increment/$conn')"
+    -> "@post('/post/Counter:abc123.increment')"
 """
 import inspect
 from .metadata import get_action_metadata
@@ -39,7 +39,7 @@ def action(method_or_func, **params) -> str:
         **params: Parameters to include in the action.
 
     Returns:
-        A Datastar action string like "@post('/post/Counter:abc123.increment/$conn')"
+        A Datastar action string like "@post('/post/Counter:abc123.increment')"
     """
     metadata = get_action_metadata(method_or_func)
     if metadata is None:
@@ -62,7 +62,7 @@ def action(method_or_func, **params) -> str:
     else:
         action_path = metadata.function_name
 
-    url = f"/{http_method}/{action_path}/$conn"
+    url = f"/{http_method}/{action_path}"
 
     # Handle remaining params based on HTTP method
     if http_method == "get" and params:

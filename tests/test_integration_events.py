@@ -41,15 +41,15 @@ class TestFullIntegration:
 
         # Class method — no id
         result = action(IntTestNote.list_all)
-        assert result == "@get('/get/IntTestNote.list_all/$conn')"
+        assert result == "@get('/get/IntTestNote.list_all')"
 
         # Instance method — with id
         result = action(IntTestNote.update_text, id="note1")
-        assert result == "@post('/post/IntTestNote:note1.update_text/$conn')"
+        assert result == "@post('/post/IntTestNote:note1.update_text')"
 
         # Delete
         result = action(IntTestNote.remove, id="$selected")
-        assert result == "@delete('/delete/IntTestNote:$selected.remove/$conn')"
+        assert result == "@delete('/delete/IntTestNote:$selected.remove')"
 
     def test_standalone_action_string_generation(self):
         """Standalone function action strings."""
@@ -58,7 +58,7 @@ class TestFullIntegration:
         def create_note(title: str = ""): pass
 
         result = action(create_note, title="$title")
-        assert "@post('/post/notes.create_note/$conn')" in result
+        assert "@post('/post/notes.create_note')" in result
 
     def test_dispatch_calls_registered_handler(self):
         """Dispatch through the event system reaches the right handler."""
@@ -103,7 +103,7 @@ class TestFullIntegration:
         def find_items(q: str = "", limit: int = 10): pass
 
         result = action(find_items, q="hello", limit=5)
-        assert "@get('/get/search.find_items/$conn?" in result
+        assert "@get('/get/search.find_items?" in result
         assert "q=hello" in result
         assert "limit=5" in result
 
@@ -116,4 +116,4 @@ class TestFullIntegration:
         result = action(save_item, name="test", value=42)
         assert "$name = 'test'" in result
         assert "$value = 42" in result
-        assert "@post('/post/data.save_item/$conn')" in result
+        assert "@post('/post/data.save_item')" in result

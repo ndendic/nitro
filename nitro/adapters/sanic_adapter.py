@@ -36,12 +36,19 @@ def configure_nitro(app, prefix: str = ""):
 
 def _register_catch_all(app, method: str, prefix: str):
     """Register a single catch-all endpoint for an HTTP method."""
-    path = f"{prefix}/{method}/<action:path>/<sender:str>"
+    path = f"{prefix}/{method}/<action:path>"
 
-    async def handler(request: Request, action: str, sender: str):
+    async def handler(request: Request, action: str):
         try:
             # Extract signals from request
             signals = await _extract_signals(request)
+
+            # Sender from cookie or header — not from URL
+            sender = (
+                request.cookies.get("user_id")
+                or request.headers.get("x-client-id")
+                or "anonymous"
+            )
 
             result = await dispatch_action(
                 action_str=action,
