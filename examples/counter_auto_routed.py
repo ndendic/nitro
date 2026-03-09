@@ -1,108 +1,61 @@
 """
-Proof-of-Concept: Auto-Routed Counter App with Nitro Phase 2
+Counter example using the event-driven action system.
 
-This example demonstrates the 75% code reduction achieved by auto-routing.
+Run: python examples/counter_auto_routed.py
 
-BEFORE (Manual Routing): ~190 lines
-AFTER (Auto-Routing): ~45 lines
-
-The @action decorator automatically generates:
-- POST /counter/{id}/increment?amount=1
-- POST /counter/{id}/decrement?amount=1
-- POST /counter/{id}/reset
-- GET  /counter/{id}/status
-
-No manual route handlers needed!
+Demonstrates:
+- Entity with decorated methods (@post, @get)
+- Automatic Blinker event registration via __init_subclass__
+- action() helper for generating Datastar action strings
+- Sanic catch-all endpoints for dispatch
 """
+from sanic import Sanic
+from sqlmodel import Field
+from nitro import Entity, get, post, action
+from nitro.adapters.sanic_adapter import configure_nitro
 
-from fastapi import FastAPI
-from nitro import Entity, action
-from nitro.adapters.fastapi import configure_nitro
-from nitro.domain.repository.sql import SQLModelRepository
+app = Sanic("CounterExample")
 
-
-# ============================================================================
-# ENTITY DEFINITION (with auto-routing)
-# ============================================================================
 
 class Counter(Entity, table=True):
-    """Counter entity with auto-routed actions."""
-
+    __tablename__ = "counter"
+    id: str = Field(primary_key=True)
     count: int = 0
-    name: str = "Counter"
 
-    model_config = {
-        "repository_class": SQLModelRepository
-    }
-
-    @action(method="POST", summary="Increment counter")
+    @post()
     async def increment(self, amount: int = 1):
-        """Increment the counter by the specified amount."""
         self.count += amount
         self.save()
-        return {"count": self.count, "message": f"Incremented by {amount}"}
+        return {"count": self.count}
 
-    @action(method="POST", summary="Decrement counter")
+    @post()
     async def decrement(self, amount: int = 1):
-        """Decrement the counter by the specified amount."""
         self.count -= amount
         self.save()
-        return {"count": self.count, "message": f"Decremented by {amount}"}
+        return {"count": self.count}
 
-    @action(method="POST", summary="Reset counter")
-    async def reset(self):
-        """Reset the counter to zero."""
-        self.count = 0
-        self.save()
-        return {"count": self.count, "message": "Reset to 0"}
-
-    @action(method="GET", summary="Get counter status")
+    @get()
     def status(self):
-        """Get the current counter status."""
-        return {
-            "id": self.id,
-            "name": self.name,
-            "count": self.count
-        }
+        return {"count": self.count, "id": self.id}
+
+    @get()
+    @classmethod
+    def list_all(cls):
+        return [c.model_dump() for c in cls.all()]
 
 
-# ============================================================================
-# APPLICATION SETUP
-# ============================================================================
+# UI helpers using action()
+def counter_widget(counter: Counter):
+    """Example of generating Datastar action strings from Python."""
+    print(f"Increment: {action(counter.increment)}")
+    print(f"Decrement: {action(counter.decrement)}")
+    print(f"Status:    {action(counter.status)}")
+    print(f"List all:  {action(Counter.list_all)}")
 
-app = FastAPI(
-    title="Auto-Routed Counter App",
-    description="Demonstration of Nitro Phase 2 auto-routing",
-    version="1.0.0"
-)
 
-# Initialize database
-Counter.repository().init_db()
-
-# Create default counter if it doesn't exist
-if not Counter.get("demo"):
-    counter = Counter(id="demo", name="Demo Counter", count=0)
-    counter.save()
-
-# ONE LINE: Auto-register all @action methods as routes!
+# Register catch-all endpoints
 configure_nitro(app)
 
-
-# ============================================================================
-# RUN APPLICATION
-# ============================================================================
-
 if __name__ == "__main__":
-    import uvicorn
-    print("\n" + "="*70)
-    print("🚀 Auto-Routed Counter App")
-    print("="*70)
-    print("\nAvailable routes (auto-generated):")
-    print("  POST   /counter/{id}/increment?amount=1")
-    print("  POST   /counter/{id}/decrement?amount=1")
-    print("  POST   /counter/{id}/reset")
-    print("  GET    /counter/{id}/status")
-    print("\nOpenAPI docs: http://localhost:8090/docs")
-    print("="*70 + "\n")
-
-    uvicorn.run(app, host="0.0.0.0", port=8090)
+    Counter.repository().init_db()
+    app.run(host="0.0.0.0", port=8000, debug=True)
