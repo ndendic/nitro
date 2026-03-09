@@ -32,13 +32,10 @@ class ActionMetadata:
     # Internal metadata
     function_name: str = ""  # Original method name
     entity_class_name: str = ""  # Entity class name
+    event_name: str = ""  # Blinker event name (e.g., "Counter.increment")
+    prefix: str = ""  # Action prefix (e.g., "auth")
     is_async: bool = False  # Whether method is async
     parameters: dict = field(default_factory=dict)  # Parameter signatures
-
-    # Advanced options (future use)
-    requires_auth: bool = False  # Authentication required (Phase 2.2)
-    rate_limit: Optional[str] = None  # Rate limit spec (Phase 2.3)
-    cache_ttl: Optional[int] = None  # Cache TTL for GET (Phase 2.4)
 
     def __post_init__(self):
         """Validate metadata after initialization."""
@@ -59,61 +56,6 @@ class ActionMetadata:
                 f"Invalid status code: {self.status_code}. "
                 f"Must be between 100 and 599"
             )
-
-    def generate_url_path(
-        self,
-        prefix: str = "",
-        entity_name_override: Optional[str] = None
-    ) -> str:
-        """
-        Generate URL path for this action.
-
-        Args:
-            prefix: URL prefix (e.g., "/api/v1")
-            entity_name_override: Custom entity name (e.g., "users" instead of "user")
-
-        Returns:
-            Generated URL path
-
-        Examples:
-            Counter.increment -> "/counter/{id}/increment"
-            Product.search -> "/product/search" (class method, no {id})
-            With override: "/users/{id}/activate" (entity_name_override="users")
-            With custom path: @action(path="/add") -> "/counter/{id}/add"
-        """
-        # Get entity name (custom or default)
-        entity_name = (entity_name_override or self.entity_class_name).lower()
-
-        # Check if method requires instance (has 'self' parameter)
-        requires_id = "self" in self.parameters
-
-        # Determine the action segment (custom path or method name)
-        if self.path:
-            # Check if this is an absolute custom path (contains multiple segments or /)
-            # Absolute path: "/custom/path" or "/api/custom"
-            # Relative path: "add", "/add" (single segment after /)
-            path_parts = self.path.strip('/').split('/')
-
-            if len(path_parts) > 1:
-                # Multiple segments = absolute custom path, use as-is
-                custom_path = self.path if self.path.startswith('/') else f'/{self.path}'
-                return f"{prefix}{custom_path}" if prefix else custom_path
-            else:
-                # Single segment = replace action name only
-                action_segment = path_parts[0]
-        else:
-            # Use method name
-            action_segment = self.function_name
-
-        # Build final path with entity name
-        if requires_id:
-            path = f"/{entity_name}/{{id}}/{action_segment}"
-        else:
-            # Class method - no {id} in path
-            path = f"/{entity_name}/{action_segment}"
-
-        # Add prefix if provided
-        return f"{prefix}{path}" if prefix else path
 
     def __repr__(self) -> str:
         """String representation for debugging."""
