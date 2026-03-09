@@ -47,10 +47,10 @@ def action(method_or_func, **params) -> str:
 
     http_method = metadata.method.lower()
 
-    # Auto-inject entity id from bound instance method
+    # Auto-inject entity id from bound instance method (not classmethods)
     if inspect.ismethod(method_or_func) and hasattr(method_or_func, "__self__"):
         instance = method_or_func.__self__
-        if hasattr(instance, "id"):
+        if not isinstance(instance, type) and hasattr(instance, "id"):
             params.setdefault("id", instance.id)
 
     # Build the action path
