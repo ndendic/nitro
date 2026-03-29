@@ -1098,5 +1098,394 @@ def CustomTag(tag_name: str, *children: Child, **kwargs: AttributeValue) -> Unio
     ...
 
 __version__: str
-__author__: str 
+__author__: str
 __description__: str
+
+# ============================================================================
+# Nitro-specific API stubs
+# ============================================================================
+
+# --- Utilities (nitro.utils) ---
+
+def show(html: HtmlString) -> Any:
+    """Display HTML in IPython/Jupyter notebooks."""
+    ...
+
+def uniq(length: int = 6) -> str:
+    """Generate a unique hex string of the given length."""
+    ...
+
+class AttrDict(dict):
+    """`dict` subclass that provides access to keys as attributes."""
+    def __getattr__(self, k: str) -> Any: ...
+    def __setattr__(self, k: str, v: Any) -> None: ...
+    def copy(self) -> "AttrDict": ...
+
+# --- Event System (nitro.events) ---
+
+class Namespace(dict):
+    """A dict mapping names to Event instances."""
+    def event(self, name: str, doc: str | None = None) -> "Event": ...
+
+class Event:
+    """Enhanced Blinker signal with async support, priority, and conditions."""
+    name: str
+    namespace: Namespace
+
+    def __init__(self, name: str, namespace: Namespace | None = None, doc: str | None = None) -> None: ...
+    def connect(
+        self,
+        receiver: Any,
+        sender: Any = ...,
+        weak: bool = True,
+        priority: int = 0,
+        condition: Any | None = None,
+    ) -> Any:
+        """Connect a receiver with optional priority and condition."""
+        ...
+    def emit(self, sender: Any = ..., *args: Any, **kwargs: Any) -> list[Any]:
+        """Emit event synchronously with priority ordering and cancellation."""
+        ...
+    async def emit_async(self, sender: Any = ..., *args: Any, **kwargs: Any) -> list[Any]:
+        """Fully async emit with parallel execution."""
+        ...
+
+default_namespace: Namespace
+
+def event(name: str, doc: str | None = None) -> Event:
+    """Return or create a named Event in the default namespace."""
+    ...
+
+def on(
+    evt: str | Event,
+    sender: Any = ...,
+    weak: bool = True,
+    priority: int = 0,
+    condition: Any | None = None,
+) -> Any:
+    """Decorator to connect a handler to an event."""
+    ...
+
+def emit(event_to_emit: str | Event, sender: Any = ..., *args: Any, **kwargs: Any) -> list[Any]:
+    """Emit an event by name or Event instance."""
+    ...
+
+async def emit_async(event_to_emit: str | Event, sender: Any = ..., *args: Any, **kwargs: Any) -> list[Any]:
+    """Async emit an event by name or Event instance."""
+    ...
+
+ANY: Any
+"""Sentinel for subscribing to all senders (from blinker)."""
+
+# --- SSE Client (nitro.events.client) ---
+
+class Client:
+    """Manages individual client connections with automatic lifecycle handling."""
+    client_id: str
+    connected: bool
+    topics: Any
+    muted_topics: Any
+
+    def __init__(
+        self,
+        client_id: str | None = None,
+        topics: list[str] | dict[str, list[str]] | Any = ...,
+        muted_topics: str | list[str] | Any = ...,
+    ) -> None: ...
+    def subscribe(self, topic: str, senders: list[str] | Any = ...) -> None:
+        """Subscribe to a topic with optional sender filtering."""
+        ...
+    def unsubscribe(self, topic: str) -> None:
+        """Unsubscribe from a topic."""
+        ...
+    async def stream(self) -> Any:
+        """Async generator that yields events from subscribed topics."""
+        ...
+    def __enter__(self) -> "Client": ...
+    def __exit__(self, *args: Any) -> None: ...
+    async def __aenter__(self) -> "Client": ...
+    async def __aexit__(self, *args: Any) -> None: ...
+
+# --- Entity System (nitro.domain.entities) ---
+
+class Entity:
+    """SQL-backed entity with Active Record pattern. Built on SQLModel."""
+    id: str
+
+    def __init__(self, **kwargs: Any) -> None: ...
+    def __init_subclass__(cls, **kwargs: Any) -> None: ...
+
+    @classmethod
+    def repository(cls) -> Any:
+        """Get the singleton repository instance."""
+        ...
+
+    @classmethod
+    def get(cls, id: Any) -> "Entity | None":
+        """Get an entity by ID."""
+        ...
+
+    @classmethod
+    def exists(cls, id: Any) -> bool:
+        """Check if an entity exists by ID."""
+        ...
+
+    def save(self) -> bool:
+        """Save the entity to the database."""
+        ...
+
+    def delete(self) -> bool:
+        """Delete the entity from the database."""
+        ...
+
+    @classmethod
+    def all(cls) -> list["Entity"]:
+        """Get all entities of this type."""
+        ...
+
+    @classmethod
+    def where(
+        cls,
+        *expressions: Any,
+        order_by: Any | None = None,
+        limit: int | None = None,
+        offset: int | None = None,
+    ) -> list["Entity"]:
+        """Query entities with SQLAlchemy expressions."""
+        ...
+
+    @classmethod
+    def find(cls, id: Any) -> "Entity | None":
+        """Find an entity by ID (alias for get)."""
+        ...
+
+    @classmethod
+    def find_by(cls, **kwargs: Any) -> "list[Entity] | Entity | None":
+        """Find entities by field values."""
+        ...
+
+    @classmethod
+    def search(
+        cls,
+        search_value: str | None = None,
+        sorting_field: str | None = None,
+        sort_direction: str = "asc",
+        limit: int | None = None,
+        offset: int | None = None,
+        as_dict: bool = False,
+        fields: list[str] | None = None,
+    ) -> list[dict[str, Any]]:
+        """Search entities with text matching, sorting, and pagination."""
+        ...
+
+    @classmethod
+    def filter(
+        cls,
+        sorting_field: str | None = None,
+        sort_direction: str = "asc",
+        limit: int | None = None,
+        offset: int | None = None,
+        as_dict: bool = False,
+        fields: list[str] | None = None,
+        exact_match: bool = True,
+        **kwargs: Any,
+    ) -> list["Entity"]:
+        """Filter entities by field values with sorting and pagination."""
+        ...
+
+    @property
+    def signals(self) -> Any:
+        """Get a Signals instance populated from entity fields."""
+        ...
+
+    @classmethod
+    def fields_meta(
+        cls,
+        exclude: list[str] | None = None,
+        include_computed: bool = False,
+    ) -> AttrDict:
+        """Get metadata for all fields in the entity."""
+        ...
+
+# --- Routing Decorators (nitro.routing) ---
+
+def action(method_or_func: Any, **params: Any) -> str:
+    """Generate a Datastar action string from a decorated function reference.
+
+    Example:
+        action(counter.increment, amount=5)
+        -> "$amount = 5; @post('/post/Counter:abc123.increment')"
+    """
+    ...
+
+def get(
+    path: str | None = None,
+    summary: str | None = None,
+    description: str | None = None,
+    tags: list[str] | None = None,
+    response_model: Any | None = None,
+    status_code: int = 200,
+    prefix: str = "",
+) -> Any:
+    """Decorator to register a GET action handler."""
+    ...
+
+def post(
+    path: str | None = None,
+    summary: str | None = None,
+    description: str | None = None,
+    tags: list[str] | None = None,
+    response_model: Any | None = None,
+    status_code: int = 200,
+    prefix: str = "",
+) -> Any:
+    """Decorator to register a POST action handler."""
+    ...
+
+def put(
+    path: str | None = None,
+    summary: str | None = None,
+    description: str | None = None,
+    tags: list[str] | None = None,
+    response_model: Any | None = None,
+    status_code: int = 200,
+    prefix: str = "",
+) -> Any:
+    """Decorator to register a PUT action handler."""
+    ...
+
+def delete(
+    path: str | None = None,
+    summary: str | None = None,
+    description: str | None = None,
+    tags: list[str] | None = None,
+    response_model: Any | None = None,
+    status_code: int = 200,
+    prefix: str = "",
+) -> Any:
+    """Decorator to register a DELETE action handler."""
+    ...
+
+class ActionMetadata:
+    """Metadata for an @action decorated entity method."""
+    method: str
+    path: str | None
+    status_code: int
+    summary: str | None
+    description: str | None
+    tags: list[str]
+    response_model: Any | None
+    function_name: str
+    entity_class_name: str
+    event_name: str
+    prefix: str
+    is_async: bool
+    parameters: dict
+
+class NotFoundError(Exception):
+    """Raised when an entity is not found during action dispatch."""
+    ...
+
+# --- HTML Templating (nitro.html.templating) ---
+
+def Page(
+    *content: Any,
+    title: str = "Nitro",
+    hdrs: tuple | None = None,
+    ftrs: tuple | None = None,
+    htmlkw: dict | None = None,
+    bodykw: dict | None = None,
+    datastar: bool = True,
+    ds_version: str = "1.0.0-RC.6",
+    nitro_components: bool = True,
+    charts: bool = False,
+    tailwind4: bool = False,
+    lucide: bool = False,
+    highlightjs: bool = False,
+    favicon: str | None = None,
+    favicon_dark: str | None = None,
+) -> HtmlString:
+    """Base page layout with Datastar, Tailwind, Lucide, and more."""
+    ...
+
+def page_template(
+    page_title: str = "Nitro",
+    hdrs: tuple | None = None,
+    ftrs: tuple | None = None,
+    htmlkw: dict | None = None,
+    bodykw: dict | None = None,
+    datastar: bool = True,
+    ds_version: str = "1.0.0-RC.6",
+    nitro_components: bool = True,
+    charts: bool = False,
+    tailwind4: bool = False,
+    lucide: bool = False,
+    highlightjs: bool = False,
+    favicon: str | None = None,
+    favicon_dark: str | None = None,
+) -> Any:
+    """Create a page template usable as decorator or direct call."""
+    ...
+
+create_template = page_template
+"""Legacy alias for page_template."""
+
+def template(func: Any) -> Any:
+    """Decorator that turns a function into a flexible template wrapper."""
+    ...
+
+# --- HTML Utilities (re-exported from rusty_tags) ---
+
+def Fragment(*children: Child) -> HtmlString:
+    """Create an HTML fragment (no wrapping tag)."""
+    ...
+
+def Safe(content: str) -> HtmlString:
+    """Mark a string as safe HTML (no escaping)."""
+    ...
+
+def when(condition: bool, value: str) -> str:
+    """Return value if condition is True, else empty string."""
+    ...
+
+def unless(condition: bool, value: str) -> str:
+    """Return value if condition is False, else empty string."""
+    ...
+
+Option = OptionEl
+"""Alias for OptionEl (proper HTML <option> tag)."""
+
+# --- Datastar SDK (nitro.html.datastar) ---
+
+class Signals:
+    """Reactive signals container for Datastar integration."""
+    def __init__(self, **kwargs: Any) -> None: ...
+    def __getattr__(self, name: str) -> Any: ...
+
+def signals(**kwargs: Any) -> Signals:
+    """Create a Signals instance with the given initial values."""
+    ...
+
+class DS:
+    """Datastar attribute helpers."""
+    ...
+
+def reactive_class(*args: Any, **kwargs: Any) -> str:
+    """Generate a reactive CSS class expression."""
+    ...
+
+def attribute_generator(*args: Any, **kwargs: Any) -> Any:
+    """Generate Datastar data attributes."""
+    ...
+
+class SSE:
+    """Server-Sent Events helper for Datastar."""
+    ...
+
+class ElementPatchMode:
+    """Enum for Datastar element patch modes."""
+    ...
+
+class EventType:
+    """Enum for Datastar event types."""
+    ...

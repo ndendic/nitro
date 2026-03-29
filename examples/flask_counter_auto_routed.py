@@ -1,41 +1,29 @@
 """
-Flask Counter Example with Auto-Routing
+Flask Counter Example with Event-Driven Auto-Routing
 
-Demonstrates Nitro's auto-routing system with Flask.
-Entity methods decorated with @action are automatically
-registered as Flask routes.
+Demonstrates Nitro's event-driven routing system with Flask.
+Entity methods decorated with @post/@get are automatically
+registered as Blinker event handlers, dispatched via catch-all routes.
 
 Routes auto-generated:
-    POST   /counter/<id>/increment
-    POST   /counter/<id>/decrement
-    POST   /counter/<id>/reset
-    GET    /counter/<id>/status
+    POST   /post/Counter:<id>.increment
+    POST   /post/Counter:<id>.decrement
+    POST   /post/Counter:<id>.reset
+    GET    /get/Counter:<id>.status
 """
 
-import sys
-from pathlib import Path
-
-# Add parent directory to path to import local nitro
-nitro_path = Path(__file__).parent.parent
-sys.path.insert(0, str(nitro_path))
-
 from flask import Flask
-from nitro import Entity, action
+from nitro import Entity, get, post, action
 from nitro.adapters.flask import configure_nitro
-from nitro.domain.repository.sql import SQLModelRepository
 
 
 class Counter(Entity, table=True):
-    """Counter entity with auto-routed actions."""
+    """Counter entity with event-driven routed actions."""
 
     count: int = 0
     name: str = "Counter"
 
-    model_config = {
-        "repository_class": SQLModelRepository
-    }
-
-    @action(method="POST", summary="Increment counter")
+    @post(summary="Increment counter")
     def increment(self, amount: int = 1):
         """Increment the counter by the specified amount."""
         self.count += amount
@@ -45,7 +33,7 @@ class Counter(Entity, table=True):
             "message": f"Incremented by {amount}"
         }
 
-    @action(method="POST", summary="Decrement counter")
+    @post(summary="Decrement counter")
     def decrement(self, amount: int = 1):
         """Decrement the counter by the specified amount."""
         self.count -= amount
@@ -55,7 +43,7 @@ class Counter(Entity, table=True):
             "message": f"Decremented by {amount}"
         }
 
-    @action(method="POST", summary="Reset counter")
+    @post(summary="Reset counter")
     def reset(self):
         """Reset the counter to zero."""
         self.count = 0
@@ -65,7 +53,7 @@ class Counter(Entity, table=True):
             "message": "Counter reset to 0"
         }
 
-    @action(method="GET", summary="Get counter status")
+    @get(summary="Get counter status")
     def status(self):
         """Get the current counter status."""
         return {
@@ -86,21 +74,21 @@ def create_app():
     if not Counter.get("demo"):
         Counter(id="demo", name="Demo Counter", count=0).save()
 
-    # Configure Nitro auto-routing
+    # Configure Nitro event-driven routing
     configure_nitro(app)
 
     # Add manual homepage route
     @app.route("/")
     def home():
         return {
-            "message": "Flask Counter with Nitro Auto-Routing",
+            "message": "Flask Counter with Nitro Event-Driven Routing",
             "routes": {
-                "POST /counter/<id>/increment": "Increment counter",
-                "POST /counter/<id>/decrement": "Decrement counter",
-                "POST /counter/<id>/reset": "Reset counter",
-                "GET /counter/<id>/status": "Get counter status"
+                "POST /post/Counter:demo.increment": "Increment counter",
+                "POST /post/Counter:demo.decrement": "Decrement counter",
+                "POST /post/Counter:demo.reset": "Reset counter",
+                "GET /get/Counter:demo.status": "Get counter status"
             },
-            "example": "curl -X POST http://localhost:8091/counter/demo/increment"
+            "example": "curl -X POST http://localhost:8091/post/Counter:demo.increment"
         }
 
     return app
@@ -111,7 +99,7 @@ if __name__ == "__main__":
 
     # Print registered routes
     print("\n" + "="*60)
-    print("Flask Counter App with Nitro Auto-Routing")
+    print("Flask Counter App with Nitro Event-Driven Routing")
     print("="*60)
     print("\nRegistered routes:")
     for rule in app.url_map.iter_rules():

@@ -22,7 +22,7 @@ class TestDispatchAction:
             call_log.append(signals.get("name", "world"))
             return {"greeting": f"hello {signals.get('name', 'world')}"}
 
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             dispatch_action("test.greet", "client1", signals={"name": "Nikola"})
         )
         assert call_log == ["Nikola"]
@@ -35,7 +35,7 @@ class TestDispatchAction:
         async def handler(sender, **kwargs):
             received_signals.update(kwargs.get("signals", {}))
 
-        asyncio.get_event_loop().run_until_complete(
+        asyncio.run(
             dispatch_action(
                 "Counter:abc123.increment", "client1",
                 signals={"amount": 5}
@@ -53,14 +53,14 @@ class TestDispatchAction:
             called_with.update(kwargs)
             return []
 
-        asyncio.get_event_loop().run_until_complete(
+        asyncio.run(
             dispatch_action("Todo.load_all", "client1", signals={})
         )
         assert "signals" in called_with
 
     def test_dispatch_no_handler_returns_none(self):
         """If no handler is registered, emit returns nothing."""
-        result = asyncio.get_event_loop().run_until_complete(
+        result = asyncio.run(
             dispatch_action("nonexistent.action", "client1", signals={})
         )
         # No handler = no result (Blinker returns empty)

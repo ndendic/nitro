@@ -91,7 +91,7 @@ class TestStandaloneEventRegistration:
             return {"ok": True}
 
         evt = event("test.do_thing")
-        asyncio.get_event_loop().run_until_complete(
+        asyncio.run(
             evt.emit_async(None, signals={"name": "hello"})
         )
         assert call_log == ["hello"]
@@ -104,7 +104,7 @@ class TestStandaloneEventRegistration:
             call_log.append(value)
 
         evt = event("test.async_thing")
-        asyncio.get_event_loop().run_until_complete(
+        asyncio.run(
             evt.emit_async(None, signals={"value": 42})
         )
         assert call_log == [42]

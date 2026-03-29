@@ -121,7 +121,7 @@ def CRUDDialog(
             variant=trigger_variant,
         )
 
-        return Fragment(trigger, dialog)
+        return (trigger, dialog)
 
     return dialog
 

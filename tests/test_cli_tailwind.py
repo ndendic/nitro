@@ -8,6 +8,10 @@ import os
 import pytest
 from pathlib import Path
 
+# Absolute path to nitro binary in the venv — works in temp dirs unlike `uv run nitro`
+NITRO_PROJECT_DIR = str(Path(__file__).parent.parent)
+NITRO_BIN = str(Path(__file__).parent.parent / ".venv" / "bin" / "nitro")
+
 
 class TestTailwindInit:
     """Test nitro tw init command"""
@@ -18,7 +22,7 @@ class TestTailwindInit:
             ["uv", "run", "nitro", "tw", "init", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -29,7 +33,7 @@ class TestTailwindInit:
         with tempfile.TemporaryDirectory() as tmpdir:
             # Run init in temp directory
             result = subprocess.run(
-                ["uv", "run", "nitro", "tw", "init"],
+                [NITRO_BIN, "tw", "init"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir
@@ -41,19 +45,20 @@ class TestTailwindInit:
                 # If successful, check for created files
                 tmppath = Path(tmpdir)
 
-                # Should create tailwind.config.js or input.css
+                # Should create tailwind config or input.css (under static/css/)
                 config_exists = (tmppath / "tailwind.config.js").exists()
                 input_exists = (tmppath / "input.css").exists()
+                static_input_exists = (tmppath / "static" / "css" / "input.css").exists()
 
                 # At least one should exist
-                assert config_exists or input_exists, "No Tailwind files created"
+                assert config_exists or input_exists or static_input_exists, "No Tailwind files created"
 
     def test_tw_init_idempotent(self):
         """Verify running 'nitro tw init' twice is safe"""
         with tempfile.TemporaryDirectory() as tmpdir:
             # Run init first time
             result1 = subprocess.run(
-                ["uv", "run", "nitro", "tw", "init"],
+                [NITRO_BIN, "tw", "init"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir
@@ -61,7 +66,7 @@ class TestTailwindInit:
 
             # Run init second time
             result2 = subprocess.run(
-                ["uv", "run", "nitro", "tw", "init"],
+                [NITRO_BIN, "tw", "init"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir
@@ -81,7 +86,7 @@ class TestTailwindDev:
             ["uv", "run", "nitro", "tw", "dev", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -92,7 +97,7 @@ class TestTailwindDev:
         with tempfile.TemporaryDirectory() as tmpdir:
             # Try to run dev without init
             result = subprocess.run(
-                ["uv", "run", "nitro", "tw", "dev"],
+                [NITRO_BIN, "tw", "dev"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir,
@@ -116,7 +121,7 @@ class TestTailwindBuild:
             ["uv", "run", "nitro", "tw", "build", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -127,7 +132,7 @@ class TestTailwindBuild:
         with tempfile.TemporaryDirectory() as tmpdir:
             # Try to run build without init
             result = subprocess.run(
-                ["uv", "run", "nitro", "tw", "build"],
+                [NITRO_BIN, "tw", "build"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir,
@@ -169,7 +174,7 @@ module.exports = {
 
             # Try to run build
             result = subprocess.run(
-                ["uv", "run", "nitro", "tw", "build"],
+                [NITRO_BIN, "tw", "build"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir,
@@ -195,7 +200,7 @@ class TestTailwindBinaryManagement:
             ["uv", "run", "nitro", "tw", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         # Command should at least execute
@@ -208,7 +213,7 @@ class TestTailwindBinaryManagement:
             ["uv", "run", "nitro", "tw", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         # Should work regardless of Node.js presence
@@ -222,7 +227,7 @@ class TestTailwindBinaryManagement:
             with tempfile.TemporaryDirectory() as tmpdir2:
                 # Run init in first project
                 result1 = subprocess.run(
-                    ["uv", "run", "nitro", "tw", "--help"],
+                    [NITRO_BIN, "tw", "--help"],
                     capture_output=True,
                     text=True,
                     cwd=tmpdir1
@@ -230,7 +235,7 @@ class TestTailwindBinaryManagement:
 
                 # Run init in second project
                 result2 = subprocess.run(
-                    ["uv", "run", "nitro", "tw", "--help"],
+                    [NITRO_BIN, "tw", "--help"],
                     capture_output=True,
                     text=True,
                     cwd=tmpdir2
@@ -260,7 +265,7 @@ class TestTailwindConfiguration:
 
             # Run help to see if it detects structure
             result = subprocess.run(
-                ["uv", "run", "nitro", "tw", "--help"],
+                [NITRO_BIN, "tw", "--help"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir
@@ -276,7 +281,7 @@ class TestTailwindConfiguration:
             env["NITRO_TAILWIND_CSS_OUTPUT"] = "custom/output.css"
 
             result = subprocess.run(
-                ["uv", "run", "nitro", "tw", "--help"],
+                [NITRO_BIN, "tw", "--help"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir,

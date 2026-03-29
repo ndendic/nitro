@@ -1,43 +1,35 @@
 """
-FastHTML Counter Example with Auto-Routing
+FastHTML Counter Example with Event-Driven Routing
 
-Demonstrates Nitro's auto-routing system with FastHTML.
-Entity methods decorated with @action are automatically
-registered as FastHTML routes.
+Demonstrates Nitro's event-driven routing system with FastHTML.
+Entity methods decorated with @post/@get are automatically
+registered as Blinker event handlers. The Starlette adapter
+(used by FastHTML) provides catch-all endpoints that dispatch
+to those handlers.
+
+Requires: pip install python-fasthtml
 
 Routes auto-generated:
-    POST   /counter/{id}/increment
-    POST   /counter/{id}/decrement
-    POST   /counter/{id}/reset
-    GET    /counter/{id}/status
+    POST   /post/Counter:demo.increment
+    POST   /post/Counter:demo.decrement
+    POST   /post/Counter:demo.reset
+    GET    /get/Counter:demo.status
 """
 
-import sys
-from pathlib import Path
-
-# Add parent directory to path to import local nitro
-nitro_path = Path(__file__).parent.parent
-sys.path.insert(0, str(nitro_path))
-
 from fasthtml.common import *
-from nitro import Entity, action
-from nitro.adapters.fasthtml import configure_nitro
-from nitro.domain.repository.sql import SQLModelRepository
+from nitro import Entity, get, post, action
+from nitro.adapters.starlette import configure_nitro
 from rusty_tags import Div, H1, H2, P, Button, Span, Br, Pre
 from nitro.html import Page
 
 
 class Counter(Entity, table=True):
-    """Counter entity with auto-routed actions."""
+    """Counter entity with event-driven routed actions."""
 
     count: int = 0
     name: str = "Counter"
 
-    model_config = {
-        "repository_class": SQLModelRepository
-    }
-
-    @action(method="POST", summary="Increment counter")
+    @post(summary="Increment counter")
     def increment(self, amount: int = 1):
         """Increment the counter by the specified amount."""
         self.count += amount
@@ -47,7 +39,7 @@ class Counter(Entity, table=True):
             "message": f"Incremented by {amount}"
         }
 
-    @action(method="POST", summary="Decrement counter")
+    @post(summary="Decrement counter")
     def decrement(self, amount: int = 1):
         """Decrement the counter by the specified amount."""
         self.count -= amount
@@ -57,7 +49,7 @@ class Counter(Entity, table=True):
             "message": f"Decremented by {amount}"
         }
 
-    @action(method="POST", summary="Reset counter")
+    @post(summary="Reset counter")
     def reset(self):
         """Reset the counter to zero."""
         self.count = 0
@@ -67,7 +59,7 @@ class Counter(Entity, table=True):
             "message": "Counter reset to 0"
         }
 
-    @action(method="GET", summary="Get counter status")
+    @get(summary="Get counter status")
     def status(self):
         """Get the current counter status."""
         return {
@@ -87,8 +79,8 @@ if not Counter.get("demo"):
 # Create FastHTML app
 app, rt = fast_app()
 
-# Configure Nitro auto-routing (only register this Counter, not all discovered entities)
-configure_nitro(rt, entities=[Counter], auto_discover=False)
+# Configure Nitro event-driven routing (Starlette catch-all endpoints)
+configure_nitro(app)
 
 # Manual homepage route
 @rt("/")
@@ -99,40 +91,40 @@ def homepage():
 
     page_content = Page(
         Div(
-            H1("FastHTML Counter with Nitro Auto-Routing", class_="text-4xl font-bold text-indigo-600 mb-4"),
+            H1("FastHTML Counter with Nitro Event-Driven Routing", class_="text-4xl font-bold text-indigo-600 mb-4"),
             H2(f"Current Count: {count_value}", class_="text-3xl mb-6"),
 
             # Counter controls
             Div(
-                Button("➕ Increment",
+                Button("+ Increment",
                        class_="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded mr-2",
-                       onclick="fetch('/counter/demo/increment', {method: 'POST'}).then(() => location.reload())"),
-                Button("➖ Decrement",
+                       onclick="fetch('/post/Counter:demo.increment', {method: 'POST'}).then(() => location.reload())"),
+                Button("- Decrement",
                        class_="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mr-2",
-                       onclick="fetch('/counter/demo/decrement', {method: 'POST'}).then(() => location.reload())"),
-                Button("🔄 Reset",
+                       onclick="fetch('/post/Counter:demo.decrement', {method: 'POST'}).then(() => location.reload())"),
+                Button("Reset",
                        class_="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded",
-                       onclick="fetch('/counter/demo/reset', {method: 'POST'}).then(() => location.reload())"),
+                       onclick="fetch('/post/Counter:demo.reset', {method: 'POST'}).then(() => location.reload())"),
                 class_="mb-8"
             ),
 
             # API Routes
             H2("Auto-Generated API Routes:", class_="text-2xl mb-4"),
-            Pre("""POST /counter/{id}/increment
-POST /counter/{id}/decrement
-POST /counter/{id}/reset
-GET  /counter/{id}/status""",
+            Pre("""POST /post/Counter:{id}.increment
+POST /post/Counter:{id}.decrement
+POST /post/Counter:{id}.reset
+GET  /get/Counter:{id}.status""",
                 class_="bg-gray-100 p-4 rounded"),
 
             Br(),
             P("Example: ", class_="text-sm text-gray-600"),
-            Pre("""curl -X POST http://localhost:8092/counter/demo/increment
-curl -X GET http://localhost:8092/counter/demo/status""",
+            Pre("""curl -X POST http://localhost:8093/post/Counter:demo.increment
+curl -X GET http://localhost:8093/get/Counter:demo.status""",
                 class_="bg-gray-100 p-2 rounded text-xs"),
 
             class_="container mx-auto p-8"
         ),
-        title="FastHTML Counter - Nitro Auto-Routing"
+        title="FastHTML Counter - Nitro Event-Driven Routing"
     )
 
     return str(page_content)
@@ -140,13 +132,13 @@ curl -X GET http://localhost:8092/counter/demo/status""",
 
 if __name__ == "__main__":
     print("\n" + "="*60)
-    print("FastHTML Counter App with Nitro Auto-Routing")
+    print("FastHTML Counter App with Nitro Event-Driven Routing")
     print("="*60)
     print("\nAuto-generated routes:")
-    print("  POST   /counter/<id>/increment")
-    print("  POST   /counter/<id>/decrement")
-    print("  POST   /counter/<id>/reset")
-    print("  GET    /counter/<id>/status")
+    print("  POST   /post/Counter:<id>.increment")
+    print("  POST   /post/Counter:<id>.decrement")
+    print("  POST   /post/Counter:<id>.reset")
+    print("  GET    /get/Counter:<id>.status")
     print("  GET    /")
     print("\n" + "="*60)
     print("Server starting on http://0.0.0.0:8093")

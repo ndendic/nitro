@@ -43,6 +43,7 @@ def ModelTable(
     selectable: bool = False,
     bulk_actions: Optional[List[Dict[str, Any]]] = None,
     column_toggle: bool = False,
+    id: Optional[str] = None,
 ) -> HtmlString:
     """Generate a data table from BaseModel class with advanced features.
 
@@ -306,6 +307,7 @@ def ModelTable(
         TableHeader(TableRow(*headers)),
         TableBody(*rows),
         signals=signals,
+        id=id if id else f"{entity_class.__name__.lower()}-table",
     )
 
     # Build controls wrapper

@@ -91,7 +91,7 @@ class TestFullIntegration:
             results.append(result)
             return {"sum": result}
 
-        asyncio.get_event_loop().run_until_complete(
+        asyncio.run(
             dispatch_action("math.add", "client1", signals={"a": 3, "b": 7})
         )
         assert results == [10]

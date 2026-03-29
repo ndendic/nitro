@@ -6,7 +6,6 @@ for all date selection functionality. Styled with shadcn/Basecoat CSS variables.
 Requires: vanillajs-datepicker CDN script loaded in the page.
 """
 
-from turtle import right
 from typing import Any, Optional
 import rusty_tags as rt
 from rusty_tags.datastar import Signal

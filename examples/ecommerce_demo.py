@@ -12,6 +12,7 @@ Then visit: http://localhost:8006/docs
 """
 
 import sys
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import List, Optional
 from datetime import datetime
@@ -37,7 +38,7 @@ class Product(Entity, table=True):
     price: float
     stock: int = 0
 
-    model_config = {"repository_class": SQLModelRepository}
+
 
     def reduce_stock(self, quantity: int) -> bool:
         """Reduce stock by quantity, return success."""
@@ -65,7 +66,7 @@ class Order(Entity, table=True):
     status: str = "pending"  # pending, placed, confirmed, cancelled
     created_at: Optional[str] = None
 
-    model_config = {"repository_class": SQLModelRepository}
+
 
     def place(self) -> bool:
         """Place the order and trigger events."""
@@ -147,10 +148,31 @@ async def notify_restock(sender: Product, **kwargs):
 # FASTAPI APPLICATION
 # ============================================================================
 
-app = FastAPI(title="Nitro E-commerce Demo", version="1.0.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize database and demo data on startup."""
+    SQLModelRepository().init_db()
 
-# Initialize database
-SQLModelRepository().init_db()
+    # Create demo data if products table is empty
+    if len(Product.all()) == 0:
+        products = [
+            Product(id="prod-1", name="Laptop", price=999.99, stock=50),
+            Product(id="prod-2", name="Mouse", price=29.99, stock=100),
+            Product(id="prod-3", name="Keyboard", price=79.99, stock=75),
+            Product(id="prod-4", name="Monitor", price=299.99, stock=8),  # Low stock
+        ]
+
+        for product in products:
+            product.save()
+
+        print("\n✓ Demo products initialized")
+        print(f"  - {len(products)} products created")
+        print(f"  - Visit http://localhost:8006/docs to try the API\n")
+
+    yield
+
+
+app = FastAPI(title="Nitro E-commerce Demo", version="1.0.0", lifespan=lifespan)
 
 
 # ============================================================================
@@ -247,31 +269,6 @@ async def get_order(order_id: str):
     if not order:
         raise HTTPException(404, "Order not found")
     return order
-
-
-# ============================================================================
-# DEMO INITIALIZATION
-# ============================================================================
-
-@app.on_event("startup")
-async def init_demo_data():
-    """Initialize demo data on startup."""
-    # Check if products already exist
-    if len(Product.all()) == 0:
-        # Create sample products
-        products = [
-            Product(id="prod-1", name="Laptop", price=999.99, stock=50),
-            Product(id="prod-2", name="Mouse", price=29.99, stock=100),
-            Product(id="prod-3", name="Keyboard", price=79.99, stock=75),
-            Product(id="prod-4", name="Monitor", price=299.99, stock=8),  # Low stock
-        ]
-
-        for product in products:
-            product.save()
-
-        print("\n✓ Demo products initialized")
-        print(f"  - {len(products)} products created")
-        print(f"  - Visit http://localhost:8006/docs to try the API\n")
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@
 Versioned API Demo - Route Prefixes for API Versioning
 
 This example demonstrates how to use route prefixes to implement
-API versioning with Nitro's auto-routing system.
+API versioning with Nitro's event-driven routing system.
 
 Features:
 - Multiple API versions (v1, v2) on the same app
@@ -10,19 +10,25 @@ Features:
 - Backward compatibility
 - Clean migration path
 
+Route format with prefix:
+    POST /api/v1/post/CounterV1:{id}.increment
+    GET  /api/v1/get/CounterV1:{id}.status
+    POST /api/v2/post/CounterV2:{id}.increment
+    GET  /api/v2/get/CounterV2:{id}.status
+
 Run:
     uvicorn examples.versioned_api_demo:app --reload --port 8090
 
 Test:
     # V1 API (simple increment)
-    curl -X POST http://localhost:8090/api/v1/counter/demo/increment
+    curl -X POST http://localhost:8090/api/v1/post/CounterV1:demo.increment
 
     # V2 API (enhanced increment with timestamp)
-    curl -X POST http://localhost:8090/api/v2/counter/demo/increment
+    curl -X POST http://localhost:8090/api/v2/post/CounterV2:demo.increment
 
     # Both versions work independently
-    curl http://localhost:8090/api/v1/counter/demo/status
-    curl http://localhost:8090/api/v2/counter/demo/status
+    curl http://localhost:8090/api/v1/get/CounterV1:demo.status
+    curl http://localhost:8090/api/v2/get/CounterV2:demo.status
 """
 
 from datetime import datetime
@@ -30,8 +36,7 @@ from typing import Optional
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
-from nitro import Entity, action
-from nitro.domain.repository.sql import SQLModelRepository
+from nitro import Entity, get, post, action
 from nitro.adapters.fastapi import configure_nitro
 
 
@@ -46,25 +51,21 @@ class CounterV1(Entity, table=True):
     count: int = 0
     name: str = "Counter"
 
-    model_config = {
-        "repository_class": SQLModelRepository
-    }
-
-    @action(method="POST", summary="Increment counter (v1)")
+    @post()
     def increment(self, amount: int = 1):
         """Simple increment - returns just the count."""
         self.count += amount
         self.save()
         return {"count": self.count}
 
-    @action(method="POST", summary="Reset counter (v1)")
+    @post()
     def reset(self):
         """Reset to zero."""
         self.count = 0
         self.save()
         return {"count": 0, "message": "reset"}
 
-    @action(method="GET", summary="Get status (v1)")
+    @get()
     def status(self):
         """Get current count - simple response."""
         return {
@@ -86,11 +87,7 @@ class CounterV2(Entity, table=True):
     last_modified: Optional[str] = None
     total_operations: int = 0
 
-    model_config = {
-        "repository_class": SQLModelRepository
-    }
-
-    @action(method="POST", summary="Increment counter (v2 - enhanced)")
+    @post()
     def increment(self, amount: int = 1):
         """Enhanced increment - tracks metadata."""
         self.count += amount
@@ -104,7 +101,7 @@ class CounterV2(Entity, table=True):
             "total_operations": self.total_operations
         }
 
-    @action(method="POST", summary="Decrement counter (v2 - new feature)")
+    @post()
     def decrement(self, amount: int = 1):
         """New feature in v2 - decrement counter."""
         self.count -= amount
@@ -118,7 +115,7 @@ class CounterV2(Entity, table=True):
             "total_operations": self.total_operations
         }
 
-    @action(method="POST", summary="Reset counter (v2)")
+    @post()
     def reset(self):
         """Reset with enhanced response."""
         old_count = self.count
@@ -133,7 +130,7 @@ class CounterV2(Entity, table=True):
             "timestamp": self.last_modified
         }
 
-    @action(method="GET", summary="Get status (v2 - enhanced)")
+    @get()
     def status(self):
         """Enhanced status with metadata."""
         return {
@@ -155,27 +152,27 @@ app = FastAPI(
     version="2.0.0"
 )
 
-
-# Register V1 API
-configure_nitro(
-    app,
-    entities=[CounterV1],
-    prefix="/api/v1",
-    auto_discover=False
-)
-
-# Register V2 API
-configure_nitro(
-    app,
-    entities=[CounterV2],
-    prefix="/api/v2",
-    auto_discover=False
-)
-
-
-# Initialize database tables
+# Initialize database tables for both entity versions
 CounterV1.repository().init_db()
 CounterV2.repository().init_db()
+
+# Seed demo entities if they don't exist
+if not CounterV1.exists("demo"):
+    CounterV1(id="demo", name="Demo Counter V1", count=0).save()
+if not CounterV2.exists("demo"):
+    CounterV2(id="demo", name="Demo Counter V2", count=0).save()
+
+# NOTE: Both V1 and V2 entities register ALL their events at import time
+# via __init_subclass__. The prefix only affects the catch-all route paths.
+# Since both calls to configure_nitro add catch-all routes, both V1 and V2
+# events can technically be reached through either prefix. This is a known
+# limitation of the current event-driven routing approach.
+
+# Register V1 API
+configure_nitro(app, prefix="/api/v1")
+
+# Register V2 API
+configure_nitro(app, prefix="/api/v2")
 
 
 # ============================================================================
@@ -210,7 +207,7 @@ def home():
         </style>
     </head>
     <body>
-        <h1>🚀 Versioned API Demo</h1>
+        <h1>Versioned API Demo</h1>
         <p>This demo shows how to implement API versioning using Nitro's route prefix feature.</p>
 
         <h2>API V1 <span class="version">Legacy</span></h2>
@@ -218,27 +215,27 @@ def home():
 
         <div class="endpoint">
             <span class="method post">POST</span>
-            <code>/api/v1/counterv1/{id}/increment</code>
+            <code>/api/v1/post/CounterV1:{id}.increment</code>
             <p>Increment counter by amount (default: 1)</p>
             <div class="example">
                 <strong>Example:</strong><br>
-                curl -X POST "http://localhost:8090/api/v1/counterv1/demo/increment?amount=5"
+                curl -X POST "http://localhost:8090/api/v1/post/CounterV1:demo.increment?amount=5"
             </div>
         </div>
 
         <div class="endpoint">
             <span class="method get">GET</span>
-            <code>/api/v1/counterv1/{id}/status</code>
+            <code>/api/v1/get/CounterV1:{id}.status</code>
             <p>Get current counter status</p>
             <div class="example">
                 <strong>Example:</strong><br>
-                curl http://localhost:8090/api/v1/counterv1/demo/status
+                curl http://localhost:8090/api/v1/get/CounterV1:demo.status
             </div>
         </div>
 
         <div class="endpoint">
             <span class="method post">POST</span>
-            <code>/api/v1/counterv1/{id}/reset</code>
+            <code>/api/v1/post/CounterV1:{id}.reset</code>
             <p>Reset counter to zero</p>
         </div>
 
@@ -247,32 +244,32 @@ def home():
 
         <div class="endpoint">
             <span class="method post">POST</span>
-            <code>/api/v2/counterv2/{id}/increment</code>
+            <code>/api/v2/post/CounterV2:{id}.increment</code>
             <p>Enhanced increment with timestamp and operation tracking</p>
             <div class="example">
                 <strong>Example:</strong><br>
-                curl -X POST "http://localhost:8090/api/v2/counterv2/demo/increment?amount=5"<br>
+                curl -X POST "http://localhost:8090/api/v2/post/CounterV2:demo.increment?amount=5"<br>
                 <strong>Response includes:</strong> count, timestamp, total_operations
             </div>
         </div>
 
         <div class="endpoint">
             <span class="method post">POST</span>
-            <code>/api/v2/counterv2/{id}/decrement</code>
+            <code>/api/v2/post/CounterV2:{id}.decrement</code>
             <p><strong>NEW:</strong> Decrement counter (not available in v1)</p>
             <div class="example">
                 <strong>Example:</strong><br>
-                curl -X POST "http://localhost:8090/api/v2/counterv2/demo/decrement?amount=3"
+                curl -X POST "http://localhost:8090/api/v2/post/CounterV2:demo.decrement?amount=3"
             </div>
         </div>
 
         <div class="endpoint">
             <span class="method get">GET</span>
-            <code>/api/v2/counterv2/{id}/status</code>
+            <code>/api/v2/get/CounterV2:{id}.status</code>
             <p>Enhanced status with last_modified and total_operations</p>
             <div class="example">
                 <strong>Example:</strong><br>
-                curl http://localhost:8090/api/v2/counterv2/demo/status
+                curl http://localhost:8090/api/v2/get/CounterV2:demo.status
             </div>
         </div>
 

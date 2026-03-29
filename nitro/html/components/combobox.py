@@ -242,8 +242,12 @@ def Combobox(
     # Handle external binding
     bind_signal = None
     if bind is not None:
-        if hasattr(bind, 'to_js'):
-            bind_signal = bind.to_js().lstrip('$')
+        if hasattr(bind, 'to_js') and callable(bind.to_js):
+            js_result = bind.to_js()
+            if js_result is not None:
+                bind_signal = js_result.lstrip('$')
+            else:
+                bind_signal = str(bind).lstrip('$')
         elif isinstance(bind, str):
             bind_signal = bind.lstrip('$')
 

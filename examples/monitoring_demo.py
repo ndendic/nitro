@@ -54,9 +54,6 @@ def test_entity_logging():
         name: str
         email: str
 
-        class Config:
-            arbitrary_types_allowed = True
-
         @classmethod
         def repository_class(cls):
             return MemoryRepository
@@ -104,9 +101,6 @@ def test_repository_stats():
     class Product(Entity):
         name: str
         price: float
-
-        class Config:
-            arbitrary_types_allowed = True
 
         @classmethod
         def repository_class(cls):

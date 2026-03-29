@@ -32,9 +32,8 @@ class Todo(Entity, table=True):
     title: str
     completed: bool = False
 
-    # Swap backend by changing this line:
-    # model_config = {"repository_class": MemoryRepository}
-    model_config = {"repository_class": SQLModelRepository}
+    # Note: Entity uses SQLModelRepository by default.
+    # Custom repository backends are a planned feature.
 
 # Initialize FastAPI and database
 app = FastAPI(title="Nitro FastAPI Todo")

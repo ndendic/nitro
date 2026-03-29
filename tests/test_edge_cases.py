@@ -105,13 +105,23 @@ class TestEventEdgeCases:
         assert len(result) == 0
 
 
+class SimpleEntity:
+    """Simple entity-like object for MemoryRepository testing."""
+    def __init__(self, id, name, content=""):
+        self.id = id
+        self.name = name
+        self.content = content
+
+
 class TestMemoryRepositoryEdgeCases:
     """Test MemoryRepository edge cases."""
 
     def test_memory_repository_handles_concurrent_access(self):
         """Test that MemoryRepository handles concurrent access safely."""
-        # Use SQL-based entity to avoid table=False complications
-        EdgeTestEntity.repository().init_db()
+        repo = MemoryRepository()
+        # Clear any leftover data from previous tests
+        repo._data.clear()
+        repo._expiry.clear()
 
         # Track results from threads
         results = []
@@ -121,11 +131,11 @@ class TestMemoryRepositoryEdgeCases:
             """Save and load an entity in a thread."""
             try:
                 # Create and save
-                entity = EdgeTestEntity(id=f"thread_{thread_id}", name=f"Thread {thread_id}", content="test")
-                entity.save()
+                entity = SimpleEntity(id=f"thread_{thread_id}", name=f"Thread {thread_id}", content="test")
+                repo.save(entity)
 
                 # Load back
-                loaded = EdgeTestEntity.get(f"thread_{thread_id}")
+                loaded = repo.find(f"thread_{thread_id}")
                 if loaded and loaded.name == f"Thread {thread_id}":
                     results.append(thread_id)
                 else:
@@ -133,7 +143,7 @@ class TestMemoryRepositoryEdgeCases:
             except Exception as e:
                 errors.append(f"Thread {thread_id}: {str(e)}")
 
-        # Spawn 50 threads (reduced for speed and to avoid overwhelming SQLite)
+        # Spawn 50 threads
         threads = []
         for i in range(50):
             thread = threading.Thread(target=save_and_load_entity, args=(i,))
@@ -144,8 +154,8 @@ class TestMemoryRepositoryEdgeCases:
         for thread in threads:
             thread.join()
 
-        # Verify no errors occurred (or at least most succeeded)
-        # SQLite may have some concurrency limitations, so allow a few failures
+        # MemoryRepository uses a simple dict, so concurrent access should mostly work
+        # Allow a few failures due to race conditions on dict access
         assert len(errors) < 10, f"Too many errors: {errors[:5]}"
 
         # Verify most threads succeeded
@@ -153,22 +163,25 @@ class TestMemoryRepositoryEdgeCases:
 
     def test_memory_repository_concurrent_updates(self):
         """Test that concurrent updates to same entity are handled."""
-        EdgeTestEntity.repository().init_db()
+        repo = MemoryRepository()
+        # Clear any leftover data from previous tests
+        repo._data.clear()
+        repo._expiry.clear()
 
         # Create initial entity
-        entity = EdgeTestEntity(id="shared_counter", name="Counter", content="0")
-        entity.save()
+        entity = SimpleEntity(id="shared_counter", name="Counter", content="0")
+        repo.save(entity)
 
         def increment_counter(iterations):
             """Increment the counter multiple times."""
             for _ in range(iterations):
-                e = EdgeTestEntity.get("shared_counter")
+                e = repo.find("shared_counter")
                 if e:
                     current = int(e.content)
                     e.content = str(current + 1)
-                    e.save()
+                    repo.save(e)
 
-        # Run concurrent updates (reduced to avoid SQLite locking)
+        # Run concurrent updates
         threads = []
         for _ in range(5):
             thread = threading.Thread(target=increment_counter, args=(5,))
@@ -179,7 +192,7 @@ class TestMemoryRepositoryEdgeCases:
             thread.join()
 
         # Final entity should exist
-        final = EdgeTestEntity.get("shared_counter")
+        final = repo.find("shared_counter")
         assert final is not None
         # Counter should be positive (may not be exact due to race conditions)
         assert int(final.content) > 0
@@ -224,7 +237,7 @@ class TestPageEdgeCases:
 
         # Should still render valid HTML structure (lowercase from RustyTags)
         assert "<!doctype html>" in html.lower()
-        assert "<html>" in html
+        assert "<html" in html
         assert "</html>" in html
 
     def test_page_with_empty_children_list(self):

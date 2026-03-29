@@ -11,6 +11,7 @@ Run: uvicorn examples.counter_demo:app --reload --port 8001
 Then visit: http://localhost:8001
 """
 
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, JSONResponse
 from nitro.domain.entities.base_entity import Entity
@@ -69,12 +70,10 @@ async def log_reset(sender: Counter, **kwargs):
 
 
 # FastAPI app
-app = FastAPI(title="Counter Demo")
 
-
-@app.on_event("startup")
-async def startup():
-    """Initialize database."""
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize database on startup."""
     from nitro.domain.repository.sql import SQLModelRepository
     repo = SQLModelRepository()
     repo.init_db()
@@ -86,6 +85,11 @@ async def startup():
         counter = Counter(id="demo", name="Demo Counter", count=0)
         counter.save()
         print("✓ Initial counter created")
+
+    yield
+
+
+app = FastAPI(title="Counter Demo", lifespan=lifespan)
 
 
 @app.get("/", response_class=HTMLResponse)

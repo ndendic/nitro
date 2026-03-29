@@ -19,22 +19,22 @@ def _make_entity_handler(cls, method, metadata, is_instance: bool):
     """Create a Blinker event handler that wraps an Entity method."""
     if is_instance:
         async def handler(sender, **kwargs):
-            signals = kwargs.get("signals", {})
+            signals = kwargs.pop("signals", {})
             entity_id = signals.pop("id", None)
             if not entity_id:
                 raise ValueError(f"ID required for {cls.__name__}.{metadata.function_name}")
             entity = cls.get(entity_id)
             if not entity:
-                raise NotFoundError(f"{cls.__name__} '{entity_id}' not found")
-            params = _extract_params(metadata, signals)
+                raise NotFoundError(f"{cls.__name__} '{entity_id}' not found")                
+            params = _extract_params(metadata, signals, **kwargs)
             if metadata.is_async:
                 return await method(entity, **params)
             else:
                 return method(entity, **params)
     else:
         async def handler(sender, **kwargs):
-            signals = kwargs.get("signals", {})
-            params = _extract_params(metadata, signals)
+            signals = kwargs.pop("signals", {})
+            params = _extract_params(metadata, signals, **kwargs)
             if metadata.is_async:
                 return await method(**params)
             else:

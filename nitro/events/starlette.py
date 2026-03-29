@@ -4,7 +4,6 @@ from rusty_tags.datastar import SSE
 from .events import ANY
 from datastar_py.consts import ElementPatchMode
 from datastar_py.sse import _HtmlProvider
-from datastar_py.starlette import datastar_response
 
 
 from .events import emit
@@ -99,5 +98,4 @@ __all__ = [
     'emit_signals',
     'execute_script',
     'redirect',
-    'datastar_response',
 ]

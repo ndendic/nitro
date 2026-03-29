@@ -1,11 +1,14 @@
 """
-Custom Routes Demo - Nitro
+Event-Driven Routes Demo - Nitro
 
-Demonstrates all custom routing features:
-1. Custom entity names with __route_name__
-2. Custom action paths with @action(path="...")
-3. Combined custom naming
-4. Comparison with default routing
+Demonstrates routing in Nitro's event-driven paradigm:
+1. Default routing — routes based on EntityName.method_name
+2. Custom entity names with __route_name__
+3. No more custom paths — action strings are always EntityName:id.method
+4. Entities self-register via __init_subclass__ (no manual entity list)
+
+Route format: /post/EntityName:id.method_name  (instance actions)
+              /get/EntityName:id.method_name   (instance getters)
 
 Run this app:
     uv run uvicorn examples.custom_routes_demo:app --reload --port 8095
@@ -15,14 +18,14 @@ Then visit:
     http://localhost:8095/docs        # OpenAPI docs
 """
 
+from contextlib import asynccontextmanager
 from typing import Optional
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from datetime import datetime
 
 # Import Nitro components
-from nitro.domain.entities.base_entity import Entity
-from nitro.routing import action, get, post
+from nitro import Entity, get, post, action
 from nitro.adapters.fastapi import configure_nitro
 
 
@@ -31,7 +34,7 @@ from nitro.adapters.fastapi import configure_nitro
 # =============================================================================
 
 class Product(Entity, table=True):
-    """Entity with default routing - for comparison."""
+    """Entity with default routing — class name becomes the event prefix."""
 
     __tablename__ = "products"
 
@@ -39,16 +42,20 @@ class Product(Entity, table=True):
     price: float = 0.0
     stock: int = 0
 
-    @action()
+    @post()
     def restock(self, quantity: int) -> dict:
-        """Restock the product."""
+        """Restock the product.
+        Route: POST /post/Product:laptop.restock
+        """
         self.stock += quantity
         self.save()
         return {"product": self.name, "new_stock": self.stock}
 
-    @action()
+    @post()
     def update_price(self, new_price: float) -> dict:
-        """Update product price."""
+        """Update product price.
+        Route: POST /post/Product:laptop.update_price
+        """
         old_price = self.price
         self.price = new_price
         self.save()
@@ -64,33 +71,40 @@ class Product(Entity, table=True):
 # =============================================================================
 
 class User(Entity, table=True):
-    """Entity with custom route name (plural form)."""
+    """Entity with custom route name — __route_name__ controls the entity
+    name in action strings (e.g., 'users' instead of 'User')."""
 
     __tablename__ = "users"
-    __route_name__ = "users"  # Override default "user" → "users"
+    __route_name__ = "users"  # Override default "User" → "users"
 
     username: str = ""
     email: str = ""
     is_active: bool = False
     last_login: Optional[str] = None
 
-    @action()
+    @post()
     def activate(self) -> dict:
-        """Activate user account."""
+        """Activate user account.
+        Route: POST /post/users:john.activate
+        """
         self.is_active = True
         self.save()
         return {"username": self.username, "is_active": True}
 
-    @action()
+    @post()
     def deactivate(self) -> dict:
-        """Deactivate user account."""
+        """Deactivate user account.
+        Route: POST /post/users:john.deactivate
+        """
         self.is_active = False
         self.save()
         return {"username": self.username, "is_active": False}
 
     @get()
     def profile(self) -> dict:
-        """Get user profile."""
+        """Get user profile.
+        Route: GET /get/users:john.profile
+        """
         return {
             "username": self.username,
             "email": self.email,
@@ -100,46 +114,54 @@ class User(Entity, table=True):
 
 
 # =============================================================================
-# EXAMPLE 3: Custom Action Paths with @action(path="...")
+# EXAMPLE 3: Method Names ARE the Action Strings
 # =============================================================================
 
 class Counter(Entity, table=True):
-    """Entity with custom action paths."""
+    """Entity demonstrating that method names define the action string.
+    There is no path parameter — routes are always EntityName:id.method_name."""
 
     __tablename__ = "counters"
 
     name: str = "Counter"
     count: int = 0
 
-    @action(path="/add")  # Custom path instead of /increment
+    @post()
     def increment(self, amount: int = 1) -> dict:
-        """Increment counter by amount."""
+        """Increment counter by amount.
+        Route: POST /post/Counter:main.increment
+        """
         self.count += amount
         self.save()
         return {"counter": self.name, "count": self.count}
 
-    @action(path="/subtract")  # Custom path instead of /decrement
+    @post()
     def decrement(self, amount: int = 1) -> dict:
-        """Decrement counter by amount."""
+        """Decrement counter by amount.
+        Route: POST /post/Counter:main.decrement
+        """
         self.count -= amount
         self.save()
         return {"counter": self.name, "count": self.count}
 
-    @get(path="/value")  # Custom path for getter
+    @get()
     def get_count(self) -> dict:
-        """Get current count."""
+        """Get current count.
+        Route: GET /get/Counter:main.get_count
+        """
         return {"counter": self.name, "count": self.count}
 
 
 # =============================================================================
-# EXAMPLE 4: Combined Custom Entity Name + Action Paths
+# EXAMPLE 4: __route_name__ with Multiple Actions
 # =============================================================================
 
 class BlogPost(Entity, table=True):
-    """Entity with both custom entity name and action paths."""
+    """Entity with __route_name__ — the only customization available.
+    Custom paths no longer exist; the method name is always the action."""
 
     __tablename__ = "blog_posts"
-    __route_name__ = "posts"  # Custom entity name
+    __route_name__ = "posts"  # Custom entity name in action strings
 
     title: str = ""
     content: str = ""
@@ -147,9 +169,11 @@ class BlogPost(Entity, table=True):
     views: int = 0
     published_at: Optional[str] = None
 
-    @action(path="/publish")  # Custom action path
+    @post()
     def make_public(self) -> dict:
-        """Publish the blog post."""
+        """Publish the blog post.
+        Route: POST /post/posts:welcome.make_public
+        """
         if not self.is_published:
             self.is_published = True
             self.published_at = datetime.now().isoformat()
@@ -160,17 +184,21 @@ class BlogPost(Entity, table=True):
             "published_at": self.published_at
         }
 
-    @action(path="/unpublish")  # Custom action path
+    @post()
     def make_private(self) -> dict:
-        """Unpublish the blog post."""
+        """Unpublish the blog post.
+        Route: POST /post/posts:welcome.make_private
+        """
         self.is_published = False
         self.published_at = None
         self.save()
         return {"title": self.title, "is_published": False}
 
-    @get(path="/stats")  # Custom action path
+    @get()
     def get_statistics(self) -> dict:
-        """Get post statistics."""
+        """Get post statistics.
+        Route: GET /get/posts:welcome.get_statistics
+        """
         return {
             "title": self.title,
             "views": self.views,
@@ -178,9 +206,11 @@ class BlogPost(Entity, table=True):
             "published_at": self.published_at
         }
 
-    @post(path="/view")  # Custom action path
+    @post()
     def record_view(self) -> dict:
-        """Record a view."""
+        """Record a view.
+        Route: POST /post/posts:welcome.record_view
+        """
         self.views += 1
         self.save()
         return {"title": self.title, "views": self.views}
@@ -190,23 +220,8 @@ class BlogPost(Entity, table=True):
 # FastAPI Application Setup
 # =============================================================================
 
-app = FastAPI(
-    title="Nitro Custom Routes Demo",
-    description="Demonstration of Nitro's custom routing features",
-    version="1.0.0"
-)
-
-
-# Configure Nitro auto-routing for all entities
-configure_nitro(
-    app,
-    entities=[Product, User, Counter, BlogPost]
-)
-
-
-# Initialize database tables
-@app.on_event("startup")
-async def startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     """Initialize database tables on startup."""
     Product.repository().init_db()
     User.repository().init_db()
@@ -267,6 +282,20 @@ async def startup():
         except Exception:
             pass
 
+    yield
+
+
+app = FastAPI(
+    title="Nitro Event-Driven Routes Demo",
+    description="Demonstration of Nitro's event-driven routing system",
+    version="2.0.0",
+    lifespan=lifespan
+)
+
+
+# Entities self-register via __init_subclass__ — no entity list needed
+configure_nitro(app)
+
 
 # =============================================================================
 # Documentation Homepage
@@ -279,7 +308,7 @@ async def home():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Nitro Custom Routes Demo</title>
+        <title>Nitro Event-Driven Routes Demo</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com/3.4.16"></script>
@@ -288,10 +317,13 @@ async def home():
         <div class="container mx-auto px-4 py-8 max-w-5xl">
             <header class="mb-12">
                 <h1 class="text-4xl font-bold text-gray-900 mb-2">
-                    Nitro Custom Routes Demo
+                    Nitro Event-Driven Routes Demo
                 </h1>
                 <p class="text-lg text-gray-600">
-                    Explore custom entity names and action paths
+                    Routes are event names: <code class="bg-gray-200 px-2 py-1 rounded">EntityName:id.method_name</code>
+                </p>
+                <p class="text-sm text-gray-500 mt-2">
+                    No custom paths. No entity lists. Entities self-register via <code class="bg-gray-200 px-1 rounded">__init_subclass__</code>.
                 </p>
             </header>
 
@@ -301,24 +333,24 @@ async def home():
                     Example 1: Default Routing
                 </h2>
                 <p class="text-gray-600 mb-4">
-                    Standard Nitro routing without customization.
+                    No customization. Routes use the class name as the event prefix.
                 </p>
 
                 <div class="bg-gray-100 rounded p-4 mb-4">
                     <p class="text-sm font-mono text-gray-800 mb-2">Class: Product</p>
                     <code class="text-sm text-gray-700">
-                        Entity name: product<br>
-                        Action: restock → /product/{id}/restock
+                        Event name: Product:laptop.restock<br>
+                        Route: POST /post/Product:laptop.restock
                     </code>
                 </div>
 
                 <div class="space-y-2">
                     <h3 class="font-semibold text-gray-900">Try it:</h3>
                     <code class="block bg-blue-50 border border-blue-200 rounded p-3 text-sm">
-                        curl -X POST "http://localhost:8095/product/laptop/restock?quantity=5"
+                        curl -X POST "http://localhost:8095/post/Product:laptop.restock?quantity=5"
                     </code>
                     <code class="block bg-blue-50 border border-blue-200 rounded p-3 text-sm">
-                        curl -X POST "http://localhost:8095/product/laptop/update_price?new_price=899.99"
+                        curl -X POST "http://localhost:8095/post/Product:laptop.update_price?new_price=899.99"
                     </code>
                 </div>
             </section>
@@ -330,87 +362,90 @@ async def home():
                 </h2>
                 <p class="text-gray-600 mb-4">
                     Use <code class="bg-gray-200 px-2 py-1 rounded">__route_name__</code>
-                    to customize the entity name in URLs (e.g., "users" instead of "user").
+                    to control the entity name in action strings (e.g., "users" instead of "User").
                 </p>
 
                 <div class="bg-gray-100 rounded p-4 mb-4">
                     <p class="text-sm font-mono text-gray-800 mb-2">Class: User</p>
                     <code class="text-sm text-gray-700">
-                        __route_name__ = "users"  # Override<br>
-                        Action: activate → /users/{id}/activate
+                        __route_name__ = "users"<br>
+                        Event name: users:john.activate<br>
+                        Route: POST /post/users:john.activate
                     </code>
                 </div>
 
                 <div class="space-y-2">
                     <h3 class="font-semibold text-gray-900">Try it:</h3>
                     <code class="block bg-green-50 border border-green-200 rounded p-3 text-sm">
-                        curl -X POST "http://localhost:8095/users/john/activate"
+                        curl -X POST "http://localhost:8095/post/users:john.activate"
                     </code>
                     <code class="block bg-green-50 border border-green-200 rounded p-3 text-sm">
-                        curl "http://localhost:8095/users/john/profile"
+                        curl "http://localhost:8095/get/users:john.profile"
                     </code>
                 </div>
             </section>
 
-            <!-- Example 3: Custom Action Paths -->
+            <!-- Example 3: Method Names as Actions -->
             <section class="mb-12 bg-white rounded-lg shadow-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">
-                    Example 3: Custom Action Paths
+                    Example 3: Method Names Are the Action
                 </h2>
                 <p class="text-gray-600 mb-4">
-                    Use <code class="bg-gray-200 px-2 py-1 rounded">@action(path="...")</code>
-                    to customize action URL segments.
+                    There is no <code class="bg-gray-200 px-2 py-1 rounded">path</code> parameter.
+                    The method name <em>is</em> the action in the event string.
                 </p>
 
                 <div class="bg-gray-100 rounded p-4 mb-4">
                     <p class="text-sm font-mono text-gray-800 mb-2">Class: Counter</p>
                     <code class="text-sm text-gray-700">
-                        @action(path="/add")<br>
-                        def increment(): ...  # /counter/{id}/add
+                        @post()<br>
+                        def increment(): ...  # POST /post/Counter:main.increment<br>
+                        <br>
+                        @get()<br>
+                        def get_count(): ...  # GET /get/Counter:main.get_count
                     </code>
                 </div>
 
                 <div class="space-y-2">
                     <h3 class="font-semibold text-gray-900">Try it:</h3>
                     <code class="block bg-purple-50 border border-purple-200 rounded p-3 text-sm">
-                        curl -X POST "http://localhost:8095/counter/main/add?amount=5"
+                        curl -X POST "http://localhost:8095/post/Counter:main.increment?amount=5"
                     </code>
                     <code class="block bg-purple-50 border border-purple-200 rounded p-3 text-sm">
-                        curl "http://localhost:8095/counter/main/value"
+                        curl "http://localhost:8095/get/Counter:main.get_count"
                     </code>
                 </div>
             </section>
 
-            <!-- Example 4: Combined -->
+            <!-- Example 4: __route_name__ Only -->
             <section class="mb-12 bg-white rounded-lg shadow-lg p-6">
                 <h2 class="text-2xl font-bold text-gray-900 mb-4">
-                    Example 4: Combined Customization
+                    Example 4: __route_name__ with Multiple Actions
                 </h2>
                 <p class="text-gray-600 mb-4">
-                    Use both <code class="bg-gray-200 px-2 py-1 rounded">__route_name__</code>
-                    and <code class="bg-gray-200 px-2 py-1 rounded">@action(path="...")</code>
-                    together.
+                    <code class="bg-gray-200 px-2 py-1 rounded">__route_name__</code> is the
+                    only routing customization. It controls the entity prefix in all action strings.
                 </p>
 
                 <div class="bg-gray-100 rounded p-4 mb-4">
                     <p class="text-sm font-mono text-gray-800 mb-2">Class: BlogPost</p>
                     <code class="text-sm text-gray-700">
                         __route_name__ = "posts"<br>
-                        @action(path="/publish")<br>
-                        def make_public(): ...  # /posts/{id}/publish
+                        Event name: posts:welcome.make_public<br>
+                        Route: POST /post/posts:welcome.make_public
                     </code>
                 </div>
 
                 <div class="space-y-2">
                     <h3 class="font-semibold text-gray-900">Try it:</h3>
                     <code class="block bg-orange-50 border border-orange-200 rounded p-3 text-sm">
-                        curl -X POST "http://localhost:8095/posts/welcome/publish"
+                        curl -X POST "http://localhost:8095/post/posts:welcome.make_public"
                     </code>
                     <code class="block bg-orange-50 border border-orange-200 rounded p-3 text-sm">
-                        curl "http://localhost:8095/posts/welcome/stats"
+                        curl "http://localhost:8095/get/posts:welcome.get_statistics"
                     </code>
                     <code class="block bg-orange-50 border border-orange-200 rounded p-3 text-sm">
-                        curl -X POST "http://localhost:8095/posts/welcome/view"
+                        curl -X POST "http://localhost:8095/post/posts:welcome.record_view"
                     </code>
                 </div>
             </section>
@@ -448,10 +483,10 @@ async def home():
                                     Entity
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                    Default Route
+                                    Event Name
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                                    Custom Route
+                                    Route
                                 </th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                     Customization
@@ -463,56 +498,56 @@ async def home():
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     Product
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    /product/{id}/restock
+                                <td class="px-6 py-4 text-sm text-gray-500 font-mono">
+                                    Product:laptop.restock
+                                </td>
+                                <td class="px-6 py-4 text-sm text-blue-600 font-mono">
+                                    POST /post/Product:laptop.restock
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-500">
-                                    <span class="text-blue-600">Same (default)</span>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    None
+                                    None (default)
                                 </td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     User
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    /user/{id}/activate
+                                <td class="px-6 py-4 text-sm text-gray-500 font-mono">
+                                    users:john.activate
                                 </td>
-                                <td class="px-6 py-4 text-sm text-green-600 font-medium">
-                                    /users/{id}/activate
+                                <td class="px-6 py-4 text-sm text-green-600 font-medium font-mono">
+                                    POST /post/users:john.activate
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-500">
-                                    __route_name__
+                                    __route_name__ = "users"
                                 </td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     Counter
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    /counter/{id}/increment
+                                <td class="px-6 py-4 text-sm text-gray-500 font-mono">
+                                    Counter:main.increment
                                 </td>
-                                <td class="px-6 py-4 text-sm text-purple-600 font-medium">
-                                    /counter/{id}/add
+                                <td class="px-6 py-4 text-sm text-purple-600 font-medium font-mono">
+                                    POST /post/Counter:main.increment
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-500">
-                                    @action(path="/add")
+                                    None (default)
                                 </td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     BlogPost
                                 </td>
-                                <td class="px-6 py-4 text-sm text-gray-500">
-                                    /blogpost/{id}/make_public
+                                <td class="px-6 py-4 text-sm text-gray-500 font-mono">
+                                    posts:welcome.make_public
                                 </td>
-                                <td class="px-6 py-4 text-sm text-orange-600 font-medium">
-                                    /posts/{id}/publish
+                                <td class="px-6 py-4 text-sm text-orange-600 font-medium font-mono">
+                                    POST /post/posts:welcome.make_public
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-500">
-                                    Both
+                                    __route_name__ = "posts"
                                 </td>
                             </tr>
                         </tbody>
@@ -528,61 +563,77 @@ async def home():
 
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                        Custom Entity Name
+                        Default Routing (class name = event prefix)
+                    </h3>
+                    <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto"><code>from nitro import Entity, get, post, action
+
+class Product(Entity, table=True):
+    name: str = ""
+    stock: int = 0
+
+    @post()
+    def restock(self, quantity: int):
+        self.stock += quantity
+        self.save()
+        return {"new_stock": self.stock}
+
+# Route: POST /post/Product:laptop.restock</code></pre>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                        Custom Entity Name with __route_name__
                     </h3>
                     <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto"><code>class User(Entity, table=True):
-    __route_name__ = "users"  # Plural form
+    __route_name__ = "users"  # Controls event prefix
 
     username: str = ""
 
-    @action()
+    @post()
     def activate(self):
         self.is_active = True
         self.save()
         return {"status": "activated"}
 
-# Generated route: POST /users/{id}/activate</code></pre>
+# Route: POST /post/users:john.activate</code></pre>
                 </div>
 
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                        Custom Action Path
+                        Self-Registering Entities (no entity list needed)
                     </h3>
-                    <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto"><code>class Counter(Entity, table=True):
-    count: int = 0
+                    <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto"><code>from fastapi import FastAPI
+from nitro.adapters.fastapi import configure_nitro
 
-    @action(path="/add")  # Custom path
-    def increment(self, amount: int = 1):
-        self.count += amount
-        self.save()
-        return {"count": self.count}
+app = FastAPI()
 
-# Generated route: POST /counter/{id}/add</code></pre>
+# Entities register themselves via __init_subclass__
+# No entities parameter, no auto_discover
+configure_nitro(app)
+
+# All Entity subclasses are already registered!</code></pre>
                 </div>
 
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                        Combined Customization
+                        Action Strings for Datastar
                     </h3>
-                    <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto"><code>class BlogPost(Entity, table=True):
-    __route_name__ = "posts"
+                    <pre class="bg-gray-900 text-gray-100 rounded-lg p-4 overflow-x-auto"><code>from nitro import action
 
-    title: str = ""
+counter = Counter.get("main")
+action(counter.increment, amount=5)
+# Returns: @post('/post/Counter:main.increment')
 
-    @action(path="/publish")
-    def make_public(self):
-        self.is_published = True
-        self.save()
-        return {"status": "published"}
-
-# Generated route: POST /posts/{id}/publish</code></pre>
+post = BlogPost.get("welcome")
+action(post.make_public)
+# Returns: @post('/post/posts:welcome.make_public')</code></pre>
                 </div>
             </section>
 
             <!-- Footer -->
             <footer class="text-center text-gray-600 mt-12 pt-8 border-t border-gray-200">
                 <p class="mb-2">
-                    <strong>Nitro</strong> - Custom Routing Demo
+                    <strong>Nitro</strong> - Event-Driven Routes Demo
                 </p>
                 <p class="text-sm">
                     View source:

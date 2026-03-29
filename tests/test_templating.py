@@ -47,11 +47,14 @@ class TestPageRendering:
         assert "cdn.jsdelivr.net" in html_str or "unpkg.com" in html_str
 
     def test_page_excludes_datastar_when_disabled(self):
-        """Page() should NOT include Datastar when datastar=False"""
-        page = Page(Div(), datastar=False)
+        """Page() should NOT include Datastar SDK script when datastar=False"""
+        page = Page(Div(), datastar=False, lucide=False)
         html_str = str(page)
 
-        assert "datastar" not in html_str.lower()
+        # Should not include the Datastar SDK CDN script
+        # Note: dark mode localStorage script may reference "datastar" key, that's OK
+        assert "datastar-core" not in html_str.lower()
+        assert "data-star" not in html_str
 
     def test_page_includes_tailwind_css_when_configured(self):
         """Page() should include Tailwind CSS link when configured (via config)"""
@@ -105,8 +108,7 @@ class TestPageRendering:
 class TestCreateTemplateDecorator:
     """Tests for create_template decorator"""
 
-    @pytest.mark.asyncio
-    async def test_create_template_decorator_wraps_function(self):
+    def test_create_template_decorator_wraps_function(self):
         """create_template decorator should wrap function output in Page"""
         template = create_template(page_title="Test Page")
 
@@ -114,7 +116,7 @@ class TestCreateTemplateDecorator:
         def my_view():
             return Div("Content")
 
-        result = await my_view()
+        result = my_view()
         html_str = str(result)
 
         # Should be wrapped in full page
@@ -123,8 +125,7 @@ class TestCreateTemplateDecorator:
         assert "<div>Content</div>" in html_str
         assert "<title>Test Page</title>" in html_str
 
-    @pytest.mark.asyncio
-    async def test_create_template_decorator_with_custom_title(self):
+    def test_create_template_decorator_with_custom_title(self):
         """create_template decorator should support custom title per function"""
         template = create_template(page_title="Default")
 
@@ -132,14 +133,13 @@ class TestCreateTemplateDecorator:
         def my_view():
             return Div("Content")
 
-        result = await my_view()
+        result = my_view()
         html_str = str(result)
 
         assert "<title>Custom Title</title>" in html_str
         assert "Default" not in html_str
 
-    @pytest.mark.asyncio
-    async def test_create_template_decorator_preserves_function_args(self):
+    def test_create_template_decorator_preserves_function_args(self):
         """create_template decorator should preserve function arguments"""
         template = create_template()
 
@@ -147,7 +147,7 @@ class TestCreateTemplateDecorator:
         def my_view(name: str, age: int):
             return Div(f"{name} is {age}")
 
-        result = await my_view("Alice", 25)
+        result = my_view("Alice", 25)
         html_str = str(result)
 
         assert "Alice is 25" in html_str

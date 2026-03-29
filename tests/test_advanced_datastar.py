@@ -11,7 +11,7 @@ import pytest
 import asyncio
 from rusty_tags.datastar import Signals, SSE
 from nitro.events.client import Client
-from nitro.events.starlette import emit_signals, emit_elements, datastar_response
+from nitro.events.starlette import emit_signals, emit_elements
 from nitro.events.events import emit
 
 

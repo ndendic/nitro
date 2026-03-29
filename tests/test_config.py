@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from nitro.config import NitroConfig, TailwindConfig, get_nitro_config, detect_css_paths
+from nitro.config import NitroConfig, TailwindConfig, get_nitro_config
 
 
 class TestNitroConfigEnvironmentVariables:
@@ -149,49 +149,26 @@ class TestNitroConfigValidation:
         assert config.content_paths == valid_paths
 
 
+@pytest.mark.skip(reason="detect_css_paths function was removed from nitro.config; CSS paths are now configured via NitroConfig/TailwindConfig defaults")
 class TestDetectCssPaths:
-    """Test CSS path detection logic."""
+    """Test CSS path detection logic.
+
+    NOTE: These tests reference detect_css_paths() which no longer exists.
+    CSS path configuration is now handled via TailwindConfig defaults
+    (static/css/input.css, static/css/output.css).
+    """
 
     def test_detect_css_paths_with_static_dir(self, tmp_path):
-        """Test that static/ directory is detected."""
-        # Create static directory
-        (tmp_path / "static").mkdir()
-
-        input_path, output_path = detect_css_paths(tmp_path)
-
-        assert input_path == Path("static/css/input.css")
-        assert output_path == Path("static/css/output.css")
+        pass
 
     def test_detect_css_paths_with_assets_dir(self, tmp_path):
-        """Test that assets/ directory is detected."""
-        # Create assets directory (no static)
-        (tmp_path / "assets").mkdir()
-
-        input_path, output_path = detect_css_paths(tmp_path)
-
-        assert input_path == Path("assets/input.css")
-        assert output_path == Path("assets/output.css")
+        pass
 
     def test_detect_css_paths_fallback(self, tmp_path):
-        """Test fallback when neither static/ nor assets/ exist."""
-        # Don't create any directories
-
-        input_path, output_path = detect_css_paths(tmp_path)
-
-        assert input_path == Path("input.css")
-        assert output_path == Path("output.css")
+        pass
 
     def test_detect_css_paths_prefers_static_over_assets(self, tmp_path):
-        """Test that static/ is preferred when both static/ and assets/ exist."""
-        # Create both directories
-        (tmp_path / "static").mkdir()
-        (tmp_path / "assets").mkdir()
-
-        input_path, output_path = detect_css_paths(tmp_path)
-
-        # Should prefer static
-        assert input_path == Path("static/css/input.css")
-        assert output_path == Path("static/css/output.css")
+        pass
 
 
 class TestGetNitroConfig:

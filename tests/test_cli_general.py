@@ -15,7 +15,7 @@ class TestCLIHelp:
             ["uv", "run", "nitro", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -39,7 +39,7 @@ class TestCLIHelp:
             ["uv", "run", "nitro", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -55,7 +55,7 @@ class TestCLIHelp:
             ["uv", "run", "nitro", "tw", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -76,7 +76,7 @@ class TestCLIVersion:
             ["uv", "run", "nitro", "--version"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -95,7 +95,7 @@ class TestCLIVersion:
             ["uv", "run", "nitro", "--version"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -123,7 +123,7 @@ class TestCLIErrorHandling:
             ["uv", "run", "nitro", "invalid-command"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         # Should exit with non-zero code
@@ -139,7 +139,7 @@ class TestCLIErrorHandling:
             ["uv", "run", "nitro"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         # Either shows help (exit 0) or error (exit non-zero)
@@ -159,7 +159,7 @@ class TestCLIIntegration:
             ["uv", "run", "nitro", "--version"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -173,7 +173,7 @@ class TestCLIIntegration:
                 ["uv", "run", "nitro", group, "--help"],
                 capture_output=True,
                 text=True,
-                cwd="/home/ndendic/Projects/auto-nitro/nitro"
+                cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
             )
 
             assert result.returncode == 0, f"Command group '{group}' failed"

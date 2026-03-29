@@ -8,6 +8,9 @@ import pytest
 from pathlib import Path
 import shutil
 
+# Absolute path to nitro binary in the venv — works in temp dirs unlike `uv run nitro`
+NITRO_BIN = str(Path(__file__).parent.parent / ".venv" / "bin" / "nitro")
+
 
 class TestDBInit:
     """Test nitro db init command"""
@@ -18,7 +21,7 @@ class TestDBInit:
             ["uv", "run", "nitro", "db", "init", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -41,7 +44,7 @@ class User(Entity, table=True):
 
             # Run db init
             result = subprocess.run(
-                ["uv", "run", "nitro", "db", "init"],
+                [NITRO_BIN, "db", "init"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir
@@ -71,7 +74,7 @@ class User(Entity, table=True):
 
             # Run init first time
             result1 = subprocess.run(
-                ["uv", "run", "nitro", "db", "init"],
+                [NITRO_BIN, "db", "init"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir
@@ -79,7 +82,7 @@ class User(Entity, table=True):
 
             # Run init second time
             result2 = subprocess.run(
-                ["uv", "run", "nitro", "db", "init"],
+                [NITRO_BIN, "db", "init"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir
@@ -99,7 +102,7 @@ class TestDBMigrations:
             ["uv", "run", "nitro", "db", "migrations", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -110,7 +113,7 @@ class TestDBMigrations:
         with tempfile.TemporaryDirectory() as tmpdir:
             # Try to create migration without init
             result = subprocess.run(
-                ["uv", "run", "nitro", "db", "migrations"],
+                [NITRO_BIN, "db", "migrations"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir,
@@ -129,7 +132,7 @@ class TestDBMigrations:
             ["uv", "run", "nitro", "db", "migrations", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -146,7 +149,7 @@ class TestDBMigrate:
             ["uv", "run", "nitro", "db", "migrate", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -157,7 +160,7 @@ class TestDBMigrate:
         with tempfile.TemporaryDirectory() as tmpdir:
             # Try to migrate without init
             result = subprocess.run(
-                ["uv", "run", "nitro", "db", "migrate"],
+                [NITRO_BIN, "db", "migrate"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir,
@@ -176,7 +179,7 @@ class TestDBMigrate:
             ["uv", "run", "nitro", "db", "migrate", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -195,7 +198,7 @@ class TestDBWorkflow:
                 ["uv", "run", "nitro", "db", cmd, "--help"],
                 capture_output=True,
                 text=True,
-                cwd="/home/ndendic/Projects/auto-nitro/nitro"
+                cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
             )
 
             assert result.returncode == 0, f"Command 'db {cmd}' failed"
@@ -207,7 +210,7 @@ class TestDBWorkflow:
             ["uv", "run", "nitro", "db", "--help"],
             capture_output=True,
             text=True,
-            cwd="/home/ndendic/Projects/auto-nitro/nitro"
+            cwd="/home/ndendic/Projects/Ideaverse/Projects/nitro-systems/nitro"
         )
 
         assert result.returncode == 0
@@ -241,7 +244,7 @@ class Post(Entity, table=True):
 
             # Try to initialize
             result = subprocess.run(
-                ["uv", "run", "nitro", "db", "init"],
+                [NITRO_BIN, "db", "init"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir
@@ -257,7 +260,7 @@ class Post(Entity, table=True):
             env["NITRO_DB_URL"] = "sqlite:///test.db"
 
             result = subprocess.run(
-                ["uv", "run", "nitro", "db", "init"],
+                [NITRO_BIN, "db", "init"],
                 capture_output=True,
                 text=True,
                 cwd=tmpdir,

@@ -2,18 +2,14 @@
 Nitro Adapters - Integration with web frameworks
 
 This module provides framework-specific adapters for auto-routing:
+- Sanic adapter (recommended)
 - FastAPI adapter
-- Flask adapter (Phase 2.1.4)
-- FastHTML adapter (Phase 2.1.4)
-- Starlette adapter (Phase 2.1.4)
+- Flask adapter
+- Starlette adapter
+- FastHTML adapter (deprecated — use Starlette)
 
-Each adapter extends NitroDispatcher to provide framework-specific
-route registration and parameter handling.
+Each adapter provides a configure_nitro(app) function that registers
+catch-all routes for event-driven action dispatch.
 """
 
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from .fastapi import FastAPIDispatcher, configure_nitro as configure_fastapi
-
-__all__ = ["FastAPIDispatcher", "configure_fastapi"]
+__all__: list[str] = []

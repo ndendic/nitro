@@ -7,6 +7,8 @@ This example demonstrates:
 3. RustyTags HTML generation
 4. CRUD operations in FastHTML routes
 
+Requires: pip install python-fasthtml
+
 Run: python examples/fasthtml_todo_app.py
 Then visit: http://localhost:5001
 """

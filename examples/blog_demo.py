@@ -11,6 +11,7 @@ Run: uvicorn examples.blog_demo:app --reload --port 8004
 Then visit: http://localhost:8004/docs
 """
 
+from contextlib import asynccontextmanager
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException
 from sqlmodel import Field, Relationship
@@ -25,7 +26,7 @@ class User(Entity, table=True):
     email: str
     bio: Optional[str] = None
 
-    model_config = {"repository_class": SQLModelRepository}
+
 
 
 class Post(Entity, table=True):
@@ -37,7 +38,7 @@ class Post(Entity, table=True):
     # Relationship - will be loaded eagerly by repository
     author: Optional[User] = Relationship()
 
-    model_config = {"repository_class": SQLModelRepository}
+
 
 
 class Comment(Entity, table=True):
@@ -50,16 +51,12 @@ class Comment(Entity, table=True):
     post: Optional[Post] = Relationship()
     author: Optional[User] = Relationship()
 
-    model_config = {"repository_class": SQLModelRepository}
 
 
-# Initialize FastAPI
-app = FastAPI(title="Nitro Blog Demo")
 
-
-@app.on_event("startup")
-async def startup():
-    """Initialize database."""
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Initialize database on startup."""
     repo = SQLModelRepository()
     repo.init_db()
     print("✓ Blog database initialized")
@@ -108,6 +105,12 @@ async def startup():
         comment2.save()
 
         print("✓ Sample data created")
+
+    yield
+
+
+# Initialize FastAPI
+app = FastAPI(title="Nitro Blog Demo", lifespan=lifespan)
 
 
 # User endpoints
@@ -201,9 +204,26 @@ async def get_post_full(post_id: str):
     if not post:
         raise HTTPException(404, "Post not found")
 
+    # Look up the post author by ID to avoid DetachedInstanceError
+    # (relationship traversal can fail after the session is closed)
+    post_author = User.get(post.author_id) if post.author_id else None
+
     # Get all comments for this post using filter
     all_comments = Comment.all()
     comments = [c for c in all_comments if c.post_id == post_id]
+
+    # Build comment data with explicit author lookups
+    comment_data = []
+    for c in comments:
+        c_author = User.get(c.author_id) if c.author_id else None
+        comment_data.append({
+            "id": c.id,
+            "content": c.content,
+            "author": {
+                "id": c_author.id,
+                "username": c_author.username,
+            } if c_author else None
+        })
 
     return {
         "post": {
@@ -211,22 +231,12 @@ async def get_post_full(post_id: str):
             "title": post.title,
             "content": post.content,
             "author": {
-                "id": post.author.id if post.author else None,
-                "username": post.author.username if post.author else None,
-                "email": post.author.email if post.author else None,
-            } if post.author else None
+                "id": post_author.id,
+                "username": post_author.username,
+                "email": post_author.email,
+            } if post_author else None
         },
-        "comments": [
-            {
-                "id": c.id,
-                "content": c.content,
-                "author": {
-                    "id": c.author.id if c.author else None,
-                    "username": c.author.username if c.author else None,
-                } if c.author else None
-            }
-            for c in comments
-        ]
+        "comments": comment_data
     }
 
 

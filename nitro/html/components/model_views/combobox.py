@@ -15,6 +15,15 @@ from nitro.html.components.combobox import (
 from pydantic import BaseModel
 
 
+def _all_subclasses(cls):
+    """Recursively get all subclasses of a class."""
+    result = []
+    for subclass in cls.__subclasses__():
+        result.append(subclass)
+        result.extend(_all_subclasses(subclass))
+    return result
+
+
 def get_related_entity_class(foreign_key: str) -> Type[BaseModel]:
     """Get BaseModel class from foreign_key string.
 
@@ -39,13 +48,15 @@ def get_related_entity_class(foreign_key: str) -> Type[BaseModel]:
     # Parse the foreign key string - format is 'table_name.field'
     table_name = foreign_key.split('.')[0]
 
+    all_subclasses = _all_subclasses(BaseModel)
+
     # Try finding by __tablename__ first (most reliable)
-    for subclass in BaseModel.__subclasses__():
+    for subclass in all_subclasses:
         if hasattr(subclass, '__tablename__') and subclass.__tablename__ == table_name:
             return subclass
 
     # Fallback: Try matching class name (case-insensitive)
-    for subclass in BaseModel.__subclasses__():
+    for subclass in all_subclasses:
         if subclass.__name__.lower() == table_name.lower():
             return subclass
 

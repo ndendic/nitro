@@ -312,8 +312,7 @@ class TestSQLModelRepositoryFilter:
 class TestSQLModelRepositoryConnectionPooling:
     """Tests for connection handling"""
 
-    @pytest.mark.asyncio
-    async def test_handles_concurrent_operations(self, sql_repo):
+    def test_handles_concurrent_operations(self, sql_repo):
         """Repository should handle concurrent operations without connection leaks"""
         # Perform multiple operations
         for i in range(20):

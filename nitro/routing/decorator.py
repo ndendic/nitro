@@ -12,7 +12,7 @@ from .metadata import ActionMetadata, extract_parameters, set_action_metadata
 from ..events.events import on
 
 
-def _extract_params(metadata: ActionMetadata, signals: dict) -> dict:
+def _extract_params(metadata: ActionMetadata, signals: dict, **kwargs) -> dict:
     """Extract method parameters from signals dict, matching the function signature."""
     params = {}
     for name, info in metadata.parameters.items():
@@ -34,6 +34,8 @@ def _extract_params(metadata: ActionMetadata, signals: dict) -> dict:
                 except (ValueError, TypeError):
                     pass
             params[name] = value
+        elif name in kwargs:
+            params[name] = kwargs[name]
         elif info.get("default") is not None:
             params[name] = info["default"]
         else:
@@ -54,8 +56,8 @@ def _register_standalone_handler(func, metadata: ActionMetadata):
 
     @on(event_name)
     async def handler(sender, **kwargs):
-        signals = kwargs.get("signals", {})
-        params = _extract_params(metadata, signals)
+        signals = kwargs.pop("signals", {})
+        params = _extract_params(metadata, signals, **kwargs)
         if metadata.is_async:
             return await func(**params)
         else:

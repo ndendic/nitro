@@ -1,14 +1,16 @@
 """
-FastAPI adapter for the event-driven action system.
+Starlette adapter for the event-driven action system.
 
 Registers 5 catch-all endpoints that dispatch to Blinker events.
 """
 try:
-    from fastapi import FastAPI, Request, APIRouter
-    from fastapi.responses import JSONResponse
-    FASTAPI_AVAILABLE = True
+    from starlette.applications import Starlette
+    from starlette.requests import Request
+    from starlette.responses import JSONResponse
+    from starlette.routing import Route
+    STARLETTE_AVAILABLE = True
 except ImportError:
-    FASTAPI_AVAILABLE = False
+    STARLETTE_AVAILABLE = False
 
 from .catch_all import dispatch_action
 from ..routing.registration import NotFoundError
@@ -16,33 +18,32 @@ from ..routing.registration import NotFoundError
 
 def configure_nitro(app, prefix: str = ""):
     """
-    Register catch-all endpoints on a FastAPI app.
+    Register catch-all endpoints on a Starlette app.
 
     This is the only setup needed. Entity actions are registered
     via __init_subclass__, standalone actions at decoration time.
 
     Args:
-        app: FastAPI application instance
+        app: Starlette application instance
         prefix: Optional URL prefix (e.g., "/api")
     """
-    if not FASTAPI_AVAILABLE:
-        raise ImportError("FastAPI is required. Install with: pip install fastapi")
+    if not STARLETTE_AVAILABLE:
+        raise ImportError("Starlette is required. Install with: pip install starlette")
 
-    router = APIRouter()
     methods = ["get", "post", "put", "delete", "patch"]
 
     for method in methods:
-        _register_catch_all(router, method, prefix)
-
-    app.include_router(router)
+        _register_catch_all(app, method, prefix)
 
 
-def _register_catch_all(router, method: str, prefix: str):
+def _register_catch_all(app, method: str, prefix: str):
     """Register a single catch-all endpoint for an HTTP method."""
     path = f"{prefix}/{method}/{{action:path}}"
 
-    async def handler(request: Request, action: str):
+    async def handler(request: Request) -> JSONResponse:
         try:
+            action = request.path_params["action"]
+
             # Extract signals from request
             signals = await _extract_signals(request)
 
@@ -77,24 +78,18 @@ def _register_catch_all(router, method: str, prefix: str):
             return JSONResponse({"error": f"Internal error: {e}"}, status_code=500)
 
     handler.__name__ = f"catch_all_{method}"
-    router.add_api_route(path, handler, methods=[method.upper()])
+    app.routes.append(Route(path, handler, methods=[method.upper()]))
 
 
 async def _extract_signals(request: Request) -> dict:
-    """Extract signal values from a FastAPI request."""
+    """Extract signal values from a Starlette request."""
     signals = {}
 
     # Query params
     if request.query_params:
-        for key, value in request.query_params.multi_items():
-            if key in signals:
-                existing = signals[key]
-                if isinstance(existing, list):
-                    existing.append(value)
-                else:
-                    signals[key] = [existing, value]
-            else:
-                signals[key] = value
+        for key in request.query_params:
+            values = request.query_params.getlist(key)
+            signals[key] = values[0] if len(values) == 1 else values
 
     # Body params (for POST/PUT/PATCH)
     if request.method in ("POST", "PUT", "PATCH"):
