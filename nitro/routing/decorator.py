@@ -51,10 +51,9 @@ def _has_self_or_cls(func) -> bool:
 
 
 def _register_standalone_handler(func, metadata: ActionMetadata):
-    """Register a Blinker event handler for a standalone function."""
+    """Register an event handler for a standalone function."""
     event_name = metadata.event_name
 
-    @on(event_name)
     async def handler(sender, **kwargs):
         signals = kwargs.pop("signals", {})
         params = _extract_params(metadata, signals, **kwargs)
@@ -62,6 +61,8 @@ def _register_standalone_handler(func, metadata: ActionMetadata):
             return await func(**params)
         else:
             return func(**params)
+
+    on(event_name)(handler)
 
 
 def action(
