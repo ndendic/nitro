@@ -1,126 +1,165 @@
-import asyncio
-import uuid
-from typing import Any, Dict
+"""
+Nitro Events Client - SSE/WebSocket streaming support.
 
-from .events import event, ANY, filter_signals
+This module provides a backward-compatible Client that wraps nitro-events.Client
+with deprecation warnings for old API patterns.
 
-SENTINEL = object()
-client_event = event("client_lifecycle")
-active_clients: Dict[str, 'Client'] = {}    
-
-class Client:
-    """Manages individual client connections with automatic lifecycle handling"""
+Usage:
+    from nitro.events import Client
     
-    def __init__(self, 
-                 client_id: str | None = None, 
-                 topics: list[str] | dict[str, list[str]] | Any = ["ANY"],
-                 muted_topics: str | list[str] | Any = ANY):
-        self.client_id = client_id or str(uuid.uuid4())
-        self.queue = asyncio.Queue()
-        self.connected = False
-        self.topics = topics
-        self.muted_topics = muted_topics
-        self.subscriptions = {}
-        self.process_topics(topics)
-        self.process_muted_topics(muted_topics)
+    async def sse_endpoint(request):
+        async with Client(topics=["orders.*"]) as client:
+            async for msg in client.stream():
+                yield f"data: {msg.to_json()}\\n\\n"
+"""
+import warnings
+from typing import Any
+
+# Import from nitro-events
+from nitro_events import (
+    Client as BaseClient,
+    TopicSubscription,
+    Message,
+    get_default_pubsub,
+)
+from nitro_events.client import SENTINEL
+
+
+class Client(BaseClient):
+    """Backward-compatible Client wrapper.
     
-    def process_topics(self, topics: list[str] | dict[str, list[str]] | Any = ANY):
-        if isinstance(topics, dict):
-            for topic, senders in topics.items():
-                self.subscribe(topic, senders) if senders is not ANY or [] else self.subscribe(topic)
-        elif isinstance(topics, list):
-            for topic in topics:
-                self.subscribe(topic)
-        else:
-            self.subscribe(topics)
+    Adds deprecation shims for:
+    - stream(delay=...) → stream(timeout=...)
+    - send(raw_data) → send(Message(...))
+    """
+    
+    async def stream(self, timeout: float = 30.0, delay: float | None = None):
+        """Stream messages with backward-compatible delay parameter.
         
-
-    def process_muted_topics(self, muted_topics: str | list[str] | Any = ANY):
-        if isinstance(muted_topics, list):
-            for topic in muted_topics:
-                self.unsubscribe(topic)
-        elif isinstance(muted_topics, str):
-            self.unsubscribe(muted_topics)        
-
-    def subscribe(self, topic: str, senders: list[str] | Any = ANY):
-        """Subscribe to a topic with optional sender filtering"""
-        sigs = filter_signals(topic)
-        if not sigs: sigs = {topic: event(topic)}
-        senders_set = set[str](senders) if senders is not ANY else ANY
+        Args:
+            timeout: Timeout between messages (new API)
+            delay: Deprecated, use timeout instead
+        """
+        if delay is not None:
+            warnings.warn(
+                "Client.stream(delay=...) is deprecated, use timeout=... instead. "
+                "Will be removed in v2.0.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            timeout = delay
         
-        # Receiver function for this subscription
-        # async def topic_receiver(sender, result: Any):
-        async def topic_receiver(sender, result: Any):
-            if senders_set is ANY or sender in senders_set:
-                if result is not None:
-                    self.queue.put_nowait(result)
+        async for msg in super().stream(timeout=timeout):
+            yield msg
+    
+    def send(self, item: Message | Any) -> bool:
+        """Send a message to this client's queue.
         
-        # Connect directly to the blinker signal
-        for tpc, sig in sigs.items():
-            sig.connect(topic_receiver, weak=False)
-            self.subscriptions[tpc] = {
-                'senders': senders_set,
-                'receiver': topic_receiver,
-                'signal': sig
-            }
+        Args:
+            item: Message object (preferred) or raw data (deprecated)
+            
+        Returns:
+            True if sent successfully
+        """
+        if not isinstance(item, Message):
+            warnings.warn(
+                "Passing raw data to Client.send() is deprecated. "
+                "Use Client.send(Message(topic='...', data=...)) instead. "
+                "Will be removed in v2.0.",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            # Create Message with default topic from subscriptions or 'direct'
+            default_topic = self.topics[0] if self.topics else "direct"
+            item = Message(topic=default_topic, data=item)
+        
+        return super().send(item)
+    
+    def send_data(self, topic: str, data: Any, **kwargs) -> bool:
+        """Send data as a message directly to this client.
+        
+        This is the preferred way to send raw data (creates Message internally).
+        
+        Args:
+            topic: Message topic
+            data: Message payload
+            **kwargs: Additional Message fields
+            
+        Returns:
+            True if sent successfully
+        """
+        return super().send(Message(topic=topic, data=data, **kwargs))
 
-    def unsubscribe(self, topic: str):
-        """Unsubscribe from a topic"""
-        if topic in self.subscriptions:
-            sub = self.subscriptions[topic]
-            sub['signal'].disconnect(sub['receiver'])
-            del self.subscriptions[topic]
 
-    def connect(self):
-        """Connect client and register with signal system"""
-        if not self.connected:
-            active_clients[self.client_id] = self
-            self.connected = True
-            # Send connection signal
-            client_event.emit("system", action="connect", client=self)
-            print(f"📡 Client {self.client_id} connected. Total: {len(active_clients)}")
-        return self
-    
-    def disconnect(self):
-        """Disconnect client and clean up resources"""
-        if self.connected:
-            active_clients.pop(self.client_id, None)
-            self.connected = False
-            # Send disconnection signal  
-            client_event.emit("system", action="disconnect", client=self)
-            print(f"📡 Client {self.client_id} disconnected. Total: {len(active_clients)}")
-        return self
-    
-    async def stream(self, delay: float = 0.1):
-        """Async generator for streaming updates to this client"""
-        try:
-            while self.connected:
-                try:
-                    event = await asyncio.wait_for(self.queue.get(), timeout=delay)
-                    if event is None or event is SENTINEL or isinstance(event, Exception):
-                        continue
-                    yield event
-                except asyncio.TimeoutError:
-                    continue
-        except Exception as e:
-            print(f"Client {self.client_id} SSE stream error: {e}")
-        finally:
-            self.disconnect()
-    
-    def send(self, item):
-        """Send item to this client's queue"""
-        if self.connected:
-            try:
-                self.queue.put_nowait(item)
-                return True
-            except Exception:
-                self.disconnect()
-                return False
-        return False
-    
-    def __enter__(self):
-        return self.connect()
-    
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.disconnect()
+# --- Legacy compatibility ---
 
+def _get_active_clients():
+    """Legacy accessor for active clients dict.
+    
+    Deprecated: Use Client.get_active_clients() instead.
+    """
+    warnings.warn(
+        "active_clients is deprecated, use Client.get_active_clients() instead. "
+        "Will be removed in v2.0.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return Client.get_active_clients()
+
+
+class _ActiveClientsProxy(dict):
+    """Proxy for legacy active_clients access."""
+    
+    def __getitem__(self, key):
+        return Client.get_active_clients().get(key)
+    
+    def __setitem__(self, key, value):
+        warnings.warn("Direct active_clients modification is deprecated.", DeprecationWarning)
+    
+    def __contains__(self, key):
+        return key in Client.get_active_clients()
+    
+    def __iter__(self):
+        return iter(Client.get_active_clients())
+    
+    def __len__(self):
+        return Client.client_count()
+    
+    def keys(self):
+        return Client.get_active_clients().keys()
+    
+    def values(self):
+        return Client.get_active_clients().values()
+    
+    def items(self):
+        return Client.get_active_clients().items()
+    
+    def get(self, key, default=None):
+        return Client.get_client(key) or default
+    
+    def pop(self, key, *args):
+        client = Client.get_client(key)
+        if client:
+            client.disconnect()
+            return client
+        if args:
+            return args[0]
+        raise KeyError(key)
+
+
+active_clients = _ActiveClientsProxy()
+"""Legacy dict-like access to active clients.
+
+Deprecated: Use Client.get_active_clients() or Client.get_client(id).
+"""
+
+
+# --- Exports ---
+
+__all__ = [
+    "Client",
+    "TopicSubscription",
+    "Message",
+    "active_clients",
+    "SENTINEL",
+]

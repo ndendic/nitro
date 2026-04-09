@@ -1,7 +1,7 @@
 """
 Tests for async support in Nitro Framework.
 
-Tests async entity operations, concurrent event handling,
+Tests async entity operations, concurrent routing handler execution,
 and async repository operations.
 """
 
@@ -13,7 +13,9 @@ import pytest
 
 from sqlmodel import SQLModel, Field
 from nitro.domain.repository.memory import MemoryRepository
-from nitro.events.events import emit_async, event, on, default_namespace
+from nitro.routing.registry import register_handler, clear_handlers
+from nitro.adapters.catch_all import dispatch_action
+from nitro.events.events import subscribe, publish, publish_sync
 
 
 class AsyncUser(SQLModel, table=False):
@@ -42,7 +44,7 @@ class TestAsyncEntityOperations:
         result = memory_repo.save(user)
         assert result is True
 
-        retrieved = memory_repo.find("async1")
+        retrieved = memory_repo.find(AsyncUser, "async1")
         assert retrieved is not None
         assert retrieved.name == "Alice"
 
@@ -52,7 +54,7 @@ class TestAsyncEntityOperations:
         user = AsyncUser(id="async2", name="Bob")
         memory_repo.save(user)
 
-        retrieved = memory_repo.find("async2")
+        retrieved = memory_repo.find(AsyncUser, "async2")
         assert retrieved is not None
         assert retrieved.name == "Bob"
 
@@ -62,10 +64,10 @@ class TestAsyncEntityOperations:
         user = AsyncUser(id="async3", name="Charlie")
         memory_repo.save(user)
 
-        result = memory_repo.delete("async3")
+        result = memory_repo.delete(user)
         assert result is True
 
-        retrieved = memory_repo.find("async3")
+        retrieved = memory_repo.find(AsyncUser, "async3")
         assert retrieved is None
 
     @pytest.mark.asyncio
@@ -76,7 +78,7 @@ class TestAsyncEntityOperations:
             memory_repo.save(user)
 
         # Verify all users can be retrieved
-        retrieved_users = [memory_repo.find(f"async{i}") for i in range(3)]
+        retrieved_users = [memory_repo.find(AsyncUser, f"async{i}") for i in range(3)]
         assert all(u is not None for u in retrieved_users)
         assert len([u for u in retrieved_users if u]) == 3
 
@@ -92,116 +94,135 @@ class TestAsyncEntityOperations:
             memory_repo.save(user)
 
         # Verify users can be retrieved individually
-        user1 = memory_repo.find("async10")
-        user2 = memory_repo.find("async11")
-        user3 = memory_repo.find("async12")
+        user1 = memory_repo.find(AsyncUser, "async10")
+        user2 = memory_repo.find(AsyncUser, "async11")
+        user3 = memory_repo.find(AsyncUser, "async12")
         assert user1.name == "Alice"
         assert user2.name == "Bob"
         assert user3.name == "Alice"
 
 
-class TestAsyncEventHandlers:
-    """Test async event handler concurrent execution."""
+class TestAsyncRoutingHandlers:
+    """Test async routing handler concurrent execution via registry."""
+
+    def setup_method(self):
+        clear_handlers()
 
     @pytest.mark.asyncio
     async def test_async_handlers_execute_concurrently(self):
-        """Test that async handlers run in parallel."""
-        test_event = event("test.concurrent")
+        """Test that multiple async dispatch calls run concurrently."""
         results = []
+        call_times = []
 
-        @on("test.concurrent")
-        async def handler1(sender, **kwargs):
-            await asyncio.sleep(0.1)
-            results.append("handler1")
-            return "result1"
+        async def slow_handler(signals, request, sender):
+            start = time.time()
+            await asyncio.sleep(0.05)
+            results.append(signals.get("id", "unknown"))
+            call_times.append(time.time() - start)
+            return {"id": signals.get("id")}
 
-        @on("test.concurrent")
-        async def handler2(sender, **kwargs):
-            await asyncio.sleep(0.1)
-            results.append("handler2")
-            return "result2"
+        register_handler("test.slow_action", slow_handler)
 
-        @on("test.concurrent")
-        async def handler3(sender, **kwargs):
-            await asyncio.sleep(0.1)
-            results.append("handler3")
-            return "result3"
-
-        # Measure execution time
+        # Dispatch multiple actions concurrently
         start = time.time()
-        handler_results = await emit_async("test.concurrent", sender="test")
+        tasks = [
+            dispatch_action("test.slow_action", "client1", signals={"id": str(i)})
+            for i in range(3)
+        ]
+        handler_results = await asyncio.gather(*tasks)
         elapsed = time.time() - start
 
-        # If executed serially, would take 0.3s+
-        # If executed in parallel, should take ~0.1s
-        assert elapsed < 0.2, f"Handlers took {elapsed}s, expected concurrent execution"
+        # Concurrent execution should be faster than serial (3 * 0.05s = 0.15s)
+        assert elapsed < 0.12, f"Handlers took {elapsed}s, expected concurrent execution"
         assert len(results) == 3
         assert len(handler_results) == 3
 
     @pytest.mark.asyncio
-    async def test_async_handlers_execute_with_delay(self):
-        """Test async handler executes correctly with delays."""
-        default_namespace.clear()
-        test_event = event("test.delay")
-        result = []
-
-        @on("test.delay")
-        async def delayed_handler(sender, **kwargs):
-            await asyncio.sleep(0.02)
-            result.append("completed")
-            return "success"
-
-        start = time.time()
-        handler_results = await emit_async("test.delay", sender="test")
-        elapsed = time.time() - start
-
-        # Should wait for async handler to complete
-        assert elapsed >= 0.02, f"Handler completed too fast: {elapsed}s"
-        assert "completed" in result
-        assert len(handler_results) >= 1
-
-    @pytest.mark.asyncio
-    async def test_async_handler_exceptions_dont_block_others(self):
-        """Test that exception in one async handler doesn't block others."""
-        test_event = event("test.exception")
-        results = []
-
-        @on("test.exception")
-        async def failing_handler(sender, **kwargs):
-            await asyncio.sleep(0.01)
-            raise ValueError("Handler failed")
-
-        @on("test.exception")
-        async def working_handler(sender, **kwargs):
-            await asyncio.sleep(0.01)
-            results.append("success")
-            return "worked"
-
-        # emit_async should not raise exception
-        handler_results = await emit_async("test.exception", sender="test")
-
-        # Working handler should have executed despite failing one
-        assert "success" in results
-        assert len(handler_results) == 2
-
-    @pytest.mark.asyncio
-    async def test_async_handler_receives_kwargs(self):
-        """Test that async handlers receive event kwargs."""
-        default_namespace.clear()
-        test_event = event("test.kwargs")
+    async def test_async_handler_receives_signals(self):
+        """Test that async routing handlers receive signals correctly."""
+        clear_handlers()
         received_data = {}
 
-        @on("test.kwargs")
-        async def kwargs_handler(sender, **kwargs):
-            await asyncio.sleep(0.01)
-            received_data["test_value"] = kwargs.get("test_value")
+        async def signals_handler(signals, request, sender):
+            received_data.update(signals)
             received_data["sender"] = sender
             return "received"
 
-        await emit_async("test.kwargs", sender="test_sender", test_value="test_data")
+        register_handler("test.signals_action", signals_handler)
+
+        await dispatch_action(
+            "test.signals_action",
+            "test_sender",
+            signals={"test_value": "test_data", "count": 42}
+        )
 
         assert received_data["test_value"] == "test_data"
+        assert received_data["count"] == 42
         assert received_data["sender"] == "test_sender"
+
+    @pytest.mark.asyncio
+    async def test_async_handler_returns_value(self):
+        """Test that async routing handler return values are passed through."""
+        clear_handlers()
+
+        async def returning_handler(signals, request, sender):
+            await asyncio.sleep(0.01)
+            return {"status": "ok", "value": signals.get("x", 0) * 2}
+
+        register_handler("test.return_action", returning_handler)
+
+        result = await dispatch_action(
+            "test.return_action",
+            "client1",
+            signals={"x": 5}
+        )
+        assert result == {"status": "ok", "value": 10}
+
+    @pytest.mark.asyncio
+    async def test_async_handler_exception_propagates(self):
+        """Test that exception in async routing handler propagates to caller."""
+        clear_handlers()
+
+        async def failing_handler(signals, request, sender):
+            await asyncio.sleep(0.01)
+            raise ValueError("Handler failed")
+
+        register_handler("test.failing_action", failing_handler)
+
+        with pytest.raises(ValueError, match="Handler failed"):
+            await dispatch_action("test.failing_action", "client1", signals={})
+
+
+class TestAsyncPubSub:
+    """Test async pub/sub via nitro-events subscribe/publish."""
+
+    @pytest.mark.asyncio
+    async def test_subscribe_and_publish(self):
+        """Test basic subscribe and publish pattern."""
+        received = []
+
+        @subscribe("test.async.pubsub2")
+        async def on_message(message):
+            received.append(message.data)
+
+        await publish("test.async.pubsub2", data="hello", source="test")
+        await asyncio.sleep(0.05)
+
+        assert "hello" in received
+
+    @pytest.mark.asyncio
+    async def test_publish_sync_delivers_to_subscribers(self):
+        """Test publish_sync delivers messages to async subscribers."""
+        received = []
+
+        @subscribe("test.sync.pubsub2")
+        async def on_update(message):
+            received.append(message.data)
+
+        publish_sync("test.sync.pubsub2", data="sync_update", source="test")
+        await asyncio.sleep(0.05)
+
+        assert "sync_update" in received
 
 
 class TestAsyncMemoryRepository:
@@ -223,7 +244,7 @@ class TestAsyncMemoryRepository:
         assert all(results)
 
         # All users should be retrievable
-        retrieved = [memory_repo.find(f"concurrent{i}") for i in range(10)]
+        retrieved = [memory_repo.find(AsyncUser, f"concurrent{i}") for i in range(10)]
         assert all(u is not None for u in retrieved)
         assert len(retrieved) == 10
 
@@ -236,7 +257,7 @@ class TestAsyncMemoryRepository:
             memory_repo.save(user)
 
         async def read_user(user_id: int):
-            return memory_repo.find(f"read{user_id}")
+            return memory_repo.find(AsyncUser, f"read{user_id}")
 
         # Read concurrently
         tasks = [read_user(i) for i in range(5)]
@@ -250,22 +271,24 @@ class TestAsyncMemoryRepository:
     async def test_memory_repo_concurrent_deletes(self, memory_repo):
         """Test concurrent deletes from MemoryRepository."""
         # Pre-populate data
+        users_to_delete = []
         for i in range(5):
             user = AsyncUser(id=f"delete{i}", name=f"User{i}")
             memory_repo.save(user)
+            users_to_delete.append(user)
 
-        async def delete_user(user_id: int):
-            return memory_repo.delete(f"delete{user_id}")
+        async def delete_user(user):
+            return memory_repo.delete(user)
 
         # Delete concurrently
-        tasks = [delete_user(i) for i in range(5)]
+        tasks = [delete_user(u) for u in users_to_delete]
         results = await asyncio.gather(*tasks)
 
         # All deletes should succeed
         assert all(results)
 
         # No users should remain
-        remaining = [memory_repo.find(f"delete{i}") for i in range(5)]
+        remaining = [memory_repo.find(AsyncUser, f"delete{i}") for i in range(5)]
         assert all(u is None for u in remaining)
 
     @pytest.mark.asyncio
@@ -276,7 +299,7 @@ class TestAsyncMemoryRepository:
             """Simulate read-modify-write operation."""
             # This is intentionally NOT using atomic operations
             # to test if repository can handle concurrent access
-            user = memory_repo.find(counter_id)
+            user = memory_repo.find(AsyncUser, counter_id)
             if not user:
                 user = AsyncUser(id=counter_id, name="0")
                 memory_repo.save(user)
@@ -299,35 +322,12 @@ class TestAsyncMemoryRepository:
         await asyncio.gather(*tasks)
 
         # Get final value
-        final = memory_repo.find("counter1")
+        final = memory_repo.find(AsyncUser, "counter1")
         final_value = int(final.name)
 
         # Due to race conditions, final value might not be 10
         # But it should be between 1 and 10
         assert 1 <= final_value <= 10, f"Expected 1-10, got {final_value}"
-
-
-class TestAsyncGeneratorHandlers:
-    """Test async generator handlers work correctly."""
-
-    @pytest.mark.asyncio
-    async def test_async_generator_handler(self):
-        """Test async generator event handler."""
-        test_event = event("test.async_gen")
-        results = []
-
-        @on("test.async_gen")
-        async def async_gen_handler(sender, **kwargs):
-            for i in range(3):
-                await asyncio.sleep(0.01)
-                yield f"value{i}"
-
-        handler_results = await emit_async("test.async_gen", sender="test")
-
-        # Results should include generator results
-        assert len(handler_results) == 1
-        # The result is the async generator itself or consumed results
-        # Depending on implementation
 
 
 # Pytest configuration for async tests

@@ -397,6 +397,17 @@ class SQLModelRepository(EntityRepositoryInterface):
         with Session(self.engine) as session:
             return session.exec(select(func.count()).select_from(model)).one()
 
+    def delete_where(self, model: Type[SQLModel], *expressions) -> int:
+        """Delete records matching expressions. Returns count deleted."""
+        with Session(self.engine) as session:
+            statement = select(model).where(*expressions)
+            results = session.exec(statement).all()
+            count = len(results)
+            for record in results:
+                session.delete(record)
+            session.commit()
+            return count
+
     def where(
         self, model: Type[SQLModel],
         *expressions: Any,

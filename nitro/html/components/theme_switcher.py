@@ -47,9 +47,9 @@ def ThemeSwitcher(
     # Create the cycling logic for theme modes
     # light -> dark -> system -> light
     cycle_expression = f"""
-        ${signal} === 'light' ? '${signal}' = 'dark' :
-        ${signal} === 'dark' ? '${signal}' = 'system' :
-        '${signal}' = 'light'
+        ${signal} === 'light' ? ${signal} = 'dark' :
+        ${signal} === 'dark' ? ${signal} = 'system' :
+        ${signal} = 'light'
     """
 
     # Effect to apply theme to document

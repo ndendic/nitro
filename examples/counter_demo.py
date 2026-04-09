@@ -15,7 +15,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, JSONResponse
 from nitro.domain.entities.base_entity import Entity
-from nitro.events.events import on, emit_async
+from nitro.events import subscribe, publish
 from nitro.html import Page
 from rusty_tags import Div, H1, H2, P, Button, Span
 from sqlmodel import Field
@@ -35,38 +35,38 @@ class Counter(Entity, table=True):
         """Increment counter and emit event."""
         self.count += 1
         self.save()
-        await emit_async("counter.incremented", sender=self)
+        await publish("counter.incremented", data={"count": self.count, "name": self.name}, source=str(self.id))
 
     async def decrement(self) -> None:
         """Decrement counter and emit event."""
         self.count -= 1
         self.save()
-        await emit_async("counter.decremented", sender=self)
+        await publish("counter.decremented", data={"count": self.count, "name": self.name}, source=str(self.id))
 
     async def reset(self) -> None:
         """Reset counter to zero."""
         self.count = 0
         self.save()
-        await emit_async("counter.reset", sender=self)
+        await publish("counter.reset", data={"count": self.count, "name": self.name}, source=str(self.id))
 
 
 # Event handlers
-@on("counter.incremented")
-async def log_increment(sender: Counter, **kwargs):
+@subscribe("counter.incremented")
+async def log_increment(msg):
     """Log when counter is incremented."""
-    print(f"✓ Counter '{sender.name}' incremented to {sender.count}")
+    print(f"✓ Counter '{msg.data['name']}' incremented to {msg.data['count']}")
 
 
-@on("counter.decremented")
-async def log_decrement(sender: Counter, **kwargs):
+@subscribe("counter.decremented")
+async def log_decrement(msg):
     """Log when counter is decremented."""
-    print(f"✓ Counter '{sender.name}' decremented to {sender.count}")
+    print(f"✓ Counter '{msg.data['name']}' decremented to {msg.data['count']}")
 
 
-@on("counter.reset")
-async def log_reset(sender: Counter, **kwargs):
+@subscribe("counter.reset")
+async def log_reset(msg):
     """Log when counter is reset."""
-    print(f"✓ Counter '{sender.name}' reset to 0")
+    print(f"✓ Counter '{msg.data['name']}' reset to 0")
 
 
 # FastAPI app

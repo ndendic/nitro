@@ -1,15 +1,16 @@
 """
-Nitro Event-Driven Routing System.
+Nitro Routing System.
 
-Decorators register Blinker event handlers. The action() helper
+Decorators register handlers in a simple registry. The action() helper
 generates Datastar action strings. Framework adapters provide
-catch-all endpoints.
+catch-all endpoints that dispatch to registered handlers.
 """
 from .decorator import action as action_decorator, get, post, put, delete
 from .metadata import ActionMetadata, get_action_metadata, has_action_metadata
 from .actions import ActionRef, parse_action
 from .action_helper import action
 from .registration import register_entity_actions, NotFoundError
+from .registry import register_handler, get_handler, clear_handlers, list_handlers
 
 __all__ = [
     # Decorators
@@ -22,6 +23,8 @@ __all__ = [
     "ActionRef", "parse_action",
     # Registration (used by Entity.__init_subclass__)
     "register_entity_actions",
+    # Registry (handler lookup)
+    "register_handler", "get_handler", "clear_handlers", "list_handlers",
     # Errors
     "NotFoundError",
 ]

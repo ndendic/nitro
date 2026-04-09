@@ -1,7 +1,7 @@
 """
-Action decorators for the event-driven routing system.
+Action decorators for the routing system.
 
-Standalone functions: decorator stamps metadata AND registers a Blinker event handler.
+Standalone functions: decorator stamps metadata AND registers in the handler registry.
 Entity methods (have 'self' or 'cls'): decorator only stamps metadata.
 Entity method registration happens in Entity.__init_subclass__.
 """
@@ -9,7 +9,7 @@ import inspect
 from typing import Optional, Any
 
 from .metadata import ActionMetadata, extract_parameters, set_action_metadata
-from ..events.events import on
+from .registry import register_handler
 
 
 def _extract_params(metadata: ActionMetadata, signals: dict, **kwargs) -> dict:
@@ -51,18 +51,16 @@ def _has_self_or_cls(func) -> bool:
 
 
 def _register_standalone_handler(func, metadata: ActionMetadata):
-    """Register an event handler for a standalone function."""
+    """Register a handler for a standalone function in the routing registry."""
+    from .registration import _call_method
+
     event_name = metadata.event_name
 
-    async def handler(sender, **kwargs):
-        signals = kwargs.pop("signals", {})
-        params = _extract_params(metadata, signals, **kwargs)
-        if metadata.is_async:
-            return await func(**params)
-        else:
-            return func(**params)
+    async def handler(signals, request, sender):
+        params = _extract_params(metadata, signals, request=request)
+        return await _call_method(func, metadata.is_async, **params)
 
-    on(event_name)(handler)
+    register_handler(event_name, handler)
 
 
 def action(
@@ -79,7 +77,7 @@ def action(
     """
     Core decorator for registering an action.
 
-    For standalone functions: stamps metadata and registers a Blinker event handler.
+    For standalone functions: stamps metadata and registers in the handler registry.
     For Entity methods (with self/cls): stamps metadata only. Registration
     happens in Entity.__init_subclass__.
     """
@@ -117,7 +115,7 @@ def action(
         if func is not raw_func:
             set_action_metadata(func, metadata)
 
-        # Register event handler for standalone functions immediately
+        # Register handler for standalone functions immediately
         if not is_entity_method:
             _register_standalone_handler(raw_func, metadata)
 

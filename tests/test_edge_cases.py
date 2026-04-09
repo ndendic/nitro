@@ -4,10 +4,12 @@ import threading
 import pytest
 
 from nitro.domain.entities.base_entity import Entity
-from nitro.events.events import on, emit
+from nitro.routing.registry import register_handler, clear_handlers
+from nitro.adapters.catch_all import dispatch_action
 from nitro.html.templating import Page
 from nitro.domain.repository.memory import MemoryRepository
 from rusty_tags import Div, H1, P
+import asyncio
 
 
 class EdgeTestEntity(Entity, table=True):
@@ -83,26 +85,61 @@ class TestEntityEdgeCases:
         assert results == []
 
 
-class TestEventEdgeCases:
-    """Test event system edge cases."""
+class TestRoutingEdgeCases:
+    """Test routing registry edge cases."""
 
-    def test_event_emission_with_no_handlers_is_safe(self):
-        """Test that emitting events with no handlers doesn't cause errors."""
-        # Emit an event that has no registered handlers
-        result = emit("edge.case.no.handlers", sender=self)
+    def setup_method(self):
+        clear_handlers()
 
-        # Should not raise error, should return empty list
-        assert result is not None
-        # Result is a list of handler results, should be empty
-        assert len(result) == 0
+    def test_dispatch_with_no_handlers_is_safe(self):
+        """Test that dispatching to unregistered topic returns None."""
+        result = asyncio.run(
+            dispatch_action("edge.case.no.handlers", "client1", signals={})
+        )
+        # No handler = None result
+        assert result is None
 
-    def test_event_emission_returns_empty_results_list(self):
-        """Test that event emission with no handlers returns empty list."""
-        result = emit("another.nonexistent.event", sender=None)
+    def test_dispatch_returns_none_for_nonexistent_action(self):
+        """Test that dispatch_action returns None when no handler registered."""
+        result = asyncio.run(
+            dispatch_action("another.nonexistent.action", "client1", signals={})
+        )
+        assert result is None
 
-        # Should be an empty list
-        assert isinstance(result, list)
-        assert len(result) == 0
+    def test_register_and_call_handler(self):
+        """Test basic handler registration and invocation."""
+        call_log = []
+
+        async def my_handler(signals, request, sender):
+            call_log.append(signals.get("value"))
+            return signals.get("value")
+
+        register_handler("edge.test.action", my_handler)
+
+        result = asyncio.run(
+            dispatch_action("edge.test.action", "client1", signals={"value": "test"})
+        )
+        assert call_log == ["test"]
+        assert result == "test"
+
+    def test_handler_overwrite(self):
+        """Test that registering a new handler for same topic overwrites old one."""
+        call_log = []
+
+        async def handler_v1(signals, request, sender):
+            call_log.append("v1")
+
+        async def handler_v2(signals, request, sender):
+            call_log.append("v2")
+
+        register_handler("edge.overwrite.action", handler_v1)
+        register_handler("edge.overwrite.action", handler_v2)
+
+        asyncio.run(
+            dispatch_action("edge.overwrite.action", "client1", signals={})
+        )
+        # Only handler_v2 should be called (overwrote v1)
+        assert call_log == ["v2"]
 
 
 class SimpleEntity:
@@ -135,7 +172,7 @@ class TestMemoryRepositoryEdgeCases:
                 repo.save(entity)
 
                 # Load back
-                loaded = repo.find(f"thread_{thread_id}")
+                loaded = repo.find(SimpleEntity, f"thread_{thread_id}")
                 if loaded and loaded.name == f"Thread {thread_id}":
                     results.append(thread_id)
                 else:
@@ -175,7 +212,7 @@ class TestMemoryRepositoryEdgeCases:
         def increment_counter(iterations):
             """Increment the counter multiple times."""
             for _ in range(iterations):
-                e = repo.find("shared_counter")
+                e = repo.find(SimpleEntity, "shared_counter")
                 if e:
                     current = int(e.content)
                     e.content = str(current + 1)
@@ -192,7 +229,7 @@ class TestMemoryRepositoryEdgeCases:
             thread.join()
 
         # Final entity should exist
-        final = repo.find("shared_counter")
+        final = repo.find(SimpleEntity, "shared_counter")
         assert final is not None
         # Counter should be positive (may not be exact due to race conditions)
         assert int(final.content) > 0

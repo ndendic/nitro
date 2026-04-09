@@ -1,23 +1,28 @@
 [project]
 name = "nitro-boost"
-version = "0.3.0"
+version = "0.4.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
     { name = "ndendic", email = "ndendic@gmail.com" }
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "alembic>=1.17.2",
-    "blinker>=1.9.0",
     "mako>=1.3.10",
+    "nitro-events>=0.1.0",
     "pydantic>=2.11.9",
     "pydantic-settings>=2.11.0",
     "requests>=2.32.5",
     "rusty-tags>=0.6.3",
     "sqlmodel>=0.0.31",
     "typer>=0.19.2",
+    "ulid-py>=1.1.0",
 ]
+
+[project.optional-dependencies]
+# Deprecated: blinker is no longer used, kept for transition
+legacy = ["blinker>=1.9.0"]
 
 [project.scripts]
 nitro = "nitro.cli.main:app"
@@ -36,6 +41,9 @@ root = ["./nitro","./docs","./notebooks"]
 members = [
     "autocode",
 ]
+
+[tool.uv.sources]
+nitro-events = { path = "../nitro-events" }
 
 [dependency-groups]
 dev = [

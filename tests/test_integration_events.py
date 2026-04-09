@@ -1,6 +1,6 @@
 """
 Integration test for the event-driven action system.
-Full flow: Entity definition -> event registration -> action() helper -> dispatch.
+Full flow: Entity definition -> handler registration -> action() helper -> dispatch.
 """
 import pytest
 import asyncio
@@ -9,14 +9,14 @@ from nitro.domain.entities.base_entity import Entity
 from nitro.routing.decorator import get, post, delete
 from nitro.routing.action_helper import action
 from nitro.routing.metadata import get_action_metadata
+from nitro.routing.registry import get_handler, clear_handlers
 from nitro.adapters.catch_all import dispatch_action
-from nitro.events.events import default_namespace
 
 
 class TestFullIntegration:
 
     def setup_method(self):
-        default_namespace.clear()
+        clear_handlers()
 
     def test_entity_action_string_generation(self):
         """Define entity, check action() produces correct strings."""
@@ -61,8 +61,7 @@ class TestFullIntegration:
         assert "@post('/post/notes.create_note')" in result
 
     def test_dispatch_calls_registered_handler(self):
-        """Dispatch through the event system reaches the right handler."""
-        call_log = []
+        """Entity methods are registered in the handler registry."""
 
         class IntTestTask(Entity, table=True):
             __tablename__ = "int_test_task"
@@ -71,18 +70,14 @@ class TestFullIntegration:
 
             @post()
             def complete(self):
-                call_log.append(f"completed:{self.id}")
                 self.done = True
 
-        # We can't actually call Entity.get() without a DB,
-        # but we can verify the event was registered
-        from nitro.events.events import event
-        evt = event("IntTestTask.complete")
-        receivers = list(evt.receivers_for(None))
-        assert len(receivers) > 0
+        # Verify the handler was registered
+        handler = get_handler("IntTestTask.complete")
+        assert handler is not None
 
     def test_standalone_dispatch(self):
-        """Standalone function can be dispatched through events."""
+        """Standalone function can be dispatched through the registry."""
         results = []
 
         @post(prefix="math")

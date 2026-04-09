@@ -2,12 +2,12 @@
 Entity action registration via __init_subclass__.
 
 Scans Entity subclasses for decorated methods and registers
-Blinker event handlers for each.
+handlers in the routing registry for dispatch by catch-all endpoints.
 """
 import inspect
 from .metadata import get_action_metadata, has_action_metadata
 from .decorator import _extract_params
-from ..events.events import on
+from .registry import register_handler
 
 
 class NotFoundError(Exception):
@@ -15,37 +15,49 @@ class NotFoundError(Exception):
     pass
 
 
+async def _call_method(method, is_async, *args, **kwargs):
+    """Call a method handling all handler types: sync, async, generator, async generator."""
+    if is_async:
+        result = await method(*args, **kwargs)
+    else:
+        result = method(*args, **kwargs)
+
+    # Consume generators into lists
+    if inspect.isgenerator(result):
+        return list(result)
+    if inspect.isasyncgen(result):
+        return [item async for item in result]
+
+    return result
+
+
 def _make_entity_handler(cls, method, metadata, is_instance: bool):
-    """Create a Blinker event handler that wraps an Entity method."""
+    """Create a routing handler that wraps an Entity method.
+
+    Handler signature: async handler(signals, request, sender) -> Any
+    Supports sync, async, generator, and async generator methods.
+    """
     if is_instance:
-        async def handler(sender, **kwargs):
-            signals = kwargs.pop("signals", {})
+        async def handler(signals, request, sender):
             entity_id = signals.pop("id", None)
             if not entity_id:
                 raise ValueError(f"ID required for {cls.__name__}.{metadata.function_name}")
             entity = cls.get(entity_id)
             if not entity:
-                raise NotFoundError(f"{cls.__name__} '{entity_id}' not found")                
-            params = _extract_params(metadata, signals, **kwargs)
-            if metadata.is_async:
-                return await method(entity, **params)
-            else:
-                return method(entity, **params)
+                raise NotFoundError(f"{cls.__name__} '{entity_id}' not found")
+            params = _extract_params(metadata, signals, request=request)
+            return await _call_method(method, metadata.is_async, entity, **params)
     else:
-        async def handler(sender, **kwargs):
-            signals = kwargs.pop("signals", {})
-            params = _extract_params(metadata, signals, **kwargs)
-            if metadata.is_async:
-                return await method(**params)
-            else:
-                return method(**params)
+        async def handler(signals, request, sender):
+            params = _extract_params(metadata, signals, request=request)
+            return await _call_method(method, metadata.is_async, **params)
     return handler
 
 
 def register_entity_actions(cls):
     """
     Scan an Entity subclass for decorated methods and register
-    Blinker event handlers for each.
+    handlers in the routing registry.
 
     Called by Entity.__init_subclass__.
     """
@@ -65,4 +77,4 @@ def register_entity_actions(cls):
         metadata.event_name = event_name
 
         handler = _make_entity_handler(cls, method, metadata, is_instance)
-        on(event_name)(handler)
+        register_handler(event_name, handler)

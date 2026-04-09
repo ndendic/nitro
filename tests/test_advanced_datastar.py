@@ -12,7 +12,6 @@ import asyncio
 from rusty_tags.datastar import Signals, SSE
 from nitro.events.client import Client
 from nitro.events.starlette import emit_signals, emit_elements
-from nitro.events.events import emit
 
 
 class TestDatastarSSEStreaming:
@@ -51,15 +50,15 @@ class TestDatastarSSEStreaming:
         client = Client(topics=["test-stream"])
         client.connect()
 
-        # Send test messages
+        # Send test messages (old API - triggers deprecation warning)
         test_messages = ["update1", "update2", "update3"]
         for msg in test_messages:
-            client.send(msg)
+            client.send(msg)  # Raw data - will be wrapped in Message
 
-        # Collect streamed messages
+        # Collect streamed messages (old API - delay triggers deprecation warning)
         received = []
-        async for msg in client.stream(delay=0.01):
-            received.append(msg)
+        async for msg in client.stream(delay=0.05):
+            received.append(msg.data)  # Messages now contain .data
             if len(received) >= len(test_messages):
                 client.disconnect()
                 break
@@ -74,26 +73,31 @@ class TestDatastarSSEStreaming:
 
         Steps:
         1. Create client subscribed to specific topic
-        2. Emit events to that topic
+        2. Emit/publish events to that topic
         3. Verify client receives events via stream
+        
+        Note: This test uses the new publish_sync API since emit() 
+        calls legacy receivers directly, not PubSub subscriptions.
         """
+        from nitro.events.events import publish_sync
+        
         client = Client(topics=["counter-updates"])
         client.connect()
 
-        # Emit SSE updates to the topic
+        # Publish SSE updates to the topic
         updates = []
         for i in range(3):
             sse_msg = SSE.patch_signals({"count": i})
-            emit("counter-updates", sender="test", result=sse_msg)
+            publish_sync("counter-updates", data=sse_msg, source="test")
             updates.append(sse_msg)
 
         # Small delay for message processing
-        await asyncio.sleep(0.01)
+        await asyncio.sleep(0.02)
 
-        # Collect messages
+        # Collect messages (old API - delay triggers deprecation warning)
         received = []
-        async for msg in client.stream(delay=0.01):
-            received.append(msg)
+        async for msg in client.stream(delay=0.05):
+            received.append(msg.data)  # Messages contain .data
             if len(received) >= len(updates):
                 client.disconnect()
                 break

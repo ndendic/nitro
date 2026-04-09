@@ -3,7 +3,7 @@ import pytest
 import asyncio
 from nitro.routing.decorator import get, post, put, delete
 from nitro.routing.metadata import get_action_metadata
-from nitro.events.events import event, default_namespace
+from nitro.routing.registry import get_handler, clear_handlers
 
 
 class TestDecoratorMetadata:
@@ -62,25 +62,24 @@ class TestDecoratorMetadata:
 
 
 class TestStandaloneEventRegistration:
-    """Standalone functions register Blinker events at decoration time."""
+    """Standalone functions register handlers in the routing registry at decoration time."""
 
     def setup_method(self):
-        # Clear default namespace between tests
-        default_namespace.clear()
+        clear_handlers()
 
-    def test_standalone_registers_event(self):
+    def test_standalone_registers_handler(self):
         @post(prefix="auth")
         def register_user(name: str): pass
 
-        evt = event("auth.register_user")
-        assert len(list(evt.receivers_for(None))) > 0
+        handler = get_handler("auth.register_user")
+        assert handler is not None
 
-    def test_standalone_no_prefix_registers_event(self):
+    def test_standalone_no_prefix_registers_handler(self):
         @get()
         def health(): pass
 
-        evt = event("health")
-        assert len(list(evt.receivers_for(None))) > 0
+        handler = get_handler("health")
+        assert handler is not None
 
     def test_standalone_handler_calls_function(self):
         call_log = []
@@ -90,10 +89,8 @@ class TestStandaloneEventRegistration:
             call_log.append(name)
             return {"ok": True}
 
-        evt = event("test.do_thing")
-        asyncio.run(
-            evt.emit_async(None, signals={"name": "hello"})
-        )
+        handler = get_handler("test.do_thing")
+        asyncio.run(handler({"name": "hello"}, None, "test"))
         assert call_log == ["hello"]
 
     def test_standalone_async_handler(self):
@@ -103,10 +100,8 @@ class TestStandaloneEventRegistration:
         async def async_thing(value: int = 0):
             call_log.append(value)
 
-        evt = event("test.async_thing")
-        asyncio.run(
-            evt.emit_async(None, signals={"value": 42})
-        )
+        handler = get_handler("test.async_thing")
+        asyncio.run(handler({"value": 42}, None, "test"))
         assert call_log == [42]
 
     def test_original_function_still_callable(self):
@@ -119,18 +114,18 @@ class TestStandaloneEventRegistration:
 
 
 class TestEntityMethodDeferred:
-    """Entity methods only get metadata — no event registration."""
+    """Entity methods only get metadata — no handler registration."""
 
     def setup_method(self):
-        default_namespace.clear()
+        clear_handlers()
 
     def test_method_with_self_not_registered(self):
-        """Methods with 'self' param should NOT register events at decoration time."""
+        """Methods with 'self' param should NOT register handlers at decoration time."""
         @post()
         def increment(self, amount: int = 1):
             pass
 
-        # Should NOT have created an event
+        # Should NOT have registered a handler
         meta = get_action_metadata(increment)
         assert meta is not None
         # event_name should be empty (deferred to __init_subclass__)

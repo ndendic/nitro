@@ -143,7 +143,7 @@ class TestMemoryRepositoryForUnitTests:
         memory_repo.save(product)
 
         # Retrieve and verify
-        retrieved = memory_repo.find("p1")
+        retrieved = memory_repo.find(MemoryTestProduct, "p1")
         assert retrieved is not None
         assert retrieved.name == "Widget"
         assert retrieved.price == 9.99
@@ -167,8 +167,8 @@ class TestMemoryRepositoryForUnitTests:
         assert duration < 0.1
 
         # Verify all saved by checking specific ones
-        assert memory_repo.find("p0") is not None
-        assert memory_repo.find("p99") is not None
+        assert memory_repo.find(MemoryTestProduct, "p0") is not None
+        assert memory_repo.find(MemoryTestProduct, "p99") is not None
 
     def test_memory_repository_automatic_cleanup(self, memory_repo):
         """MemoryRepository can be easily cleared between tests."""
@@ -194,19 +194,19 @@ class TestMemoryRepositoryForUnitTests:
         assert result is True
 
         # Read
-        assert memory_repo.find("p1") is not None
-        assert memory_repo.exists("p1") is True
+        assert memory_repo.find(MemoryTestProduct, "p1") is not None
+        assert memory_repo.exists(MemoryTestProduct, "p1") is True
 
         # Update
         p1.price = 10.0
         memory_repo.save(p1)
-        retrieved = memory_repo.find("p1")
+        retrieved = memory_repo.find(MemoryTestProduct, "p1")
         assert retrieved.price == 10.0
 
         # Delete
-        result = memory_repo.delete("p1")
+        result = memory_repo.delete(p1)
         assert result is True
-        assert memory_repo.find("p1") is None
+        assert memory_repo.find(MemoryTestProduct, "p1") is None
 
     def test_memory_repository_isolation_with_fixtures(self, memory_repo):
         """Fixtures provide clean MemoryRepository between tests."""
@@ -381,7 +381,7 @@ class TestTestingFeaturesIntegration:
 
         # 4. Verify everything works together
         assert len(FactoryTestUser.all()) == 3
-        assert memory_repo.find("p1") is not None
+        assert memory_repo.find(MemoryTestProduct, "p1") is not None
 
         # 5. Test operations
         user = users[0]

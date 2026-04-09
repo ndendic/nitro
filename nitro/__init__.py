@@ -1,5 +1,5 @@
 # Re-export everything from rusty-tags core
-__version__ = "0.1.0"
+__version__ = "0.4.0"
 
 # Import Nitro-specific components
 from nitro.utils import show, AttrDict, uniq

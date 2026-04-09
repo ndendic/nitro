@@ -20,7 +20,7 @@ if str(nitro_path) not in sys.path:
 
 from nitro.domain.entities.base_entity import Entity
 from nitro.domain.repository.memory import MemoryRepository
-from nitro.events import on, emit
+from nitro.events import subscribe, publish_sync
 from nitro.monitoring import (
     configure_nitro_logging,
     log_entity_operation,
@@ -184,20 +184,20 @@ def test_event_metrics():
     # Define handlers
     handler_call_count = {"order.created": 0, "order.shipped": 0}
 
-    @on("order.created")
-    def send_email(sender, **kwargs):
+    @subscribe("order.created")
+    def send_email(msg):
         handler_call_count["order.created"] += 1
         import time
         time.sleep(0.01)  # Simulate work
 
-    @on("order.created")
-    def update_inventory(sender, **kwargs):
+    @subscribe("order.created")
+    def update_inventory(msg):
         handler_call_count["order.created"] += 1
         import time
         time.sleep(0.01)  # Simulate work
 
-    @on("order.shipped")
-    def notify_customer(sender, **kwargs):
+    @subscribe("order.shipped")
+    def notify_customer(msg):
         handler_call_count["order.shipped"] += 1
 
     # Step 1: Enable metrics
@@ -212,7 +212,7 @@ def test_event_metrics():
     # Emit order.created (should trigger 2 handlers)
     for i in range(3):
         event_bus_monitor.record_event_fired("order.created")
-        emit("order.created", sender=None)
+        publish_sync("order.created", data={}, source="system")
         # Record handler executions
         import time
         start = time.time()
@@ -223,7 +223,7 @@ def test_event_metrics():
     # Emit order.shipped (should trigger 1 handler)
     for i in range(2):
         event_bus_monitor.record_event_fired("order.shipped")
-        emit("order.shipped", sender=None)
+        publish_sync("order.shipped", data={}, source="system")
         start = time.time()
         time.sleep(0.005)
         event_bus_monitor.record_handler_executed("order.shipped", time.time() - start)

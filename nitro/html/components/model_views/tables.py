@@ -163,21 +163,16 @@ def ModelTable(
         data = entity_class.filter(**filter_kwargs)
 
     elif page_size:
-        # Client-side pagination: slice data
+        # Client-side pagination: render ALL rows, use data-show to filter by page
         if data is None:
             data = entity_class.all()
 
         total_count = len(data)
         total_pages = (total_count + page_size - 1) // page_size
         signals.total_pages = total_pages
-
-        # Ensure current_page is an integer
-        current_page = getattr(signals, 'current_page', 1)
-        if not isinstance(current_page, int):
-            current_page = 1
-        start = (current_page - 1) * page_size
-        end = start + page_size
-        data = data[start:end]
+        # NOTE: do NOT slice — all rows are rendered; each row gets
+        # data-show="$current_page === {page_number}" so Datastar hides/shows
+        # the correct page without a server round-trip.
 
     else:
         # No pagination: fetch all data if not provided
@@ -224,8 +219,10 @@ def ModelTable(
 
     # Build rows
     rows = []
-    for entity in data:
+    for idx, entity in enumerate(data):
         cells = []
+        # For client-side pagination, compute which page this row belongs to
+        row_page = (idx // page_size) + 1 if (page_size and not server_side) else None
 
         # Add selection checkbox cell if selectable
         if selectable:
@@ -288,7 +285,10 @@ def ModelTable(
                 )
             )
 
-        rows.append(TableRow(*cells))
+        if row_page is not None:
+            rows.append(TableRow(*cells, **{"data-show": f"$current_page === {row_page}"}))
+        else:
+            rows.append(TableRow(*cells))
 
     # Handle empty state
     if not rows:
@@ -468,29 +468,29 @@ def _table_pagination(signals: Signals) -> HtmlString:
         HtmlString: Div with page info and navigation buttons
     """
     return Div(
-        # Info text
+        # Info text — use data-text bindings so Datastar interpolates signal values
         Span(
             "Page ",
-            Span("$current_page"),
+            Span(**{"data-text": "$current_page"}),
             " of ",
-            Span("$total_pages"),
+            Span(**{"data-text": "$total_pages"}),
             cls="text-sm text-muted-foreground",
         ),
-        # Navigation buttons
+        # Navigation buttons — use data-attr:disabled so Datastar evaluates the expression
         Div(
             Button(
                 "Previous",
                 variant="outline",
                 size="sm",
                 on_click="$current_page = Math.max(1, $current_page - 1)",
-                disabled="$current_page <= 1",
+                **{"data-attr:disabled": "$current_page <= 1"},
             ),
             Button(
                 "Next",
                 variant="outline",
                 size="sm",
                 on_click="$current_page = Math.min($total_pages, $current_page + 1)",
-                disabled="$current_page >= $total_pages",
+                **{"data-attr:disabled": "$current_page >= $total_pages"},
             ),
             cls="flex gap-2",
         ),

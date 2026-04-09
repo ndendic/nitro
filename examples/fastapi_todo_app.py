@@ -25,7 +25,7 @@ from fastapi import FastAPI, BackgroundTasks, HTTPException
 from nitro.domain.entities.base_entity import Entity
 from nitro.domain.repository.sql import SQLModelRepository
 from nitro.domain.repository.memory import MemoryRepository
-from nitro.events import on, emit_async
+from nitro.events import subscribe, publish
 
 # Define Todo Entity - works as both request/response model
 class Todo(Entity, table=True):
@@ -40,9 +40,9 @@ app = FastAPI(title="Nitro FastAPI Todo")
 SQLModelRepository().init_db()
 
 # Event handler - runs asynchronously
-@on("todo.created")
-async def log_todo_creation(sender, **kwargs):
-    print(f"📝 New todo created: {sender.title}")
+@subscribe("todo.created")
+async def log_todo_creation(msg):
+    print(f"📝 New todo created: {msg.data['title']}")
 
 @app.get("/", response_model=List[Todo])
 async def list_todos():
@@ -53,7 +53,7 @@ async def list_todos():
 async def create_todo(todo: Todo, background_tasks: BackgroundTasks):
     """Create todo - Entity as request body with event."""
     todo.save()
-    background_tasks.add_task(emit_async, "todo.created", todo)
+    background_tasks.add_task(publish, "todo.created", data=todo.model_dump(), source="api")
     return todo
 
 @app.get("/{todo_id}", response_model=Todo)

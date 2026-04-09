@@ -61,7 +61,7 @@ class TestMemoryRepositorySave:
         assert result is True, "save() should return True on success"
 
         # Verify entity can be retrieved
-        retrieved = memory_repo.find(test_entity.id)
+        retrieved = memory_repo.find(MemoryTestEntity, test_entity.id)
         assert retrieved is not None, "Saved entity should be retrievable"
         assert retrieved.id == test_entity.id
         assert retrieved.name == test_entity.name
@@ -73,16 +73,16 @@ class TestMemoryRepositorySave:
         memory_repo.save(test_entity, ttl=1)
 
         # Verify exists immediately
-        assert memory_repo.exists_sync(test_entity.id) is True
-        retrieved = memory_repo.find(test_entity.id)
+        assert memory_repo.exists(MemoryTestEntity, test_entity.id) is True
+        retrieved = memory_repo.find(MemoryTestEntity, test_entity.id)
         assert retrieved is not None
 
         # Wait for expiration
         time.sleep(1.5)
 
         # Verify no longer exists
-        assert memory_repo.exists_sync(test_entity.id) is False
-        retrieved_after = memory_repo.find(test_entity.id)
+        assert memory_repo.exists(MemoryTestEntity, test_entity.id) is False
+        retrieved_after = memory_repo.find(MemoryTestEntity, test_entity.id)
         assert retrieved_after is None, "Entity should be expired after TTL"
 
     def test_data_persists_across_multiple_saves(self, memory_repo, test_entity):
@@ -96,7 +96,7 @@ class TestMemoryRepositorySave:
         memory_repo.save(test_entity)
 
         # Verify latest data is stored
-        retrieved = memory_repo.find(test_entity.id)
+        retrieved = memory_repo.find(MemoryTestEntity, test_entity.id)
         assert retrieved.name == "Updated Name"
         assert retrieved.value == 100
 
@@ -116,12 +116,13 @@ class TestMemoryRepositoryFind:
         time.sleep(1.5)
 
         # find() should return None
-        result = memory_repo.find(test_entity.id)
+        result = memory_repo.find(MemoryTestEntity, test_entity.id)
         assert result is None, "find() should return None for expired entities"
 
         # Should also be cleaned up from memory
-        assert test_entity.id not in memory_repo._data
-        assert test_entity.id not in memory_repo._expiry
+        key = (MemoryTestEntity.__name__, test_entity.id)
+        assert key not in memory_repo._data
+        assert key not in memory_repo._expiry
 
 
 class TestMemoryRepositoryDelete:
@@ -132,26 +133,44 @@ class TestMemoryRepositoryDelete:
         # Save entity
         memory_repo.save(test_entity)
 
-        # Delete entity
-        result = memory_repo.delete(test_entity.id)
+        # Delete entity (takes entity instance, not string id)
+        result = memory_repo.delete(test_entity)
 
         assert result is True, "delete() should return True when entity existed"
 
         # Verify entity is gone
-        assert memory_repo.find(test_entity.id) is None
-        assert memory_repo.exists_sync(test_entity.id) is False
+        assert memory_repo.find(MemoryTestEntity, test_entity.id) is None
+        assert memory_repo.exists(MemoryTestEntity, test_entity.id) is False
 
-    def test_delete_returns_false_for_nonexistent_entity(self, memory_repo):
+    def test_delete_returns_false_for_nonexistent_entity(self, memory_repo, test_entity):
         """MemoryRepository.delete() returns False for non-existent entity."""
-        result = memory_repo.delete("nonexistent_id")
+        # test_entity was never saved, so deleting it should return False
+        result = memory_repo.delete(test_entity)
         assert result is False, "delete() should return False when entity doesn't exist"
 
 
 class TestMemoryRepositoryExists:
     """Test MemoryRepository exists functionality."""
 
+    def test_exists_checks_entity_presence(self, memory_repo, test_entity):
+        """MemoryRepository.exists() checks entity presence by class and id."""
+        # Initially doesn't exist
+        assert memory_repo.exists(MemoryTestEntity, test_entity.id) is False
+
+        # Save entity
+        memory_repo.save(test_entity)
+
+        # Now exists
+        assert memory_repo.exists(MemoryTestEntity, test_entity.id) is True
+
+        # Delete entity
+        memory_repo.delete(test_entity)
+
+        # No longer exists
+        assert memory_repo.exists(MemoryTestEntity, test_entity.id) is False
+
     def test_exists_sync_checks_entity_presence(self, memory_repo, test_entity):
-        """MemoryRepository.exists_sync() checks entity presence."""
+        """MemoryRepository.exists_sync() checks entity presence (legacy API)."""
         # Initially doesn't exist
         assert memory_repo.exists_sync(test_entity.id) is False
 
@@ -162,7 +181,7 @@ class TestMemoryRepositoryExists:
         assert memory_repo.exists_sync(test_entity.id) is True
 
         # Delete entity
-        memory_repo.delete(test_entity.id)
+        memory_repo.delete(test_entity)
 
         # No longer exists
         assert memory_repo.exists_sync(test_entity.id) is False
@@ -200,8 +219,8 @@ class TestMemoryRepositoryCleanup:
 
         # Verify the right ones remain
         for i in range(5):
-            assert memory_repo.exists_sync(f"perm_{i}") is True
-            assert memory_repo.exists_sync(f"ttl_{i}") is False
+            assert memory_repo.exists(MemoryTestEntity, f"perm_{i}") is True
+            assert memory_repo.exists(MemoryTestEntity, f"ttl_{i}") is False
 
     def test_start_cleanup_is_called_during_init(self, memory_repo):
         """MemoryRepository.start_cleanup() is called during initialization."""
@@ -215,7 +234,7 @@ class TestMemoryRepositoryCleanup:
         entity = MemoryTestEntity(id="auto_cleanup_test", name="Test", value=1)
         memory_repo.save(entity, ttl=1)
 
-        assert memory_repo.exists_sync("auto_cleanup_test") is True
+        assert memory_repo.exists(MemoryTestEntity, "auto_cleanup_test") is True
 
         # Note: Full automatic cleanup testing would require:
         # 1. Background thread/task running
@@ -239,10 +258,10 @@ class TestMemoryRepositoryIntegration:
         assert memory_repo.save(entity) is True
 
         # Exists
-        assert memory_repo.exists_sync(entity.id) is True
+        assert memory_repo.exists(MemoryTestEntity, entity.id) is True
 
         # Find
-        found = memory_repo.find(entity.id)
+        found = memory_repo.find(MemoryTestEntity, entity.id)
         assert found is not None
         assert found.id == entity.id
 
@@ -251,12 +270,12 @@ class TestMemoryRepositoryIntegration:
         assert memory_repo.save(entity) is True
 
         # Verify update
-        updated = memory_repo.find(entity.id)
+        updated = memory_repo.find(MemoryTestEntity, entity.id)
         assert updated.value == 200
 
         # Delete
-        assert memory_repo.delete(entity.id) is True
+        assert memory_repo.delete(entity) is True
 
         # No longer exists
-        assert memory_repo.exists_sync(entity.id) is False
-        assert memory_repo.find(entity.id) is None
+        assert memory_repo.exists(MemoryTestEntity, entity.id) is False
+        assert memory_repo.find(MemoryTestEntity, entity.id) is None

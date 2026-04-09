@@ -1,11 +1,13 @@
 """Tests for error handling throughout the Nitro framework."""
 
 import pytest
+import asyncio
 from pydantic import ValidationError
 from sqlalchemy.exc import OperationalError
 
 from nitro.domain.entities.base_entity import Entity
-from nitro.events.events import on, emit
+from nitro.routing.registry import register_handler, clear_handlers
+from nitro.adapters.catch_all import dispatch_action
 from nitro.domain.repository.sql import SQLModelRepository
 
 
@@ -111,82 +113,61 @@ class TestRepositoryConnectionErrors:
             ErrorTestUser.filter(nonexistent_field="value")
 
 
-class TestEventHandlerExceptions:
-    """Test that event handler exceptions don't crash the app."""
+class TestRoutingHandlerExceptions:
+    """Test that routing handler exceptions are propagated correctly."""
 
-    def test_event_handler_exception_is_caught(self):
-        """Test that exceptions in event handlers propagate in sync mode."""
-        results = []
+    def setup_method(self):
+        clear_handlers()
 
-        @on("test.exception.event")
-        def handler_that_raises(sender):
+    def test_routing_handler_exception_propagates(self):
+        """Test that exceptions in routing handlers propagate to caller."""
+
+        async def handler_that_raises(signals, request, sender):
             raise ValueError("Handler failed!")
 
-        @on("test.exception.event")
-        def handler_that_succeeds(sender):
-            results.append("success")
+        register_handler("test.exception.action", handler_that_raises)
 
-        # Emit event - sync mode allows exceptions to propagate
-        # This is the expected behavior - callers can handle exceptions
         with pytest.raises(ValueError, match="Handler failed"):
-            emit("test.exception.event", sender=self)
+            asyncio.run(
+                dispatch_action("test.exception.action", "client1", signals={})
+            )
 
-        # Clean up
-        from nitro.events.events import event
-        event("test.exception.event").disconnect(handler_that_raises)
-        event("test.exception.event").disconnect(handler_that_succeeds)
-
-    def test_async_event_handler_exception_handling(self):
-        """Test async event handlers with emit_async (parallel execution)."""
-        import asyncio
-
+    def test_routing_handler_returns_result(self):
+        """Test that routing handler return values are passed through."""
         results = []
 
-        @on("test.async.exception")
-        async def async_handler_raises(sender):
+        async def successful_handler(signals, request, sender):
+            results.append("success")
+            return {"status": "ok"}
+
+        register_handler("test.success.action", successful_handler)
+
+        result = asyncio.run(
+            dispatch_action("test.success.action", "client1", signals={})
+        )
+        assert results == ["success"]
+        assert result == {"status": "ok"}
+
+    def test_dispatch_no_handler_is_safe(self):
+        """Test that dispatching to nonexistent handler doesn't crash."""
+        result = asyncio.run(
+            dispatch_action("nonexistent.action.no.handlers", "client1", signals={})
+        )
+        # No handler = None result
+        assert result is None
+
+    def test_async_routing_handler_exception_handling(self):
+        """Test async routing handler with exception."""
+
+        async def async_handler_raises(signals, request, sender):
             raise RuntimeError("Async handler failed!")
 
-        @on("test.async.exception")
-        async def async_handler_succeeds(sender):
-            results.append("async_success")
+        register_handler("test.async.exception", async_handler_raises)
 
-        async def run_test():
-            # emit_async runs handlers in parallel with asyncio.gather
-            # gather returns results, doesn't raise by default
-            from nitro.events.events import emit_async
-            result = await emit_async("test.async.exception", sender=None)
-            # Result contains exception objects from failed handlers
-            # but doesn't raise them (this is the parallel execution behavior)
-
-        # Run the async test
-        asyncio.run(run_test())
-
-        # Clean up
-        from nitro.events.events import event
-        event("test.async.exception").disconnect(async_handler_raises)
-        event("test.async.exception").disconnect(async_handler_succeeds)
-
-    def test_event_emission_with_no_handlers_is_safe(self):
-        """Test that emitting events with no handlers doesn't crash."""
-        # Emit event that has no handlers
-        emit("nonexistent.event.no.handlers", sender=self)
-
-        # Should complete without error
-        assert True
-
-    def test_event_handler_exception_logged(self, caplog):
-        """Test that handler exceptions propagate (logging is application concern)."""
-        @on("test.logged.exception")
-        def handler_logs_error(sender):
-            raise RuntimeError("This should propagate")
-
-        # Emit and verify exception propagates
-        with pytest.raises(RuntimeError, match="This should propagate"):
-            emit("test.logged.exception", sender=self)
-
-        # Clean up
-        from nitro.events.events import event
-        event("test.logged.exception").disconnect(handler_logs_error)
+        with pytest.raises(RuntimeError, match="Async handler failed"):
+            asyncio.run(
+                dispatch_action("test.async.exception", "client1", signals={})
+            )
 
 
 class TestCLIErrorMessages:

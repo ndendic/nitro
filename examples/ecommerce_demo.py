@@ -26,7 +26,7 @@ from fastapi import FastAPI, BackgroundTasks, HTTPException
 from pydantic import BaseModel
 from nitro.domain.entities.base_entity import Entity
 from nitro.domain.repository.sql import SQLModelRepository
-from nitro.events import on, emit_async
+from nitro.events import subscribe, publish
 
 # ============================================================================
 # DOMAIN ENTITIES
@@ -85,26 +85,26 @@ class Order(Entity, table=True):
 # EVENT HANDLERS - Decoupled Business Logic
 # ============================================================================
 
-@on("order.placed")
-async def send_confirmation_email(sender: Order, **kwargs):
+@subscribe("order.placed")
+async def send_confirmation_email(msg):
     """Send order confirmation email (simulated)."""
     print(f"\n📧 EMAIL SERVICE")
-    print(f"   To: {sender.customer_email}")
-    print(f"   Subject: Order Confirmation #{sender.id}")
-    print(f"   Order Total: ${sender.total:.2f}")
-    print(f"   Status: {sender.status}")
+    print(f"   To: {msg.data['customer_email']}")
+    print(f"   Subject: Order Confirmation #{msg.data['id']}")
+    print(f"   Order Total: ${msg.data['total']:.2f}")
+    print(f"   Status: {msg.data['status']}")
     print(f"   ✓ Email sent successfully\n")
 
 
-@on("order.placed")
-async def update_inventory(sender: Order, **kwargs):
+@subscribe("order.placed")
+async def update_inventory(msg):
     """Update product inventory based on order items."""
     print(f"\n📦 INVENTORY SERVICE")
-    print(f"   Processing order {sender.id}")
+    print(f"   Processing order {msg.data['id']}")
 
     # Parse items from JSON string
     import json
-    items = json.loads(sender.items)
+    items = json.loads(msg.data['items'])
 
     all_updated = True
     for item_data in items:
@@ -123,23 +123,23 @@ async def update_inventory(sender: Order, **kwargs):
         print(f"   ⚠️  Some inventory updates failed\n")
 
 
-@on("order.placed")
-async def log_analytics(sender: Order, **kwargs):
+@subscribe("order.placed")
+async def log_analytics(msg):
     """Log order for analytics (simulated)."""
     print(f"\n📊 ANALYTICS SERVICE")
-    print(f"   Order ID: {sender.id}")
-    print(f"   Customer: {sender.customer_email}")
-    print(f"   Revenue: ${sender.total:.2f}")
-    print(f"   Timestamp: {sender.created_at}")
+    print(f"   Order ID: {msg.data['id']}")
+    print(f"   Customer: {msg.data['customer_email']}")
+    print(f"   Revenue: ${msg.data['total']:.2f}")
+    print(f"   Timestamp: {msg.data['created_at']}")
     print(f"   ✓ Analytics logged\n")
 
 
-@on("product.low_stock")
-async def notify_restock(sender: Product, **kwargs):
+@subscribe("product.low_stock")
+async def notify_restock(msg):
     """Notify when product stock is low."""
     print(f"\n⚠️  LOW STOCK ALERT")
-    print(f"   Product: {sender.name}")
-    print(f"   Current Stock: {sender.stock}")
+    print(f"   Product: {msg.data['name']}")
+    print(f"   Current Stock: {msg.data['stock']}")
     print(f"   Action: Send notification to procurement team")
     print(f"   ✓ Restock notification sent\n")
 
@@ -244,14 +244,14 @@ async def create_order(request: CreateOrderRequest, background_tasks: Background
     order.place()
 
     # Emit order.placed event asynchronously
-    # This will trigger all @on("order.placed") handlers
-    background_tasks.add_task(emit_async, "order.placed", order)
+    # This will trigger all @subscribe("order.placed") handlers
+    background_tasks.add_task(publish, "order.placed", data=order.model_dump(), source="api")
 
     # Check for low stock
     for item in request.items:
         product = Product.get(item.product_id)
         if product and product.stock < 10:
-            background_tasks.add_task(emit_async, "product.low_stock", product)
+            background_tasks.add_task(publish, "product.low_stock", data=product.model_dump(), source="api")
 
     return order
 
