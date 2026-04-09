@@ -8,7 +8,7 @@ to avoid metaclass conflicts with SQLModel.
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, ClassVar, Union
 
-import ulid
+import uuid
 
 from nitro.utils import AttrDict
 from sqlmodel import SQLModel, Field
@@ -36,7 +36,7 @@ class Entity(SQLModel):
         json_encoders={datetime: lambda dt: dt.isoformat()},
     )
 
-    id: str = Field(default_factory=lambda: str(ulid.new()), primary_key=True)
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
 
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
