@@ -22,6 +22,7 @@ Edit this file to customize your page layout and add routes.
 
 from nitro import *
 from nitro.html import *
+from nitro.html.components import *  # Card, Badge, LucideIcon, etc.
 from nitro.html import template as templ, page_template
 {framework_import}
 
@@ -272,6 +273,7 @@ Edit this file to customize your page layout.
 
 from nitro import *
 from nitro.html import *
+from nitro.html.components import *  # Card, Badge, LucideIcon, etc.
 from nitro.html import template as templ, page_template
 {framework_import}
 from components import Sidebar, Navbar
