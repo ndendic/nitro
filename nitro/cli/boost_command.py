@@ -228,10 +228,10 @@ def boost_command(
             "       [blue]pip install -e .[/blue]  [dim]# alternative[/dim]"
         )
         console.print(
-            "  [bold]2.[/bold] Start the dev server:   [blue]python main.py[/blue]"
+            "  [bold]2.[/bold] Start the dev server:   [blue]uv run python main.py[/blue]"
         )
         console.print(
-            "  [bold]3.[/bold] Watch for CSS changes:  [blue]nitro tw dev[/blue] [dim](separate terminal)[/dim]"
+            "  [bold]3.[/bold] Watch for CSS changes:  [blue]uv run nitro tw dev[/blue] [dim](separate terminal)[/dim]"
         )
         console.print(
             "  [bold]4.[/bold] Edit [blue]base.py[/blue] to customize your page"
