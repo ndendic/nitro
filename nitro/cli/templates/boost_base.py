@@ -246,7 +246,7 @@ def Sidebar():
                     A(
                         LucideIcon("book-open", cls="size-4 text-muted-foreground"),
                         Span("Documentation", cls="text-xs text-muted-foreground"),
-                        href="https://nitro.ndendic.com",
+                        href="https://nitro.artyficial.space",
                         target="_blank",
                         cls="flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-sidebar-accent/50 transition-colors",
                     ),
