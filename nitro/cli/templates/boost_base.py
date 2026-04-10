@@ -294,6 +294,7 @@ def template(content, title: str = "Nitro App"):
                     Div(content, id="content"),
                     cls="p-4 md:p-6 xl:p-12",
                 ),
+                signals=Signals(theme="default"),
             ),
         ),
         title=title,
@@ -302,6 +303,12 @@ def template(content, title: str = "Nitro App"):
 
 
 def StatCard(icon, label, value, description=""):
+    # Reactive binding: if `value` starts with "$", treat it as a Datastar
+    # signal expression and bind via data_text so the card updates live.
+    if isinstance(value, str) and value.startswith("$"):
+        value_el = Span(data_text=value, cls="text-2xl font-bold tracking-tight")
+    else:
+        value_el = Span(value, cls="text-2xl font-bold tracking-tight")
     return Div(
         Div(
             Div(
@@ -312,7 +319,7 @@ def StatCard(icon, label, value, description=""):
             cls="flex items-center justify-between",
         ),
         Div(
-            Span(value, cls="text-2xl font-bold tracking-tight"),
+            value_el,
             P(description, cls="text-xs text-muted-foreground mt-0.5") if description else "",
             cls="mt-2",
         ),
@@ -353,7 +360,7 @@ def index():
             StatCard("zap", "Status", "Running", "All systems operational"),
             StatCard("layers", "Entities", "0", "Define models in base.py"),
             StatCard("route", "Routes", "1", "This page — add more!"),
-            StatCard("palette", "Theme", "Default", "Try the theme selector"),
+            StatCard("palette", "Theme", "$theme", "Changes as you pick one"),
             cls="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8",
         ),
         # Quick actions
