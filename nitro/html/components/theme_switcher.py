@@ -171,7 +171,7 @@ def ThemeSwitcherDropdown(
                 aria_label="Select theme",
                 aria_haspopup="menu",
                 on_click=f"${open_signal} = !${open_signal}",
-                **{"data-attr-aria-expanded": f"${open_signal}"},
+                **{"data-attr:aria-expanded": f"${open_signal}"},
             ),
             # Dropdown menu
             rt.Div(
@@ -182,7 +182,7 @@ def ThemeSwitcherDropdown(
                         role="menuitem",
                         tabindex="0",
                         on_click=f"${signal} = 'light'; ${open_signal} = false",
-                        **{"data-attr-aria-selected": f"${signal} === 'light'"},
+                        **{"data-attr:aria-selected": f"${signal} === 'light'"},
                     ),
                     rt.Div(
                         LucideIcon("moon", cls="size-4"),
@@ -190,7 +190,7 @@ def ThemeSwitcherDropdown(
                         role="menuitem",
                         tabindex="0",
                         on_click=f"${signal} = 'dark'; ${open_signal} = false",
-                        **{"data-attr-aria-selected": f"${signal} === 'dark'"},
+                        **{"data-attr:aria-selected": f"${signal} === 'dark'"},
                     ),
                     rt.Div(
                         LucideIcon("laptop", cls="size-4"),
@@ -198,7 +198,7 @@ def ThemeSwitcherDropdown(
                         role="menuitem",
                         tabindex="0",
                         on_click=f"${signal} = 'system'; ${open_signal} = false",
-                        **{"data-attr-aria-selected": f"${signal} === 'system'"},
+                        **{"data-attr:aria-selected": f"${signal} === 'system'"},
                     ),
                     role="menu",
                 ),
@@ -206,7 +206,7 @@ def ThemeSwitcherDropdown(
                 data_side="bottom",
                 data_align="end",
                 aria_hidden="true",
-                **{"data-attr-aria-hidden": f"!${open_signal}"},
+                **{"data-attr:aria-hidden": f"!${open_signal}"},
             ),
             cls="dropdown-menu",
             on_click__outside=f"${open_signal} = false",
