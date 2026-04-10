@@ -3,7 +3,7 @@
 README_TEMPLATE = '''\
 # {project_name}
 
-Built with [Nitro](https://nitro.systems) — a collection of abstraction layers for Python web development.
+Built with [Nitro](https://nitro.artyficial.space) — a collection of abstraction layers for Python web development.
 
 ## Quick Start
 
@@ -22,14 +22,14 @@ pip install -e .
 ### 2. Run the dev server
 
 ```bash
-python main.py
+uv run python main.py
 ```
 
 ### 3. Watch for CSS changes
 
 In a separate terminal:
 ```bash
-nitro tw dev
+uv run nitro tw dev
 ```
 
 Your app will be running at [http://localhost:8000](http://localhost:8000).
@@ -38,12 +38,12 @@ Your app will be running at [http://localhost:8000](http://localhost:8000).
 
 - **Framework:** {framework}
 - **Template:** {template}
-- **Styling:** Tailwind CSS v4 + BaseCoat
+- **Styling:** Tailwind CSS v4 + BaseCoat (bundled with `nitro-boost`)
 
 ## Learn More
 
-- [Nitro Documentation](https://nitro.systems/docs)
-- [Nitro GitHub](https://github.com/nitro-systems/nitro)
+- [Nitro Documentation](https://nitro.artyficial.space)
+- [Nitro GitHub](https://github.com/ndendic/nitro)
 '''
 
 

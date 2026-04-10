@@ -9,14 +9,16 @@ PYPROJECT_TOML_TEMPLATE = '''\
 [project]
 name = "{project_name}"
 version = "0.1.0"
-requires-python = ">= 3.10"
+requires-python = ">= 3.11"
 dependencies = [
-    "nitro",
+    "nitro-boost",
     "{framework_dep}",
 ]
 
-[project.scripts]
-dev = "main:app"
+[dependency-groups]
+dev = [
+    "pytest",
+]
 '''
 
 

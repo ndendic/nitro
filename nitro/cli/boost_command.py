@@ -237,7 +237,7 @@ def boost_command(
             "  [bold]4.[/bold] Edit [blue]base.py[/blue] to customize your page"
         )
         console.print(
-            "\n  [dim]Docs: https://nitro.systems/docs[/dim]"
+            "\n  [dim]Docs: https://nitro.artyficial.space[/dim]"
         )
 
     except typer.Exit:
