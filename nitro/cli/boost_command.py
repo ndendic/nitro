@@ -11,6 +11,8 @@ from nitro.cli.templates import (
     generate_boost_components,
     generate_boost_main,
     generate_env_example,
+    generate_pyproject_toml,
+    generate_readme,
 )
 
 
@@ -64,8 +66,14 @@ def validate_boost_project(root: Path, force: bool = False) -> None:
 
 def write_boost_files(
     root: Path, framework: str, template: str, verbose: bool = False
-) -> None:
-    """Generate and write boost files to project root."""
+) -> list[str]:
+    """Generate and write boost files to project root.
+
+    Returns:
+        List of filenames that were created.
+    """
+    project_name = root.name
+
     # Ensure static dir exists for static file serving
     static_dir = root / "static"
     static_dir.mkdir(exist_ok=True)
@@ -74,6 +82,8 @@ def write_boost_files(
         ("main.py", generate_boost_main(framework)),
         ("base.py", generate_boost_base(framework, template)),
         (".env.example", generate_env_example()),
+        ("pyproject.toml", generate_pyproject_toml(project_name, framework)),
+        ("README.md", generate_readme(project_name, framework, template)),
     ]
 
     # Add components.py if the template needs it
@@ -81,14 +91,28 @@ def write_boost_files(
     if components:
         files.append(("components.py", components))
 
+    created = []
     for filename, content in files:
         file_path = root / filename
         file_path.write_text(content)
+        created.append(filename)
         if verbose:
             console.print(f"[green]Created:[/green] {filename}")
 
     if verbose:
         console.print("[green]Created:[/green] static/")
+    created.append("static/")
+
+    # Auto-copy .env.example → .env if .env does not already exist
+    env_path = root / ".env"
+    env_example_path = root / ".env.example"
+    if not env_path.exists():
+        env_path.write_text(env_example_path.read_text())
+        created.append(".env")
+        if verbose:
+            console.print("[green]Created:[/green] .env (copied from .env.example)")
+
+    return created
 
 
 def run_tailwind_setup(verbose: bool = False) -> None:
@@ -182,20 +206,39 @@ def boost_command(
         )
 
         # Generate files
-        write_boost_files(root, framework.value, template, verbose)
+        created_files = write_boost_files(root, framework.value, template, verbose)
 
         # Init + build Tailwind CSS
         run_tailwind_setup(verbose)
 
-        console.print("\n[green]Project ready![/green]")
+        console.print("\n[bold green]Project ready![/bold green]")
+
+        console.print("\n[bold]Generated files:[/bold]")
+        for filename in created_files:
+            console.print(f"  [green]+[/green] {filename}")
+
         console.print("\n[bold]Next steps:[/bold]")
         console.print(
-            "  1. Run [blue]python main.py[/blue] to start the dev server"
+            "  [bold]1.[/bold] Install dependencies:"
         )
         console.print(
-            "  2. Run [blue]nitro tw dev[/blue] in a separate terminal to watch for CSS changes"
+            "       [blue]uv sync[/blue]          [dim]# recommended[/dim]"
         )
-        console.print("  3. Edit [blue]base.py[/blue] to customize your page")
+        console.print(
+            "       [blue]pip install -e .[/blue]  [dim]# alternative[/dim]"
+        )
+        console.print(
+            "  [bold]2.[/bold] Start the dev server:   [blue]python main.py[/blue]"
+        )
+        console.print(
+            "  [bold]3.[/bold] Watch for CSS changes:  [blue]nitro tw dev[/blue] [dim](separate terminal)[/dim]"
+        )
+        console.print(
+            "  [bold]4.[/bold] Edit [blue]base.py[/blue] to customize your page"
+        )
+        console.print(
+            "\n  [dim]Docs: https://nitro.systems/docs[/dim]"
+        )
 
     except typer.Exit:
         raise
