@@ -142,3 +142,8 @@ def put(prefix: str = "", **kwargs):
 def delete(prefix: str = "", status_code: int = 204, **kwargs):
     """DELETE action decorator."""
     return action(method="DELETE", prefix=prefix, status_code=status_code, **kwargs)
+
+
+def patch(prefix: str = "", **kwargs):
+    """PATCH action decorator."""
+    return action(method="PATCH", prefix=prefix, **kwargs)

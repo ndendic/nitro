@@ -10,7 +10,8 @@ from nitro.html.datastar import *  # noqa: F403
 
 # Phase 2: Auto-routing exports
 from nitro.domain.entities.base_entity import Entity
-from nitro.routing import action, get, post, put, delete, ActionMetadata, NotFoundError
+from nitro.routing import action, get, post, put, delete, patch, ActionMetadata, NotFoundError
+from nitro.domain.mixins import TimestampMixin, SoftDeleteMixin, SlugMixin, TaggableMixin, AuditMixin
 
 __author__ = "Nikola Dendic"
 __description__ = "Abstraction layers for Python web development."
@@ -24,7 +25,14 @@ __all__ = [
     "post",
     "put",
     "delete",
+    "patch",
     "ActionMetadata",
+    # Entity mixins
+    "TimestampMixin",
+    "SoftDeleteMixin",
+    "SlugMixin",
+    "TaggableMixin",
+    "AuditMixin",
     # Utils
     "show",
     "AttrDict",
