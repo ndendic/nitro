@@ -86,3 +86,12 @@ __all__ = [
     "TaskMessage",
     "generate_task_id",
 ]
+
+# RedisTaskQueue is imported lazily to avoid hard dependency on the redis package.
+# Import it explicitly when needed:
+#
+#   from nitro.tasks.redis_queue import RedisTaskQueue
+#
+# or check availability:
+#
+#   from nitro.tasks.redis_queue import HAS_REDIS, RedisTaskQueue
