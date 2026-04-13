@@ -8,6 +8,7 @@ from .tailwind_commands.dev import dev_command
 from .tailwind_commands.init import init_command
 from .database_commands.cli import app as db_app
 from .boost_command import boost_command
+from .config_commands import config_app
 from nitro.scaffold.cli import create_command
 app = typer.Typer(
     name="nitro",
@@ -44,6 +45,7 @@ tw_app.command("build")(build_command)
 app.add_typer(tw_app)
 
 app.add_typer(db_app)
+app.add_typer(config_app, name="config", help="Configuration management")
 
 # Boost command (top-level)
 app.command("boost")(boost_command)
