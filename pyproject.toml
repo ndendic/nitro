@@ -49,6 +49,10 @@ members = [
 [tool.uv.sources]
 nitro-events = { path = "../nitro-events" }
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "strict"
+
 [dependency-groups]
 dev = [
     "fastapi[standard]>=0.118.0",
