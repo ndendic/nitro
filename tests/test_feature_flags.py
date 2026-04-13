@@ -47,8 +47,8 @@ def make_flags() -> FeatureFlags:
 
 
 def run(coro):
-    """Run a coroutine in the current event loop."""
-    return asyncio.get_event_loop().run_until_complete(coro)
+    """Run a coroutine synchronously."""
+    return asyncio.run(coro)
 
 
 # ===========================================================================
