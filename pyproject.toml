@@ -25,6 +25,7 @@ dependencies = [
 legacy = ["blinker>=1.9.0"]
 # Optional backends and services
 redis = ["redis>=5.0.0"]
+postgres = ["asyncpg>=0.29.0"]
 auth-jwt = ["python-jose[cryptography]>=3.3.0", "passlib[bcrypt]>=1.7.4"]
 
 [project.scripts]
