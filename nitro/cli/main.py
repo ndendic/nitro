@@ -8,6 +8,7 @@ from .tailwind_commands.dev import dev_command
 from .tailwind_commands.init import init_command
 from .database_commands.cli import app as db_app
 from .boost_command import boost_command
+from nitro.scaffold.cli import create_command
 app = typer.Typer(
     name="nitro",
     help="Python-first set of abstraction layers for Python web development",
@@ -46,6 +47,9 @@ app.add_typer(db_app)
 
 # Boost command (top-level)
 app.command("boost")(boost_command)
+
+# Create command (top-level)
+app.command("create")(create_command)
 
 if __name__ == "__main__":
     app()
