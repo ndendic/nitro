@@ -164,7 +164,7 @@ class TestCorrelationId:
         async def run():
             await asyncio.gather(task_a(), task_b())
 
-        asyncio.get_event_loop().run_until_complete(run())
+        asyncio.run(run())
         assert results["a"] == "aaaaaaaaaaaa"
         assert results["b"] == "bbbbbbbbbbb0"
 
@@ -397,14 +397,14 @@ class TestLoggingMiddleware:
         from nitro.logging.middleware import LoggingMiddleware
         mw = LoggingMiddleware()
         req = _make_request(headers={"X-Request-ID": "headerid12ab"})
-        asyncio.get_event_loop().run_until_complete(mw.on_request(req))
+        asyncio.run(mw.on_request(req))
         assert req.ctx.nitro_correlation_id == "headerid12ab"
 
     def test_generates_id_when_no_header(self):
         from nitro.logging.middleware import LoggingMiddleware
         mw = LoggingMiddleware()
         req = _make_request()
-        asyncio.get_event_loop().run_until_complete(mw.on_request(req))
+        asyncio.run(mw.on_request(req))
         assert req.ctx.nitro_correlation_id is not None
         assert len(req.ctx.nitro_correlation_id) == 12
 
@@ -413,8 +413,8 @@ class TestLoggingMiddleware:
         mw = LoggingMiddleware()
         req = _make_request()
         resp = _make_response()
-        asyncio.get_event_loop().run_until_complete(mw.on_request(req))
-        asyncio.get_event_loop().run_until_complete(mw.on_response(req, resp))
+        asyncio.run(mw.on_request(req))
+        asyncio.run(mw.on_response(req, resp))
         assert "X-Request-ID" in resp.headers
 
     def test_logs_request_start(self):
@@ -422,7 +422,7 @@ class TestLoggingMiddleware:
         mock_logger = MagicMock()
         mw = LoggingMiddleware(logger=mock_logger)
         req = _make_request()
-        asyncio.get_event_loop().run_until_complete(mw.on_request(req))
+        asyncio.run(mw.on_request(req))
         assert mock_logger.info.called
 
     def test_logs_request_completion_with_status_and_duration(self):
@@ -431,8 +431,8 @@ class TestLoggingMiddleware:
         mw = LoggingMiddleware(logger=mock_logger)
         req = _make_request()
         resp = _make_response(status=201)
-        asyncio.get_event_loop().run_until_complete(mw.on_request(req))
-        asyncio.get_event_loop().run_until_complete(mw.on_response(req, resp))
+        asyncio.run(mw.on_request(req))
+        asyncio.run(mw.on_response(req, resp))
         call_kwargs = mock_logger.info.call_args_list[-1][1]
         extra = call_kwargs.get("extra", {})
         assert extra.get("status") == 201
@@ -443,7 +443,7 @@ class TestLoggingMiddleware:
         mock_logger = MagicMock()
         mw = LoggingMiddleware(logger=mock_logger)
         req = _make_request()
-        asyncio.get_event_loop().run_until_complete(mw.on_error(req, ValueError("oops")))
+        asyncio.run(mw.on_error(req, ValueError("oops")))
         assert mock_logger.error.called
 
     def test_response_returns_response_object(self):
@@ -451,8 +451,8 @@ class TestLoggingMiddleware:
         mw = LoggingMiddleware()
         req = _make_request()
         resp = _make_response()
-        asyncio.get_event_loop().run_until_complete(mw.on_request(req))
-        result = asyncio.get_event_loop().run_until_complete(mw.on_response(req, resp))
+        asyncio.run(mw.on_request(req))
+        result = asyncio.run(mw.on_response(req, resp))
         assert result is resp
 
 
@@ -550,7 +550,7 @@ class TestLogAction:
         async def async_fn(x):
             return x + 1
 
-        result = asyncio.get_event_loop().run_until_complete(async_fn(3))
+        result = asyncio.run(async_fn(3))
         assert result == 4
 
     def test_include_args_true_logs_arguments(self):
@@ -611,7 +611,7 @@ class TestLogAction:
             raise ValueError("async boom")
 
         with pytest.raises(ValueError, match="async boom"):
-            asyncio.get_event_loop().run_until_complete(async_failing())
+            asyncio.run(async_failing())
 
 
 # ===========================================================================
@@ -738,7 +738,7 @@ class TestIntegration:
         mw = LoggingMiddleware(logger=logger)
         req = _make_request(headers={"X-Request-ID": "mwintegration12"})
 
-        asyncio.get_event_loop().run_until_complete(mw.on_request(req))
+        asyncio.run(mw.on_request(req))
 
         # Middleware stores the chosen ID on the request context object
         assert req.ctx.nitro_correlation_id == "mwintegration12"
