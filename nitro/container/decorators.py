@@ -111,17 +111,17 @@ def inject(container: "Container"):
                         kwargs[name] = await container.resolve(hint)
 
             try:
-                loop = asyncio.get_event_loop()
-                if loop.is_running():
-                    # Can't block — caller must be async; warn and call without injection.
-                    raise RuntimeError(
-                        "inject() used on a sync function called from within a running "
-                        "event loop.  Convert the function to async or call it from "
-                        "synchronous code."
-                    )
-                loop.run_until_complete(_resolve_all())
+                loop = asyncio.get_running_loop()
             except RuntimeError:
-                asyncio.run(_resolve_all())
+                loop = None
+
+            if loop and loop.is_running():
+                raise RuntimeError(
+                    "inject() used on a sync function called from within a running "
+                    "event loop.  Convert the function to async or call it from "
+                    "synchronous code."
+                )
+            asyncio.run(_resolve_all())
 
             return func(*args, **kwargs)
 
