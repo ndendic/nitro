@@ -302,7 +302,7 @@ configure_nitro(app)
 
 
 @app.before_server_start
-async def setup(app, loop=None):
+async def setup(app):
     Poll.repository().init_db()
     Option.repository().init_db()
     # Seed a default poll if none exists

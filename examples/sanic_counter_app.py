@@ -158,7 +158,7 @@ configure_nitro(app)
 
 
 @app.before_server_start
-async def setup(app, loop=None):
+async def setup(app):
     Counter.repository().init_db()
     if not Counter.get("main"):
         Counter(id="main", value=0).save()

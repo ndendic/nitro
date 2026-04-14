@@ -373,14 +373,14 @@ configure_nitro(app)
 
 
 @app.before_server_start
-async def setup(app, loop=None):
+async def setup(app):
     Pomodoro.repository().init_db()
     if not Pomodoro.get("main"):
         Pomodoro(id="main", state="idle", remaining=WORK_DURATION).save()
 
 
 @app.after_server_start
-async def start_ticker(app, loop=None):
+async def start_ticker(app):
     """Background task: tick the timer every second when active."""
     app.add_task(_tick_loop())
 

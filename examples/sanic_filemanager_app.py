@@ -672,7 +672,7 @@ configure_nitro(app)
 
 
 @app.before_server_start
-async def setup(app, loop=None):
+async def setup(app):
     FileItem.repository().init_db()
     if not FileItem.all():
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")

@@ -397,7 +397,7 @@ class Document(Entity, table=True):
 
 
 @app.before_server_start
-async def setup(app, loop=None):
+async def setup(app):
     Document.repository().init_db()
     if not Document.get("default"):
         doc = Document(id="default", title="Welcome", content=DEFAULT_CONTENT)

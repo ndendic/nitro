@@ -430,7 +430,7 @@ configure_nitro(app)
 
 
 @app.before_server_start
-async def setup(app, loop=None):
+async def setup(app):
     Notification.repository().init_db()
     # Clear stale data and re-seed
     for n in Notification.all():
@@ -439,7 +439,7 @@ async def setup(app, loop=None):
 
 
 @app.after_server_start
-async def start_notification_loop(app, loop=None):
+async def start_notification_loop(app):
     """Background task: generate random notifications every 5-10 seconds."""
     app.add_task(_notification_loop())
 

@@ -284,13 +284,13 @@ configure_nitro(app)
 
 
 @app.before_server_start
-async def setup(app, loop=None):
+async def setup(app):
     Activity.repository().init_db()
     _update_metrics()
 
 
 @app.after_server_start
-async def start_metrics_loop(app, loop=None):
+async def start_metrics_loop(app):
     """Background task: update metrics and broadcast every 3 seconds."""
     app.add_task(_metrics_loop())
 
