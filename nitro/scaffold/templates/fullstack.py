@@ -40,7 +40,7 @@ health.register(MemoryCheck())
 sanic_health(app, health)
 
 # Logging middleware
-app.middleware("request")(request_logging_middleware)
+request_logging_middleware(app)
 
 # Auth + sessions
 register_auth(app)

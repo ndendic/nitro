@@ -13,6 +13,7 @@ from __future__ import annotations
 def _main_py(project_name: str) -> str:
     return f'''"""{{project_name}} — Built with Nitro."""
 from sanic import Sanic
+from sanic.response import html as html_response
 from nitro.adapters.sanic_adapter import configure_nitro
 from nitro.health import HealthRegistry, DatabaseCheck, MemoryCheck, sanic_health
 from nitro.logging import configure_logging, get_logger, request_logging_middleware
@@ -31,12 +32,12 @@ config = AppConfig()
 
 # Health checks
 health = HealthRegistry(version="1.0.0")
-health.register(DatabaseCheck())
+health.register(DatabaseCheck(critical=False))
 health.register(MemoryCheck())
 sanic_health(app, health)
 
 # Logging middleware
-app.middleware("request")(request_logging_middleware)
+request_logging_middleware(app)
 
 
 @app.before_server_start
@@ -49,7 +50,7 @@ async def setup(app):
 async def index(request):
     from nitro.html import Page
     from rusty_tags import Div, H1, P
-    return Page(
+    page = Page(
         Div(
             H1("{project_name}"),
             P("Powered by Nitro"),
@@ -58,7 +59,8 @@ async def index(request):
         title="{project_name}",
         datastar=True,
         tailwind4=True,
-    ).to_response()
+    )
+    return html_response(str(page))
 
 
 if __name__ == "__main__":
@@ -98,7 +100,7 @@ class Item(Entity, table=True):
 
 
 def data_init():
-    Entity.repository.init_db()
+    Entity.repository().init_db()
 '''
 
 

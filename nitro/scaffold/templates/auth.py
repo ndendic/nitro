@@ -14,7 +14,7 @@ from .minimal import generate_minimal_files
 def _auth_views_py(project_name: str) -> str:
     return f'''"""Authentication views for {project_name}."""
 from sanic import Sanic
-from sanic.response import redirect
+from sanic.response import html as html_response, redirect
 from nitro.auth import AuthService, User, require_auth
 from nitro.sessions import MemorySessionStore, sanic_sessions
 from nitro.html import Page
@@ -38,7 +38,7 @@ def register_auth(app: Sanic) -> None:
 
 
 async def login_page(request):
-    return Page(
+    page = Page(
         Div(
             H1("Sign In"),
             Form(
@@ -66,7 +66,8 @@ async def login_page(request):
         ),
         title="Sign In — {project_name}",
         tailwind4=True,
-    ).to_response()
+    )
+    return html_response(str(page))
 
 
 async def login_handler(request):
@@ -75,7 +76,7 @@ async def login_handler(request):
 
     result = auth.authenticate(email, password)
     if not result:
-        return Page(
+        page = Page(
             Div(
                 H1("Sign In"),
                 Span("Invalid email or password.", cls="text-red-600"),
@@ -84,7 +85,8 @@ async def login_handler(request):
             ),
             title="Sign In — {project_name}",
             tailwind4=True,
-        ).to_response()
+        )
+        return html_response(str(page))
 
     user, access_token, _ = result
     session = request.ctx.session
@@ -94,7 +96,7 @@ async def login_handler(request):
 
 
 async def register_page(request):
-    return Page(
+    page = Page(
         Div(
             H1("Create Account"),
             Form(
@@ -122,7 +124,8 @@ async def register_page(request):
         ),
         title="Register — {project_name}",
         tailwind4=True,
-    ).to_response()
+    )
+    return html_response(str(page))
 
 
 async def register_handler(request):
@@ -132,7 +135,7 @@ async def register_handler(request):
     try:
         user = auth.register(email, password)
     except ValueError as exc:
-        return Page(
+        page = Page(
             Div(
                 H1("Register"),
                 Span(str(exc), cls="text-red-600"),
@@ -141,7 +144,8 @@ async def register_handler(request):
             ),
             title="Register — {project_name}",
             tailwind4=True,
-        ).to_response()
+        )
+        return html_response(str(page))
 
     session = request.ctx.session
     session["user_id"] = user.id
@@ -162,7 +166,7 @@ async def dashboard(request):
     if not user_email:
         return redirect("/login")
 
-    return Page(
+    page = Page(
         Div(
             H2(f"Welcome, {{user_email}}"),
             P("You are logged in."),
@@ -171,7 +175,8 @@ async def dashboard(request):
         ),
         title="Dashboard — {project_name}",
         tailwind4=True,
-    ).to_response()
+    )
+    return html_response(str(page))
 '''
 
 
@@ -203,7 +208,7 @@ health.register(MemoryCheck())
 sanic_health(app, health)
 
 # Logging middleware
-app.middleware("request")(request_logging_middleware)
+request_logging_middleware(app)
 
 # Auth + sessions
 register_auth(app)
