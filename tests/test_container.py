@@ -601,17 +601,13 @@ class TestHas:
         c.override(Counter, Singleton(lambda: Counter()))
         assert c.has(Counter)
 
-    def test_has_after_reset(self):
+    @pytest.mark.asyncio
+    async def test_has_after_reset(self):
         """has() returns False after container.reset()."""
-
-        async def _run():
-            c = Container()
-            c.register(Counter, Singleton(lambda: Counter()))
-            await c.reset()
-            return c.has(Counter)
-
-        result = asyncio.get_event_loop().run_until_complete(_run())
-        assert not result
+        c = Container()
+        c.register(Counter, Singleton(lambda: Counter()))
+        await c.reset()
+        assert not c.has(Counter)
 
 
 # ===========================================================================

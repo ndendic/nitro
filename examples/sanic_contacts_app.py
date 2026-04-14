@@ -140,16 +140,23 @@ def stats_bar():
             class_="flex items-center gap-3 flex-wrap py-2",
         )
 
-    # Tag counts
+    filtered = _get_filtered_contacts()
+    shown = len(filtered)
+    is_filtered = _current_search or _current_tag
+
+    # Tag counts from filtered results
     tag_counts = {}
-    for c in all_contacts:
+    for c in filtered:
         tag_counts[c.tag] = tag_counts.get(c.tag, 0) + 1
 
+    count_text = (
+        f"{shown} of {total} contact{'s' if total != 1 else ''}"
+        if is_filtered
+        else f"{total} contact{'s' if total != 1 else ''}"
+    )
+
     parts = [
-        Span(
-            f"{total} contact{'s' if total != 1 else ''}",
-            class_="text-sm font-semibold text-gray-700",
-        ),
+        Span(count_text, class_="text-sm font-semibold text-gray-700"),
     ]
 
     for tag_key, count in sorted(tag_counts.items(), key=lambda x: -x[1]):

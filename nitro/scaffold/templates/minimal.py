@@ -40,7 +40,7 @@ app.middleware("request")(request_logging_middleware)
 
 
 @app.before_server_start
-async def setup(app, loop):
+async def setup(app):
     data_init()
     log.info("Server ready", extra={{"port": config.server.port}})
 
@@ -98,7 +98,7 @@ class Item(Entity, table=True):
 
 
 def data_init():
-    Entity._repository.init_db()
+    Entity.repository.init_db()
 '''
 
 

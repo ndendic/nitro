@@ -210,7 +210,7 @@ register_auth(app)
 
 
 @app.before_server_start
-async def setup(app, loop):
+async def setup(app):
     data_init()
     log.info("Server ready", extra={{"port": config.server.port}})
 
