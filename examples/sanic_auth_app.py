@@ -20,6 +20,9 @@ Run:
     cd nitro && python examples/sanic_auth_app.py
     Then visit http://localhost:8017
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///auth.db")
+
 import uuid
 import hashlib
 import secrets

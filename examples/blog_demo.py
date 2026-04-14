@@ -10,6 +10,9 @@ This example demonstrates:
 Run: uvicorn examples.blog_demo:app --reload --port 8004
 Then visit: http://localhost:8004/docs
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///blog_demo.db")
+
 
 from contextlib import asynccontextmanager
 from typing import List, Optional

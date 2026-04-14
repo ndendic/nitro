@@ -30,6 +30,9 @@ Test:
     curl http://localhost:8090/api/v1/get/CounterV1:demo.status
     curl http://localhost:8090/api/v2/get/CounterV2:demo.status
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///versioned_api.db")
+
 
 from datetime import datetime
 from typing import Optional

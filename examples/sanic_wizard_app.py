@@ -13,6 +13,9 @@ Run:
     cd nitro && python examples/sanic_wizard_app.py
     Then visit http://localhost:8012
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///wizard.db")
+
 import uuid
 from datetime import datetime, timezone
 

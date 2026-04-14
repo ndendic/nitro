@@ -12,6 +12,9 @@ Run:
     cd nitro && python examples/sanic_contacts_app.py
     Then visit http://localhost:8011
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///contacts.db")
+
 import uuid
 
 from sanic import Sanic, Request

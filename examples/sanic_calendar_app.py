@@ -18,6 +18,9 @@ Run:
     cd nitro && python examples/sanic_calendar_app.py
     Then visit http://localhost:8013
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///calendar.db")
+
 import uuid
 import calendar
 from datetime import date, datetime

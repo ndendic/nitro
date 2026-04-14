@@ -11,6 +11,9 @@ Demonstrates:
 Run: uvicorn examples.fastapi_todo_app:app --reload --port 8080
 Then visit: http://localhost:8080/docs
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///fastapi_todo.db")
+
 
 import sys
 from pathlib import Path

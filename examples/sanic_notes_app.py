@@ -13,6 +13,9 @@ Run:
     cd nitro && python examples/sanic_notes_app.py
     Then visit http://localhost:8006
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///notes.db")
+
 import uuid
 from datetime import datetime
 

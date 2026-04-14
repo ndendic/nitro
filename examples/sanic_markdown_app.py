@@ -18,6 +18,9 @@ Run:
     cd nitro && python examples/sanic_markdown_app.py
     Then visit http://localhost:8015
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///markdown.db")
+
 import uuid
 
 import markdown

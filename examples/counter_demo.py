@@ -10,6 +10,9 @@ This example demonstrates:
 Run: uvicorn examples.counter_demo:app --reload --port 8001
 Then visit: http://localhost:8001
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///counter_demo.db")
+
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI

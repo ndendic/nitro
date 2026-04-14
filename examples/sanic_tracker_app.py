@@ -13,6 +13,9 @@ Run:
     cd nitro && python examples/sanic_tracker_app.py
     Then visit http://localhost:8009
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///tracker.db")
+
 import uuid
 
 from sanic import Sanic, Request

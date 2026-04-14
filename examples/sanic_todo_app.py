@@ -12,6 +12,9 @@ Run:
     cd nitro && python examples/sanic_todo_app.py
     Then visit http://localhost:8002
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///todo.db")
+
 import uuid
 
 from sanic import Sanic, Request

@@ -10,6 +10,9 @@ This example demonstrates:
 Run: uvicorn examples.starlette_counter_app:app --reload
 Then visit: http://localhost:8000
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///starlette_counter.db")
+
 
 from starlette.applications import Starlette
 from starlette.routing import Route

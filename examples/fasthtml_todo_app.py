@@ -12,6 +12,9 @@ Requires: pip install python-fasthtml
 Run: python examples/fasthtml_todo_app.py
 Then visit: http://localhost:5001
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///fh_todo.db")
+
 
 from fasthtml.common import *
 from nitro.domain.entities.base_entity import Entity

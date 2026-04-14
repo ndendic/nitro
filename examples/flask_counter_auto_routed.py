@@ -11,6 +11,9 @@ Routes auto-generated:
     POST   /post/Counter:<id>.reset
     GET    /get/Counter:<id>.status
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///flask_counter.db")
+
 
 from flask import Flask
 from nitro import Entity, get, post, action

@@ -21,6 +21,9 @@ Run:
     cd nitro && python examples/sanic_filemanager_app.py
     Then visit http://localhost:8019
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///filemanager.db")
+
 import uuid
 from datetime import datetime, timezone
 

@@ -13,6 +13,9 @@ Run:
     cd nitro && python examples/sanic_chat_app.py
     Then visit http://localhost:8004
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///chat.db")
+
 import uuid
 from datetime import datetime, timezone
 

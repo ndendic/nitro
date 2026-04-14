@@ -9,6 +9,9 @@ Demonstrates:
 - action() helper for generating Datastar action strings
 - Sanic catch-all endpoints for dispatch
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///counter_ar.db")
+
 from sanic import Sanic
 from sqlmodel import Field
 from nitro import Entity, get, post, action

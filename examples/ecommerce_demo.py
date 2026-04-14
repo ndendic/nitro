@@ -10,6 +10,9 @@ Demonstrates:
 Run: uvicorn examples.ecommerce_demo:app --reload --port 8006
 Then visit: http://localhost:8006/docs
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///ecommerce.db")
+
 
 import sys
 from contextlib import asynccontextmanager

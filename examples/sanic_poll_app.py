@@ -13,6 +13,9 @@ Run:
     cd nitro && python examples/sanic_poll_app.py
     Then visit http://localhost:8005
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///poll.db")
+
 import uuid
 
 from sanic import Sanic, Request

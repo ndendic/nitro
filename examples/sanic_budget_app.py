@@ -13,6 +13,9 @@ Run:
     cd nitro && python examples/sanic_budget_app.py
     Then visit http://localhost:8010
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///budget.db")
+
 import uuid
 from datetime import datetime, timezone
 

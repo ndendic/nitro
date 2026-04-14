@@ -13,6 +13,9 @@ Run:
     cd nitro && python examples/sanic_kanban_app.py
     Then visit http://localhost:8003
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///kanban.db")
+
 import uuid
 import json
 from datetime import datetime, timezone

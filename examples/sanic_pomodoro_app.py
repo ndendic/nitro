@@ -17,6 +17,9 @@ Run:
     cd nitro && python examples/sanic_pomodoro_app.py
     Then visit http://localhost:8014
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///pomodoro.db")
+
 import uuid
 import asyncio
 

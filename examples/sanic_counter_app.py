@@ -14,6 +14,9 @@ Run:
     cd nitro && python examples/sanic_counter_app.py
     Then visit http://localhost:8001
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///counter.db")
+
 import uuid
 
 from sanic import Sanic, Request

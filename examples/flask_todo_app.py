@@ -10,6 +10,9 @@ This example demonstrates:
 Run: python examples/flask_todo_app.py
 Then visit: http://localhost:5003
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///flask_todo.db")
+
 
 import sys
 from pathlib import Path

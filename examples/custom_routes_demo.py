@@ -17,6 +17,9 @@ Then visit:
     http://localhost:8095/            # Interactive documentation
     http://localhost:8095/docs        # OpenAPI docs
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///custom_routes.db")
+
 
 from contextlib import asynccontextmanager
 from typing import Optional

@@ -15,6 +15,9 @@ Routes auto-generated:
     POST   /post/Counter:demo.reset
     GET    /get/Counter:demo.status
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///fh_counter.db")
+
 
 from fasthtml.common import *
 from nitro import Entity, get, post, action

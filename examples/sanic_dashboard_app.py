@@ -13,6 +13,9 @@ Run:
     cd nitro && python examples/sanic_dashboard_app.py
     Then visit http://localhost:8007
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///dashboard.db")
+
 import uuid
 import random
 import asyncio

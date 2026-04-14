@@ -20,6 +20,9 @@ Run:
     cd nitro && python examples/sanic_datatable_app.py
     Then visit http://localhost:8018
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///datatable.db")
+
 import uuid
 import random
 from datetime import datetime, timezone, timedelta

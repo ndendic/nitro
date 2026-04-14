@@ -19,6 +19,9 @@ Run:
     cd nitro && python examples/sanic_gallery_app.py
     Then visit http://localhost:8016
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///gallery.db")
+
 import uuid
 from datetime import datetime, timezone
 

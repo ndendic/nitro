@@ -20,6 +20,9 @@ Run:
     cd nitro && python examples/sanic_notifications_app.py
     Then visit http://localhost:8020
 """
+import os
+os.environ.setdefault("NITRO_DB_URL", "sqlite:///notifications.db")
+
 import uuid
 import random
 import asyncio
