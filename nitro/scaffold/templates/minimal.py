@@ -42,7 +42,7 @@ request_logging_middleware(app)
 
 @app.before_server_start
 async def setup(app):
-    data_init()
+    data_init(config.db.url)
     log.info("Server ready", extra={{"port": config.server.port}})
 
 
@@ -90,7 +90,9 @@ class AppConfig(AppSettings):
 
 
 def _entities_py() -> str:
-    return '''from nitro import Entity
+    return '''from typing import Optional
+from nitro import Entity
+from nitro.domain.repository.sql import SQLModelRepository
 
 
 class Item(Entity, table=True):
@@ -99,7 +101,9 @@ class Item(Entity, table=True):
     active: bool = True
 
 
-def data_init():
+def data_init(db_url: Optional[str] = None):
+    if db_url:
+        SQLModelRepository(url=db_url)
     Entity.repository().init_db()
 '''
 

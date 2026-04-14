@@ -54,7 +54,7 @@ register_crud_routes(app, Item, config=CRUDConfig(title="Items", icon="package")
 
 @app.before_server_start
 async def setup(app):
-    data_init()
+    data_init(config.db.url)
     log.info("Server ready", extra={{"port": config.server.port}})
 
 
